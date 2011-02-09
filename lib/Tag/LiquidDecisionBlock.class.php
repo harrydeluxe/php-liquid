@@ -151,6 +151,9 @@ class LiquidDecisionBlock extends LiquidBlock
 
 			case '<=':
 				return ($left <= $right);
+				
+			case 'contains':
+				return ($left == $right || strpos($left, $right));
 
 			default:
 				throw new LiquidException("Error in tag '".$this->name()."' - Unknown operator $op");
