@@ -31,7 +31,8 @@ class AssignLiquidTag extends LiquidTag
 	 */
 	public function __construct($markup, &$tokens, &$file_system)
 	{
-		$syntax_regexp = new LiquidRegexp('/(\w+)\s*=\s*('.LIQUID_ALLOWED_VARIABLE_CHARS.'+)/');
+		//$syntax_regexp = new LiquidRegexp('/(\w+)\s*=\s*('.LIQUID_ALLOWED_VARIABLE_CHARS.'+)/');
+		$syntax_regexp = new LiquidRegexp('/(\w+)\s*=\s*('.LIQUID_QUOTED_FRAGMENT.'+)/');
 		
 		if($syntax_regexp->match($markup))
 		{
@@ -42,7 +43,6 @@ class AssignLiquidTag extends LiquidTag
 		{
 			throw new LiquidException("Syntax Error in 'assign' - Valid syntax: assign [var] = [source]");
 		}
-
 	}
 
 
