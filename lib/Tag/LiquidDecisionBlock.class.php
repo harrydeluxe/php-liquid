@@ -48,7 +48,8 @@ class LiquidDecisionBlock extends LiquidBlock
 		// arrays simply return true
 		if(is_array($value))
 		{
-			return true;
+			return $value;
+			//return true;
 		}
 		
 		return $value;
@@ -153,7 +154,7 @@ class LiquidDecisionBlock extends LiquidBlock
 				return ($left <= $right);
 				
 			case 'contains':
-				return ($left == $right || strpos($left, $right));
+				return is_array($left) ? in_array($right, $left) : ($left == $right || strpos($left, $right));
 
 			default:
 				throw new LiquidException("Error in tag '".$this->name()."' - Unknown operator $op");
