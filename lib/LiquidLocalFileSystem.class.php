@@ -52,8 +52,7 @@ class LiquidLocalFileSystem extends LiquidBlankFileSystem
 		
 		if($full_path)
 		{
-			//file_get_contents($full_path);
-			return file_get_contents($full_path);	// harry
+			return file_get_contents($full_path);
 		}
 		else
 		{
@@ -76,35 +75,25 @@ class LiquidLocalFileSystem extends LiquidBlankFileSystem
 		if(!$name_regex->match($template_path))
 		{
 			throw new LiquidException("Illegal template name '$template_path'");
-			//trigger_error("Illegal template name '$template_path'", E_USER_ERROR);
-			//return false;
 		}
 		
 		if(strpos($template_path, '/') !== false)
 		{
-			//$full_path = $this->root.dirname($template_path).'/'."_".basename($template_path).".liquid";
-			$full_path = $this->_root.dirname($template_path).'/'.basename($template_path).'.'.LIQUID_INCLUDE_SUFFIX;	// harry
+			$full_path = $this->_root.dirname($template_path).'/'.basename($template_path).'.'.LIQUID_INCLUDE_SUFFIX;
 		}
 		else
 		{
-			//$full_path = $this->root."_".$template_path.".liquid";
-			$full_path = $this->_root.$template_path.'.'.LIQUID_INCLUDE_SUFFIX;	// harry
+			$full_path = $this->_root.$template_path.'.'.LIQUID_INCLUDE_SUFFIX;
 		}
 		
-		
-		//$root_regex = new LiquidRegexp(realpath($this->_root));
-		$root_regex = new LiquidRegexp('/'.preg_quote(realpath($this->_root), '/').'/');	// harry
+		$root_regex = new LiquidRegexp('/'.preg_quote(realpath($this->_root), '/').'/');
 		
 		
 		if(!$root_regex->match(realpath($full_path)))
 		{
-			throw new LiquidException("Illegal template path '".realpath($full_path)."'");	// harry
+			throw new LiquidException("Illegal template path '".realpath($full_path)."'");
 		}
 		
-		/* braucht man nicht weil vorher schon eine exception ausgeloest wird durch realpath
-		if(!is_file($full_path))
-			throw new LiquidException("Template nicht vorhanden: $full_path");	// harry
-		*/
 		return $full_path;
 	}	
 }
