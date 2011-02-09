@@ -23,7 +23,7 @@ class LiquidStandardFilters
 	 * @param mixed $input
 	 * @return int
 	 */
-	function size($input)
+	public static function size($input)
 	{ 
 		if(is_string($input) || is_numeric($input))
 		{
@@ -51,14 +51,9 @@ class LiquidStandardFilters
 	 * @param string $input
 	 * @return string
 	 */
-	function downcase($input)
+	public static function downcase($input)
 	{
-		if(is_string($input))
-		{
-			return strtolower($input);
-		}
-		
-		return $input;
+		return is_string($input) ? strtolower($input) : $input;
 	}
 
 
@@ -68,14 +63,57 @@ class LiquidStandardFilters
 	 * @param string $input
 	 * @return string
 	 */
-	function upcase($input)
+	public static function upcase($input)
 	{
-		if(is_string($input))
-		{
-			return strtoupper($input);
-		}
-		
-		return $input;		
+		return is_string($input) ? strtoupper($input) : $input;
+	}
+	
+	
+	/**
+	 * Alias of upcase
+	 *
+	 * @param string $input
+	 * @return string
+	 */
+	public static function capitalize($input)
+	{
+		return self::upcase($input);		
+	}
+
+
+	/**
+	 * Escape a string
+	 *
+	 * @param string $input
+	 * @return string
+	 */
+	public static function escape($input)
+	{
+		return is_string($input) ? addslashes($input) : $input;
+	}
+
+
+	/**
+	 * Strip all newlines (\n, \r) from string
+	 *
+	 * @param string $input
+	 * @return string
+	 */
+	public static function strip_newlines($input)
+	{
+		return is_string($input) ? str_replace(array("\n", "\r"), '', $input) : $input;
+	}
+
+
+	/**
+	 * Replace each newline (\n) with html break
+	 *
+	 * @param string $input
+	 * @return string
+	 */
+	public static function newline_to_br($input)
+	{
+		return is_string($input) ? str_replace(array("\n", "\r"), '<br />', $input) : $input;
 	}
 
 
@@ -86,7 +124,7 @@ class LiquidStandardFilters
 	 * @param int $characters
 	 * @return string
 	 */
-	function truncate($input, $characters = 100)
+	public static function truncate($input, $characters = 100)
 	{
 		if(is_string($input) || is_numeric($input))
 		{
@@ -107,15 +145,15 @@ class LiquidStandardFilters
 	 * @param int $words
 	 * @return string
 	 */
-	function truncatewords($input, $words)
+	public static function truncatewords($input, $words = 3)
 	{
 		if(is_string($input))
 		{
 			$wordlist = explode(" ", $input);
 			
-			if(size($wordlist) > $words)
+			if(count($wordlist) > $words)
 			{
-				return implode(" ", array_slice($wordlist, 0, $words)).'$hellip;';
+				return implode(" ", array_slice($wordlist, 0, $words)).'&hellip;';
 			}
 		}
 		
@@ -129,9 +167,9 @@ class LiquidStandardFilters
 	 * @param string $input
 	 * @return string
 	 */
-	function strip_html($input)
+	public static function strip_html($input)
 	{
-		return strip_tags($input);
+		return is_string($input) ? strip_tags($input) : $input;
 	}
 
 
@@ -142,13 +180,9 @@ class LiquidStandardFilters
 	 * @param string $glue
 	 * @return string
 	 */
-	function join($input, $glue = ' ')
+	public static function join($input, $glue = ' ')
 	{	
-		if(is_array($input))
-		{
-			return implode($glue, $input);
-		}
-		return $input;
+		return is_array($input) ? implode($glue, $input) : $input;
 	}
 
 
@@ -159,7 +193,7 @@ class LiquidStandardFilters
 	 * @param string $format
 	 * @return string
 	 */
-	function date($input, $format)
+	public static function date($input, $format)
 	{
 		if(!is_numeric($input))
 		{
@@ -177,14 +211,9 @@ class LiquidStandardFilters
 	 * @param array $input
 	 * @return mixed
 	 */
-	function first($input)
+	public static function first($input)
 	{
-		if(is_array($input))
-		{
-			return reset($input);
-		} 
-		
-		return $input;
+		return is_array($input) ? reset($input) : $input;
 	}
 
 
@@ -194,13 +223,8 @@ class LiquidStandardFilters
 	 * @param array $input
 	 * @return mixed
 	 */
-	function last($input)
+	public static function last($input)
 	{
-		if(is_array($input))
-		{
-			return end($input);
-		} 
-		
-		return $input;		
+		return is_array($input) ? end($input) : $input;		
 	}
 }
