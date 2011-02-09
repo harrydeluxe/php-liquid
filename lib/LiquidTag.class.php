@@ -1,0 +1,109 @@
+<?php
+/**
+ * Liquid for PHP
+ * 
+ * @package Liquid
+ * @copyright Copyright (c) 2011 Harald Hanek, 
+ * fork of php-liquid (c) 2006 Mateo Murphy,
+ * based on Liquid for Ruby (c) 2006 Tobias Luetke
+ * @license http://www.opensource.org/licenses/mit-license.php
+ */
+
+
+/**
+ * Base class for tags
+ * 
+ * @package Liquid
+ */
+class LiquidTag
+{
+	/**
+	 * The markup for the tag
+	 *
+	 * @var string
+	 */
+	var $markup;
+	
+	/**
+	 * Filesystem object is used to load included template files
+	 *
+	 * @var LiquidFileSystem
+	 */
+	var $file_system;
+	
+	/**
+	 * Additional attributes
+	 *
+	 * @var array
+	 */
+	var $attributes;	
+
+
+	/**
+	 * Constructor
+	 *
+	 * @param string $markup
+	 * @param array $tokens
+	 * @param LiquidFileSystem $file_system
+	 * @return LiquidTag
+	 */
+	function __construct($markup, &$tokens, &$file_system)
+	{
+		$this->markup = $markup;
+		$this->file_system = $file_system;
+		return $this->parse($tokens);
+	}
+
+
+	/**
+	 * Parse the given tokens
+	 *
+	 * @param array $tokens
+	 */
+	function parse(& $tokens)
+	{
+	}
+
+
+	/**
+	 * Extracts tag attributes from a markup string
+	 *
+	 * @param string $markup
+	 */
+	function extract_attributes($markup)
+	{
+		$this->attributes = array();
+	
+		$attribute_regexp = new LiquidRegexp(LIQUID_TAG_ATTRIBUTES);
+		
+		$matches = $attribute_regexp->scan($markup);
+		
+		foreach ($matches as $match)
+		{
+			$this->attributes[$match[0]] = $match[1];
+		}		
+	}		
+
+
+	/**
+	 * Returns the name of the tag
+	 *
+	 * @return string
+	 */
+	function name()
+	{
+		return strtolower(this::class_name());
+	}
+
+
+	/**
+	 * Render the tag with the given context
+	 *
+	 * @param LiquidContext $context
+	 * @return string
+	 */
+	function render(&$context)
+	{
+		return '';
+	}
+}
