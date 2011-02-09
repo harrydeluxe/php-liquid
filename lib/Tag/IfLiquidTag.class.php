@@ -45,7 +45,8 @@ class IfLiquidTag extends LiquidDecisionBlock
 	 */
 	function __construct($markup, &$tokens, &$file_system)
 	{
-		$regex = new LiquidRegexp('/('.LIQUID_QUOTED_FRAGMENT.')\s*([=!<>]+)?\s*('.LIQUID_QUOTED_FRAGMENT.')?/');
+		//$regex = new LiquidRegexp('/('.LIQUID_QUOTED_FRAGMENT.')\s*([=!<>]+)?\s*('.LIQUID_QUOTED_FRAGMENT.')?/');
+		$regex = new LiquidRegexp('/('.LIQUID_QUOTED_FRAGMENT.')\s*([=!<>a-z_]+)?\s*('.LIQUID_QUOTED_FRAGMENT.')?/');
 		
 		$this->nodelist_true = & $this->nodelist;
 		$this->nodelist = array();
