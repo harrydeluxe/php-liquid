@@ -7,7 +7,7 @@
  *
  * @package Liquid
  */
-class CaseLiquidTag extends LiquidDecisionBlock
+class LiquidTagCase extends LiquidDecisionBlock
 {
 	/**
 	 * Stack of nodelists

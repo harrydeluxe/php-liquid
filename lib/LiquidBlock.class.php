@@ -43,9 +43,7 @@ class LiquidBlock extends LiquidTag
 					}
 
 					// search for a defined class of the right name, instead of searching in an array				
-					$tag_name = $tag_regexp->matches[1].'LiquidTag';
-					
-					$tag_name = ucwords($tag_name); // harry camelcase
+					$tag_name = 'LiquidTag'.ucwords($tag_regexp->matches[1]);
 					
 					// fetch the tag from registered blocks
 					if(class_exists($tag_name))
@@ -111,7 +109,8 @@ class LiquidBlock extends LiquidTag
 		}
 		
 	}
-	
+
+
 	/**
 	 * Returns the string that delimits the end of the block
 	 *
@@ -140,29 +139,29 @@ class LiquidBlock extends LiquidTag
 	 * @param string $token
 	 * @return LiquidVariable
 	 */
-	function create_variable($token) {
+	function create_variable($token)
+	{
 		$variable_regexp = new LiquidRegexp('/^'.LIQUID_VARIABLE_START.'(.*)'.LIQUID_VARIABLE_END.'$/');
-		if ($variable_regexp->match($token)) {
+		if($variable_regexp->match($token))
+		{
 			return new LiquidVariable($variable_regexp->matches[1]);			
 		}
 		else
 		{
-			//trigger_error("Variable $token was not properly terminated");
-			throw new LiquidException("Variable $token was not properly terminated");// harry
+			throw new LiquidException("Variable $token was not properly terminated");
 		}
-		
 	}
-	
+
+
 	/**
 	 * Render the block.
 	 *
 	 * @param LiquiContext $context
 	 * @return string
 	 */
-	function render(& $context) {
-		
+	public function render(& $context)
+	{
 		return $this->render_all($this->nodelist, $context);
-		
 	}
 
 
@@ -191,7 +190,7 @@ class LiquidBlock extends LiquidTag
 		
 		if(!is_array($list))
 		{
-			throw new LiquidException('Parameter $list is not an array');// harry
+			throw new LiquidException('Parameter $list is not an array');
 		}
 		
 		foreach($list as $token)

@@ -16,7 +16,7 @@
  * 
  * @package Liquid
  */
-class CycleLiquidTag extends LiquidTag
+class LiquidTagCycle extends LiquidTag
 {
 	/**
 	 * @var string The name of the cycle; if none is given one is created using the value list

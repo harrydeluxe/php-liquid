@@ -10,7 +10,7 @@
  *
  * @package Liquid
  */
-class IfLiquidTag extends LiquidDecisionBlock
+class LiquidTagIf extends LiquidDecisionBlock
 {
 	
 	/**

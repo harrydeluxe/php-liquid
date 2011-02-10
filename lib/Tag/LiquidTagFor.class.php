@@ -9,7 +9,7 @@
  * 
  * @package Liquid
  */
-class ForLiquidTag extends LiquidBlock
+class LiquidTagFor extends LiquidBlock
 {
 	/**
 	 * @var array The collection to loop over

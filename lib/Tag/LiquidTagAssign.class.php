@@ -8,7 +8,7 @@
  *
  * @package Liquid
  */
-class AssignLiquidTag extends LiquidTag
+class LiquidTagAssign extends LiquidTag
 {
 	/**
 	 * @var string The variable to assign from

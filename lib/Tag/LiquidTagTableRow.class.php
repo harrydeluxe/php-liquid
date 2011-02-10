@@ -4,7 +4,7 @@
  *
  * @package Liquid
  */
-class TableRowLiquidTag extends LiquidBlock
+class LiquidTagTableRow extends LiquidBlock
 {
 	
 	/**

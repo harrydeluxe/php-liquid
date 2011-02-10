@@ -43,7 +43,6 @@ class LiquidTemplate
 	 *
 	 * @return LiquidTemplate
 	 */
-	//public function __construct()
 	public function __construct($path = null)
 	{
 		//$this->file_system = new LiquidBlankFileSystem();
@@ -99,13 +98,8 @@ class LiquidTemplate
 	 * @param array $registers Additional registers for the template
 	 * @return string
 	 */
-	function render($assigns = null, $filters = null, $registers = null)
+	public function render(array $assigns = array(), $filters = null, $registers = null)
 	{
-		if(is_null($assigns))
-		{
-			$assigns = array();
-		}
-
 		$context = new LiquidContext($assigns, $registers);
 		
 		if(!is_null($filters))

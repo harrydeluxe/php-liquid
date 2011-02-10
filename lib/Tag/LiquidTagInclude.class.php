@@ -19,7 +19,7 @@
  *
  * @package Liquid
  */
-class IncludeLiquidTag extends LiquidTag
+class LiquidTagInclude extends LiquidTag
 {
 	/**
 	 * @var string The name of the template

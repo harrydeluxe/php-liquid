@@ -7,7 +7,7 @@
  *
  * @package Liquid
  */
-class CaptureLiquidTag extends LiquidBlock
+class LiquidTagCapture extends LiquidBlock
 {
 	/**
 	 * The variable to assign to

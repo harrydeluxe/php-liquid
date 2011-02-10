@@ -70,14 +70,14 @@ class LiquidStandardFilters
 	
 	
 	/**
-	 * Alias of upcase
+	 * Capitalize words in the input sentence
 	 *
 	 * @param string $input
 	 * @return string
 	 */
 	public static function capitalize($input)
 	{
-		return self::upcase($input);		
+    	return preg_replace("!(^|[^\p{L}'])([\p{Ll}])!ue", "'\\1'.ucfirst('\\2')", ucwords($input)); 
 	}
 
 

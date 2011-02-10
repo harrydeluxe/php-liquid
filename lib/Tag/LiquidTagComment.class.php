@@ -7,7 +7,7 @@
  * 
  * @package Liquid
  */
-class CommentLiquidTag extends LiquidBlock
+class LiquidTagComment extends LiquidBlock
 {
 	/**
 	 * Renders the block
