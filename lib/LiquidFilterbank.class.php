@@ -75,11 +75,11 @@ class LiquidFilterbank
 		// if it wasn't an object an isn't a string either, it's a bad parameter
 		if(!is_string($filter))
 		{
-			throw new LiquidException("Parameter passed to add_filter must be an object or a string");// harry
+			throw new LiquidException("Parameter passed to add_filter must be an object or a string");
 		}
 		
 		// if the filter is a class, register all its methods
-		if (class_exists($filter))
+		if(class_exists($filter))
 		{
 			$methods = array_flip(get_class_methods($filter));
 			foreach($methods as $method => $null)
@@ -97,7 +97,7 @@ class LiquidFilterbank
 			return true;
 		}
 
-		throw new LiquidException("Parameter passed to add_filter must a class or a function");// harry
+		throw new LiquidException("Parameter passed to add_filter must a class or a function");
 	}
 
 

@@ -48,8 +48,8 @@ class LiquidTagIf extends LiquidDecisionBlock
 		//$regex = new LiquidRegexp('/('.LIQUID_QUOTED_FRAGMENT.')\s*([=!<>]+)?\s*('.LIQUID_QUOTED_FRAGMENT.')?/');
 		$regex = new LiquidRegexp('/('.LIQUID_QUOTED_FRAGMENT.')\s*([=!<>a-z_]+)?\s*('.LIQUID_QUOTED_FRAGMENT.')?/');
 		
-		$this->nodelist_true = & $this->nodelist;
-		$this->nodelist = array();
+		$this->nodelist_true = & $this->_nodelist;
+		$this->_nodelist = array();
 		
 		$this->nodelist_false = array();
 		
@@ -79,7 +79,7 @@ class LiquidTagIf extends LiquidDecisionBlock
 	{
 		if($tag == 'else')
 		{
-			$this->nodelist = & $this->nodelist_false;
+			$this->_nodelist = & $this->nodelist_false;
 			$this->nodelist_false = array();
 		}
 		else

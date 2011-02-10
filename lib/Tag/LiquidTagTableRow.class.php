@@ -107,7 +107,7 @@ class LiquidTagTableRow extends LiquidBlock
 			
 			));
 			
-			$result .= "<td class=\"col".(++ $col)."\">" . $this->render_all($this->nodelist, $context) . "</td>";
+			$result .= "<td class=\"col".(++ $col)."\">" . $this->render_all($this->_nodelist, $context) . "</td>";
 			
 			if($col == $cols && ! ($index == $length - 1))
 			{

@@ -128,7 +128,7 @@ class LiquidTagFor extends LiquidBlock
 				'last'		=> (int)($index == $length - 1)
 			));
 			
-			$result .= $this->render_all($this->nodelist, $context);
+			$result .= $this->render_all($this->_nodelist, $context);
 		}
 		
 		$context->pop();

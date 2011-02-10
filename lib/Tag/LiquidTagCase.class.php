@@ -93,7 +93,7 @@ class LiquidTagCase extends LiquidDecisionBlock
 			if ($when_syntax_regexp->match($params)) {
 				$this->push_nodelist();
 				$this->right = $when_syntax_regexp->matches[0];
-				$this->nodelist = array();
+				$this->_nodelist = array();
 				
 			}
 			else
@@ -106,8 +106,8 @@ class LiquidTagCase extends LiquidDecisionBlock
 			// push the last nodelist onto the stack and prepare to recieve the else nodes
 			$this->push_nodelist();
 			$this->right = null;
-			$this->else_nodelist = & $this->nodelist;
-			$this->nodelist = array();
+			$this->else_nodelist = & $this->_nodelist;
+			$this->_nodelist = array();
 			break;
 		
 		default:
@@ -124,7 +124,7 @@ class LiquidTagCase extends LiquidDecisionBlock
 	{
 		if(!is_null($this->right))
 		{
-			$this->nodelists[] = array($this->right, $this->nodelist);
+			$this->nodelists[] = array($this->right, $this->_nodelist);
 		}
 	}
 

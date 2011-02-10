@@ -9,7 +9,7 @@ class LiquidBlock extends LiquidTag
 	/**
 	 * @var array
 	 */
-	var $nodelist;
+	protected $_nodelist;
 
 
 	/**
@@ -23,7 +23,7 @@ class LiquidBlock extends LiquidTag
 		$tag_regexp = new LiquidRegexp('/^'.LIQUID_TAG_START.'\s*(\w+)\s*(.*)?'.LIQUID_TAG_END.'$/');
 		$variable_start_regexp = new LiquidRegexp('/^'.LIQUID_VARIABLE_START.'/');
 		
-		$this->nodelist = array();
+		$this->_nodelist = array();
 		
 		if(!is_array($tokens))
 		{
@@ -48,7 +48,7 @@ class LiquidBlock extends LiquidTag
 					// fetch the tag from registered blocks
 					if(class_exists($tag_name))
 					{
-						$this->nodelist[] = new $tag_name($tag_regexp->matches[2], $tokens, $this->file_system);
+						$this->_nodelist[] = new $tag_name($tag_regexp->matches[2], $tokens, $this->file_system);
 					}
 					else
 					{
@@ -65,12 +65,12 @@ class LiquidBlock extends LiquidTag
 			}
 			elseif($variable_start_regexp->match($token))
 			{
-				$this->nodelist[] = $this->create_variable($token);
+				$this->_nodelist[] = $this->create_variable($token);
 				
 			}
 			elseif($token != '')
 			{
-				$this->nodelist[] = $token;
+				$this->_nodelist[] = $token;
 			}
 		}
 		
@@ -161,7 +161,7 @@ class LiquidBlock extends LiquidTag
 	 */
 	public function render(& $context)
 	{
-		return $this->render_all($this->nodelist, $context);
+		return $this->render_all($this->_nodelist, $context);
 	}
 
 
@@ -173,7 +173,7 @@ class LiquidBlock extends LiquidTag
 	 */
 	function assert_missing_delimitation()
 	{
-		throw new LiquidException($this->block_name()." tag was never closed");// harry
+		throw new LiquidException($this->block_name()." tag was never closed");
 	}
 
 
@@ -203,7 +203,6 @@ class LiquidBlock extends LiquidTag
 			{
 				$result .= $token;
 			}
-			
 		}
 		
 		return $result;

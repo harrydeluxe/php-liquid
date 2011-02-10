@@ -22,21 +22,21 @@ class LiquidTag
 	 *
 	 * @var string
 	 */
-	var $markup;
+	protected $markup;
 	
 	/**
 	 * Filesystem object is used to load included template files
 	 *
 	 * @var LiquidFileSystem
 	 */
-	var $file_system;
+	protected $file_system;
 	
 	/**
 	 * Additional attributes
 	 *
 	 * @var array
 	 */
-	var $attributes;	
+	protected $attributes;	
 
 
 	/**
