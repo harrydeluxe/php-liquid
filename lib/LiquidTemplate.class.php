@@ -86,7 +86,8 @@ class LiquidTemplate
 	 */
 	public function parse($source)
 	{
-		$this->root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);	
+		$this->root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+		return $this;
 	}
 
 
