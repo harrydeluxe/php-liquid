@@ -40,6 +40,9 @@ class LiquidTagInclude extends LiquidTag
 	 * @var LiquidDocument The LiquidDocument that represents the included template
 	 */
 	private $document;
+	
+	
+	protected $_hash;
 
 
 	/**
@@ -87,14 +90,57 @@ class LiquidTagInclude extends LiquidTag
 		{
 			throw new LiquidException("No file system");
 		} 
-		
+	
 		// read the source of the template and create a new sub document
 		$source = $this->file_system->read_template_file($this->template_name);
-		$tokens = LiquidTemplate::tokenize($source);
-		$this->document = new LiquidDocument($tokens, $this->file_system);
+		
+		//$this->document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+		
+		
+		$this->_hash = md5($source);
+		
+		$parseNew = true;
+		
+		$tmpname = LIQUID_TMPPATH.$this->_hash;
+		
+		if(LIQUID_CACHE === true && is_file($tmpname))
+		{
+			$this->document = unserialize(file_get_contents($tmpname));
+			$parseNew = $this->document->checkIncludes();
+		}
+		
+		if($parseNew)
+		{
+			$this->document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+			if(LIQUID_CACHE === true)
+			{
+				if(!@file_put_contents($tmpname, serialize($this->document)))
+					throw new LiquidException("Tempfile failed to open stream");
+			}
+		}
 	}
 
 
+	/**
+	 * check for cached includes
+	 *
+	 * @return string
+	 */
+	public function checkIncludes()
+	{
+		if($this->document->checkIncludes() == true)
+			return true;
+	
+		$source = $this->file_system->read_template_file($this->template_name);
+		$tmpname = LIQUID_TMPPATH.md5($source);
+		
+		if(is_file($tmpname) && $this->_hash == md5($source))
+			return false;
+		
+		return true;
+	}
+
+	
 	/**
 	 * Renders the node
 	 *

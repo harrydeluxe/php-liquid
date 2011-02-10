@@ -104,6 +104,9 @@ define('LIQUID_TOKENIZATION_REGEXP', '/('.LIQUID_TAG_START.'.*?'.LIQUID_TAG_END.
 
 defined('LIQUID_PATH') or define('LIQUID_PATH',dirname(__FILE__));
 
+defined('LIQUID_TMPPATH') or define('LIQUID_TMPPATH', null);
+defined('LIQUID_CACHE') or define('LIQUID_CACHE', false);
+
 
 class Liquid
 {

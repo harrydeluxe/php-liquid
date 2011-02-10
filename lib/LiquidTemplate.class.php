@@ -86,7 +86,27 @@ class LiquidTemplate
 	 */
 	public function parse($source)
 	{
-		$this->root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+		$parseNew = true;
+		
+		$tmpname = LIQUID_TMPPATH.md5($source);
+		
+		if(LIQUID_CACHE === true && is_file($tmpname))
+		{
+			$this->root = unserialize(file_get_contents($tmpname));
+			$parseNew = $this->root->checkIncludes();
+		}
+		
+		if($parseNew)
+		{
+			$this->root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+			
+			if(LIQUID_CACHE === true)
+			{
+				if(!@file_put_contents($tmpname, serialize($this->root)))
+					throw new LiquidException("Tempfile failed to open stream");
+			}
+		}
+
 		return $this;
 	}
 

@@ -33,6 +33,29 @@ class LiquidDocument extends LiquidBlock
 
 
 	/**
+	 * check for cached includes
+	 *
+	 * @return string
+	 */
+	public function checkIncludes()
+	{
+		$return = false;
+		foreach($this->_nodelist as $token)
+		{
+			if(is_object($token))
+			{
+				if(get_class($token) == 'LiquidTagInclude')
+				{
+					if($token->checkIncludes() == true)
+						$return = true;
+				}
+			}
+		}
+		return $return;
+	}
+
+
+	/**
 	 * There isn't a real delimiter
 	 *
 	 * @return string
