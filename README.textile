@@ -13,10 +13,10 @@ For more information on Liquid, visit: ("http://www.liquidmarkup.org":http://www
 h2. What does it look like?
 
 Example snippet:
+
 <pre>
-{% if products %}
-  <ul id="products">
-	
+ {% if products %}
+	<ul id="products">
 	{% for product in products %}
 	  <li>
 		<h2>{{product.name}}</h2>
@@ -28,14 +28,14 @@ Example snippet:
 		
 	  </li>      
 	{% endfor %}
-	
-  </ul>
-{% endif %}
+	</ul>
+ {% endif %}
 </pre>
 
 Code to render:
+
 <pre>
-$liquid->parse(file_get_contents('templates/products.tpl'))->render($products);
+ $liquid->parse(file_get_contents('templates/products.tpl'))->render($products);
 </pre>
 
 h2. Requirements
