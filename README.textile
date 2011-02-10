@@ -13,19 +13,29 @@ For more information on Liquid, visit: ("http://www.liquidmarkup.org":http://www
 h2. What does it look like?
 
 Example snippet:
-
 <pre>
-<ul id="products">      
+{% if products %}
+  <ul id="products">
+	
 	{% for product in products %}
-	<li>
-		<h2>{{product.title}}</h2>
-		Only {{product.price | format_as_money }}
+	  <li>
+		<h2>{{product.name}}</h2>
+		Only {{product.price | price }}
 	
-		<p>{{product.description | prettyprint | truncate: 200  }}</p>
+		{{product.description | prettyprint | paragraph }}
+		
+		{{ 'it rocks!' | paragraph }}
+		
+	  </li>      
+	{% endfor %}
 	
-	</li>      
-	{% endfor %}      
-</ul>
+  </ul>
+{% endif %}
+</pre>
+
+Code to render:
+<pre>
+$liquid->parse(file_get_contents('templates/products.tpl'))->render($products);
 </pre>
 
 h2. Requirements
