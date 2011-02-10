@@ -10,12 +10,30 @@ Liquid is a PHP port of the Liquid template engine for Ruby, which was written b
   
 For more information on Liquid, visit: ("http://www.liquidmarkup.org":http://www.liquidmarkup.org)
 
-h1. Requirements
+h2. What does it look like?
+
+Example snippet:
+
+<pre>
+<ul id="products">      
+	{% for product in products %}
+	<li>
+		<h2>{{product.title}}</h2>
+		Only {{product.price | format_as_money }}
+	
+		<p>{{product.description | prettyprint | truncate: 200  }}</p>
+	
+	</li>      
+	{% endfor %}      
+</ul>
+</pre>
+
+h2. Requirements
 
 * PHP 5.2+
 * SPL extension
 
-h1. Fork Notes
+h2. Fork Notes
 
 This fork is based on php-liquid by Mateo Murphy. The original library is still hosted at: ("http://code.google.com/p/php-liquid/":http://code.google.com/p/php-liquid/)
 
