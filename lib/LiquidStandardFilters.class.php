@@ -68,7 +68,7 @@ class LiquidStandardFilters
 		return is_string($input) ? strtoupper($input) : $input;
 	}
 	
-	
+
 	/**
 	 * Capitalize words in the input sentence
 	 *
