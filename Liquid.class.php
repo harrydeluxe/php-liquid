@@ -107,6 +107,8 @@ defined('LIQUID_PATH') or define('LIQUID_PATH',dirname(__FILE__));
 defined('LIQUID_TMPPATH') or define('LIQUID_TMPPATH', null);
 defined('LIQUID_CACHE') or define('LIQUID_CACHE', false);
 
+defined('LIQUID_AUTOLOAD') or define('LIQUID_AUTOLOAD', true);
+
 
 class Liquid
 {
@@ -143,11 +145,27 @@ class Liquid
 	 */
 	public static function autoload($className)
 	{
-		// use include so that the error PHP file may appear
 		if(isset(self::$_coreClasses[$className]))
-			include(LIQUID_PATH.self::$_coreClasses[$className]);
+		{
+			include(LIQUID_PATH.self::$_coreClasses[$className]);	// use include so that the error PHP file may appear
 			//include_once(LIQUID_PATH.self::$_coreClasses[$className]);
-		return true;
+			return true;
+		}
+		return false;
+	}
+
+
+	/**
+	 * Registers a new class autoloader.
+	 * The new autoloader will be placed before {@link autoload} and after
+	 * any other existing autoloaders.
+	 * @param callback $callback a valid PHP callback (function name or array($className,$methodName)).
+	 */
+	public static function registerAutoloader($callback)
+	{
+		spl_autoload_unregister(array('Liquid', 'autoload'));
+		spl_autoload_register($callback);
+		spl_autoload_register(array('Liquid', 'autoload'));
 	}
 
 
@@ -178,4 +196,6 @@ class Liquid
 	);
 }
 
-spl_autoload_register(array('Liquid', 'autoload'));
+if(LIQUID_AUTOLOAD)
+	spl_autoload_register(array('Liquid', 'autoload'));
+	
