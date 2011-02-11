@@ -84,7 +84,7 @@ class LiquidTagInclude extends LiquidTag
 	 *
 	 * @param array $tokens
 	 */
-	function parse($tokens)
+	public function parse(&$tokens)
 	{
 		if(!isset($this->file_system))
 		{
@@ -146,7 +146,7 @@ class LiquidTagInclude extends LiquidTag
 	 *
 	 * @param LiquidContext $context
 	 */
-	function render(& $context)
+	public function render(&$context)
 	{
 		$result = '';
 		$variable = $context->get($this->variable);
