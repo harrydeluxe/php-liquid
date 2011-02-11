@@ -46,10 +46,9 @@ class LiquidLocalFileSystem extends LiquidBlankFileSystem
 	 * @param string $template_path
 	 * @return string
 	 */
-	function read_template_file($templatePath)
+	public function read_template_file($templatePath)
 	{
 		$full_path = $this->full_path($templatePath);
-		
 		if($full_path)
 		{
 			return file_get_contents($full_path);
@@ -68,7 +67,7 @@ class LiquidLocalFileSystem extends LiquidBlankFileSystem
 	 * @param string $template_path
 	 * @return string
 	 */
-	function full_path($template_path)
+	public function full_path($template_path)
 	{
 		$name_regex = new LiquidRegexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
 		
