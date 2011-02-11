@@ -17,7 +17,7 @@ class LiquidBlock extends LiquidTag
 	 *
 	 * @param array $tokens
 	 */
-	function parse(&$tokens)
+	public function parse(&$tokens)
 	{
 		$start_regexp = new LiquidRegexp('/^'.LIQUID_TAG_START.'/');
 		$tag_regexp = new LiquidRegexp('/^'.LIQUID_TAG_START.'\s*(\w+)\s*(.*)?'.LIQUID_TAG_END.'$/');
@@ -159,7 +159,7 @@ class LiquidBlock extends LiquidTag
 	 * @param LiquiContext $context
 	 * @return string
 	 */
-	public function render(& $context)
+	public function render(&$context)
 	{
 		return $this->render_all($this->_nodelist, $context);
 	}

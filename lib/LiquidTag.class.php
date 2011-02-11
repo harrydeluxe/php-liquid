@@ -14,7 +14,7 @@
  * 
  * @package Liquid
  */
-class LiquidTag
+abstract class LiquidTag
 {
 	/**
 	 * The markup for the tag
@@ -46,7 +46,7 @@ class LiquidTag
 	 * @param LiquidFileSystem $file_system
 	 * @return LiquidTag
 	 */
-	function __construct($markup, &$tokens, &$file_system)
+	public function __construct($markup, &$tokens, &$file_system)
 	{
 		$this->markup = $markup;
 		$this->file_system = $file_system;
@@ -59,7 +59,7 @@ class LiquidTag
 	 *
 	 * @param array $tokens
 	 */
-	function parse(& $tokens)
+	public function parse(&$tokens)
 	{
 	}
 
@@ -69,7 +69,7 @@ class LiquidTag
 	 *
 	 * @param string $markup
 	 */
-	function extract_attributes($markup)
+	public function extract_attributes($markup)
 	{
 		$this->attributes = array();
 	
@@ -89,7 +89,7 @@ class LiquidTag
 	 *
 	 * @return string
 	 */
-	function name()
+	public function name()
 	{
 		return strtolower(this::class_name());
 	}
@@ -101,7 +101,7 @@ class LiquidTag
 	 * @param LiquidContext $context
 	 * @return string
 	 */
-	function render(&$context)
+	public function render(&$context)
 	{
 		return '';
 	}
