@@ -55,7 +55,7 @@ class LiquidTagCase extends LiquidDecisionBlock
 		
 		$syntax_regexp = new LiquidRegexp('/'.LIQUID_QUOTED_FRAGMENT.'/');
 		
-		if($syntax_regexp->match($markup, $matches))
+		if($syntax_regexp->match($markup))
 		{
 			$this->left = $syntax_regexp->matches[0];
 		}
