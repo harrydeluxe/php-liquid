@@ -13,6 +13,17 @@ class LiquidBlock extends LiquidTag
 
 
 	/**
+	 * 
+	 *
+	 * @return array
+	 */
+	public function getNodelist()
+	{
+		return $this->_nodelist;
+	}
+
+
+	/**
 	 * Parses the given tokens
 	 *
 	 * @param array $tokens
@@ -184,14 +195,9 @@ class LiquidBlock extends LiquidTag
 	 * @param LiquidContext $context
 	 * @return string
 	 */
-	function render_all($list, & $context)
+	function render_all(array $list, & $context)
 	{
 		$result = '';
-		
-		if(!is_array($list))
-		{
-			throw new LiquidException('Parameter $list is not an array');
-		}
 		
 		foreach($list as $token)
 		{
