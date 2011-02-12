@@ -179,7 +179,7 @@ class Liquid
 		'LiquidBlankFileSystem' => '/lib/LiquidBlankFileSystem.class.php',
 		'LiquidLocalFileSystem' => '/lib/LiquidLocalFileSystem.class.php',
 		'LiquidFilterbank' => '/lib/LiquidFilterbank.class.php',
-		'LiquidTagTableRow' => '/lib/Tag/LiquidTagTableRow.class.php',
+		'LiquidTagTablerow' => '/lib/Tag/LiquidTagTablerow.class.php',
 		'LiquidDecisionBlock' => '/lib/LiquidDecisionBlock.class.php',
 		'LiquidTagInclude' => '/lib/Tag/LiquidTagInclude.class.php',
 		'LiquidTagCase' => '/lib/Tag/LiquidTagCase.class.php',
