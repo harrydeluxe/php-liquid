@@ -92,13 +92,15 @@ class LiquidTagFor extends LiquidBlock
 				}
 			} 
 			
-			$limit = $context->get($this->attributes['limit']);
+			//$limit = $context->get($this->attributes['limit']);
+			$limit = (isset($this->attributes['limit'])) ? $context->get($this->attributes['limit']) : null;
 			
 			$range_end = $limit ? $limit : count($collection) - $offset;
 			
 			$range = array($offset, $range_end);
 			
 			$context->registers['for'][$this->name] = $range_end + $offset;
+			
 		}
 		
 		$result = '';
