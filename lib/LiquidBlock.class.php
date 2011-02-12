@@ -43,7 +43,7 @@ class LiquidBlock extends LiquidTag
 		
 		while($token = array_shift($tokens))
 		{
-			if ($start_regexp->match($token))
+			if($start_regexp->match($token))
 			{
 				if($tag_regexp->match($token))
 				{
@@ -65,8 +65,6 @@ class LiquidBlock extends LiquidTag
 					{
 						$this->unknown_tag($tag_regexp->matches[1], $tag_regexp->matches[2], $tokens);	
 					}
-					
-
 				}
 				else
 				{
@@ -154,13 +152,9 @@ class LiquidBlock extends LiquidTag
 	{
 		$variable_regexp = new LiquidRegexp('/^'.LIQUID_VARIABLE_START.'(.*)'.LIQUID_VARIABLE_END.'$/');
 		if($variable_regexp->match($token))
-		{
-			return new LiquidVariable($variable_regexp->matches[1]);			
-		}
-		else
-		{
-			throw new LiquidException("Variable $token was not properly terminated");
-		}
+			return new LiquidVariable($variable_regexp->matches[1]);	
+		
+		throw new LiquidException("Variable $token was not properly terminated");
 	}
 
 
@@ -195,22 +189,15 @@ class LiquidBlock extends LiquidTag
 	 * @param LiquidContext $context
 	 * @return string
 	 */
-	function render_all(array $list, & $context)
+	function render_all(array $list, &$context)
 	{
 		$result = '';
 		
 		foreach($list as $token)
 		{
-			if(is_object($token) && method_exists($token, 'render'))
-			{
-				$result .= $token->render($context);
-			}
-			else
-			{
-				$result .= $token;
-			}
+			$result .= (is_object($token) && method_exists($token, 'render')) ? $token->render($context) : $token;
 		}
-		
+
 		return $result;
 	}
 }
