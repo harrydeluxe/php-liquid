@@ -23,9 +23,9 @@
 class LiquidTemplate
 {
 	/**
-	 * @var LiquidDocument The root of the node tree
+	 * @var LiquidDocument The _root of the node tree
 	 */
-	private $root;
+	private $_root;
 	
 	/**
 	 * @var LiquidBlankFileSystem The file system to use for includes
@@ -49,6 +49,18 @@ class LiquidTemplate
 		$this->file_system = (isset($path)) ? new LiquidLocalFileSystem($path) : new LiquidBlankFileSystem();
 		$this->filters = array();
 	}
+
+
+	/**
+	 * 
+	 *
+	 * @return LiquidDocument
+	 */
+	public function getRoot()
+	{
+		return $this->_root;
+	}
+
 	
 /*	this is currently not needed
 	function register_tag($name) {
@@ -92,17 +104,17 @@ class LiquidTemplate
 		
 		if(LIQUID_CACHE === true && is_file($tmpname))
 		{
-			$this->root = unserialize(file_get_contents($tmpname));
-			$parseNew = $this->root->checkIncludes();
+			$this->_root = unserialize(file_get_contents($tmpname));
+			$parseNew = $this->_root->checkIncludes();
 		}
 		
 		if($parseNew)
 		{
-			$this->root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+			$this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
 			
 			if(LIQUID_CACHE === true)
 			{
-				if(!@file_put_contents($tmpname, serialize($this->root)))
+				if(!@file_put_contents($tmpname, serialize($this->_root)))
 					throw new LiquidException("Tempfile failed to open stream");
 			}
 		}
@@ -140,6 +152,6 @@ class LiquidTemplate
 			$context->add_filters($filter);
 		}
 		
-		return $this->root->render($context);
+		return $this->_root->render($context);
 	}
 }
