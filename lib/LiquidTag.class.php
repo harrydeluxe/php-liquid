@@ -77,7 +77,7 @@ abstract class LiquidTag
 		
 		$matches = $attribute_regexp->scan($markup);
 		
-		foreach ($matches as $match)
+		foreach($matches as $match)
 		{
 			$this->attributes[$match[0]] = $match[1];
 		}		

@@ -170,7 +170,8 @@ class LiquidContext
 			throw new LiquidException("Cannot resolve arrays as key");
 		}
 		
-		if (is_null($key) || $key == 'null') {
+		if (is_null($key) || $key == 'null')
+		{
 			return null;
 		}
 	
@@ -222,11 +223,8 @@ class LiquidContext
 			{
 				$obj = $scope[$key];
 				
-				//if(is_a($obj, 'LiquidDrop'))
-				if($obj instanceof LiquidDrop)	// harry
-				{
+				if($obj instanceof LiquidDrop)
 					$obj->context = $this;
-				}
 				
 				return $obj;
 			}
@@ -246,7 +244,7 @@ class LiquidContext
 		
 		$object = $this->fetch(array_shift($parts));
 		
-		if (is_object($object))
+		if(is_object($object))
 		{
 			$object = $object->to_liquid();
 		}
@@ -256,24 +254,21 @@ class LiquidContext
 		{
 			while (count($parts) > 0)
 			{
-				//if (is_a($object, 'LiquidDrop'))
-				if ($object instanceof LiquidDrop)	// harry
-				{
+				if($object instanceof LiquidDrop)
 					$object->context = $this;
-				}	
 				
 				$next_part_name = array_shift($parts);
 				
-				if (is_array($object))
+				if(is_array($object))
 				{
 					
 					// if the last part of the context variable is .size we just return the count
-					if ($next_part_name == 'size' && count($parts) == 0 && !array_key_exists('size', $object))
+					if($next_part_name == 'size' && count($parts) == 0 && !array_key_exists('size', $object))
 					{
 						return count($object);	
 					}					
 					
-					if (array_key_exists($next_part_name, $object))
+					if(array_key_exists($next_part_name, $object))
 					{
 						$object = $object[$next_part_name];
 					}
