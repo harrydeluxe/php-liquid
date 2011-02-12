@@ -26,6 +26,7 @@ class LiquidVariable
 	 * @var string The name of the variable
 	 */
 	private $_name;
+	//public $_name;
 	
 	/**
 	 * @var string The markup of the variable
@@ -33,6 +34,16 @@ class LiquidVariable
 	private $markup;
 
 
+	public function getName()
+	{
+		return $this->_name;
+	}
+	
+	public function getFilters()
+	{
+		return $this->filters;
+	}
+	
 	/**
 	 * Constructor
 	 *
