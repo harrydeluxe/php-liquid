@@ -56,7 +56,7 @@ class LiquidTagInclude extends LiquidTag
 	public function __construct($markup, &$tokens, &$file_system)
 	{
 		$regex = new LiquidRegexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+('.LIQUID_QUOTED_FRAGMENT.'+))?/');
-							
+
 		if($regex->match($markup))
 		{
 			

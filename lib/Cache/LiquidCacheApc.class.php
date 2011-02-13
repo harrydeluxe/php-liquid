@@ -20,7 +20,7 @@ class LiquidCacheApc extends LiquidCache
 		
 		if(!extension_loaded('apc'))
 			throw new LiquidException('LiquidCacheApc requires PHP apc extension to be loaded.');
-    }
+	}
 
 
 	/**

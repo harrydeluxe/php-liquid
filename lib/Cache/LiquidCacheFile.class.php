@@ -14,15 +14,15 @@ class LiquidCacheFile extends LiquidCache
 	 * It checks the availability of apccache.
 	 * @throws LiquidException if Cachedir not exists.
 	 */
-    public function __construct($options = array())
+	public function __construct($options = array())
 	{
 		parent::__construct($options);
 		
-        if(isset($options['cache_dir']) && is_writable($options['cache_dir']))
+		if(isset($options['cache_dir']) && is_writable($options['cache_dir']))
 			$this->_path = realpath($options['cache_dir']).DIRECTORY_SEPARATOR;
 		else
 			throw new LiquidException('Cachedir not exists or not writable');
-    }
+	}
 
 
 	/**
@@ -31,13 +31,13 @@ class LiquidCacheFile extends LiquidCache
 	 * @param string $key a unique key identifying the cached value
 	 * @return string the value stored in cache, false if the value is not in the cache or expired.
 	 */
-    public function read($key)
+	public function read($key)
 	{
-        if(!$this->exists($key))
-            return false;
+		if(!$this->exists($key))
+			return false;
 
-        return unserialize(file_get_contents($this->_path.$this->_prefix.$key));
-    }
+		return unserialize(file_get_contents($this->_path.$this->_prefix.$key));
+	}
 
 
 	/**
@@ -46,15 +46,15 @@ class LiquidCacheFile extends LiquidCache
 	 * @param string $key a unique key identifying the cached value
 	 * @return boolean true if the key is in cache, false otherwise
 	 */
-    public function exists($key)
+	public function exists($key)
 	{
 		$cacheFile = $this->_path.$this->_prefix.$key;
 		
-        if(!file_exists($cacheFile) || @filemtime($cacheFile) + $this->_expire < time())
-            return false;
+		if(!file_exists($cacheFile) || @filemtime($cacheFile) + $this->_expire < time())
+			return false;
 
 		return true;
-    }
+	}
 
 
 	/**
@@ -73,7 +73,7 @@ class LiquidCacheFile extends LiquidCache
 		}
 
 		throw new LiquidException('Can not write cache file');
-    }
+	}
 
 
 	/**
@@ -81,9 +81,9 @@ class LiquidCacheFile extends LiquidCache
 	 *
 	 * @return boolean whether the flush operation was successful.
 	 */
-    public function flush($expiredOnly = false)
+	public function flush($expiredOnly = false)
 	{
-        foreach(glob($this->_path.$this->_prefix.'*') as $file)
+		foreach(glob($this->_path.$this->_prefix.'*') as $file)
 		{
 			if($expiredOnly)
 			{
@@ -91,9 +91,9 @@ class LiquidCacheFile extends LiquidCache
 					@unlink($file);
 			}
 			else
-            	@unlink($file);
-        }
-    }
+				@unlink($file);
+		}
+	}
 
 
 	/**

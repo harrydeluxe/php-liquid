@@ -77,7 +77,7 @@ class LiquidStandardFilters
 	 */
 	public static function capitalize($input)
 	{
-    	return preg_replace("!(^|[^\p{L}'])([\p{Ll}])!ue", "'\\1'.ucfirst('\\2')", ucwords($input)); 
+		return preg_replace("!(^|[^\p{L}'])([\p{Ll}])!ue", "'\\1'.ucfirst('\\2')", ucwords($input)); 
 	}
 
 

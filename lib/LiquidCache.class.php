@@ -9,31 +9,31 @@
  */
 abstract class LiquidCache
 {
-    protected $_expire = 3600;
+	protected $_expire = 3600;
 	
-    protected $_prefix = 'liquid_';
+	protected $_prefix = 'liquid_';
 	
-    protected $_path;
+	protected $_path;
 
 
 	public function __construct($options = array())
 	{
-        if(isset($options['cache_expire']))
+		if(isset($options['cache_expire']))
 		{
-            $this->_expire = $options['cache_expire'];
-        }
+			$this->_expire = $options['cache_expire'];
+		}
 		
-        if(isset($options['cache_prefix']))
+		if(isset($options['cache_prefix']))
 		{
-            $this->_prefix = $options['cache_prefix'];
-        }
-    }
+			$this->_prefix = $options['cache_prefix'];
+		}
+	}
 
-    public function read($key){}
+	public function read($key){}
 	
-    public function exists($key){}
-
-    public function write($key, &$value){}
-
-    public function flush($expiredOnly = false){}
+	public function exists($key){}
+	
+	public function write($key, &$value){}
+	
+	public function flush($expiredOnly = false){}
 }
