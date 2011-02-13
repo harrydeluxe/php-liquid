@@ -38,16 +38,53 @@ class LiquidTemplate
 	var $filters;
 
 
+	private static $_cache;
+
+
 	/**
 	 * Constructor
 	 *
 	 * @return LiquidTemplate
 	 */
-	public function __construct($path = null)
+	public function __construct($path = null, $cache = null)
 	{
-		//$this->file_system = new LiquidBlankFileSystem();
 		$this->file_system = (isset($path)) ? new LiquidLocalFileSystem($path) : new LiquidBlankFileSystem();
 		$this->filters = array();
+		$this->setCache($cache);
+	}
+
+
+	/**
+	 * 
+	 *
+	 */
+	public function setCache($cache)
+	{
+		if(is_array($cache))
+		{
+			if(isset($cache['cache']) && class_exists('LiquidCache'.ucwords($cache['cache'])) )
+			{
+				$classname = 'LiquidCache'.ucwords($cache['cache']);
+				self::$_cache = new $classname($cache);
+			}
+			else
+				throw new LiquidException('Invalid Cache options!');
+		}
+		else
+		{
+			self::$_cache = $cache;
+		}
+	}
+	
+	
+	/**
+	 * 
+	 *
+	 * @return object
+	 */
+	public static function getCache()
+	{
+		return self::$_cache;
 	}
 
 
@@ -98,27 +135,23 @@ class LiquidTemplate
 	 */
 	public function parse($source)
 	{
-		$parseNew = true;
+		$cache = self::$_cache;
 		
-		$tmpname = LIQUID_TMPPATH.md5($source);
-		
-		if(LIQUID_CACHE === true && is_file($tmpname))
+		if(isset($cache))
 		{
-			$this->_root = unserialize(file_get_contents($tmpname));
-			$parseNew = $this->_root->checkIncludes();
-		}
-		
-		if($parseNew)
-		{
-			$this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
-			
-			if(LIQUID_CACHE === true)
+			if(($this->_root = $cache->read(md5($source))) != false && $this->_root->checkIncludes() != true)
 			{
-				if(!@file_put_contents($tmpname, serialize($this->_root)))
-					throw new LiquidException("Tempfile failed to open stream");
+			}
+			else
+			{
+				$this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+				$cache->write(md5($source), $this->_root);
 			}
 		}
-
+		else
+		{
+			$this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+		}
 		return $this;
 	}
 

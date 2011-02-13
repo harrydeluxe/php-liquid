@@ -104,8 +104,6 @@ define('LIQUID_TOKENIZATION_REGEXP', '/('.LIQUID_TAG_START.'.*?'.LIQUID_TAG_END.
 
 defined('LIQUID_PATH') or define('LIQUID_PATH',dirname(__FILE__));
 
-defined('LIQUID_TMPPATH') or define('LIQUID_TMPPATH', null);
-defined('LIQUID_CACHE') or define('LIQUID_CACHE', false);
 
 defined('LIQUID_AUTOLOAD') or define('LIQUID_AUTOLOAD', true);
 
@@ -176,6 +174,11 @@ class Liquid
 		'LiquidContext' => '/lib/LiquidContext.class.php',
 		'LiquidDocument' => '/lib/LiquidDocument.class.php',
 		'LiquidDrop' => '/lib/LiquidDrop.class.php',
+		
+		'LiquidCache' => '/lib/LiquidCache.class.php',
+		'LiquidCacheApc' => '/lib/Cache/LiquidCacheApc.class.php',
+		'LiquidCacheFile' => '/lib/Cache/LiquidCacheFile.class.php',
+		
 		'LiquidBlankFileSystem' => '/lib/LiquidBlankFileSystem.class.php',
 		'LiquidLocalFileSystem' => '/lib/LiquidLocalFileSystem.class.php',
 		'LiquidFilterbank' => '/lib/LiquidFilterbank.class.php',
