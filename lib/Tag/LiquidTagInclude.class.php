@@ -94,29 +94,24 @@ class LiquidTagInclude extends LiquidTag
 		// read the source of the template and create a new sub document
 		$source = $this->file_system->read_template_file($this->template_name);
 		
-		//$this->document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
-		
-		
 		$this->_hash = md5($source);
-		
-		$parseNew = true;
-		
-		$tmpname = LIQUID_TMPPATH.$this->_hash;
-		
-		if(LIQUID_CACHE === true && is_file($tmpname))
+
+		$cache = LiquidTemplate::getCache();
+
+		if(isset($cache))
 		{
-			$this->document = unserialize(file_get_contents($tmpname));
-			$parseNew = $this->document->checkIncludes();
+			if(($this->document = $cache->read($this->_hash)) != false && $this->document->checkIncludes() != true)
+			{
+			}
+			else
+			{
+				$this->document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+				$cache->write($this->_hash, $this->document);
+			}
 		}
-		
-		if($parseNew)
+		else
 		{
 			$this->document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
-			if(LIQUID_CACHE === true)
-			{
-				if(!@file_put_contents($tmpname, serialize($this->document)))
-					throw new LiquidException("Tempfile failed to open stream");
-			}
 		}
 	}
 
@@ -128,13 +123,14 @@ class LiquidTagInclude extends LiquidTag
 	 */
 	public function checkIncludes()
 	{
+		$cache = LiquidTemplate::getCache();
+
 		if($this->document->checkIncludes() == true)
 			return true;
 	
 		$source = $this->file_system->read_template_file($this->template_name);
-		$tmpname = LIQUID_TMPPATH.md5($source);
 		
-		if(is_file($tmpname) && $this->_hash == md5($source))
+		if($cache->exists(md5($source)) && $this->_hash == md5($source))
 			return false;
 		
 		return true;
