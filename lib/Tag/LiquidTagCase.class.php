@@ -134,7 +134,7 @@ class LiquidTagCase extends LiquidDecisionBlock
 	 *
 	 * @param LiquidContext $context
 	 */
-	function render(&$context)
+	public function render(&$context)
 	{
 		$output = ''; // array();
 		$run_else_block = true;

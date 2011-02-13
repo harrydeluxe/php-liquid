@@ -21,12 +21,12 @@ class LiquidTagCycle extends LiquidTag
 	/**
 	 * @var string The name of the cycle; if none is given one is created using the value list
 	 */
-	var $name;
+	private $_name;
 
 	/**
 	 * @var array The variables to cycle between
 	 */
-	var $variables;	
+	private $_variables;	
 
 
 	/**
@@ -36,20 +36,20 @@ class LiquidTagCycle extends LiquidTag
 	 * @param array $tokens
 	 * @return CycleLiquidTag
 	 */
-	function __construct($markup, &$tokens, &$file_system)
+	public function __construct($markup, &$tokens, &$file_system)
 	{
 		$simple_syntax = new LiquidRegexp("/".LIQUID_QUOTED_FRAGMENT."/");
 		$named_syntax = new LiquidRegexp("/(".LIQUID_QUOTED_FRAGMENT.")\s*\:\s*(.*)/");
 		
 		if($named_syntax->match($markup))
 		{
-			$this->variables = $this->variables_from_string($named_syntax->matches[2]);
-			$this->name = $named_syntax->matches[1];
+			$this->_variables = $this->_variablesFromString($named_syntax->matches[2]);
+			$this->_name = $named_syntax->matches[1];
 		}
 		elseif($simple_syntax->match($markup))
 		{
-			$this->variables = $this->variables_from_string($markup);
-			$this->name = "'".implode($this->variables)."'";
+			$this->_variables = $this->_variablesFromString($markup);
+			$this->_name = "'".implode($this->_variables)."'";
 		}
 		else
 		{
@@ -64,11 +64,11 @@ class LiquidTagCycle extends LiquidTag
 	 * @var LiquidContext $context
 	 * @return string
 	 */
-	function render(&$context)
+	public function render(&$context)
 	{
 		$context->push();
 		
-		$key = $context->get($this->name);
+		$key = $context->get($this->_name);
 		
 		if(isset($context->registers['cycle'][$key]))
 		{
@@ -79,11 +79,11 @@ class LiquidTagCycle extends LiquidTag
 			$iteration = 0;
 		}
 		
-		$result = $context->get($this->variables[$iteration]);
+		$result = $context->get($this->_variables[$iteration]);
 		
 		$iteration += 1;
 
-		if($iteration >= count($this->variables))
+		if($iteration >= count($this->_variables))
 		{
 			$iteration = 0;
 		}
@@ -102,7 +102,7 @@ class LiquidTagCycle extends LiquidTag
 	 * @param string $markup
 	 * @return array;
 	 */
-	function variables_from_string($markup)
+	private function _variablesFromString($markup)
 	{
 		$regexp = new LiquidRegexp('/\s*('.LIQUID_QUOTED_FRAGMENT.')\s*/');
 		$parts = explode(',', $markup);

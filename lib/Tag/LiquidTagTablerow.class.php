@@ -63,7 +63,7 @@ class LiquidTagTablerow extends LiquidBlock
 	 * @param LiquidContext $context
 	 * @return string
 	 */
-	function render(& $context)
+	public function render(&$context)
 	{
 		$collection = $context->get($this->collection_name);
 		

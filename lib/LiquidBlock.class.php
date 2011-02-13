@@ -189,7 +189,8 @@ class LiquidBlock extends LiquidTag
 	 * @param LiquidContext $context
 	 * @return string
 	 */
-	function render_all(array $list, &$context)
+	//public function render_all(array $list, &$context)
+	protected function render_all(array $list, &$context)
 	{
 		$result = '';
 		

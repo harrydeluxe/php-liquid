@@ -14,7 +14,7 @@ class LiquidTagCapture extends LiquidBlock
 	 *
 	 * @var string
 	 */
-	var $to;
+	private $_to;
 
 
 	/**
@@ -25,13 +25,13 @@ class LiquidTagCapture extends LiquidBlock
 	 * @param LiquidFileSystem $file_system
 	 * @return CaptureLiquidTag
 	 */
-	function __construct($markup, &$tokens, &$file_system)
+	public function __construct($markup, &$tokens, &$file_system)
 	{
 		$syntax_regexp = new LiquidRegexp('/(\w+)/');
 		
 		if($syntax_regexp->match($markup))
 		{
-			$this->to = $syntax_regexp->matches[1];
+			$this->_to = $syntax_regexp->matches[1];
 			parent::__construct($markup, $tokens, $file_system);
 		}
 		else
@@ -46,10 +46,10 @@ class LiquidTagCapture extends LiquidBlock
 	 *
 	 * @param LiquidContext $context
 	 */
-	function render(& $context)
+	public function render(& $context)
 	{
 		$output = parent::render($context);
 		
-		$context->set($this->to, $output);
+		$context->set($this->_to, $output);
 	}		
 }

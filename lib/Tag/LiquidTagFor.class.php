@@ -14,17 +14,17 @@ class LiquidTagFor extends LiquidBlock
 	/**
 	 * @var array The collection to loop over
 	 */
-	var $collection_name;
+	private $_collectionName;
 	
 	/**
 	 * @var string The variable name to assign collection elemnts to
 	 */
-	var $variable_name;
+	private $_variableName;
 
 	/**
 	 * @var string The name of the loop, which is a compound of the collection and variable names
 	 */
-	var $name;
+	private $_name;
 
 
 	/**
@@ -35,7 +35,7 @@ class LiquidTagFor extends LiquidBlock
 	 * @param LiquidFileSystem $file_system
 	 * @return ForLiquidTag
 	 */
-	function __construct($markup, &$tokens, &$file_system)
+	public function __construct($markup, &$tokens, &$file_system)
 	{
 		parent::__construct($markup, $tokens, $file_system);
 		
@@ -43,9 +43,9 @@ class LiquidTagFor extends LiquidBlock
 		
 		if($syntax_regexp->match($markup))
 		{
-			$this->variable_name = $syntax_regexp->matches[1];
-			$this->collection_name = $syntax_regexp->matches[2];
-			$this->name = $syntax_regexp->matches[1].'-'.$syntax_regexp->matches[2];
+			$this->_variableName = $syntax_regexp->matches[1];
+			$this->_collectionName = $syntax_regexp->matches[2];
+			$this->_name = $syntax_regexp->matches[1].'-'.$syntax_regexp->matches[2];
 			$this->extract_attributes($markup);
 		}
 		else
@@ -60,14 +60,14 @@ class LiquidTagFor extends LiquidBlock
 	 *
 	 * @param LiquidContext $context
 	 */
-	function render(&$context)
+	public function render(&$context)
 	{
 		if(!isset($context->registers['for']))
 		{
 			$context->registers['for'] = array();
 		}
 		
-		$collection = $context->get($this->collection_name);
+		$collection = $context->get($this->_collectionName);
 		
 		if(is_null($collection) || count($collection) == 0)
 		{
@@ -82,14 +82,7 @@ class LiquidTagFor extends LiquidBlock
 			
 			if(isset($this->attributes['offset']))
 			{
-				if($this->attributes['offset'] == 'continue')
-				{
-					$offset = $context->registers['for'][$this->name];
-				}
-				else
-				{
-					$offset = $context->get($this->attributes['offset']);
-				}
+				$offset = ($this->attributes['offset'] == 'continue') ? $context->registers['for'][$this->_name] : $context->get($this->attributes['offset']);
 			} 
 			
 			//$limit = $context->get($this->attributes['limit']);
@@ -99,7 +92,7 @@ class LiquidTagFor extends LiquidBlock
 			
 			$range = array($offset, $range_end);
 			
-			$context->registers['for'][$this->name] = $range_end + $offset;
+			$context->registers['for'][$this->_name] = $range_end + $offset;
 			
 		}
 		
@@ -118,9 +111,9 @@ class LiquidTagFor extends LiquidBlock
 
 		foreach($segment as $index => $item)
 		{
-			$context->set($this->variable_name, $item);
+			$context->set($this->_variableName, $item);
 			$context->set('forloop', array(
-				'name'		=> $this->name,
+				'name'		=> $this->_name,
 				'length' 	=> $length,
 				'index' 	=> $index + 1,
 				'index0' 	=> $index,

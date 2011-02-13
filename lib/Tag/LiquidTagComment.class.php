@@ -15,7 +15,7 @@ class LiquidTagComment extends LiquidBlock
 	 * @param LiquidContext $context
 	 * @return string
 	 */
-	function render(&$context)
+	public function render(&$context)
 	{
 		return '';
 	}	
