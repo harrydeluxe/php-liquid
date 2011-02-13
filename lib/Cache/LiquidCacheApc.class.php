@@ -19,7 +19,7 @@ class LiquidCacheApc extends LiquidCache
 		parent::__construct($options);
 		
 		if(!extension_loaded('apc'))
-            throw new LiquidException('LiquidCacheApc requires PHP apc extension to be loaded.');
+			throw new LiquidException('LiquidCacheApc requires PHP apc extension to be loaded.');
     }
 
 
