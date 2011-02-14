@@ -41,6 +41,8 @@ class LiquidBlock extends LiquidTag
 			return;
 		}
 		
+		$tags = LiquidTemplate::getTags();
+		
 		while($token = array_shift($tokens))
 		{
 			if($start_regexp->match($token))
@@ -53,8 +55,10 @@ class LiquidBlock extends LiquidTag
 						return $this->end_tag();
 					}
 
-					// search for a defined class of the right name, instead of searching in an array				
-					$tag_name = 'LiquidTag'.ucwords($tag_regexp->matches[1]);
+					if(array_key_exists($tag_regexp->matches[1], $tags))
+						$tag_name = $tags[$tag_regexp->matches[1]];
+					else			
+						$tag_name = 'LiquidTag'.ucwords($tag_regexp->matches[1]);// search for a defined class of the right name, instead of searching in an array	
 					
 					// fetch the tag from registered blocks
 					if(class_exists($tag_name))

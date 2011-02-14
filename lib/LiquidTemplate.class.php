@@ -30,12 +30,17 @@ class LiquidTemplate
 	/**
 	 * @var LiquidBlankFileSystem The file system to use for includes
 	 */
-	var $file_system;
+	private $_fileSystem;
 	
 	/**
 	 * @var array Globally included filters
 	 */
-	var $filters;
+	private $_filters;
+	
+	/**
+	 * @var array Custom tags
+	 */
+	private static $_tags = array();
 
 
 	private static $_cache;
@@ -48,8 +53,8 @@ class LiquidTemplate
 	 */
 	public function __construct($path = null, $cache = null)
 	{
-		$this->file_system = (isset($path)) ? new LiquidLocalFileSystem($path) : new LiquidBlankFileSystem();
-		$this->filters = array();
+		$this->_fileSystem = (isset($path)) ? new LiquidLocalFileSystem($path) : new LiquidBlankFileSystem();
+		$this->_filters = array();
 		$this->setCache($cache);
 	}
 
@@ -99,20 +104,37 @@ class LiquidTemplate
 	}
 
 	
-/*	this is currently not needed
-	function register_tag($name) {
-		$this->tags[$name] = $name;
-		
+	/**
+	 * Register custom Tags
+	 *
+	 * @param string $name
+	 * @param string $class
+	 */
+	public function registerTag($name, $class)
+	{
+		self::$_tags[$name] = $class;
 	}
-*/	
+
+
+	/**
+	 * 
+	 *
+	 * @return array
+	 */
+	public static function getTags()
+	{
+		return self::$_tags;
+	}
+
+
 	/**
 	 * Register the filter
 	 *
 	 * @param unknown_type $filter
 	 */
-	function register_filter($filter)
+	public function registerFilter($filter)
 	{
-		$this->filters[] = $filter;
+		$this->_filters[] = $filter;
 	}	
 
 
@@ -144,13 +166,13 @@ class LiquidTemplate
 			}
 			else
 			{
-				$this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+				$this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->_fileSystem);
 				$cache->write(md5($source), $this->_root);
 			}
 		}
 		else
 		{
-			$this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+			$this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->_fileSystem);
 		}
 		return $this;
 	}
@@ -172,15 +194,15 @@ class LiquidTemplate
 		{
 			if(is_array($filters))
 			{
-				array_merge($this->filters, $filters);
+				array_merge($this->_filters, $filters);
 			}
 			else
 			{
-				$this->filters[] = $filters;
+				$this->_filters[] = $filters;
 			}
 		}
 	
-		foreach($this->filters as $filter)
+		foreach($this->_filters as $filter)
 		{
 			$context->add_filters($filter);
 		}
