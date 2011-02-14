@@ -1,6 +1,6 @@
 h1. Liquid template engine for PHP
 
-Liquid is a PHP port of the Liquid template engine for Ruby, which was written by Tobias Lutke. Although there are many other templating engines for PHP, including Smarty (from which Liquid was partially inspired), Liquid had some advantages that made porting worthwhile:
+Liquid is a PHP port of the "Liquid template engine for Ruby":http://www.liquidmarkup.org, which was written by Tobias Lutke. Although there are many other templating engines for PHP, including Smarty (from which Liquid was partially inspired), Liquid had some advantages that made porting worthwhile:
 
 * Readable and human friendly syntax, that is usable in any type of document, not just html, without need for escaping.
 * Quick and easy to use and maintain.
@@ -9,8 +9,6 @@ Liquid is a PHP port of the Liquid template engine for Ruby, which was written b
 * Seperate compiling and rendering stages for improved performance.
 * Easy to extend with your own tags and filters.
 * 100% Markup compatibility with a Ruby templating engine, making templates usable for either.
-  
-For more information on Liquid, visit: ("http://www.liquidmarkup.org":http://www.liquidmarkup.org)
 
 h2. What does it look like?
 
