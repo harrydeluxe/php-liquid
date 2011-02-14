@@ -14,38 +14,38 @@
  * if a given property exists
  *
  */
-define('LIQUID_HAS_PROPERTY_METHOD', 'field_exists');
+defined('LIQUID_HAS_PROPERTY_METHOD') or define('LIQUID_HAS_PROPERTY_METHOD', 'field_exists');
 
 /**
  * This method is called on object when resolving variables when
  * a given property exists
  *
  */
-define('LIQUID_GET_PROPERTY_METHOD', 'get');
+defined('LIQUID_GET_PROPERTY_METHOD') or define('LIQUID_GET_PROPERTY_METHOD', 'get');
 
 /**
  * Separator between filters
  *
  */
-define('LIQUID_FILTER_SEPARATOR', '\|');
+defined('LIQUID_FILTER_SEPARATOR') or define('LIQUID_FILTER_SEPARATOR', '\|');
 
 /**
  * Separator for arguments
  *
  */
-define('LIQUID_ARGUMENT_SEPARATOR', ',');
+defined('LIQUID_ARGUMENT_SEPARATOR') or define('LIQUID_ARGUMENT_SEPARATOR', ',');
 
 /**
  * Separator for argument names and values
  *
  */
-define('LIQUID_FILTER_ARGUMENT_SEPARATOR', ':');
+defined('LIQUID_FILTER_ARGUMENT_SEPARATOR') or define('LIQUID_FILTER_ARGUMENT_SEPARATOR', ':');
 
 /**
  * Separator for variable attributes
  *
  */
-define('LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR', '.');
+defined('LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR') or define('LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR', '.');
 
 /**
  * Suffix fuer include dateien
@@ -57,49 +57,49 @@ defined('LIQUID_INCLUDE_SUFFIX') or define('LIQUID_INCLUDE_SUFFIX', 'tpl');
  * Tag start
  *
  */
-define('LIQUID_TAG_START', '{%');
+defined('LIQUID_TAG_START') or define('LIQUID_TAG_START', '{%');
 
 /**
  * Tag end
  *
  */
-define('LIQUID_TAG_END', '%}');
+defined('LIQUID_TAG_END') or define('LIQUID_TAG_END', '%}');
 
 /**
  * Variable start
  *
  */
-define('LIQUID_VARIABLE_START', '{{');
+defined('LIQUID_VARIABLE_START') or define('LIQUID_VARIABLE_START', '{{');
 
 /**
  * Variable end
  *
  */
-define('LIQUID_VARIABLE_END', '}}');
+defined('LIQUID_VARIABLE_END') or define('LIQUID_VARIABLE_END', '}}');
 
 /**
  * The characters allowed in a variable
  *
  */
-define('LIQUID_ALLOWED_VARIABLE_CHARS', '[a-zA-Z_.-]');
+defined('LIQUID_ALLOWED_VARIABLE_CHARS') or define('LIQUID_ALLOWED_VARIABLE_CHARS', '[a-zA-Z_.-]');
 
 /**
  * Regex for quoted fragments
  *
  */
-define('LIQUID_QUOTED_FRAGMENT', '"[^"]+"|\'[^\']+\'|[^\s,|]+');
+defined('LIQUID_QUOTED_FRAGMENT') or define('LIQUID_QUOTED_FRAGMENT', '"[^"]+"|\'[^\']+\'|[^\s,|]+');
 
 /**
  * Regex for recongnizing tab attributes
  *
  */
-define('LIQUID_TAG_ATTRIBUTES', '/(\w+)\s*\:\s*('.LIQUID_QUOTED_FRAGMENT.')/');
+defined('LIQUID_TAG_ATTRIBUTES') or define('LIQUID_TAG_ATTRIBUTES', '/(\w+)\s*\:\s*('.LIQUID_QUOTED_FRAGMENT.')/');
 
 /**
  * Regex used to split tokenss
  *
  */
-define('LIQUID_TOKENIZATION_REGEXP', '/('.LIQUID_TAG_START.'.*?'.LIQUID_TAG_END.'|'.LIQUID_VARIABLE_START.'.*?'.LIQUID_VARIABLE_END.')/');
+defined('LIQUID_TOKENIZATION_REGEXP') or define('LIQUID_TOKENIZATION_REGEXP', '/('.LIQUID_TAG_START.'.*?'.LIQUID_TAG_END.'|'.LIQUID_VARIABLE_START.'.*?'.LIQUID_VARIABLE_END.')/');
 
 
 defined('LIQUID_PATH') or define('LIQUID_PATH',dirname(__FILE__));
