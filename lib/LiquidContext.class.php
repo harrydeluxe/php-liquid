@@ -240,7 +240,7 @@ class LiquidContext
 	 */
 	function variable($key)
 	{
-		$parts = explode(LIQUID_VARIABLE_ATTRIBUTE_SEPERATOR, $key);
+		$parts = explode(LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR, $key);
 		
 		$object = $this->fetch(array_shift($parts));
 		

@@ -55,10 +55,10 @@ class LiquidVariable
 		$this->markup = $markup;
 		
 		$quoted_fragment_regexp = new LiquidRegexp('/\s*('.LIQUID_QUOTED_FRAGMENT.')/');
-		$filter_seperator_regexp = new LiquidRegexp('/'.LIQUID_FILTER_SEPERATOR.'\s*(.*)/');
-		$filter_split_regexp = new LiquidRegexp('/'.LIQUID_FILTER_SEPERATOR.'/');
+		$filter_seperator_regexp = new LiquidRegexp('/'.LIQUID_FILTER_SEPARATOR.'\s*(.*)/');
+		$filter_split_regexp = new LiquidRegexp('/'.LIQUID_FILTER_SEPARATOR.'/');
 		$filter_name_regexp = new LiquidRegexp('/\s*(\w+)/');
-		$filter_argument_regexp = new LiquidRegexp('/(?:'.LIQUID_FILTER_ARGUMENT_SEPERATOR.'|'.LIQUID_ARGUMENT_SPERATOR.')\s*('.LIQUID_QUOTED_FRAGMENT.')/');
+		$filter_argument_regexp = new LiquidRegexp('/(?:'.LIQUID_FILTER_ARGUMENT_SEPARATOR.'|'.LIQUID_ARGUMENT_SEPARATOR.')\s*('.LIQUID_QUOTED_FRAGMENT.')/');
 		
 		$quoted_fragment_regexp->match($markup);
 		//$this->_name = $quoted_fragment_regexp->matches[1];

@@ -24,28 +24,28 @@ define('LIQUID_HAS_PROPERTY_METHOD', 'field_exists');
 define('LIQUID_GET_PROPERTY_METHOD', 'get');
 
 /**
- * Seperator between filters
+ * Separator between filters
  *
  */
-define('LIQUID_FILTER_SEPERATOR', '\|');
+define('LIQUID_FILTER_SEPARATOR', '\|');
 
 /**
- * Seperator for arguments
+ * Separator for arguments
  *
  */
-define('LIQUID_ARGUMENT_SPERATOR', ',');
+define('LIQUID_ARGUMENT_SEPARATOR', ',');
 
 /**
- * Seperator for argument names and values
+ * Separator for argument names and values
  *
  */
-define('LIQUID_FILTER_ARGUMENT_SEPERATOR', ':');
+define('LIQUID_FILTER_ARGUMENT_SEPARATOR', ':');
 
 /**
- * Seperator for variable attributes
+ * Separator for variable attributes
  *
  */
-define('LIQUID_VARIABLE_ATTRIBUTE_SEPERATOR', '.');
+define('LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR', '.');
 
 /**
  * Suffix fuer include dateien

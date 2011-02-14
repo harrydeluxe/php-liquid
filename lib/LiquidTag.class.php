@@ -35,9 +35,9 @@ abstract class LiquidTag
 	 *
 	 * @var array
 	 */
-	protected $attributes;	
-
-
+	protected $attributes;
+	
+	
 	/**
 	 * Constructor
 	 *
