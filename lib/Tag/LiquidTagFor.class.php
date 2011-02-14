@@ -17,7 +17,7 @@ class LiquidTagFor extends LiquidBlock
 	private $_collectionName;
 	
 	/**
-	 * @var string The variable name to assign collection elemnts to
+	 * @var string The variable name to assign collection elements to
 	 */
 	private $_variableName;
 
