@@ -63,6 +63,16 @@ class LiquidTemplate
 	 * 
 	 *
 	 */
+	public function setFileSystem($fileSystem)
+	{
+		$this->_fileSystem = $fileSystem;
+	}
+
+
+	/**
+	 * 
+	 *
+	 */
 	public function setCache($cache)
 	{
 		if(is_array($cache))
