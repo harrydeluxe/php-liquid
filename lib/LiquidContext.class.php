@@ -23,21 +23,21 @@ class LiquidContext
 	 *
 	 * @var array
 	 */
-	var $assigns;
+	private $_assigns;
 
 	/**
 	 * Registers for non-variable state data
 	 *
 	 * @var array
 	 */
-	var $registers;
+	public $registers;
 	
 	/**
 	 * The filterbank holds all the filters
 	 *
 	 * @var LiquidFilterbank
 	 */
-	var $filterbank;
+	private $filterbank;
 
 
 	/**
@@ -49,7 +49,7 @@ class LiquidContext
 	 */
 	public function __construct($assigns = null, $registers = array())
 	{
-		$this->assigns = (isset($assigns)) ? array($assigns) : array(array());
+		$this->_assigns = (isset($assigns)) ? array($assigns) : array(array());
 		$this->registers = $registers;
 		$this->filterbank = new LiquidFilterbank($this);
 	}
@@ -60,11 +60,12 @@ class LiquidContext
 	 *
 	 * @param mixed $filter
 	 */
-	function add_filters($filter)
+	public function add_filters($filter)
 	{
 		$this->filterbank->add_filter($filter);
 	}
-	
+
+
 	/**
 	 * Invoke the filter that matches given name
 	 *
@@ -73,7 +74,7 @@ class LiquidContext
 	 * @param array $args Additional arguments for the filter
 	 * @return string
 	 */
-	function invoke($name, $value, $args = null)
+	public function invoke($name, $value, $args = null)
 	{
 		return $this->filterbank->invoke($name, $value, $args);
 	}
@@ -84,9 +85,9 @@ class LiquidContext
 	 *
 	 * @param array $new_assigns
 	 */
-	function merge($new_assigns)
+	public function merge($new_assigns)
 	{
-		$this->assigns[0] = array_merge($this->assigns[0], $new_assigns);
+		$this->_assigns[0] = array_merge($this->_assigns[0], $new_assigns);
 	}	
 
 
@@ -95,9 +96,9 @@ class LiquidContext
 	 *
 	 * @return bool
 	 */
-	function push()
+	public function push()
 	{
-		array_unshift($this->assigns, array());
+		array_unshift($this->_assigns, array());
 		return true;
 	}
 
@@ -107,14 +108,14 @@ class LiquidContext
 	 *
 	 * @return bool
 	 */
-	function pop()
+	public function pop()
 	{
-		if(count($this->assigns) == 1)
+		if(count($this->_assigns) == 1)
 		{
 			throw new LiquidException('No elements to pop');
 		}
 		
-		array_shift($this->assigns);
+		array_shift($this->_assigns);
 	}
 
 
@@ -124,7 +125,7 @@ class LiquidContext
 	 * @param string
 	 * @return mixed
 	 */
-	function get($key)
+	public function get($key)
 	{
 		return $this->resolve($key);
 	}
@@ -136,9 +137,9 @@ class LiquidContext
 	 * @param string $key
 	 * @param mixed $value
 	 */
-	function set($key, $value)
+	public function set($key, $value)
 	{
-		$this->assigns[0][$key] = $value;
+		$this->_assigns[0][$key] = $value;
 	}
 
 
@@ -162,7 +163,7 @@ class LiquidContext
 	 * @param string $key
 	 * @return mixed
 	 */
-	function resolve($key)
+	public function resolve($key)
 	{
 		// this shouldn't happen
 		if(is_array($key))
@@ -215,16 +216,16 @@ class LiquidContext
 	 * @param string $key
 	 * @return mixed
 	 */
-	function fetch($key)
+	public function fetch($key)
 	{
-		foreach ($this->assigns as $scope)
+		foreach ($this->_assigns as $scope)
 		{
 			if(array_key_exists($key, $scope))
 			{
 				$obj = $scope[$key];
 				
 				if($obj instanceof LiquidDrop)
-					$obj->context = $this;
+					$obj->setContext($this);
 				
 				return $obj;
 			}
@@ -238,7 +239,7 @@ class LiquidContext
 	 * @param string $key
 	 * @return mixed
 	 */
-	function variable($key)
+	public function variable($key)
 	{
 		$parts = explode(LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR, $key);
 		
@@ -246,22 +247,24 @@ class LiquidContext
 		
 		if(is_object($object))
 		{
-			$object = $object->to_liquid();
+			if(!method_exists($object, 'toLiquid'))
+				throw new LiquidException("Method 'toLiquid' not exists!");
+				
+			$object = $object->toLiquid();
 		}
 		
 		
-		if (!is_null($object))
+		if(!is_null($object))
 		{
 			while (count($parts) > 0)
 			{
 				if($object instanceof LiquidDrop)
-					$object->context = $this;
+					$object->setContext($this);
 				
 				$next_part_name = array_shift($parts);
 				
 				if(is_array($object))
 				{
-					
 					// if the last part of the context variable is .size we just return the count
 					if($next_part_name == 'size' && count($parts) == 0 && !array_key_exists('size', $object))
 					{
@@ -278,25 +281,25 @@ class LiquidContext
 					}
 					
 				}
-				elseif (is_object($object))
+				elseif(is_object($object))
 				{
 					if($object instanceof LiquidDrop)
 					{
 						// if the object is a drop, make sure it supports the given method
-						if (!$object->has_key($next_part_name))
+						if (!$object->hasKey($next_part_name))
 						{
 							return null;
 						}
 						
 						// php4 doesn't support array access, so we have
 						// to use the invoke method instead
-						$object = $object->invoke_drop($next_part_name);
+						$object = $object->invokeDrop($next_part_name);
 						
 					}
 					elseif(method_exists($object, LIQUID_HAS_PROPERTY_METHOD))
 					{
 						
-						if (!call_user_method(LIQUID_HAS_PROPERTY_METHOD, $object, $next_part_name))
+						if(!call_user_method(LIQUID_HAS_PROPERTY_METHOD, $object, $next_part_name))
 						{
 							return null;
 						}
@@ -317,9 +320,9 @@ class LiquidContext
 					}
 				}
 
-				if (is_object($object) && method_exists($object, 'to_liquid'))
+				if (is_object($object) && method_exists($object, 'toLiquid'))
 				{
-					$object = $object->to_liquid();
+					$object = $object->toLiquid();
 				}
 			}
 
