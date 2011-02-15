@@ -28,19 +28,19 @@
  * tmpl = Liquid::Template.parse( ' {% for product in product.top_sales %} {{ product.name }} {%endfor%} '  )
  * tmpl.render('product' => ProductDrop.new ) * will invoke top_sales query. 
  *
- * Your drop can either implement the methods sans any parameters or implement the before_method(name) method which is a 
+ * Your drop can either implement the methods sans any parameters or implement the _beforeMethod(name) method which is a 
  * catch all
  * 
  * @package Liquid
  */
 
-class LiquidDrop
+abstract class LiquidDrop
 {
 	
 	/**
 	 * @var LiquidContext
 	 */
-	var $context;
+	protected $_context;
 
 
 	/**
@@ -49,9 +49,20 @@ class LiquidDrop
 	 * @param string $method
 	 * @return mixed
 	 */
-	function before_method($method)
+	protected function _beforeMethod($method)
 	{
 		return null;
+	}
+
+
+	/**
+	 * Enter description here...
+	 *
+	 * @param object $context
+	 */
+	public function setContext($context)
+	{
+		$this->_context = $context;
 	}
 
 
@@ -61,9 +72,9 @@ class LiquidDrop
 	 * @param string $method
 	 * @return mixed
 	 */
-	function invoke_drop($method)
+	public function invokeDrop($method)
 	{
-		$result = $this->before_method($method);
+		$result = $this->_beforeMethod($method);
 		
 		if (is_null($result) && method_exists($this, $method))
 		{
@@ -79,19 +90,30 @@ class LiquidDrop
 	 * @param unknown_type $name
 	 * @return bool
 	 */
-	function has_key($name)
+	public function hasKey($name)
 	{
 		return true;
 	}
-	
+
+
 	/**
 	 * Enter description here...
 	 *
 	 * @return unknown
 	 */
-	function to_liquid()
+	public function toLiquid()
 	{
 		return $this;
-		
+	}
+
+
+	/**
+	 * Enter description here...
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return get_class($this);
 	}
 }
