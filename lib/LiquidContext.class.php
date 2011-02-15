@@ -286,7 +286,7 @@ class LiquidContext
 					if($object instanceof LiquidDrop)
 					{
 						// if the object is a drop, make sure it supports the given method
-						if (!$object->hasKey($next_part_name))
+						if(!$object->hasKey($next_part_name))
 						{
 							return null;
 						}

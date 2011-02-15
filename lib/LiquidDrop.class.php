@@ -76,14 +76,15 @@ abstract class LiquidDrop
 	{
 		$result = $this->_beforeMethod($method);
 		
-		if (is_null($result) && method_exists($this, $method))
+		if(is_null($result) && method_exists($this, $method))
 		{
 			$result = $this->$method();
 		}
 		
 		return $result;
 	}
-	
+
+
 	/**
 	 * Returns true if the drop supports the given method
 	 *
