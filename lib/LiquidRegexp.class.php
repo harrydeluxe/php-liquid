@@ -30,7 +30,6 @@ class LiquidRegexp
 	 */
 	var $pattern;
 
-	
 	/**
 	 * The matches from the last method called
 	 *
@@ -104,7 +103,8 @@ class LiquidRegexp
 	{
 		return preg_match($this->pattern, $string, $this->matches);		
 	}
-	
+
+
 	/**
 	 * Matches the given string. Matches all.
 	 *
@@ -115,7 +115,8 @@ class LiquidRegexp
 	{
 		return preg_match_all($this->pattern, $string, $this->matches);
 	}
-	
+
+
 	/**
 	 * Splits the given string
 	 *

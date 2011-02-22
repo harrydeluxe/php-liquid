@@ -90,13 +90,13 @@ defined('LIQUID_ALLOWED_VARIABLE_CHARS') or define('LIQUID_ALLOWED_VARIABLE_CHAR
 defined('LIQUID_QUOTED_FRAGMENT') or define('LIQUID_QUOTED_FRAGMENT', '"[^"]+"|\'[^\']+\'|[^\s,|]+');
 
 /**
- * Regex for recongnizing tab attributes
+ * Regex for recognizing tab attributes
  *
  */
 defined('LIQUID_TAG_ATTRIBUTES') or define('LIQUID_TAG_ATTRIBUTES', '/(\w+)\s*\:\s*('.LIQUID_QUOTED_FRAGMENT.')/');
 
 /**
- * Regex used to split tokenss
+ * Regex used to split tokens
  *
  */
 defined('LIQUID_TOKENIZATION_REGEXP') or define('LIQUID_TOKENIZATION_REGEXP', '/('.LIQUID_TAG_START.'.*?'.LIQUID_TAG_END.'|'.LIQUID_VARIABLE_START.'.*?'.LIQUID_VARIABLE_END.')/');
