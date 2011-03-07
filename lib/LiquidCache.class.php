@@ -29,11 +29,11 @@ abstract class LiquidCache
 		}
 	}
 
-	public function read($key){}
+	public function read($key, $unserialize = true){}
 	
 	public function exists($key){}
 	
-	public function write($key, &$value){}
+	public function write($key, &$value, $serialize = true){}
 	
 	public function flush($expiredOnly = false){}
 }

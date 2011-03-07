@@ -31,12 +31,15 @@ class LiquidCacheFile extends LiquidCache
 	 * @param string $key a unique key identifying the cached value
 	 * @return string the value stored in cache, false if the value is not in the cache or expired.
 	 */
-	public function read($key)
+	public function read($key, $unserialize = true)
 	{
 		if(!$this->exists($key))
 			return false;
 
-		return unserialize(file_get_contents($this->_path.$this->_prefix.$key));
+		if($unserialize)
+			return unserialize(file_get_contents($this->_path.$this->_prefix.$key));
+		
+		return file_get_contents($this->_path.$this->_prefix.$key);
 	}
 
 
@@ -64,9 +67,9 @@ class LiquidCacheFile extends LiquidCache
 	 * @param string $value the value to be cached
 	 * @return boolean true if the value is successfully stored into cache, false otherwise
 	 */
-    public function write($key, &$value)
+    public function write($key, &$value, $serialize = true)
 	{
-		if(@file_put_contents($this->_path.$this->_prefix.$key, serialize($value)) !== false)
+		if(@file_put_contents($this->_path.$this->_prefix.$key, $serialize ? serialize($value) : $value) !== false)
 		{
 			$this->gc();
 			return true;
