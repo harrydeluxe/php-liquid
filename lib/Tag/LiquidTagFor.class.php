@@ -69,7 +69,7 @@ class LiquidTagFor extends LiquidBlock
 		
 		$collection = $context->get($this->_collectionName);
 		
-		if(is_null($collection) || count($collection) == 0)
+		if(is_null($collection) || !is_array($collection) || count($collection) == 0)
 		{
 			return '';
 		}
@@ -108,6 +108,13 @@ class LiquidTagFor extends LiquidBlock
 		$context->push();
 		
 		$length = count($segment);
+		
+		/**
+		 * @todo If $segment keys are not integer, forloop not work
+		 * array_values is only a little help without being tested.
+		 */
+		$segment = array_values($segment);
+
 
 		foreach($segment as $index => $item)
 		{
