@@ -93,16 +93,16 @@ defined('LIQUID_QUOTED_FRAGMENT') or define('LIQUID_QUOTED_FRAGMENT', '"[^"]+"|\
  * Regex for recognizing tab attributes
  *
  */
-defined('LIQUID_TAG_ATTRIBUTES') or define('LIQUID_TAG_ATTRIBUTES', '/(\w+)\s*\:\s*('.LIQUID_QUOTED_FRAGMENT.')/');
+defined('LIQUID_TAG_ATTRIBUTES') or define('LIQUID_TAG_ATTRIBUTES', '/(\w+)\s*\:\s*(' . LIQUID_QUOTED_FRAGMENT . ')/');
 
 /**
  * Regex used to split tokens
  *
  */
-defined('LIQUID_TOKENIZATION_REGEXP') or define('LIQUID_TOKENIZATION_REGEXP', '/('.LIQUID_TAG_START.'.*?'.LIQUID_TAG_END.'|'.LIQUID_VARIABLE_START.'.*?'.LIQUID_VARIABLE_END.')/');
+defined('LIQUID_TOKENIZATION_REGEXP') or define('LIQUID_TOKENIZATION_REGEXP', '/(' . LIQUID_TAG_START . '.*?' . LIQUID_TAG_END . '|' . LIQUID_VARIABLE_START . '.*?' . LIQUID_VARIABLE_END . ')/');
 
 
-defined('LIQUID_PATH') or define('LIQUID_PATH',dirname(__FILE__));
+defined('LIQUID_PATH') or define('LIQUID_PATH', dirname(__FILE__));
 
 
 defined('LIQUID_AUTOLOAD') or define('LIQUID_AUTOLOAD', true);
@@ -119,19 +119,19 @@ class Liquid
 	public static function array_flatten($array)
 	{
 		$return = array();
-		
+
 		foreach($array as $element)
 		{
 			if(is_array($element))
 			{
-				$return = array_merge($return, self::array_flatten($element));	
+				$return = array_merge($return, self::array_flatten($element));
 			}
 			else
 			{
-				$return[] = $element;	
+				$return[] = $element;
 			}
 		}
-		return $return;	
+		return $return;
 	}
 
 
@@ -145,7 +145,7 @@ class Liquid
 	{
 		if(isset(self::$_coreClasses[$className]))
 		{
-			include(LIQUID_PATH.self::$_coreClasses[$className]);	// use include so that the error PHP file may appear
+			include(LIQUID_PATH . self::$_coreClasses[$className]); // use include so that the error PHP file may appear
 			//include_once(LIQUID_PATH.self::$_coreClasses[$className]);
 			return true;
 		}
@@ -161,44 +161,47 @@ class Liquid
 	 */
 	public static function registerAutoloader($callback)
 	{
-		spl_autoload_unregister(array('Liquid', 'autoload'));
+		spl_autoload_unregister(array(
+			'Liquid', 'autoload'
+		));
 		spl_autoload_register($callback);
-		spl_autoload_register(array('Liquid', 'autoload'));
+		spl_autoload_register(array(
+			'Liquid', 'autoload'
+		));
 	}
 
 
 	private static $_coreClasses = array(
-		'LiquidException' => '/lib/LiquidException.class.php',
-		'LiquidRegexp' => '/lib/LiquidRegexp.class.php',
-		'LiquidBlock' => '/lib/LiquidBlock.class.php',
-		'LiquidContext' => '/lib/LiquidContext.class.php',
-		'LiquidDocument' => '/lib/LiquidDocument.class.php',
-		'LiquidDrop' => '/lib/LiquidDrop.class.php',
-		
-		'LiquidCache' => '/lib/LiquidCache.class.php',
-		'LiquidCacheApc' => '/lib/Cache/LiquidCacheApc.class.php',
-		'LiquidCacheFile' => '/lib/Cache/LiquidCacheFile.class.php',
-		
-		'LiquidBlankFileSystem' => '/lib/LiquidBlankFileSystem.class.php',
-		'LiquidLocalFileSystem' => '/lib/LiquidLocalFileSystem.class.php',
-		'LiquidFilterbank' => '/lib/LiquidFilterbank.class.php',
-		'LiquidTagTablerow' => '/lib/Tag/LiquidTagTablerow.class.php',
-		'LiquidDecisionBlock' => '/lib/LiquidDecisionBlock.class.php',
-		'LiquidTagInclude' => '/lib/Tag/LiquidTagInclude.class.php',
-		'LiquidTagCase' => '/lib/Tag/LiquidTagCase.class.php',
-		'LiquidTagAssign' => '/lib/Tag/LiquidTagAssign.class.php',
-		'LiquidTagComment' => '/lib/Tag/LiquidTagComment.class.php',
-		'LiquidTagCapture' => '/lib/Tag/LiquidTagCapture.class.php',
-		'LiquidTagCycle' => '/lib/Tag/LiquidTagCycle.class.php',
-		'LiquidTagFor' => '/lib/Tag/LiquidTagFor.class.php',
-		'LiquidTagIf' => '/lib/Tag/LiquidTagIf.class.php',
-		'LiquidStandardFilters' => '/lib/LiquidStandardFilters.class.php',
-		'LiquidTag' => '/lib/LiquidTag.class.php',
-		'LiquidTemplate' => '/lib/LiquidTemplate.class.php',
-		'LiquidVariable' => '/lib/LiquidVariable.class.php'
+			'LiquidException' => '/lib/LiquidException.class.php',
+			'LiquidRegexp' => '/lib/LiquidRegexp.class.php',
+			'LiquidBlock' => '/lib/LiquidBlock.class.php',
+			'LiquidContext' => '/lib/LiquidContext.class.php',
+			'LiquidDocument' => '/lib/LiquidDocument.class.php',
+			'LiquidDrop' => '/lib/LiquidDrop.class.php',
+			'LiquidCache' => '/lib/LiquidCache.class.php',
+			'LiquidCacheApc' => '/lib/Cache/LiquidCacheApc.class.php',
+			'LiquidCacheFile' => '/lib/Cache/LiquidCacheFile.class.php',
+			'LiquidBlankFileSystem' => '/lib/LiquidBlankFileSystem.class.php',
+			'LiquidLocalFileSystem' => '/lib/LiquidLocalFileSystem.class.php',
+			'LiquidFilterbank' => '/lib/LiquidFilterbank.class.php',
+			'LiquidTagTablerow' => '/lib/Tag/LiquidTagTablerow.class.php',
+			'LiquidDecisionBlock' => '/lib/LiquidDecisionBlock.class.php',
+			'LiquidTagInclude' => '/lib/Tag/LiquidTagInclude.class.php',
+			'LiquidTagCase' => '/lib/Tag/LiquidTagCase.class.php',
+			'LiquidTagAssign' => '/lib/Tag/LiquidTagAssign.class.php',
+			'LiquidTagComment' => '/lib/Tag/LiquidTagComment.class.php',
+			'LiquidTagCapture' => '/lib/Tag/LiquidTagCapture.class.php',
+			'LiquidTagCycle' => '/lib/Tag/LiquidTagCycle.class.php',
+			'LiquidTagFor' => '/lib/Tag/LiquidTagFor.class.php',
+			'LiquidTagIf' => '/lib/Tag/LiquidTagIf.class.php',
+			'LiquidStandardFilters' => '/lib/LiquidStandardFilters.class.php',
+			'LiquidTag' => '/lib/LiquidTag.class.php',
+			'LiquidTemplate' => '/lib/LiquidTemplate.class.php',
+			'LiquidVariable' => '/lib/LiquidVariable.class.php'
 	);
 }
 
 if(LIQUID_AUTOLOAD)
-	spl_autoload_register(array('Liquid', 'autoload'));
-	
+	spl_autoload_register(array(
+		'Liquid', 'autoload'
+	));
