@@ -200,6 +200,9 @@ class LiquidStandardFilters
 			$input = strtotime($input);
 		}
 		
+		if($format == 'r')
+			return date($format, $input);
+			
 		return strftime($format, $input);
 		
 	}
