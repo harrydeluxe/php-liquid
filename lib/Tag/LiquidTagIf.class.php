@@ -77,7 +77,7 @@ class LiquidTagIf extends LiquidDecisionBlock
 	 */
 	function unknown_tag($tag, $params, &$tokens)
 	{
-		if($tag == 'else')
+		if($tag == 'else' || $tag == 'elsif')
 		{
 			$this->_nodelist = & $this->_nodelistFalse;
 			$this->_nodelistFalse = array();
