@@ -43,8 +43,10 @@ class LiquidBlock extends LiquidTag
 		
 		$tags = LiquidTemplate::getTags();
 		
-		while($token = array_shift($tokens))
+		while(count($tokens))
 		{
+      $token = array_shift($tokens);
+
 			if($start_regexp->match($token))
 			{
 				if($tag_regexp->match($token))

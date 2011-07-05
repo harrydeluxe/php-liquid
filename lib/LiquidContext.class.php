@@ -241,8 +241,14 @@ class LiquidContext
 	 */
 	public function variable($key)
 	{
+    /* Support [0] style array indicies */
+    if (preg_match("|\[[0-9]+\]|", $key))
+    {
+      $key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
+    }
+
 		$parts = explode(LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR, $key);
-		
+
 		$object = $this->fetch(array_shift($parts));
 		
 		if(is_object($object))
@@ -252,7 +258,6 @@ class LiquidContext
 				
 			$object = $object->toLiquid();
 		}
-		
 		
 		if(!is_null($object))
 		{
