@@ -91,7 +91,7 @@ abstract class LiquidTag
 	 */
 	public function name()
 	{
-		return strtolower(this::class_name());
+		return strtolower(get_class($this));
 	}
 
 
