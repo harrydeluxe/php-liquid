@@ -241,11 +241,11 @@ class LiquidContext
 	 */
 	public function variable($key)
 	{
-    /* Support [0] style array indicies */
-    if (preg_match("|\[[0-9]+\]|", $key))
-    {
-      $key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
-    }
+		/* Support [0] style array indicies */
+		if(preg_match("|\[[0-9]+\]|", $key))
+		{
+			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
+		}
 
 		$parts = explode(LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR, $key);
 
