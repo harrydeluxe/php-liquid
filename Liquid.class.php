@@ -48,11 +48,16 @@ defined('LIQUID_FILTER_ARGUMENT_SEPARATOR') or define('LIQUID_FILTER_ARGUMENT_SE
 defined('LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR') or define('LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR', '.');
 
 /**
- * Suffix fuer include dateien
+ * Suffix for include files
  *
  */
 defined('LIQUID_INCLUDE_SUFFIX') or define('LIQUID_INCLUDE_SUFFIX', 'liquid');
 
+/**
+ * Prefix for include files
+ *
+ */
+defined('LIQUID_INCLUDE_PREFIX') or define('LIQUID_INCLUDE_SUFFIX', '_');
 /**
  * Tag start
  *

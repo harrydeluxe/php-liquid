@@ -79,13 +79,13 @@ class LiquidLocalFileSystem extends LiquidBlankFileSystem
 		
 		if(strpos($template_path, '/') !== false)
 		{
-			//$full_path = $this->_root.dirname($template_path).'/_'.basename($template_path).'.'.LIQUID_INCLUDE_SUFFIX;
-			$full_path = $this->_root.dirname($template_path).'/'.basename($template_path).'.'.LIQUID_INCLUDE_SUFFIX;
+			$full_path = $this->_root.dirname($template_path).'/'.LIQUID_INCLUDE_PREFIX.basename($template_path).'.'.LIQUID_INCLUDE_SUFFIX;
+			//$full_path = $this->_root.dirname($template_path).'/'.basename($template_path).'.'.LIQUID_INCLUDE_SUFFIX;
 		}
 		else
 		{
-			//$full_path = $this->_root.'_'. $template_path.'.'.LIQUID_INCLUDE_SUFFIX;
-			$full_path = $this->_root.$template_path.'.'.LIQUID_INCLUDE_SUFFIX;
+			$full_path = $this->_root.LIQUID_INCLUDE_PREFIX. $template_path.'.'.LIQUID_INCLUDE_SUFFIX;
+			//$full_path = $this->_root.$template_path.'.'.LIQUID_INCLUDE_SUFFIX;
 		}
 
 		$root_regex = new LiquidRegexp('/'.preg_quote(realpath($this->_root), '/').'/');
