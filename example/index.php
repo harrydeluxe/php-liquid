@@ -1,4 +1,6 @@
 <?php
+define('LIQUID_INCLUDE_SUFFIX', 'tpl');
+define('LIQUID_INCLUDE_PREFIX', '');
 
 require_once('../Liquid.class.php');
 
