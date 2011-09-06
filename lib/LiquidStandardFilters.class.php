@@ -230,4 +230,56 @@ class LiquidStandardFilters
 	{
 		return is_array($input) ? end($input) : $input;		
 	}
+	
+	
+	/**
+	 * addition
+	 *
+	 * @param int $input
+	 * @param int $operand
+	 * @return int
+	 */
+	public static function plus($input, $operand)
+	{
+		return (int) $input + (int) $operand;		
+	}	
+	
+	
+	/**
+	 * subtraction
+	 *
+	 * @param int $input
+	 * @param int $operand
+	 * @return int
+	 */
+	public static function minus($input, $operand)
+	{
+		return (int) $input - (int) $operand;		
+	}	
+	
+	
+	/**
+	 * multiplication
+	 *
+	 * @param int $input
+	 * @param int $operand
+	 * @return int
+	 */
+	public static function times($input, $operand)
+	{
+		return (int) $input * (int) $operand;		
+	}	
+	
+	
+	/**
+	 * division
+	 *
+	 * @param int $input
+	 * @param int $operand
+	 * @return int
+	 */
+	public static function divided_by($input, $operand)
+	{
+		return (int) $input / (int) $operand;		
+	}
 }
