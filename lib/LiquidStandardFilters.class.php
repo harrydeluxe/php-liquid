@@ -231,6 +231,19 @@ class LiquidStandardFilters
 		return is_array($input) ? end($input) : $input;		
 	}
 	
+
+	/**
+	 * Split input string into an array of substrings separated by given pattern.
+	 *
+	 * @param string $input
+	 * @param string $pattern
+	 * @return array
+	 */
+	public static function split($input, $pattern)
+	{
+		return explode($pattern, $input);		
+	}
+	
 	
 	/**
 	 * addition
