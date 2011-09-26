@@ -57,7 +57,7 @@ defined('LIQUID_INCLUDE_SUFFIX') or define('LIQUID_INCLUDE_SUFFIX', 'liquid');
  * Prefix for include files
  *
  */
-defined('LIQUID_INCLUDE_PREFIX') or define('LIQUID_INCLUDE_SUFFIX', '_');
+defined('LIQUID_INCLUDE_PREFIX') or define('LIQUID_INCLUDE_PREFIX', '_');
 /**
  * Tag start
  *
