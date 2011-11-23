@@ -295,4 +295,17 @@ class LiquidStandardFilters
 	{
 		return (int) $input / (int) $operand;		
 	}
+
+	
+	/**
+	 * modulo
+	 *
+	 * @param int $input
+	 * @param int $operand
+	 * @return int
+	 */
+	public static function modulo($input, $operand)
+	{
+		return (int) $input % (int) $operand;		
+	}
 }
