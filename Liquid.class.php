@@ -199,6 +199,8 @@ class Liquid
 			'LiquidTagCycle' => '/lib/Tag/LiquidTagCycle.class.php',
 			'LiquidTagFor' => '/lib/Tag/LiquidTagFor.class.php',
 			'LiquidTagIf' => '/lib/Tag/LiquidTagIf.class.php',
+			'LiquidTagIncrement' => '/lib/Tag/LiquidTagIncrement.class.php',
+			'LiquidTagDecrement' => '/lib/Tag/LiquidTagDecrement.class.php',
 			'LiquidStandardFilters' => '/lib/LiquidStandardFilters.class.php',
 			'LiquidTag' => '/lib/LiquidTag.class.php',
 			'LiquidTemplate' => '/lib/LiquidTemplate.class.php',

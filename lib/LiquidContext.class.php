@@ -39,6 +39,12 @@ class LiquidContext
 	 */
 	private $filterbank;
 
+	/**
+	 * Global scopes
+	 *
+	 * @var array
+	 */
+	public $environments = array();
 
 	/**
 	 * Constructor
@@ -218,6 +224,14 @@ class LiquidContext
 	 */
 	public function fetch($key)
 	{
+		foreach ($this->environments as $environment)
+		{
+			if (array_key_exists($key, $environment))
+			{
+				return $environment[$key];
+			}
+		}
+
 		foreach ($this->_assigns as $scope)
 		{
 			if(array_key_exists($key, $scope))
