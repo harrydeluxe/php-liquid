@@ -10,3 +10,4 @@
  */
 
 include dirname(__DIR__) . '/Liquid.class.php';
+include __DIR__ . '/LiquidTestcase.php';

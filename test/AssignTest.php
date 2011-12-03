@@ -18,7 +18,7 @@
  *
  * @package Liquid
  */
-class AssignTest extends PHPUnit_Framework_Testcase
+class AssignTest extends LiquidTestcase
 {
 	/**
 	 * Tests the normal behavior of throwing an exception when the assignment is incorrect
@@ -29,10 +29,8 @@ class AssignTest extends PHPUnit_Framework_Testcase
 	{
 		$this->setExpectedException('LiquidException');
 
-		$template = new LiquidTemplate;
-
-		$template->parse('{% assign test %}');
-		$this->assertTrue($template->render() === 'hello');
+		// since the assignment is incorrect we should rise an exception
+		$this->assertTrueHelper('{% assign test %}', 'hello');
 	}
 
 	/**
@@ -42,10 +40,10 @@ class AssignTest extends PHPUnit_Framework_Testcase
 	 */
 	public function testSimpleAssign()
 	{
-		$template = new LiquidTemplate;
-
-		$template->parse('{% assign test = "hello" %}{{ test }}');
-		$this->assertTrue($template->render() === 'hello');
+		$this->assertTrueHelper('{% assign header = "" %}<h1>{{ header }}</h1>', '<h1></h1>');
+		$this->assertTrueHelper('{% assign header = "hello" %}<h1>{{ header }}</h1>', '<h1>hello</h1>');
+		$this->assertTrueHelper('{% assign val = 1 %}number: {{ val }}', 'number: 1');
+		$this->assertTrueHelper('{% assign val = 1.2 %}number: {{ val }}', 'number: 1.2');
 	}
 
 	/**
@@ -55,24 +53,11 @@ class AssignTest extends PHPUnit_Framework_Testcase
 	 */
 	public function testAssignWithFilters()
 	{
-		$template = new LiquidTemplate;
-
-		$template->parse('{% assign test = "hello" | upcase %}{{ test }}');
-		$this->assertTrue($template->render() === 'HELLO');
-
-		$template->parse('{% assign test = "hello" | upcase | downcase | capitalize %}{{ test }}');
-		$this->assertTrue($template->render() === 'Hello');
-
-		$template->parse('{% assign test = var1 | first | upcase %}{{ test }}');
-		$this->assertTrue($template->render(array('var1' => array('a', 'b', 'c'))) === 'A');
-
-		$template->parse('{% assign test = var1 | last | upcase %}{{ test }}');
-		$this->assertTrue($template->render(array('var1' => array('a', 'b', 'c'))) === 'C');
-
-		$template->parse('{% assign test = var1 | join %}{{ test }}');
-		$this->assertTrue($template->render(array('var1' => array('a', 'b', 'c'))) === 'a b c');
-
-		$template->parse('{% assign test = var1 | join : "." %}{{ test }}');
-		$this->assertTrue($template->render(array('var1' => array('a', 'b', 'c'))) === 'a.b.c');
+		$this->assertTrueHelper('{% assign test = "hello" | upcase %}{{ test }}', 'HELLO');
+		$this->assertTrueHelper('{% assign test = "hello" | upcase | downcase | capitalize %}{{ test }}', 'Hello');
+		$this->assertTrueHelper('{% assign test = var1 | first | upcase %}{{ test }}', 'A', array('var1' => array('a', 'b', 'c')));
+		$this->assertTrueHelper('{% assign test = var1 | last | upcase %}{{ test }}', 'C', array('var1' => array('a', 'b', 'c')));
+		$this->assertTrueHelper('{% assign test = var1 | join %}{{ test }}', 'a b c', array('var1' => array('a', 'b', 'c')));
+		$this->assertTrueHelper('{% assign test = var1 | join : "." %}{{ test }}', 'a.b.c', array('var1' => array('a', 'b', 'c')));
 	}
 }
