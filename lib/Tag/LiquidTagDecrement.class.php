@@ -29,7 +29,7 @@ class LiquidTagDecrement extends LiquidTag
 	 */
 	public function __construct($markup, &$tokens, &$file_system)
 	{
-		$syntax = new LiquidRegexp("/(\w+)\s*(".LIQUID_ALLOWED_VARIABLE_CHARS."+)/");
+		$syntax = new LiquidRegexp("/(".LIQUID_ALLOWED_VARIABLE_CHARS."+)/");
 
 		if ($syntax->match($markup))
 		{
@@ -48,11 +48,25 @@ class LiquidTagDecrement extends LiquidTag
 	 */
 	public function render(&$context)
 	{
-		$initial_value = $context->get($this->_toDecrement);
-
-		if (is_numeric($initial_value))
+		// if the value is not set in the environment check to see if it
+		// exists in the context, and if not set it to 0
+		if (! isset($context->environments[0][$this->_toDecrement]))
 		{
-			$context->set($this->_toDecrement, $initial_value - 1);
+			// check for a context value
+			$from_context = $context->get($this->_toDecrement);
+
+			if (null !== $from_context)
+			{
+				// we already have a value in the context
+				$context->environments[0][$this->_toDecrement] = $from_context;
+			}
+			else
+			{
+				$context->environments[0][$this->_toDecrement] = 0;
+			}
 		}
+
+		// decrement the environment value
+		$context->environments[0][$this->_toDecrement] --;
 	}
 }

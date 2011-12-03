@@ -37,7 +37,7 @@ class IncrementTest extends LiquidTestcase
 	 */
 	public function testIncrement()
 	{
-		$this->assertTrueHelper('{% increment val %}{{ val }}', '');
+		$this->assertTrueHelper('{% increment val %}{{ val }}', '0');
 		$this->assertTrueHelper('{% assign val = "0" %}{% increment val %}{{ val }}', '1');
 		$this->assertTrueHelper('{% assign val = "1" %}{% increment val %}{{ val }}', '2');
 		$this->assertTrueHelper('{% assign val = "11" %}{% increment val %}{{ val }}', '12');
@@ -45,6 +45,18 @@ class IncrementTest extends LiquidTestcase
 		$this->assertTrueHelper('{% assign val = "1.3" %}{% increment val %}{{ val }}', '2.3');
 		$this->assertTrueHelper('{% assign val = "1" %}{% increment val %}{% increment val %}{{ val }}', '3');
 		$this->assertTrueHelper('{% assign val = "-1" %}{% increment val %}{% increment val %}{% increment val %}{{ val }}', '2');
-		$this->assertTrueHelper('{% assign val = "A" %}{% increment val %}{{ val }}', 'A');
+		$this->assertTrueHelper('{% increment a %}{% increment b %}{% increment a %}{% increment a %}{% increment b %}{{ a }} {{ b }}', '2 1');
+		$this->assertTrueHelper('{% increment val %}{{ val }}', '3', array('val' => 2));
+	}
+
+	/**
+	 * Tests the increment tag outside context
+	 *
+	 * @return void
+	 */
+	public function testOutOfContextIncrement()
+	{
+		$this->assertTrueHelper("{% assign val = 4 %}{% for item in list %}{% increment val %}{% endfor %}{{ val }}", '7', array('list' => array(1, 2, 3)));
+		$this->assertTrueHelper("{% assign val = 2 %}{% for item in list %}{% increment val %}{% increment val %}{% endfor %}{{ val }}", '8', array('list' => array(1, 2, 3)));
 	}
 }

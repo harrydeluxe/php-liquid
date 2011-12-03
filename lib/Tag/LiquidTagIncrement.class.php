@@ -29,7 +29,7 @@ class LiquidTagIncrement extends LiquidTag
 	 */
 	public function __construct($markup, &$tokens, &$file_system)
 	{
-		$syntax = new LiquidRegexp("/(\w+)\s*(".LIQUID_ALLOWED_VARIABLE_CHARS."+)/");
+		$syntax = new LiquidRegexp("/(".LIQUID_ALLOWED_VARIABLE_CHARS."+)/");
 
 		if ($syntax->match($markup))
 		{
@@ -48,11 +48,25 @@ class LiquidTagIncrement extends LiquidTag
 	 */
 	public function render(&$context)
 	{
-		$initial_value = $context->get($this->_toIncrement);
-
-		if (is_numeric($initial_value))
+		// if the value is not set in the environment check to see if it
+		// exists in the context, and if not set it to -1
+		if (! isset($context->environments[0][$this->_toIncrement]))
 		{
-			$context->set($this->_toIncrement, $initial_value + 1);
+			// check for a context value
+			$from_context = $context->get($this->_toIncrement);
+
+			if (null !== $from_context)
+			{
+				// we already have a value in the context
+				$context->environments[0][$this->_toIncrement] = $from_context;
+			}
+			else
+			{
+				$context->environments[0][$this->_toIncrement] = -1;
+			}
 		}
+
+		// increment the value
+		$context->environments[0][$this->_toIncrement] ++;
 	}
 }
