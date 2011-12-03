@@ -40,10 +40,14 @@ class AssignTest extends LiquidTestcase
 	 */
 	public function testSimpleAssign()
 	{
-		$this->assertTrueHelper('{% assign header = "" %}<h1>{{ header }}</h1>', '<h1></h1>');
-		$this->assertTrueHelper('{% assign header = "hello" %}<h1>{{ header }}</h1>', '<h1>hello</h1>');
+		$this->assertTrueHelper('{% assign header = "" %}.{{ header }}.', '..');
+		$this->assertTrueHelper('{% assign header = "hello" %}.{{ header }}.', '.hello.');
 		$this->assertTrueHelper('{% assign val = 1 %}number: {{ val }}', 'number: 1');
 		$this->assertTrueHelper('{% assign val = 1.2 %}number: {{ val }}', 'number: 1.2');
+		$this->assertTrueHelper('{% assign foo = values %}.{{ foo.0 }}.', '.foo.', array('values' => array('foo', 'bar', 'baz')));
+		$this->assertTrueHelper('{% assign foo = values %}.{{ foo.1 }}.', '.bar.', array('values' => array('foo', 'bar', 'baz')));
+		$this->assertTrueHelper('{% assign foo = values %}.{{ foo[0] }}.', '.foo.', array('values' => array('foo', 'bar', 'baz')));
+		$this->assertTrueHelper('{% assign foo = values %}.{{ foo[1] }}.', '.bar.', array('values' => array('foo', 'bar', 'baz')));
 	}
 
 	/**
