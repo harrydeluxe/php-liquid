@@ -1,6 +1,6 @@
 h1. Liquid template engine for PHP
 
-Liquid is a PHP port of the "Liquid template engine for Ruby":http://www.liquidmarkup.org, which was written by Tobias Lutke. Although there are many other templating engines for PHP, including Smarty (from which Liquid was partially inspired), Liquid had some advantages that made porting worthwhile:
+Liquid is a PHP port of the "Liquid template engine for Ruby":https://github.com/Shopify/liquid, which was written by Tobias Lutke. Although there are many other templating engines for PHP, including Smarty (from which Liquid was partially inspired), Liquid had some advantages that made porting worthwhile:
 
 * Readable and human friendly syntax, that is usable in any type of document, not just html, without need for escaping.
 * Quick and easy to use and maintain.
@@ -15,27 +15,29 @@ h2. What does it look like?
 Example snippet:
 
 <pre>
- {% if products %}
+{% if products %}
 	<ul id="products">
 	{% for product in products %}
 	  <li>
-		<h2>{{product.name}}</h2>
-		Only {{product.price | price }}
+		<h2>{{ product.name }}</h2>
+		Only {{ product.price | price }}
 	
-		{{product.description | prettyprint | paragraph }}
+		{{ product.description | prettyprint | paragraph }}
 		
 		{{ 'it rocks!' | paragraph }}
 		
 	  </li>      
 	{% endfor %}
 	</ul>
- {% endif %}
+{% endif %}
 </pre>
+
+h2. Howto use Liquid
 
 Code to render:
 
 <pre>
- $liquid->parse(file_get_contents('templates/products.tpl'))->render($products);
+$liquid->parse(file_get_contents('templates/products.tpl'))->render($products);
 </pre>
 
 h2. Requirements
