@@ -54,16 +54,9 @@ class LiquidTagDecrement extends LiquidTag
 		{
 			// check for a context value
 			$from_context = $context->get($this->_toDecrement);
-
-			if (null !== $from_context)
-			{
-				// we already have a value in the context
-				$context->environments[0][$this->_toDecrement] = $from_context;
-			}
-			else
-			{
-				$context->environments[0][$this->_toDecrement] = 0;
-			}
+			
+			// we already have a value in the context
+			$context->environments[0][$this->_toDecrement] = (null !== $from_context) ? $from_context : 0;
 		}
 
 		// decrement the environment value

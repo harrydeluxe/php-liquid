@@ -54,16 +54,9 @@ class LiquidTagIncrement extends LiquidTag
 		{
 			// check for a context value
 			$from_context = $context->get($this->_toIncrement);
-
-			if (null !== $from_context)
-			{
-				// we already have a value in the context
-				$context->environments[0][$this->_toIncrement] = $from_context;
-			}
-			else
-			{
-				$context->environments[0][$this->_toIncrement] = -1;
-			}
+			
+			// we already have a value in the context
+			$context->environments[0][$this->_toIncrement] = (null !== $from_context) ? $from_context : -1;
 		}
 
 		// increment the value
