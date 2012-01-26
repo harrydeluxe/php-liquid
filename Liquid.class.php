@@ -162,8 +162,6 @@ class Liquid
 	{			
 		if(isset(self::$_coreClasses[$className]))
 		{
-			if($className == 'LiquidTagElse')
-				exit('#');
 			include(LIQUID_PATH . self::$_coreClasses[$className]); // use include so that the error PHP file may appear
 			//include_once(LIQUID_PATH.self::$_coreClasses[$className]);
 			return true;
