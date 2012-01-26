@@ -45,7 +45,7 @@ class LiquidBlock extends LiquidTag
 		
 		while(count($tokens))
 		{
-      $token = array_shift($tokens);
+      		$token = array_shift($tokens);
 
 			if($start_regexp->match($token))
 			{
@@ -62,8 +62,8 @@ class LiquidBlock extends LiquidTag
 					else			
 						$tag_name = 'LiquidTag'.ucwords($tag_regexp->matches[1]);// search for a defined class of the right name, instead of searching in an array	
 					
-					// fetch the tag from registered blocks
-					if(class_exists($tag_name))
+
+					if(Liquid::classExists($tag_name) === true && class_exists($tag_name) === true)
 					{
 						$this->_nodelist[] = new $tag_name($tag_regexp->matches[2], $tokens, $this->file_system);
 					}

@@ -139,7 +139,19 @@ class Liquid
 		return $return;
 	}
 
-
+	
+	/**
+	 * Checks if class exists in $_coreClasses array
+	 * 
+	 * @param string $className class name
+	 * @return boolean whether the class exists in $_coreClasses
+	 */
+	public static function classExists($className)
+	{
+		return (isset(self::$_coreClasses[$className])) ? true : false;
+	}
+	
+	
 	/**
 	 * Class autoload loader.
 	 * This method is provided to be invoked within an __autoload() magic method.
@@ -147,9 +159,11 @@ class Liquid
 	 * @return boolean whether the class has been loaded successfully
 	 */
 	public static function autoload($className)
-	{
+	{			
 		if(isset(self::$_coreClasses[$className]))
 		{
+			if($className == 'LiquidTagElse')
+				exit('#');
 			include(LIQUID_PATH . self::$_coreClasses[$className]); // use include so that the error PHP file may appear
 			//include_once(LIQUID_PATH.self::$_coreClasses[$className]);
 			return true;
