@@ -59,11 +59,13 @@ class LiquidBlock extends LiquidTag
 
 					if(array_key_exists($tag_regexp->matches[1], $tags))
 						$tag_name = $tags[$tag_regexp->matches[1]];
-					else			
+					else
+					{									
 						$tag_name = 'LiquidTag'.ucwords($tag_regexp->matches[1]);// search for a defined class of the right name, instead of searching in an array	
+						$tag_name = (Liquid::classExists($tag_name) === true) ? $tag_name : null;
+					}
 					
-
-					if(Liquid::classExists($tag_name) === true && class_exists($tag_name) === true)
+					if(class_exists($tag_name))
 					{
 						$this->_nodelist[] = new $tag_name($tag_regexp->matches[2], $tokens, $this->file_system);
 					}
