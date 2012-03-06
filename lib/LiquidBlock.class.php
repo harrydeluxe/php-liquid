@@ -45,7 +45,7 @@ class LiquidBlock extends LiquidTag
 		
 		while(count($tokens))
 		{
-      		$token = array_shift($tokens);
+			$token = array_shift($tokens);
 
 			if($start_regexp->match($token))
 			{
