@@ -9,164 +9,169 @@
  * YES
  *
  * @package Liquid
+ * @copyright Copyright (c) 2011-2012 Harald Hanek, 
+ * fork of php-liquid (c) 2006 Mateo Murphy,
+ * based on Liquid for Ruby (c) 2006 Tobias Luetke
+ * @license http://harrydeluxe.mit-license.org
  */
+
 class LiquidTagIf extends LiquidDecisionBlock
 {
 
-	/**
-	 * Array holding the nodes to render for each logical block
-	 *
-	 * @var array
-	 */
-	private $_nodelistHolders = array();
+    /**
+     * Array holding the nodes to render for each logical block
+     *
+     * @var array
+     */
+    private $_nodelistHolders = array();
 
-	/**
-	 * Array holding the block type, block markup (conditions) and block nodelist
-	 *
-	 * @var array
-	 */
-	private $_blocks = array();
-
-
-	/**
-	 * Constructor
-	 *
-	 * @param string $markup
-	 * @param array $tokens
-	 * @param LiquidFileSystem $file_system
-	 * @return IfLiquidTag
-	 */
-	public function __construct($markup, &$tokens, &$file_system)
-	{
-		$this->_nodelist = &$this->_nodelistHolders[count($this->_blocks)];
-
-		array_push($this->_blocks, array(
-			'if', $markup, &$this->_nodelist
-		));
-
-		parent::__construct($markup, $tokens, $file_system);
-
-	}
+    /**
+     * Array holding the block type, block markup (conditions) and block nodelist
+     *
+     * @var array
+     */
+    private $_blocks = array();
 
 
-	/**
-	 * Handler for unknown tags, handle else tags
-	 *
-	 * @param string $tag
-	 * @param array $params
-	 * @param array $tokens
-	 */
-	function unknown_tag($tag, $params, &$tokens)
-	{
-		if($tag == 'else' || $tag == 'elsif')
-		{
-			/* Update reference to nodelistHolder for this block */
-			$this->_nodelist = &$this->_nodelistHolders[count($this->_blocks) + 1];
-			$this->_nodelistHolders[count($this->_blocks) + 1] = array();
+    /**
+     * Constructor
+     *
+     * @param string $markup
+     * @param array $tokens
+     * @param LiquidFileSystem $file_system
+     * @return IfLiquidTag
+     */
+    public function __construct($markup, &$tokens, &$file_system)
+    {
+        $this->_nodelist = &$this->_nodelistHolders[count($this->_blocks)];
 
-			array_push($this->_blocks, array(
-				$tag, $params, &$this->_nodelist
-			));
+        array_push($this->_blocks, array(
+            'if', $markup, &$this->_nodelist
+        ));
 
-		}
-		else
-		{
-			parent::unknown_tag($tag, $params, $tokens);
-		}
-	}
+        parent::__construct($markup, $tokens, $file_system);
+
+    }
 
 
-	/**
-	 * Render the tag
-	 *
-	 * @param LiquidContext $context
-	 */
-	public function render(&$context)
-	{
-		$context->push();
+    /**
+     * Handler for unknown tags, handle else tags
+     *
+     * @param string $tag
+     * @param array $params
+     * @param array $tokens
+     */
+    function unknown_tag($tag, $params, &$tokens)
+    {
+        if ($tag == 'else' || $tag == 'elsif')
+        {
+            /* Update reference to nodelistHolder for this block */
+            $this->_nodelist = &$this->_nodelistHolders[count($this->_blocks) + 1];
+            $this->_nodelistHolders[count($this->_blocks) + 1] = array();
 
-		$logicalRegex = new LiquidRegexp('/\s+(and|or)\s+/');
-		$conditionalRegex = new LiquidRegexp('/(' . LIQUID_QUOTED_FRAGMENT . ')\s*([=!<>a-z_]+)?\s*(' . LIQUID_QUOTED_FRAGMENT . ')?/');
+            array_push($this->_blocks, array(
+                $tag, $params, &$this->_nodelist
+            ));
 
-		$result = '';
+        }
+        else
+        {
+            parent::unknown_tag($tag, $params, $tokens);
+        }
+    }
 
-		foreach($this->_blocks as $i => $block)
-		{
-			if($block[0] == 'else')
-			{
-				$result = $this->render_all($block[2], $context);
 
-				break;
-			}
+    /**
+     * Render the tag
+     *
+     * @param LiquidContext $context
+     */
+    public function render(&$context)
+    {
+        $context->push();
 
-			if($block[0] == 'if' || $block[0] == 'elsif')
-			{
-				/* Extract logical operators */
-				$logicalRegex->match($block[1]);
+        $logicalRegex = new LiquidRegexp('/\s+(and|or)\s+/');
+        $conditionalRegex = new LiquidRegexp('/(' . LIQUID_QUOTED_FRAGMENT . ')\s*([=!<>a-z_]+)?\s*(' . LIQUID_QUOTED_FRAGMENT . ')?/');
 
-				$logicalOperators = $logicalRegex->matches;
-				array_shift($logicalOperators);
+        $result = '';
 
-				/* Extract individual conditions */
-				$temp = $logicalRegex->split($block[1]);
+        foreach($this->_blocks as $i => $block)
+        {
+            if ($block[0] == 'else')
+            {
+                $result = $this->render_all($block[2], $context);
 
-				$conditions = array();
+                break;
+            }
 
-				foreach($temp as $condition)
-				{
-					if($conditionalRegex->match($condition))
-					{
-						$left = (isset($conditionalRegex->matches[1])) ? $conditionalRegex->matches[1] : null;
-						$operator = (isset($conditionalRegex->matches[2])) ? $conditionalRegex->matches[2] : null;
-						$right = (isset($conditionalRegex->matches[3])) ? $conditionalRegex->matches[3] : null;
+            if ($block[0] == 'if' || $block[0] == 'elsif')
+            {
+                /* Extract logical operators */
+                $logicalRegex->match($block[1]);
 
-						array_push($conditions, array(
-								'left' => $left,
-								'operator' => $operator,
-								'right' => $right
-						));
-					}
-					else
-					{
-						throw new LiquidException("Syntax Error in tag 'if' - Valid syntax: if [condition]");
-					}
-				}
+                $logicalOperators = $logicalRegex->matches;
+                array_shift($logicalOperators);
 
-				if(count($logicalOperators))
-				{
-					/* If statement contains and/or */
-					$display = true;
+                /* Extract individual conditions */
+                $temp = $logicalRegex->split($block[1]);
 
-					foreach($logicalOperators as $k => $logicalOperator)
-					{
-						if($logicalOperator == 'and')
-						{
-							$display = $this->interpret_condition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) && $this->interpret_condition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
-						}
-						else
-						{
-							$display = $this->interpret_condition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) || $this->interpret_condition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
-						}
-					}
+                $conditions = array();
 
-				}
-				else
-				{
-					/* If statement is a single condition */
-					$display = $this->interpret_condition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
-				}
+                foreach($temp as $condition)
+                {
+                    if ($conditionalRegex->match($condition))
+                    {
+                        $left = (isset($conditionalRegex->matches[1])) ? $conditionalRegex->matches[1] : null;
+                        $operator = (isset($conditionalRegex->matches[2])) ? $conditionalRegex->matches[2] : null;
+                        $right = (isset($conditionalRegex->matches[3])) ? $conditionalRegex->matches[3] : null;
 
-				if($display)
-				{
-					$result = $this->render_all($block[2], $context);
+                        array_push($conditions, array(
+                                'left' => $left,
+                                'operator' => $operator,
+                                'right' => $right
+                        ));
+                    }
+                    else
+                    {
+                        throw new LiquidException("Syntax Error in tag 'if' - Valid syntax: if [condition]");
+                    }
+                }
 
-					break;
-				}
-			}
-		}
+                if (count($logicalOperators))
+                {
+                    /* If statement contains and/or */
+                    $display = true;
 
-		$context->pop();
+                    foreach($logicalOperators as $k => $logicalOperator)
+                    {
+                        if ($logicalOperator == 'and')
+                        {
+                            $display = $this->interpret_condition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) && $this->interpret_condition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
+                        }
+                        else
+                        {
+                            $display = $this->interpret_condition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) || $this->interpret_condition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
+                        }
+                    }
 
-		return $result;
-	}
+                }
+                else
+                {
+                    /* If statement is a single condition */
+                    $display = $this->interpret_condition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
+                }
+
+                if ($display)
+                {
+                    $result = $this->render_all($block[2], $context);
+
+                    break;
+                }
+            }
+        }
+
+        $context->pop();
+
+        return $result;
+    }
 }

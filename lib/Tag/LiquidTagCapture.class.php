@@ -6,50 +6,55 @@
  * {% capture foo %} bar {% endcapture %}
  *
  * @package Liquid
+ * @copyright Copyright (c) 2011-2012 Harald Hanek, 
+ * fork of php-liquid (c) 2006 Mateo Murphy,
+ * based on Liquid for Ruby (c) 2006 Tobias Luetke
+ * @license http://harrydeluxe.mit-license.org
  */
+
 class LiquidTagCapture extends LiquidBlock
 {
-	/**
-	 * The variable to assign to
-	 *
-	 * @var string
-	 */
-	private $_to;
+    /**
+     * The variable to assign to
+     *
+     * @var string
+     */
+    private $_to;
 
 
-	/**
-	 * Constructor
-	 *
-	 * @param string $markup
-	 * @param Array $tokens
-	 * @param LiquidFileSystem $file_system
-	 * @return CaptureLiquidTag
-	 */
-	public function __construct($markup, &$tokens, &$file_system)
-	{
-		$syntax_regexp = new LiquidRegexp('/(\w+)/');
-		
-		if($syntax_regexp->match($markup))
-		{
-			$this->_to = $syntax_regexp->matches[1];
-			parent::__construct($markup, $tokens, $file_system);
-		}
-		else
-		{
-			throw new LiquidException("Syntax Error in 'capture' - Valid syntax: assign [var] = [source]"); // harry
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param string $markup
+     * @param Array $tokens
+     * @param LiquidFileSystem $file_system
+     * @return CaptureLiquidTag
+     */
+    public function __construct($markup, &$tokens, &$file_system)
+    {
+        $syntax_regexp = new LiquidRegexp('/(\w+)/');
+
+        if ($syntax_regexp->match($markup))
+        {
+            $this->_to = $syntax_regexp->matches[1];
+            parent::__construct($markup, $tokens, $file_system);
+        }
+        else
+        {
+            throw new LiquidException("Syntax Error in 'capture' - Valid syntax: assign [var] = [source]"); // harry
+        }
+    }
 
 
-	/**
-	 * Renders the block
-	 *
-	 * @param LiquidContext $context
-	 */
-	public function render(& $context)
-	{
-		$output = parent::render($context);
-		
-		$context->set($this->_to, $output);
-	}		
+    /**
+     * Renders the block
+     *
+     * @param LiquidContext $context
+     */
+    public function render(&$context)
+    {
+        $output = parent::render($context);
+
+        $context->set($this->_to, $output);
+    }
 }
