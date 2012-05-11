@@ -2,11 +2,11 @@
 /**
  * This implements an abstract file system which retrieves template files named in a manner similar to Rails partials,
  * ie. with the template name prefixed with an underscore. The extension ".liquid" is also added.
- * 
+ *
  * For security reasons, template paths are only allowed to contain letters, numbers, and underscore.
- * 
+ *
  * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
+ * @copyright Copyright (c) 2011-2012 Harald Hanek,
  * fork of php-liquid (c) 2006 Mateo Murphy,
  * based on Liquid for Ruby (c) 2006 Tobias Luetke
  * @license http://harrydeluxe.mit-license.org
@@ -42,16 +42,11 @@ class LiquidLocalFileSystem extends LiquidBlankFileSystem
      */
     public function read_template_file($templatePath)
     {
-        $full_path = $this->full_path($templatePath);
-        if ($full_path)
-        {
-            return file_get_contents($full_path);
-        }
-        else
+        if (!($full_path = $this->full_path($templatePath)))
         {
             throw new LiquidException("No such template '$templatePath'");
         }
-
+        return file_get_contents($full_path);
     }
 
 
@@ -63,7 +58,6 @@ class LiquidLocalFileSystem extends LiquidBlankFileSystem
      */
     public function full_path($template_path)
     {
-
         $name_regex = new LiquidRegexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
 
         if (!$name_regex->match($template_path))

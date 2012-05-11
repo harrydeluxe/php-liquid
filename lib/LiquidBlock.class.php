@@ -1,9 +1,9 @@
 <?php
 /**
  * Base class for blocks.
- * 
+ *
  * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
+ * @copyright Copyright (c) 2011-2012 Harald Hanek,
  * fork of php-liquid (c) 2006 Mateo Murphy,
  * based on Liquid for Ruby (c) 2006 Tobias Luetke
  * @license http://harrydeluxe.mit-license.org
@@ -18,7 +18,7 @@ class LiquidBlock extends LiquidTag
 
 
     /**
-     * 
+     *
      *
      * @return array
      */
@@ -56,7 +56,7 @@ class LiquidBlock extends LiquidTag
             {
                 if ($tag_regexp->match($token))
                 {
-                    // if we found the proper block delimitor just end parsing here and let the outer block proceed 
+                    // if we found the proper block delimitor just end parsing here and let the outer block proceed
                     if ($tag_regexp->matches[1] == $this->block_delimiter())
                     {
                         return $this->end_tag();
@@ -66,13 +66,15 @@ class LiquidBlock extends LiquidTag
                         $tag_name = $tags[$tag_regexp->matches[1]];
                     else
                     {
-                        $tag_name = 'LiquidTag' . ucwords($tag_regexp->matches[1]);// search for a defined class of the right name, instead of searching in an array	
+                        $tag_name = 'LiquidTag' . ucwords($tag_regexp->matches[1]);// search for a defined class of the right name, instead of searching in an array
                         $tag_name = (Liquid::classExists($tag_name) === true) ? $tag_name : null;
                     }
 
                     if (class_exists($tag_name))
                     {
                         $this->_nodelist[] = new $tag_name($tag_regexp->matches[2], $tokens, $this->file_system);
+                        if($tag_regexp->matches[1] == 'extends')
+                            return true;
                     }
                     else
                     {

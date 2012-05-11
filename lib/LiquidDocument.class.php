@@ -38,7 +38,7 @@ class LiquidDocument extends LiquidBlock
         {
             if (is_object($token))
             {
-                if (get_class($token) == 'LiquidTagInclude')
+                if (get_class($token) == 'LiquidTagInclude' || get_class($token) == 'LiquidTagExtends')
                 {
                     if ($token->checkIncludes() == true)
                         $return = true;

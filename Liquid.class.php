@@ -206,6 +206,8 @@ class Liquid
             'LiquidTagInclude' => '/lib/Tag/LiquidTagInclude.class.php',
             'LiquidTagCase' => '/lib/Tag/LiquidTagCase.class.php',
             'LiquidTagAssign' => '/lib/Tag/LiquidTagAssign.class.php',
+            'LiquidTagBlock' => '/lib/Tag/LiquidTagBlock.class.php',
+            'LiquidTagExtends' => '/lib/Tag/LiquidTagExtends.class.php',
             'LiquidTagComment' => '/lib/Tag/LiquidTagComment.class.php',
             'LiquidTagCapture' => '/lib/Tag/LiquidTagCapture.class.php',
             'LiquidTagCycle' => '/lib/Tag/LiquidTagCycle.class.php',
