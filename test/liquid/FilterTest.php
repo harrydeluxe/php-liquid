@@ -55,7 +55,7 @@ class FilterTest extends UnitTestCase
 	{
 		$var = new LiquidVariable('var | money');
 		$this->context->set('var', 1000);
-		$this->context->add_filters(new MoneyFilter());
+		$this->context->addFilters(new MoneyFilter());
 		$this->assertIdentical(' 1000$ ', $var->render($this->context));		
 	}
 	
@@ -63,7 +63,7 @@ class FilterTest extends UnitTestCase
 	{
 		$var = new LiquidVariable('var | money_with_underscore ');
 		$this->context->set('var', 1000);
-		$this->context->add_filters(new MoneyFilter());
+		$this->context->addFilters(new MoneyFilter());
 		$this->assertIdentical(' 1000$ ', $var->render($this->context));				
 	}
 
@@ -71,8 +71,8 @@ class FilterTest extends UnitTestCase
 	{
 		$var = new LiquidVariable('var | money ');
 		$this->context->set('var', 1000);
-		$this->context->add_filters(new MoneyFilter(), 'money');
-		$this->context->add_filters(new CanadianMoneyFilter(), 'money');
+		$this->context->addFilters(new MoneyFilter(), 'money');
+		$this->context->addFilters(new CanadianMoneyFilter(), 'money');
 		$this->assertIdentical(' 1000$ CAD ', $var->render($this->context));				
 	}
 	
@@ -80,7 +80,7 @@ class FilterTest extends UnitTestCase
 	{
 		$var = new LiquidVariable("var | size");
 		$this->context->set('var', 1000);
-		//$this->context->add_filters(new MoneyFilter());
+		//$this->context->addFilters(new MoneyFilter());
 		$this->assertEqual(4, $var->render($this->context));		
 	}
 	

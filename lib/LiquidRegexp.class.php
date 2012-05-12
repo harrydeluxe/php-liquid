@@ -71,11 +71,11 @@ class LiquidRegexp
 
         $result = array();
 
-        foreach($matches as $match_key => $sub_matches)
+        foreach($matches as $matchKey => $subMatches)
         {
-            foreach($sub_matches as $sub_match_key => $sub_match)
+            foreach($subMatches as $subMatchKey => $subMatch)
             {
-                $result[$sub_match_key][$match_key] = $sub_match;
+                $result[$subMatchKey][$matchKey] = $subMatch;
             }
         }
 

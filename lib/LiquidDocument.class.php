@@ -16,12 +16,12 @@ class LiquidDocument extends LiquidBlock
      * Constructor
      *
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return LiquidDocument
      */
-    function __construct($tokens, &$file_system)
+    function __construct($tokens, &$fileSystem)
     {
-        $this->file_system = $file_system;
+        $this->_fileSystem = $fileSystem;
         $this->parse($tokens);
     }
 
@@ -54,7 +54,7 @@ class LiquidDocument extends LiquidBlock
      *
      * @return string
      */
-    function block_delimiter()
+    function blockDelimiter()
     {
         return '';
     }
@@ -64,7 +64,7 @@ class LiquidDocument extends LiquidBlock
      * Document blocks don't need to be terminated since they are not actually opened
      *
      */
-    function assert_missing_delimitation()
+    function assertMissingDelimitation()
     {
     }
 }

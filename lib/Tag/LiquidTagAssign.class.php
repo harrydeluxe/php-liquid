@@ -3,8 +3,8 @@
  * Performs an assignment of one variable to another
  * 
  * @example 
- * {%assign var = var %}
- * {%assign var = "hello" | upcase %}
+ * {% assign var = var %}
+ * {% assign var = "hello" | upcase %}
  *
  * @package Liquid
  * @copyright Copyright (c) 2011-2012 Harald Hanek, 
@@ -31,31 +31,31 @@ class LiquidTagAssign extends LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return AssignLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $syntax_regexp = new LiquidRegexp('/(\w+)\s*=\s*(' . LIQUID_QUOTED_FRAGMENT . '+)/');
+        $syntaxRegexp = new LiquidRegexp('/(\w+)\s*=\s*(' . LIQUID_QUOTED_FRAGMENT . '+)/');
 
-        $filter_seperator_regexp = new LiquidRegexp('/' . LIQUID_FILTER_SEPARATOR . '\s*(.*)/');
-        $filter_split_regexp = new LiquidRegexp('/' . LIQUID_FILTER_SEPARATOR . '/');
-        $filter_name_regexp = new LiquidRegexp('/\s*(\w+)/');
-        $filter_argument_regexp = new LiquidRegexp('/(?:' . LIQUID_FILTER_ARGUMENT_SEPARATOR . '|' . LIQUID_ARGUMENT_SEPARATOR . ')\s*(' . LIQUID_QUOTED_FRAGMENT . ')/');
+        $filterSeperatorRegexp = new LiquidRegexp('/' . LIQUID_FILTER_SEPARATOR . '\s*(.*)/');
+        $filterSplitRegexp = new LiquidRegexp('/' . LIQUID_FILTER_SEPARATOR . '/');
+        $filterNameRegexp = new LiquidRegexp('/\s*(\w+)/');
+        $filterArgumentRegexp = new LiquidRegexp('/(?:' . LIQUID_FILTER_ARGUMENT_SEPARATOR . '|' . LIQUID_ARGUMENT_SEPARATOR . ')\s*(' . LIQUID_QUOTED_FRAGMENT . ')/');
 
         $this->filters = array();
 
-        if ($filter_seperator_regexp->match($markup))
+        if ($filterSeperatorRegexp->match($markup))
         {
-            $filters = $filter_split_regexp->split($filter_seperator_regexp->matches[1]);
+            $filters = $filterSplitRegexp->split($filterSeperatorRegexp->matches[1]);
 
             foreach($filters as $filter)
             {
-                $filter_name_regexp->match($filter);
-                $filtername = $filter_name_regexp->matches[1];
+                $filterNameRegexp->match($filter);
+                $filtername = $filterNameRegexp->matches[1];
 
-                $filter_argument_regexp->match_all($filter);
-                $matches = Liquid::array_flatten($filter_argument_regexp->matches[1]);
+                $filterArgumentRegexp->match_all($filter);
+                $matches = Liquid::array_flatten($filterArgumentRegexp->matches[1]);
 
                 array_push($this->filters, array(
                     $filtername, $matches
@@ -63,10 +63,10 @@ class LiquidTagAssign extends LiquidTag
             }
         }
 
-        if ($syntax_regexp->match($markup))
+        if ($syntaxRegexp->match($markup))
         {
-            $this->_to = $syntax_regexp->matches[1];
-            $this->_from = $syntax_regexp->matches[2];
+            $this->_to = $syntaxRegexp->matches[1];
+            $this->_from = $syntaxRegexp->matches[2];
         }
         else
         {
@@ -86,16 +86,16 @@ class LiquidTagAssign extends LiquidTag
 
         foreach($this->filters as $filter)
         {
-            list($filtername, $filter_arg_keys) = $filter;
+            list($filtername, $filterArgKeys) = $filter;
 
-            $filter_arg_values = array();
+            $filterArgValues = array();
 
-            foreach($filter_arg_keys as $arg_key)
+            foreach($filterArgKeys as $arg_key)
             {
-                $filter_arg_values[] = $context->get($arg_key);
+                $filterArgValues[] = $context->get($arg_key);
             }
 
-            $output = $context->invoke($filtername, $output, $filter_arg_values);
+            $output = $context->invoke($filtername, $output, $filterArgValues);
         }
 
         $context->set($this->_to, $output);

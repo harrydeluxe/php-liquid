@@ -31,7 +31,7 @@ class LiquidDecisionBlock extends LiquidBlock
      * @param mixed $value
      * @return string
      */
-    function string_value($value)
+    private function _stringValue($value)
     {
         // objects should have a to_string a value to compare to
         if (is_object($value))
@@ -51,7 +51,6 @@ class LiquidDecisionBlock extends LiquidBlock
         if (is_array($value))
         {
             return $value;
-            //return true;
         }
 
         return $value;
@@ -66,10 +65,10 @@ class LiquidDecisionBlock extends LiquidBlock
      * @param LiquidContext $context
      * @return bool
      */
-    function equal_variables($left, $right, &$context)
+    protected function _equalVariables($left, $right, &$context)
     {
-        $left = $this->string_value($context->get($left));
-        $right = $this->string_value($context->get($right));
+        $left = $this->_stringValue($context->get($left));
+        $right = $this->_stringValue($context->get($right));
 
         return ($left == $right);
 
@@ -85,11 +84,11 @@ class LiquidDecisionBlock extends LiquidBlock
      * @param LiquidContext $context
      * @return bool
      */
-    function interpret_condition($left, $right, $op = null, &$context)
+    protected function _interpretCondition($left, $right, $op = null, &$context)
     {
         if (is_null($op))
         {
-            $value = $this->string_value($context->get($left));
+            $value = $this->_stringValue($context->get($left));
             return $value;
         }
 
@@ -111,8 +110,8 @@ class LiquidDecisionBlock extends LiquidBlock
             $left = $context->get($left);
             $right = $context->get($right);
 
-            $left = $this->string_value($left);
-            $right = $this->string_value($right);
+            $left = $this->_stringValue($left);
+            $right = $this->_stringValue($right);
         }
 
         // special rules for null values

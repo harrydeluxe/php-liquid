@@ -19,9 +19,9 @@ class LiquidBlankFileSystem
     /**
      * Retrieve a template file
      *
-     * @param string $template_path
+     * @param string $templatePath
      */
-    function read_template_file($template_path)
+    function readTemplateFile($templatePath)
     {
         throw new LiquidException("This liquid context does not allow includes.");
     }

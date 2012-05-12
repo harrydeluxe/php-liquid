@@ -17,14 +17,14 @@ class LiquidTagTablerow extends LiquidBlock
      *
      * @var string
      */
-    public $variable_name;
+    public $variableName;
 
     /**
      * The collection name of the table tags
      *
      * @var string
      */
-    public $collection_name;
+    public $collectionName;
 
     /**
      * Additional attributes
@@ -39,21 +39,21 @@ class LiquidTagTablerow extends LiquidBlock
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return TableRowLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
-        parent::__construct($markup, $tokens, $file_system);
+        parent::__construct($markup, $tokens, $fileSystem);
 
         $syntax = new LiquidRegexp("/(\w+)\s+in\s+(" . LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 
         if ($syntax->match($markup))
         {
-            $this->variable_name = $syntax->matches[1];
-            $this->collection_name = $syntax->matches[2];
+            $this->variableName = $syntax->matches[1];
+            $this->collectionName = $syntax->matches[2];
 
-            $this->extract_attributes($markup);
+            $this->extractAttributes($markup);
         }
         else
         {
@@ -70,7 +70,7 @@ class LiquidTagTablerow extends LiquidBlock
      */
     public function render(&$context)
     {
-        $collection = $context->get($this->collection_name);
+        $collection = $context->get($this->collectionName);
 
         if (!is_array($collection))
         {
@@ -80,16 +80,16 @@ class LiquidTagTablerow extends LiquidBlock
         // discard keys
         $collection = array_values($collection);
 
-        if (isset($this->attributes['limit']) || isset($this->attributes['offset']))
+        if (isset($this->_attributes['limit']) || isset($this->_attributes['offset']))
         {
-            $limit = $context->get($this->attributes['limit']);
-            $offset = $context->get($this->attributes['offset']);
+            $limit = $context->get($this->_attributes['limit']);
+            $offset = $context->get($this->_attributes['offset']);
             $collection = array_slice($collection, $offset, $limit);
         }
 
         $length = count($collection);
 
-        $cols = $context->get($this->attributes['cols']);
+        $cols = $context->get($this->_attributes['cols']);
 
         $row = 1;
         $col = 0;
@@ -100,7 +100,7 @@ class LiquidTagTablerow extends LiquidBlock
 
         foreach($collection as $index => $item)
         {
-            $context->set($this->variable_name, $item);
+            $context->set($this->variableName, $item);
             $context->set('tablerowloop', array(
                     'length' => $length,
                     'index' => $index + 1,
@@ -111,7 +111,7 @@ class LiquidTagTablerow extends LiquidBlock
                     'last' => (int) ($index == $length - 1)
             ));
 
-            $result .= "<td class=\"col" . (++$col) . "\">" . $this->render_all($this->_nodelist, $context) . "</td>";
+            $result .= "<td class=\"col" . (++$col) . "\">" . $this->renderAll($this->_nodelist, $context) . "</td>";
 
             if ($col == $cols && !($index == $length - 1))
             {

@@ -24,10 +24,10 @@ class LiquidTagIncrement extends LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return AssignLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
         $syntax = new LiquidRegexp("/(" . LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 

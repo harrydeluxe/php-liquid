@@ -37,21 +37,21 @@ class LiquidTagFor extends LiquidBlock
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return ForLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
-        parent::__construct($markup, $tokens, $file_system);
+        parent::__construct($markup, $tokens, $fileSystem);
 
-        $syntax_regexp = new LiquidRegexp('/(\w+)\s+in\s+(' . LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
+        $syntaxRegexp = new LiquidRegexp('/(\w+)\s+in\s+(' . LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
 
-        if ($syntax_regexp->match($markup))
+        if ($syntaxRegexp->match($markup))
         {
-            $this->_variableName = $syntax_regexp->matches[1];
-            $this->_collectionName = $syntax_regexp->matches[2];
-            $this->_name = $syntax_regexp->matches[1] . '-' . $syntax_regexp->matches[2];
-            $this->extract_attributes($markup);
+            $this->_variableName = $syntaxRegexp->matches[1];
+            $this->_collectionName = $syntaxRegexp->matches[2];
+            $this->_name = $syntaxRegexp->matches[1] . '-' . $syntaxRegexp->matches[2];
+            $this->extractAttributes($markup);
         }
         else
         {
@@ -83,17 +83,17 @@ class LiquidTagFor extends LiquidBlock
             0, count($collection)
         );
 
-        if (isset($this->attributes['limit']) || isset($this->attributes['offset']))
+        if (isset($this->_attributes['limit']) || isset($this->_attributes['offset']))
         {
             $offset = 0;
 
-            if (isset($this->attributes['offset']))
+            if (isset($this->_attributes['offset']))
             {
-                $offset = ($this->attributes['offset'] == 'continue') ? $context->registers['for'][$this->_name] : $context->get($this->attributes['offset']);
+                $offset = ($this->_attributes['offset'] == 'continue') ? $context->registers['for'][$this->_name] : $context->get($this->_attributes['offset']);
             }
 
-            //$limit = $context->get($this->attributes['limit']);
-            $limit = (isset($this->attributes['limit'])) ? $context->get($this->attributes['limit']) : null;
+            //$limit = $context->get($this->_attributes['limit']);
+            $limit = (isset($this->_attributes['limit'])) ? $context->get($this->_attributes['limit']) : null;
 
             $range_end = $limit ? $limit : count($collection) - $offset;
 
@@ -139,7 +139,7 @@ class LiquidTagFor extends LiquidBlock
                     'last' => (int) ($index == $length - 1)
             ));
 
-            $result .= $this->render_all($this->_nodelist, $context);
+            $result .= $this->renderAll($this->_nodelist, $context);
         }
 
         $context->pop();

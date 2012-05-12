@@ -16,21 +16,21 @@ abstract class LiquidTag
      *
      * @var string
      */
-    protected $markup;
+    protected $_markup;
 
     /**
      * Filesystem object is used to load included template files
      *
      * @var LiquidFileSystem
      */
-    protected $file_system;
+    protected $_fileSystem;
 
     /**
      * Additional attributes
      *
      * @var array
      */
-    protected $attributes;
+    protected $_attributes;
 
 
     /**
@@ -38,13 +38,13 @@ abstract class LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return LiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $this->markup = $markup;
-        $this->file_system = $file_system;
+        $this->_markup = $markup;
+        $this->_fileSystem = $fileSystem;
         return $this->parse($tokens);
     }
 
@@ -64,9 +64,9 @@ abstract class LiquidTag
      *
      * @param string $markup
      */
-    public function extract_attributes($markup)
+    public function extractAttributes($markup)
     {
-        $this->attributes = array();
+        $this->_attributes = array();
 
         $attribute_regexp = new LiquidRegexp(LIQUID_TAG_ATTRIBUTES);
 
@@ -74,7 +74,7 @@ abstract class LiquidTag
 
         foreach($matches as $match)
         {
-            $this->attributes[$match[0]] = $match[1];
+            $this->_attributes[$match[0]] = $match[1];
         }
     }
 

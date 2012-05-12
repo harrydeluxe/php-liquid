@@ -208,7 +208,7 @@ class LiquidTemplate
 
         foreach($this->_filters as $filter)
         {
-            $context->add_filters($filter);
+            $context->addFilters($filter);
         }
 
         return $this->_root->render($context);

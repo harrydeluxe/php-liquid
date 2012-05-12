@@ -25,17 +25,17 @@ class LiquidTagBlock extends LiquidBlock
      *
      * @param string $markup
      * @param Array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return CaptureLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $syntax_regexp = new LiquidRegexp('/(\w+)/');
+        $syntaxRegexp = new LiquidRegexp('/(\w+)/');
 
-        if ($syntax_regexp->match($markup))
+        if ($syntaxRegexp->match($markup))
         {
-            $this->_block = $syntax_regexp->matches[1];
-            parent::__construct($markup, $tokens, $file_system);
+            $this->_block = $syntaxRegexp->matches[1];
+            parent::__construct($markup, $tokens, $fileSystem);
         }
         else
         {

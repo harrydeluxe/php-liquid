@@ -16,9 +16,9 @@
 class LiquidTestFileSystem extends LiquidBlankFileSystem 
 {
 	
-	function read_template_file($template_path)
+	function readTemplateFile($templatePath)
 	{
-		if ($template_path == 'inner') {
+		if ($templatePath == 'inner') {
 			return "Inner: {{ inner }}{{ other }}";
 			
 		}		

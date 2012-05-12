@@ -14,13 +14,13 @@ $cache = array('cache' => 'file', 'cache_dir' => PROTECTED_PATH.'cache/');
 
 //$liquid->setCache($cache);
 
-$liquid->parse(file_get_contents(PROTECTED_PATH.'templates/block.tpl'));
+$liquid->parse(file_get_contents(PROTECTED_PATH.'templates/child.tpl'));
 
 $assigns = array(
 		'document' => array(
 			'title' => 'This is php-liquid',
 			'content' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-			'copyright' => 'Harald Hanek - All rights reserved.'
+			'copyright' => '&copy; Copyright 2012 Harald Hanek - All rights reserved.'
 			)
 		);
 

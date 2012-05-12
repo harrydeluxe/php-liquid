@@ -28,24 +28,26 @@ class LiquidTagInclude extends LiquidTag
     /**
      * @var string The name of the template
      */
-    private $template_name;
+    private $_templateName;
 
     /**
      * @var bool True if the variable is a collection
      */
-    private $collection;
+    private $_collection;
 
     /**
      * @var mixed The value to pass to the child template as the template name
      */
-    private $variable;
+    private $_variable;
 
     /**
      * @var LiquidDocument The LiquidDocument that represents the included template
      */
-    private $document;
+    private $_document;
 
-
+    /**
+     * @var string The Source Hash
+     */
     protected $_hash;
 
 
@@ -54,32 +56,32 @@ class LiquidTagInclude extends LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return IncludeLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
         $regex = new LiquidRegexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . LIQUID_QUOTED_FRAGMENT . '+))?/');
 
         if ($regex->match($markup))
         {
 
-            $this->template_name = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
+            $this->_templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
 
             if (isset($regex->matches[1]))
             {
-                $this->collection = (isset($regex->matches[3])) ? ($regex->matches[3] == "for") : null;
-                $this->variable = (isset($regex->matches[4])) ? $regex->matches[4] : null;
+                $this->_collection = (isset($regex->matches[3])) ? ($regex->matches[3] == "for") : null;
+                $this->_variable = (isset($regex->matches[4])) ? $regex->matches[4] : null;
             }
 
-            $this->extract_attributes($markup);
+            $this->extractAttributes($markup);
         }
         else
         {
             throw new LiquidException("Error in tag 'include' - Valid syntax: include '[template]' (with|for) [object|collection]");
         }
 
-        parent::__construct($markup, $tokens, $file_system);
+        parent::__construct($markup, $tokens, $fileSystem);
     }
 
 
@@ -90,13 +92,13 @@ class LiquidTagInclude extends LiquidTag
      */
     public function parse(&$tokens)
     {
-        if (!isset($this->file_system))
+        if (!isset($this->_fileSystem))
         {
             throw new LiquidException("No file system");
         }
 
         // read the source of the template and create a new sub document
-        $source = $this->file_system->read_template_file($this->template_name);
+        $source = $this->_fileSystem->readTemplateFile($this->_templateName);
 
         $this->_hash = md5($source);
 
@@ -104,18 +106,18 @@ class LiquidTagInclude extends LiquidTag
 
         if (isset($cache))
         {
-            if (($this->document = $cache->read($this->_hash)) != false && $this->document->checkIncludes() != true)
+            if (($this->_document = $cache->read($this->_hash)) != false && $this->_document->checkIncludes() != true)
             {
             }
             else
             {
-                $this->document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
-                $cache->write($this->_hash, $this->document);
+                $this->_document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->_fileSystem);
+                $cache->write($this->_hash, $this->_document);
             }
         }
         else
         {
-            $this->document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->file_system);
+            $this->_document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->_fileSystem);
         }
     }
 
@@ -129,10 +131,10 @@ class LiquidTagInclude extends LiquidTag
     {
         $cache = LiquidTemplate::getCache();
 
-        if ($this->document->checkIncludes() == true)
+        if ($this->_document->checkIncludes() == true)
             return true;
 
-        $source = $this->file_system->read_template_file($this->template_name);
+        $source = $this->_fileSystem->readTemplateFile($this->_templateName);
 
         if ($cache->exists(md5($source)) && $this->_hash == md5($source))
             return false;
@@ -149,31 +151,31 @@ class LiquidTagInclude extends LiquidTag
     public function render(&$context)
     {
         $result = '';
-        $variable = $context->get($this->variable);
+        $variable = $context->get($this->_variable);
 
         $context->push();
 
-        foreach($this->attributes as $key => $value)
+        foreach($this->_attributes as $key => $value)
         {
             $context->set($key, $context->get($value));
         }
 
-        if ($this->collection)
+        if ($this->_collection)
         {
             foreach($variable as $item)
             {
-                $context->set($this->template_name, $item);
-                $result .= $this->document->render($context);
+                $context->set($this->_templateName, $item);
+                $result .= $this->_document->render($context);
             }
         }
         else
         {
-            if (!is_null($this->variable))
+            if (!is_null($this->_variable))
             {
-                $context->set($this->template_name, $variable);
+                $context->set($this->_templateName, $variable);
             }
 
-            $result .= $this->document->render($context);
+            $result .= $this->_document->render($context);
         }
 
         $context->pop();

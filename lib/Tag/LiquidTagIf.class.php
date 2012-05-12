@@ -38,10 +38,10 @@ class LiquidTagIf extends LiquidDecisionBlock
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return IfLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
         $this->_nodelist = &$this->_nodelistHolders[count($this->_blocks)];
 
@@ -49,7 +49,7 @@ class LiquidTagIf extends LiquidDecisionBlock
             'if', $markup, &$this->_nodelist
         ));
 
-        parent::__construct($markup, $tokens, $file_system);
+        parent::__construct($markup, $tokens, $fileSystem);
 
     }
 
@@ -61,7 +61,7 @@ class LiquidTagIf extends LiquidDecisionBlock
      * @param array $params
      * @param array $tokens
      */
-    function unknown_tag($tag, $params, &$tokens)
+    public function unknownTag($tag, $params, &$tokens)
     {
         if ($tag == 'else' || $tag == 'elsif')
         {
@@ -76,7 +76,7 @@ class LiquidTagIf extends LiquidDecisionBlock
         }
         else
         {
-            parent::unknown_tag($tag, $params, $tokens);
+            parent::unknownTag($tag, $params, $tokens);
         }
     }
 
@@ -99,7 +99,7 @@ class LiquidTagIf extends LiquidDecisionBlock
         {
             if ($block[0] == 'else')
             {
-                $result = $this->render_all($block[2], $context);
+                $result = $this->renderAll($block[2], $context);
 
                 break;
             }
@@ -146,11 +146,11 @@ class LiquidTagIf extends LiquidDecisionBlock
                     {
                         if ($logicalOperator == 'and')
                         {
-                            $display = $this->interpret_condition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) && $this->interpret_condition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
+                            $display = $this->_interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) && $this->_interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
                         }
                         else
                         {
-                            $display = $this->interpret_condition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) || $this->interpret_condition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
+                            $display = $this->_interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) || $this->_interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
                         }
                     }
 
@@ -158,12 +158,12 @@ class LiquidTagIf extends LiquidDecisionBlock
                 else
                 {
                     /* If statement is a single condition */
-                    $display = $this->interpret_condition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
+                    $display = $this->_interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
                 }
 
                 if ($display)
                 {
-                    $result = $this->render_all($block[2], $context);
+                    $result = $this->renderAll($block[2], $context);
 
                     break;
                 }

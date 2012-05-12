@@ -51,7 +51,7 @@ class FilterbankTest extends UnitTestCase
 	{
 		$var = new LiquidVariable('var | test_function_filter');
 		$this->context->set('var', 1000);
-		$this->context->add_filters('test_function_filter');
+		$this->context->addFilters('test_function_filter');
 		$this->assertIdentical('worked', $var->render($this->context));		
 	}
 	
@@ -62,7 +62,7 @@ class FilterbankTest extends UnitTestCase
 	{
 		$var = new LiquidVariable('var | static_test');
 		$this->context->set('var', 1000);
-		$this->context->add_filters('TestClassFilter');
+		$this->context->addFilters('TestClassFilter');
 		$this->assertIdentical('worked', $var->render($this->context));	
 	}
 	
@@ -74,7 +74,7 @@ class FilterbankTest extends UnitTestCase
 	{
 		$var = new LiquidVariable('var | instance_test_one');
 		$this->context->set('var', 1000);
-		$this->context->add_filters( new TestClassFilter());
+		$this->context->addFilters( new TestClassFilter());
 		$this->assertIdentical('set', $var->render($this->context));			
 		
 		$var = new LiquidVariable('var | instance_test_two');

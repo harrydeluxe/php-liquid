@@ -11,7 +11,6 @@
 
 class LiquidContext
 {
-
     /**
      * Local scopes
      *
@@ -31,7 +30,7 @@ class LiquidContext
      *
      * @var LiquidFilterbank
      */
-    private $filterbank;
+    private $_filterbank;
 
     /**
      * Global scopes
@@ -45,7 +44,6 @@ class LiquidContext
      *
      * @param array $assigns
      * @param array $registers
-     * @return LiquidContext
      */
     public function __construct($assigns = null, $registers = array())
     {
@@ -55,7 +53,7 @@ class LiquidContext
             array()
         );
         $this->registers = $registers;
-        $this->filterbank = new LiquidFilterbank($this);
+        $this->_filterbank = new LiquidFilterbank($this);
     }
 
 
@@ -64,9 +62,9 @@ class LiquidContext
      *
      * @param mixed $filter
      */
-    public function add_filters($filter)
+    public function addFilters($filter)
     {
-        $this->filterbank->add_filter($filter);
+        $this->_filterbank->addFilter($filter);
     }
 
 
@@ -80,18 +78,18 @@ class LiquidContext
      */
     public function invoke($name, $value, $args = null)
     {
-        return $this->filterbank->invoke($name, $value, $args);
+        return $this->_filterbank->invoke($name, $value, $args);
     }
 
 
     /**
      * Merges the given assigns into the current assigns
      *
-     * @param array $new_assigns
+     * @param array $newAssigns
      */
-    public function merge($new_assigns)
+    public function merge($newAssigns)
     {
-        $this->_assigns[0] = array_merge($this->_assigns[0], $new_assigns);
+        $this->_assigns[0] = array_merge($this->_assigns[0], $newAssigns);
     }
 
 
@@ -153,7 +151,7 @@ class LiquidContext
      * @param string $key
      * @return bool
      */
-    function has_key($key)
+    public function hasKey($key)
     {
         return (!is_null($this->resolve($key)));
     }
@@ -278,19 +276,19 @@ class LiquidContext
                 if ($object instanceof LiquidDrop)
                     $object->setContext($this);
 
-                $next_part_name = array_shift($parts);
+                $nextPartName = array_shift($parts);
 
                 if (is_array($object))
                 {
                     // if the last part of the context variable is .size we just return the count
-                    if ($next_part_name == 'size' && count($parts) == 0 && !array_key_exists('size', $object))
+                    if ($nextPartName == 'size' && count($parts) == 0 && !array_key_exists('size', $object))
                     {
                         return count($object);
                     }
 
-                    if (array_key_exists($next_part_name, $object))
+                    if (array_key_exists($nextPartName, $object))
                     {
-                        $object = $object[$next_part_name];
+                        $object = $object[$nextPartName];
                     }
                     else
                     {
@@ -303,37 +301,37 @@ class LiquidContext
                     if ($object instanceof LiquidDrop)
                     {
                         // if the object is a drop, make sure it supports the given method
-                        if (!$object->hasKey($next_part_name))
+                        if (!$object->hasKey($nextPartName))
                         {
                             return null;
                         }
 
                         // php4 doesn't support array access, so we have
                         // to use the invoke method instead
-                        $object = $object->invokeDrop($next_part_name);
+                        $object = $object->invokeDrop($nextPartName);
 
                     }
                     elseif (method_exists($object, LIQUID_HAS_PROPERTY_METHOD))
                     {
 
-                        if (!call_user_method(LIQUID_HAS_PROPERTY_METHOD, $object, $next_part_name))
+                        if (!call_user_method(LIQUID_HAS_PROPERTY_METHOD, $object, $nextPartName))
                         {
                             return null;
                         }
 
-                        $object = call_user_method(LIQUID_GET_PROPERTY_METHOD, $object, $next_part_name);
+                        $object = call_user_method(LIQUID_GET_PROPERTY_METHOD, $object, $nextPartName);
 
 
                     }
                     else
                     {
                         // if it's just a regular object, attempt to access a property
-                        if (!property_exists($object, $next_part_name))
+                        if (!property_exists($object, $nextPartName))
                         {
                             return null;
                         }
 
-                        $object = $object->$next_part_name;
+                        $object = $object->$nextPartName;
                     }
                 }
 

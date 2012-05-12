@@ -43,7 +43,7 @@ class LiquidFilterbank
     {
         $this->context = $context;
 
-        $this->add_filter('LiquidStandardFilters');
+        $this->addFilter('LiquidStandardFilters');
     }
 
 
@@ -54,7 +54,7 @@ class LiquidFilterbank
      * filters will be called statically) or the name of a function.
      * @return bool
      */
-    function add_filter($filter)
+    function addFilter($filter)
     {
         // if the passed filter was an object, store the object for future reference.
         if (is_object($filter))
@@ -69,7 +69,7 @@ class LiquidFilterbank
         // if it wasn't an object an isn't a string either, it's a bad parameter
         if (!is_string($filter))
         {
-            throw new LiquidException("Parameter passed to add_filter must be an object or a string");
+            throw new LiquidException("Parameter passed to addFilter must be an object or a string");
         }
 
         // if the filter is a class, register all its methods
@@ -91,7 +91,7 @@ class LiquidFilterbank
             return true;
         }
 
-        throw new LiquidException("Parameter passed to add_filter must a class or a function");
+        throw new LiquidException("Parameter passed to addFilter must a class or a function");
     }
 
 

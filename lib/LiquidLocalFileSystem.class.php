@@ -37,12 +37,12 @@ class LiquidLocalFileSystem extends LiquidBlankFileSystem
     /**
      * Retrieve a template file
      *
-     * @param string $template_path
+     * @param string $templatePath
      * @return string
      */
-    public function read_template_file($templatePath)
+    public function readTemplateFile($templatePath)
     {
-        if (!($full_path = $this->full_path($templatePath)))
+        if (!($full_path = $this->fullPath($templatePath)))
         {
             throw new LiquidException("No such template '$templatePath'");
         }
@@ -53,25 +53,25 @@ class LiquidLocalFileSystem extends LiquidBlankFileSystem
     /**
      * Resolves a given path to a full template file path, making sure it's valid
      *
-     * @param string $template_path
+     * @param string $templatePath
      * @return string
      */
-    public function full_path($template_path)
+    public function fullPath($templatePath)
     {
         $name_regex = new LiquidRegexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
 
-        if (!$name_regex->match($template_path))
+        if (!$name_regex->match($templatePath))
         {
-            throw new LiquidException("Illegal template name '$template_path'");
+            throw new LiquidException("Illegal template name '$templatePath'");
         }
 
-        if (strpos($template_path, '/') !== false)
+        if (strpos($templatePath, '/') !== false)
         {
-            $full_path = $this->_root . dirname($template_path) . '/' . LIQUID_INCLUDE_PREFIX . basename($template_path) . '.' . LIQUID_INCLUDE_SUFFIX;
+            $full_path = $this->_root . dirname($templatePath) . '/' . LIQUID_INCLUDE_PREFIX . basename($templatePath) . '.' . LIQUID_INCLUDE_SUFFIX;
         }
         else
         {
-            $full_path = $this->_root . LIQUID_INCLUDE_PREFIX . $template_path . '.' . LIQUID_INCLUDE_SUFFIX;
+            $full_path = $this->_root . LIQUID_INCLUDE_PREFIX . $templatePath . '.' . LIQUID_INCLUDE_SUFFIX;
         }
 
         $root_regex = new LiquidRegexp('/' . preg_quote(realpath($this->_root), '/') . '/');

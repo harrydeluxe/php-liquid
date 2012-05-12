@@ -92,13 +92,13 @@ class ContextTest extends UnitTestCase
 	function test_add_filter()
 	{
 		$context = new LiquidContext();
-		$context->add_filters(new HiFilter());
+		$context->addFilters(new HiFilter());
 		$this->assertEqual('hi? hi!', $context->invoke('hi', 'hi?'));
 
 		$context = new LiquidContext();
 		$this->assertEqual('hi?', $context->invoke('hi', 'hi?'));
 			
-		$context->add_filters(new HiFilter());
+		$context->addFilters(new HiFilter());
 		$this->assertEqual('hi? hi!', $context->invoke('hi', 'hi?'));		
 	}
 

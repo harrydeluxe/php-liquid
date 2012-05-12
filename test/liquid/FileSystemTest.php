@@ -20,7 +20,7 @@ class FileSystemTest extends LiquidTestcase
 		
 		try 
 		{
-			$file_system->read_template_file('dummy');
+			$file_system->readTemplateFile('dummy');
 			$this->fail("Exception was expected.");
 		} 
 		catch (Exception $e)
@@ -36,13 +36,13 @@ class FileSystemTest extends LiquidTestcase
 		$root = dirname(__FILE__).'/templates/';
 		
 		$file_system = new LiquidLocalFileSystem($root);
-		$this->assertEqual($root."mypartial.tpl", $file_system->full_path("mypartial"));
-		$this->assertEqual($root."dir/mypartial.tpl", $file_system->full_path("dir/mypartial"));
+		$this->assertEqual($root."mypartial.tpl", $file_system->fullPath("mypartial"));
+		$this->assertEqual($root."dir/mypartial.tpl", $file_system->fullPath("dir/mypartial"));
 
 
 		try 
 		{
-			$file_system->full_path('../dir/mypartial');
+			$file_system->fullPath('../dir/mypartial');
 			$this->fail();
 		} 
 		catch (Exception $e)
@@ -53,7 +53,7 @@ class FileSystemTest extends LiquidTestcase
 
 		try 
 		{
-			$file_system->full_path("/dir/../../dir/mypartial");
+			$file_system->fullPath("/dir/../../dir/mypartial");
 			$this->fail();
 		} 
 		catch (Exception $e)
@@ -63,7 +63,7 @@ class FileSystemTest extends LiquidTestcase
 		
 		try 
 		{
-			$file_system->full_path("/etc/passwd");
+			$file_system->fullPath("/etc/passwd");
 			$this->fail();
 		} 
 		catch (Exception $e)

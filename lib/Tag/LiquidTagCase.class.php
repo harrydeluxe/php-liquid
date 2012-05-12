@@ -26,7 +26,7 @@ class LiquidTagCase extends LiquidDecisionBlock
      *
      * @var array
      */
-    public $else_nodelist;
+    public $elseNodelist;
 
     /**
      * The left value to compare
@@ -48,21 +48,21 @@ class LiquidTagCase extends LiquidDecisionBlock
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return CaseLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
         $this->nodelists = array();
-        $this->else_nodelist = array();
+        $this->elseNodelist = array();
 
-        parent::__construct($markup, $tokens, $file_system);
+        parent::__construct($markup, $tokens, $fileSystem);
 
-        $syntax_regexp = new LiquidRegexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
+        $syntaxRegexp = new LiquidRegexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
 
-        if ($syntax_regexp->match($markup))
+        if ($syntaxRegexp->match($markup))
         {
-            $this->left = $syntax_regexp->matches[0];
+            $this->left = $syntaxRegexp->matches[0];
         }
         else
         {
@@ -75,7 +75,7 @@ class LiquidTagCase extends LiquidDecisionBlock
      * Pushes the last nodelist onto the stack
      *
      */
-    public function end_tag()
+    public function endTag()
     {
         $this->push_nodelist();
     }
@@ -88,18 +88,18 @@ class LiquidTagCase extends LiquidDecisionBlock
      * @param array $params
      * @param array $tokens
      */
-    public function unknown_tag($tag, $params, &$tokens)
+    public function unknownTag($tag, $params, &$tokens)
     {
-        $when_syntax_regexp = new LiquidRegexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
+        $whenSyntaxRegexp = new LiquidRegexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
 
         switch ($tag)
         {
             case 'when':
             // push the current nodelist onto the stack and prepare for a new one
-                if ($when_syntax_regexp->match($params))
+                if ($whenSyntaxRegexp->match($params))
                 {
                     $this->push_nodelist();
-                    $this->right = $when_syntax_regexp->matches[0];
+                    $this->right = $whenSyntaxRegexp->matches[0];
                     $this->_nodelist = array();
 
                 }
@@ -113,12 +113,12 @@ class LiquidTagCase extends LiquidDecisionBlock
             // push the last nodelist onto the stack and prepare to recieve the else nodes
                 $this->push_nodelist();
                 $this->right = null;
-                $this->else_nodelist = &$this->_nodelist;
+                $this->elseNodelist = &$this->_nodelist;
                 $this->_nodelist = array();
                 break;
 
             default:
-                parent::unknown_tag($tag, $params, $tokens);
+                parent::unknownTag($tag, $params, $tokens);
         }
     }
 
@@ -152,12 +152,12 @@ class LiquidTagCase extends LiquidDecisionBlock
         {
             list($right, $nodelist) = $data;
 
-            if ($this->equal_variables($this->left, $right, $context))
+            if ($this->_equalVariables($this->left, $right, $context))
             {
                 $run_else_block = false;
 
                 $context->push();
-                $output .= $this->render_all($nodelist, $context);
+                $output .= $this->renderAll($nodelist, $context);
                 $context->pop();
             }
         }
@@ -165,7 +165,7 @@ class LiquidTagCase extends LiquidDecisionBlock
         if ($run_else_block)
         {
             $context->push();
-            $output .= $this->render_all($this->else_nodelist, $context);
+            $output .= $this->renderAll($this->elseNodelist, $context);
             $context->pop();
         }
 

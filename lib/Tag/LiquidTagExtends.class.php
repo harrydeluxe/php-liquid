@@ -22,7 +22,10 @@ class LiquidTagExtends extends LiquidTag
      */
     private $_document;
 
-    protected $_hash;
+    /**
+     * @var string The Source Hash
+     */
+     protected $_hash;
 
 
     /**
@@ -30,10 +33,10 @@ class LiquidTagExtends extends LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $file_system
+     * @param LiquidFileSystem $fileSystem
      * @return IncludeLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
         $regex = new LiquidRegexp('/("[^"]+"|\'[^\']+\')?/');
 
@@ -46,26 +49,26 @@ class LiquidTagExtends extends LiquidTag
             throw new LiquidException("Error in tag 'extends' - Valid syntax: extends '[template name]'");
         }
 
-        parent::__construct($markup, $tokens, $file_system);
+        parent::__construct($markup, $tokens, $fileSystem);
     }
 
 
     private function _findBlocks($tokens)
     {
-        $blockstart_regexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
-        $blockend_regexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
+        $blockstartRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
+        $blockendRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
 
         $b = array();
         $name = null;
 
         foreach($tokens as $token)
         {
-            if($blockstart_regexp->match($token))
+            if($blockstartRegexp->match($token))
             {
-                $name = $blockstart_regexp->matches[1];
+                $name = $blockstartRegexp->matches[1];
                 $b[$name] = array();
             }
-            else if($blockend_regexp->match($token))
+            else if($blockendRegexp->match($token))
             {
                 $name = null;
             }
@@ -89,7 +92,7 @@ class LiquidTagExtends extends LiquidTag
      */
     public function parse(&$tokens)
     {
-        if (!isset($this->file_system))
+        if (!isset($this->_fileSystem))
         {
             throw new LiquidException("No file system");
         }
@@ -97,15 +100,15 @@ class LiquidTagExtends extends LiquidTag
 
 
         // read the source of the template and create a new sub document
-        $source = $this->file_system->read_template_file($this->_templateName);
+        $source = $this->_fileSystem->readTemplateFile($this->_templateName);
 
         // tokens in this new document
         $maintokens = LiquidTemplate::tokenize($source);
 
         $childtokens = $this->_findBlocks($tokens);
 
-        $blockstart_regexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
-        $blockend_regexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
+        $blockstartRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
+        $blockendRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
 
         $b = array();
         $name = null;
@@ -115,9 +118,9 @@ class LiquidTagExtends extends LiquidTag
 
         for($i = 0; $i < count($maintokens); $i++)
         {
-            if($blockstart_regexp->match($maintokens[$i]))
+            if($blockstartRegexp->match($maintokens[$i]))
             {
-                $name = $blockstart_regexp->matches[1];
+                $name = $blockstartRegexp->matches[1];
 
                 if(isset($childtokens[$name]))
                 {
@@ -131,7 +134,7 @@ class LiquidTagExtends extends LiquidTag
             if(!$aufzeichnen)
                 array_push($rest, $maintokens[$i]);
 
-            if($blockend_regexp->match($maintokens[$i]) && $aufzeichnen === true)
+            if($blockendRegexp->match($maintokens[$i]) && $aufzeichnen === true)
             {
                 $aufzeichnen = false;
                 array_push($rest, $maintokens[$i]);
@@ -149,13 +152,13 @@ class LiquidTagExtends extends LiquidTag
             }
             else
             {
-                $this->_document = new LiquidDocument($rest, $this->file_system);
+                $this->_document = new LiquidDocument($rest, $this->_fileSystem);
                 $cache->write($this->_hash, $this->_document);
             }
         }
         else
         {
-            $this->_document = new LiquidDocument($rest, $this->file_system);
+            $this->_document = new LiquidDocument($rest, $this->_fileSystem);
         }
     }
 
@@ -172,7 +175,7 @@ class LiquidTagExtends extends LiquidTag
         if ($this->_document->checkIncludes() == true)
             return true;
 
-        $source = $this->file_system->read_template_file($this->_templateName);
+        $source = $this->_fileSystem->readTemplateFile($this->_templateName);
 
         if ($cache->exists(md5($source)) && $this->_hash == md5($source))
             return false;

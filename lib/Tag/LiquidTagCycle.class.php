@@ -41,17 +41,17 @@ class LiquidTagCycle extends LiquidTag
      * @param array $tokens
      * @return CycleLiquidTag
      */
-    public function __construct($markup, &$tokens, &$file_system)
+    public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $simple_syntax = new LiquidRegexp("/" . LIQUID_QUOTED_FRAGMENT . "/");
-        $named_syntax = new LiquidRegexp("/(" . LIQUID_QUOTED_FRAGMENT . ")\s*\:\s*(.*)/");
+        $simpleSyntax = new LiquidRegexp("/" . LIQUID_QUOTED_FRAGMENT . "/");
+        $namedSyntax = new LiquidRegexp("/(" . LIQUID_QUOTED_FRAGMENT . ")\s*\:\s*(.*)/");
 
-        if ($named_syntax->match($markup))
+        if ($namedSyntax->match($markup))
         {
-            $this->_variables = $this->_variablesFromString($named_syntax->matches[2]);
-            $this->_name = $named_syntax->matches[1];
+            $this->_variables = $this->_variablesFromString($namedSyntax->matches[2]);
+            $this->_name = $namedSyntax->matches[1];
         }
-        elseif ($simple_syntax->match($markup))
+        elseif ($simpleSyntax->match($markup))
         {
             $this->_variables = $this->_variablesFromString($markup);
             $this->_name = "'" . implode($this->_variables) . "'";
