@@ -9,6 +9,7 @@ Liquid is a PHP port of the "Liquid template engine for Ruby":https://github.com
 * Seperate compiling and rendering stages for improved performance.
 * Easy to extend with your own "tags and filters":https://github.com/harrydeluxe/php-liquid/wiki/Liquid-for-programmers.
 * 100% Markup compatibility with a Ruby templating engine, making templates usable for either.
+* Unit tested: Liquid is fully unit-tested. The library is stable and ready to be used in large projects.
 
 h2. Why Liquid?
 
