@@ -24,7 +24,7 @@ class LiquidFilterbank
      *
      * @var unknown_type
      */
-    public $method_map;
+    public $methodMap;
 
     /**
      * Reference to the current context object
@@ -78,7 +78,7 @@ class LiquidFilterbank
             $methods = array_flip(get_class_methods($filter));
             foreach($methods as $method => $null)
             {
-                $this->method_map[$method] = $filter;
+                $this->methodMap[$method] = $filter;
             }
 
             return true;
@@ -87,7 +87,7 @@ class LiquidFilterbank
         // if it's a function register it simply
         if (function_exists($filter))
         {
-            $this->method_map[$filter] = false;
+            $this->methodMap[$filter] = false;
             return true;
         }
 
@@ -113,9 +113,9 @@ class LiquidFilterbank
         array_unshift($args, $value);
 
         // consult the mapping 
-        if (isset($this->method_map[$name]))
+        if (isset($this->methodMap[$name]))
         {
-            $class = $this->method_map[$name];
+            $class = $this->methodMap[$name];
 
             // if we have a registered object for the class, use that instead
             if (isset($this->filters[$class]))
