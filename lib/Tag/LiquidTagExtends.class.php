@@ -97,49 +97,55 @@ class LiquidTagExtends extends LiquidTag
             throw new LiquidException("No file system");
         }
 
-
-
         // read the source of the template and create a new sub document
         $source = $this->_fileSystem->readTemplateFile($this->_templateName);
 
         // tokens in this new document
         $maintokens = LiquidTemplate::tokenize($source);
-
-        $childtokens = $this->_findBlocks($tokens);
-
-        $blockstartRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
-        $blockendRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
-
-        $b = array();
-        $name = null;
-
-        $rest = array();
-        $aufzeichnen = false;
-
-        for($i = 0; $i < count($maintokens); $i++)
+        
+        $m = preg_grep('/^' . LIQUID_TAG_START . '\s*extends .*?' . LIQUID_TAG_END . '$/', $maintokens);
+        if(isset($m[0]))
         {
-            if($blockstartRegexp->match($maintokens[$i]))
-            {
-                $name = $blockstartRegexp->matches[1];
-
-                if(isset($childtokens[$name]))
-                {
-                    $aufzeichnen = true;
-                    array_push($rest, $maintokens[$i]);
-                    foreach($childtokens[$name] as $item)
-                        array_push($rest, $item);
-                }
-
-            }
-            if(!$aufzeichnen)
-                array_push($rest, $maintokens[$i]);
-
-            if($blockendRegexp->match($maintokens[$i]) && $aufzeichnen === true)
-            {
-                $aufzeichnen = false;
-                array_push($rest, $maintokens[$i]);
-            }
+        	$rest = array_merge($maintokens, $tokens);
         }
+		else
+		{		
+	        $childtokens = $this->_findBlocks($tokens);
+	
+	        $blockstartRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
+	        $blockendRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
+	
+	        $b = array();
+	        $name = null;
+	
+	        $rest = array();
+	        $aufzeichnen = false;
+	
+	        for($i = 0; $i < count($maintokens); $i++)
+	        {
+	            if($blockstartRegexp->match($maintokens[$i]))
+	            {
+	                $name = $blockstartRegexp->matches[1];
+	
+	                if(isset($childtokens[$name]))
+	                {
+	                    $aufzeichnen = true;
+	                    array_push($rest, $maintokens[$i]);
+	                    foreach($childtokens[$name] as $item)
+	                        array_push($rest, $item);
+	                }
+	
+	            }
+	            if(!$aufzeichnen)
+	                array_push($rest, $maintokens[$i]);
+	
+	            if($blockendRegexp->match($maintokens[$i]) && $aufzeichnen === true)
+	            {
+	                $aufzeichnen = false;
+	                array_push($rest, $maintokens[$i]);
+	            }
+	        }
+		}
 
         $this->_hash = md5($source);
 
