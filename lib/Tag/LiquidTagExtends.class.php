@@ -102,9 +102,16 @@ class LiquidTagExtends extends LiquidTag
 
         // tokens in this new document
         $maintokens = LiquidTemplate::tokenize($source);
-
-        $m = preg_grep('/^' . LIQUID_TAG_START . '\s*extends .*?' . LIQUID_TAG_END . '$/', $maintokens);
-        if(isset($m[0]))
+        
+        $eRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*extends (.*)?' . LIQUID_TAG_END . '$/');
+        foreach($maintokens as $maintoken)
+            if($eRegexp->match($maintoken))
+            {
+                $m = $eRegexp->matches[1];
+                break;
+            }
+        
+        if(isset($m))
         {
             $rest = array_merge($maintokens, $tokens);
         }
