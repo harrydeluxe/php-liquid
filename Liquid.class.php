@@ -48,6 +48,12 @@ defined('LIQUID_FILTER_ARGUMENT_SEPARATOR') or define('LIQUID_FILTER_ARGUMENT_SE
 defined('LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR') or define('LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR', '.');
 
 /**
+ * Allow Templatenames with extension in include and extends tags. default = false
+ *
+ */
+defined('LIQUID_INCLUDE_ALLOW_EXT') or define('LIQUID_INCLUDE_ALLOW_EXT', false);
+
+/**
  * Suffix for include files
  *
  */
