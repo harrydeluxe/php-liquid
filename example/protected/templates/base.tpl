@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        {% include 'header' %}
+        {% include 'header.tpl' %}
     </head>
     <body>
 		<div id="content">{% block content %}{% endblock %}</div>	

@@ -1,4 +1,5 @@
 
+ * Allow Templatenames with Fileextension
  * Extends Tag supports now multiple inheritance
  * Clean up code, change all variables and methods to camelCase
  

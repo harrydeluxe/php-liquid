@@ -1,6 +1,6 @@
 <?php
-define('LIQUID_INCLUDE_SUFFIX', 'tpl');
-define('LIQUID_INCLUDE_PREFIX', '');
+
+define('LIQUID_INCLUDE_ALLOW_EXT', true);
 
 require_once('../Liquid.class.php');
 
@@ -23,6 +23,5 @@ $assigns = array(
 			'copyright' => '&copy; Copyright 2012 Harald Hanek - All rights reserved.'
 			)
 		);
-
-print $liquid->render($assigns);
-?>
+		
+echo $liquid->render($assigns);
