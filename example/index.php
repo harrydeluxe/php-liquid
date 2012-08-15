@@ -9,7 +9,7 @@ define('PROTECTED_PATH', dirname(__FILE__).'/protected/');
 
 $liquid = new LiquidTemplate(PROTECTED_PATH.'templates/');
 
-$cache = array('cache' => 'file', 'cache_dir' => PROTECTED_PATH.'cache/');
+//$cache = array('cache' => 'file', 'cache_dir' => PROTECTED_PATH.'cache/');
 //$cache = array('cache' => 'apc');
 
 $liquid->setCache($cache);
@@ -26,6 +26,7 @@ $assigns = array(
 					array(
 						'title' => 'Blog Title 1',
 						'content' => 'Nunc putamus parum claram',
+                        'tags' => array('claram', 'parum'),
 						'comments' => array(
 										array(
 											'title' => 'First Comment',
@@ -36,6 +37,7 @@ $assigns = array(
 					array(
 						'title' => 'Blog Title 2',
 						'content' => 'Nunc putamus parum claram',
+                        'tags' => array('claram', 'parum', 'freestyle'),
 						'comments' => array(
 										array(
 											'title' => 'First Comment',
@@ -53,4 +55,5 @@ $assigns = array(
 		);
 
 print $liquid->render($assigns);
+
 ?>
