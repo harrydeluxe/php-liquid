@@ -138,10 +138,19 @@ class LiquidContext
      *
      * @param string $key
      * @param mixed $value
+     * @param bool $global
      */
-    public function set($key, $value)
+    public function set($key, $value, $global = false)
     {
-        $this->_assigns[0][$key] = $value;
+        if($global)
+        {
+            for($i = 0; $i < count($this->_assigns); $i++)
+            {
+                $this->_assigns[$i][$key] = $value;
+            }
+        }
+        else
+            $this->_assigns[0][$key] = $value;
     }
 
 
