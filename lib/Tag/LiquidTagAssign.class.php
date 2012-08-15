@@ -98,6 +98,6 @@ class LiquidTagAssign extends LiquidTag
             $output = $context->invoke($filtername, $output, $filterArgValues);
         }
 
-        $context->set($this->_to, $output);
+        $context->set($this->_to, $output, true);
     }
 }
