@@ -1,9 +1,12 @@
+* 0.9.2 (2012-08-15)
 
+ * context->set allows now global vars
  * Allow Templatenames with Fileextension
- * Extends Tag supports now multiple inheritance
+ * Tag 'extends' supports now multiple inheritance
  * Clean up code, change all variables and methods to camelCase
- 
- 
+
+
 * 0.9.1 (2012-05-12)
 
+ * added the extends and block filter
  * Initial release
