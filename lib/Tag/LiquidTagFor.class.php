@@ -20,6 +20,18 @@ class LiquidTagFor extends LiquidBlock
      * @var array The collection to loop over
      */
     private $_collectionName;
+    
+    /**
+     * @var mixed The range start
+     */
+    private $_rangeStart;
+
+
+    /**
+     * @var mixed The range end
+     */
+    private $_rangeEnd;
+    
 
     /**
      * @var string The variable name to assign collection elements to
@@ -37,21 +49,33 @@ class LiquidTagFor extends LiquidBlock
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
+     * @param LiquidFileSystem $file_system
      * @return ForLiquidTag
      */
-    public function __construct($markup, &$tokens, &$fileSystem)
+    public function __construct($markup, &$tokens, &$file_system)
     {
-        parent::__construct($markup, $tokens, $fileSystem);
+        parent::__construct($markup, $tokens, $file_system);
 
-        $syntaxRegexp = new LiquidRegexp('/(\w+)\s+in\s+(' . LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
+        $syntax_regexp = new LiquidRegexp('/(\w+)\s+in\s+(' . LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
+        $syntax_range_regexp = new LiquidRegexp('/(\w+)\s+in\s+\(([0-9a-zA-Z_.-]+..[0-9a-zA-Z_.-]+)\)/');
 
-        if ($syntaxRegexp->match($markup))
+        if ($syntax_regexp->match($markup))
         {
-            $this->_variableName = $syntaxRegexp->matches[1];
-            $this->_collectionName = $syntaxRegexp->matches[2];
-            $this->_name = $syntaxRegexp->matches[1] . '-' . $syntaxRegexp->matches[2];
-            $this->extractAttributes($markup);
+            $this->_variableName = $syntax_regexp->matches[1];
+            $this->_collectionName = $syntax_regexp->matches[2];
+            $this->_name = $syntax_regexp->matches[1] . '-' . $syntax_regexp->matches[2];
+            
+            $this->extract_attributes($markup);
+        }
+        else if ($syntax_range_regexp->match($markup)) {
+            $this->_variableName = $syntax_range_regexp->matches[1];
+            
+            $range = explode("..",$syntax_range_regexp->matches[2]);
+            $this->_rangeStart = $range[0];
+            $this->_rangeEnd = $range[1];
+            
+            $this->_name = $syntax_range_regexp->matches[1] . '-' . $syntax_range_regexp->matches[2];
+            $this->extract_attributes($markup);
         }
         else
         {
@@ -72,7 +96,15 @@ class LiquidTagFor extends LiquidBlock
             $context->registers['for'] = array();
         }
 
-        $collection = $context->get($this->_collectionName);
+        if ($this->_rangeStart || $this->_rangeEnd) {
+            
+            $start = (int)$context->get($this->_rangeStart);
+            $end = (int)$context->get($this->_rangeEnd);
+            $collection = range($start,$end);
+            
+        } else {
+            $collection = $context->get($this->_collectionName);
+        }
 
         if (is_null($collection) || !is_array($collection) || count($collection) == 0)
         {
@@ -83,17 +115,17 @@ class LiquidTagFor extends LiquidBlock
             0, count($collection)
         );
 
-        if (isset($this->_attributes['limit']) || isset($this->_attributes['offset']))
+        if (isset($this->attributes['limit']) || isset($this->attributes['offset']))
         {
             $offset = 0;
 
-            if (isset($this->_attributes['offset']))
+            if (isset($this->attributes['offset']))
             {
-                $offset = ($this->_attributes['offset'] == 'continue') ? $context->registers['for'][$this->_name] : $context->get($this->_attributes['offset']);
+                $offset = ($this->attributes['offset'] == 'continue') ? $context->registers['for'][$this->_name] : $context->get($this->attributes['offset']);
             }
 
-            //$limit = $context->get($this->_attributes['limit']);
-            $limit = (isset($this->_attributes['limit'])) ? $context->get($this->_attributes['limit']) : null;
+            //$limit = $context->get($this->attributes['limit']);
+            $limit = (isset($this->attributes['limit'])) ? $context->get($this->attributes['limit']) : null;
 
             $range_end = $limit ? $limit : count($collection) - $offset;
 
@@ -139,7 +171,7 @@ class LiquidTagFor extends LiquidBlock
                     'last' => (int) ($index == $length - 1)
             ));
 
-            $result .= $this->renderAll($this->_nodelist, $context);
+            $result .= $this->render_all($this->_nodelist, $context);
         }
 
         $context->pop();
