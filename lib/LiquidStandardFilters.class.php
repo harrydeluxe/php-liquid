@@ -37,6 +37,32 @@ class LiquidStandardFilters
 
         return $input;
     }
+    
+    
+    /**
+     * Append characters to a string
+     *
+     * @param input string $input
+     * @param string to append $append
+     * @return string
+     */
+    public static function append($input,$append)
+    {
+        return $input.$append;
+    }
+    
+    
+    /**
+     * Prepend characters to a string
+     *
+     * @param input string $input
+     * @param string to prepend $prepend
+     * @return string
+     */
+    public static function prepend($input,$prepend)
+    {
+        return $prepend.$input;
+    }
 
 
     /**
@@ -241,7 +267,63 @@ class LiquidStandardFilters
     {
         return explode($pattern, $input);
     }
-
+    
+    
+    /**
+     * Replace all occurrences of a string with another.
+     *
+     * @param string $input
+     * @param string $find
+     * @param string $replace
+     * @return string
+     */
+    public static function replace($input, $find, $replace)
+    {
+        return str_replace($find, $replace, $input);
+    }
+    
+    
+    /**
+     * Replace first occurrence of a string with another.
+     *
+     * @param string $input
+     * @param string $find
+     * @param string $replace
+     * @return string
+     */
+    public static function replace_first($input, $find, $replace)
+    {
+    	$count = 1;
+    	return str_replace($find, $replace, $input, $count);
+    }
+    
+    
+    /**
+     * Remove all occurrences of a string.
+     *
+     * @param string $input
+     * @param string $find
+     * @return string
+     */
+    public static function remove($input, $find)
+    {
+        return str_replace($find, '', $input);
+    }
+    
+    
+    /**
+     * Remove first occurrence of a string.
+     *
+     * @param string $input
+     * @param string $find
+     * @return string
+     */
+    public static function remove_first($input, $find)
+    {
+    	$count = 1;
+        return str_replace($find, '', $input, $count);
+    }
+    
 
     /**
      * addition
