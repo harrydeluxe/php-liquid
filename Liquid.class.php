@@ -157,43 +157,6 @@ class Liquid
         return (isset(self::$_coreClasses[$className])) ? true : false;
     }
 
-
-    /**
-     * Class autoload loader.
-     * This method is provided to be invoked within an __autoload() magic method.
-     * @param string $className class name
-     * @return boolean whether the class has been loaded successfully
-     */
-    public static function autoload($className)
-    {
-        if (isset(self::$_coreClasses[$className]))
-        {
-            include(LIQUID_PATH . self::$_coreClasses[$className]); // use include so that the error PHP file may appear
-            //include_once(LIQUID_PATH.self::$_coreClasses[$className]);
-            return true;
-        }
-        return false;
-    }
-
-
-    /**
-     * Registers a new class autoloader.
-     * The new autoloader will be placed before {@link autoload} and after
-     * any other existing autoloaders.
-     * @param callback $callback a valid PHP callback (function name or array($className,$methodName)).
-     */
-    public static function registerAutoloader($callback)
-    {
-        spl_autoload_unregister(array(
-            'Liquid', 'autoload'
-        ));
-        spl_autoload_register($callback);
-        spl_autoload_register(array(
-            'Liquid', 'autoload'
-        ));
-    }
-
-
     private static $_coreClasses = array(
             'LiquidException' => '/lib/LiquidException.class.php',
             'LiquidRegexp' => '/lib/LiquidRegexp.class.php',
@@ -227,8 +190,3 @@ class Liquid
             'LiquidVariable' => '/lib/LiquidVariable.class.php'
     );
 }
-
-if (LIQUID_AUTOLOAD)
-    spl_autoload_register(array(
-        'Liquid', 'autoload'
-    ));
