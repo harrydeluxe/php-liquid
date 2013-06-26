@@ -1,0 +1,8 @@
+{
+    "name": "billysbilling/php-liquid",
+    "description": "Composer module wrapper for harrydeluxe/php-liquid",
+    "version": "1.0.0",
+    "autoload": {
+        "classmap": ["Liquid.class.php", "lib"]
+    }
+}
