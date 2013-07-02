@@ -58,7 +58,7 @@ class LiquidTagFor extends LiquidBlock
 			$this->_variableName = $syntax_regexp->matches[1];
 			$this->_collectionName = $syntax_regexp->matches[2];
 			$this->_name = $syntax_regexp->matches[1].'-'.$syntax_regexp->matches[2];
-			$this->extract_attributes($markup);
+			$this->extractAttributes($markup);
 		}
 		else
 		{
@@ -70,7 +70,7 @@ class LiquidTagFor extends LiquidBlock
 				$this->_start = $syntax_regexp->matches[2];
 				$this->_collectionName = $syntax_regexp->matches[3];
 				$this->_name = $syntax_regexp->matches[1].'-digit';
-				$this->extract_attributes($markup);
+				$this->extractAttributes($markup);
 			} else {
 				throw new LiquidException("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection] OR for [int] in ([start]..[end])");
 			}
@@ -158,7 +158,7 @@ class LiquidTagFor extends LiquidBlock
 						'last'		=> (int)($index == $length - 1)
 					));
 					
-					$result .= $this->render_all($this->_nodelist, $context);
+					$result .= $this->renderAll($this->_nodelist, $context);
 				}
 				
 			break;
@@ -195,7 +195,7 @@ class LiquidTagFor extends LiquidBlock
 						'last'		=> (int)($index == $length - 1)
 					));
 					
-					$result .= $this->render_all($this->_nodelist, $context);
+					$result .= $this->renderAll($this->_nodelist, $context);
 					
 					$index++;
 				}
