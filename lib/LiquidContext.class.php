@@ -270,14 +270,6 @@ class LiquidContext
 
         $object = $this->fetch(array_shift($parts));
 
-        if (is_object($object))
-        {
-            if (!method_exists($object, 'toLiquid'))
-                throw new LiquidException("Method 'toLiquid' not exists!");
-
-            $object = $object->toLiquid();
-        }
-
         if (!is_null($object))
         {
             while(count($parts) > 0)
