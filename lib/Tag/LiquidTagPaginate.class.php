@@ -114,7 +114,7 @@ class LiquidTagPaginate extends LiquidBlock
     	
     	}
     	
-    	if ( $this->_currentPage != $total_pages )
+    	if ( $this->_currentPage != $this->_totalPages )
     	{
 	    	$paginate['next']['title'] = 'Next';
 	    	$paginate['next']['url'] = $this->current_url() . '?page=' . ($this->_currentPage + 1);
