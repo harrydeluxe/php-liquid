@@ -104,20 +104,25 @@ class LiquidTagPaginate extends LiquidBlock
     		'current_page' => $this->_currentPage,
     		'current_offset' => $this->_currentOffset,
     		'pages' => $this->_totalPages,
-    		'items' => $this->_collectionSize
+    		'items' => $this->_collectionSize,
+    		'previous' => false,
+    		'next' => false
     	);
     	
     	if ( $this->_currentPage != 1 )
     	{
-	    	$paginate['previous']['title'] = 'Previous';
-	    	$paginate['previous']['url'] = $this->current_url() . '?page=' . ($this->_currentPage - 1);
-    	
+	    	$paginate['previous'] = array(
+	    		'title' => '&laquo; Previous',
+				'url' => $this->current_url() . '?page=' . ( $this->_currentPage - 1 )
+			);
     	}
     	
     	if ( $this->_currentPage != $this->_totalPages )
     	{
-	    	$paginate['next']['title'] = 'Next';
-	    	$paginate['next']['url'] = $this->current_url() . '?page=' . ($this->_currentPage + 1);
+	    	$paginate['next'] = array(
+	    		'title' => 'Next &raquo;',
+	    		'url' => $this->current_url() . '?page=' . ( $this->_currentPage + 1 )
+	    	);
     	}
 
     	$context->set('paginate',$paginate);
@@ -129,9 +134,11 @@ class LiquidTagPaginate extends LiquidBlock
      */
     public function current_url()
     {
-	    $url = 'http';
-		if ($_SERVER['HTTPS'] == 'on') $url .= 's';
-		$url .= '://' . $_SERVER["HTTP_HOST"] . reset(explode('?',$_SERVER["REQUEST_URI"]));
-		return $url;
+	    $scheme = 'http';
+		if ( $_SERVER['HTTPS'] == 'on' ) $scheme .= 's';
+		$full_url = $scheme . '://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+		$parsed_url = parse_url($full_url);
+		$current_url = $parsed_url['scheme'] . '://' . $parsed_url['host'] . $parsed_url['path'];
+	    return $current_url;
     }
 }
