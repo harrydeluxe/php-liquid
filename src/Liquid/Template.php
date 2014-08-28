@@ -18,76 +18,83 @@ class Template
 	/**
 	 * @var Document The _root of the node tree
 	 */
-	private $_root;
+	private $root;
 
 	/**
+	 * todo
 	 * @var BlankFileSystem The file system to use for includes
 	 */
-	private $_fileSystem;
+	private $fileSystem;
 
 	/**
 	 * @var array Globally included filters
 	 */
-	private $_filters;
+	private $filters = array();
 
 	/**
 	 * @var array Custom tags
 	 */
-	private static $_tags = array();
-
-	private static $_cache;
+	private static $tags = array();
 
 	/**
-	 * Constructor
+	 * @var Cache
+	 */
+	private static $cache;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param string $path
+	 * @param array|Cache $cache
 	 *
 	 * @return Template
 	 */
 	public function __construct($path = null, $cache = null) {
-		$this->_fileSystem = (isset($path)) ? new LocalFileSystem($path) : new BlankFileSystem();
-		$this->_filters = array();
+		$this->fileSystem = $path !== null
+			? new LocalFileSystem($path)
+			: new BlankFileSystem();
+
 		$this->setCache($cache);
 	}
 
 	/**
-	 *
-	 *
+	 * // todo
+	 * @param string $fileSystem
 	 */
 	public function setFileSystem($fileSystem) {
-		$this->_fileSystem = $fileSystem;
+		$this->fileSystem = $fileSystem;
 	}
 
 	/**
+	 * @param array|Cache $cache
 	 *
-	 *
+	 * @throws LiquidException
 	 */
 	public function setCache($cache) {
 		if (is_array($cache)) {
-			if (isset($cache['cache']) && class_exists('LiquidCache' . ucwords($cache['cache']))) {
-				$classname = 'LiquidCache' . ucwords($cache['cache']);
-				self::$_cache = new $classname($cache);
-			} else
-				throw new LiquidException('Invalid Cache options!');
-		} else {
-			self::$_cache = $cache;
+			if (isset($cache['cache']) && class_exists('\Liquid\Cache' . ucwords($cache['cache']))) {
+				$classname = '\Liquid\Cache' . ucwords($cache['cache']);
+				self::$cache = new $classname($cache);
+			} else {
+				throw new LiquidException('Invalid cache options!');
+			}
+		} else if ($cache instanceof Cache) {
+			self::$cache = $cache;
 		}
 	}
 
 	/**
-	 *
-	 *
-	 * @return object
+	 * @return Cache
 	 */
 	public static function getCache() {
-		return self::$_cache;
+		return self::$cache;
 	}
 
 	/**
-	 *
-	 *
 	 * @return Document
 	 */
 	public function getRoot() {
-		return $this->_root;
+		return $this->root;
 	}
 
 	/**
@@ -97,25 +104,23 @@ class Template
 	 * @param string $class
 	 */
 	public function registerTag($name, $class) {
-		self::$_tags[$name] = $class;
+		self::$tags[$name] = $class;
 	}
 
 	/**
-	 *
-	 *
 	 * @return array
 	 */
 	public static function getTags() {
-		return self::$_tags;
+		return self::$tags;
 	}
 
 	/**
 	 * Register the filter
 	 *
-	 * @param unknown_type $filter
+	 * @param string $filter
 	 */
 	public function registerFilter($filter) {
-		$this->_filters[] = $filter;
+		$this->filters[] = $filter;
 	}
 
 	/**
@@ -126,35 +131,36 @@ class Template
 	 * @return array
 	 */
 	public static function tokenize($source) {
-		return (!$source) ? array() : preg_split(LIQUID_TOKENIZATION_REGEXP, $source, null, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+		return (!$source) ? array() : preg_split(Liquid::LIQUID_TOKENIZATION_REGEXP, $source, null, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 	}
 
 	/**
 	 * Parses the given source string
 	 *
 	 * @param string $source
+	 *
+	 * @return Template
 	 */
 	public function parse($source) {
-		$cache = self::$_cache;
-
-		if (isset($cache)) {
-			if (($this->_root = $cache->read(md5($source))) != false && $this->_root->checkIncludes() != true) {
+		if (self::$cache !== null) {
+			if (($this->root = self::$cache->read(md5($source))) != false && $this->root->checkIncludes() != true) {
 			} else {
-				$this->_root = new Document(Template::tokenize($source), $this->_fileSystem);
-				$cache->write(md5($source), $this->_root);
+				$this->root = new Document(Template::tokenize($source), $this->fileSystem);
+				self::$cache->write(md5($source), $this->root);
 			}
 		} else {
-			$this->_root = new Document(Template::tokenize($source), $this->_fileSystem);
+			$this->root = new Document(Template::tokenize($source), $this->fileSystem);
 		}
+
 		return $this;
 	}
 
 	/**
 	 * Renders the current template
 	 *
-	 * @param array $assigns An array of values for the template
-	 * @param array $filters Additional filters for the template
-	 * @param array $registers Additional registers for the template
+	 * @param array $assigns an array of values for the template
+	 * @param array $filters additional filters for the template
+	 * @param array $registers additional registers for the template
 	 *
 	 * @return string
 	 */
@@ -163,16 +169,16 @@ class Template
 
 		if (!is_null($filters)) {
 			if (is_array($filters)) {
-				array_merge($this->_filters, $filters);
+				array_merge($this->filters, $filters);
 			} else {
-				$this->_filters[] = $filters;
+				$this->filters[] = $filters;
 			}
 		}
 
-		foreach ($this->_filters as $filter) {
+		foreach ($this->filters as $filter) {
 			$context->addFilters($filter);
 		}
 
-		return $this->_root->render($context);
+		return $this->root->render($context);
 	}
 }

@@ -228,7 +228,7 @@ class Context
 			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
 		}
 
-		$parts = explode(LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR, $key);
+		$parts = explode(Liquid::LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR, $key);
 
 		$object = $this->fetch(array_shift($parts));
 
@@ -269,13 +269,13 @@ class Context
 						// to use the invoke method instead
 						$object = $object->invokeDrop($nextPartName);
 
-					} elseif (method_exists($object, LIQUID_HAS_PROPERTY_METHOD)) {
+					} elseif (method_exists($object, Liquid::LIQUID_HAS_PROPERTY_METHOD)) {
 
-						if (!call_user_method(LIQUID_HAS_PROPERTY_METHOD, $object, $nextPartName)) {
+						if (!call_user_method(Liquid::LIQUID_HAS_PROPERTY_METHOD, $object, $nextPartName)) {
 							return null;
 						}
 
-						$object = call_user_method(LIQUID_GET_PROPERTY_METHOD, $object, $nextPartName);
+						$object = call_user_method(Liquid::LIQUID_GET_PROPERTY_METHOD, $object, $nextPartName);
 
 
 					} else {

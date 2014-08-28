@@ -3,6 +3,7 @@
 namespace Liquid\Tag;
 
 use Liquid\Context;
+use Liquid\Liquid;
 use Liquid\LiquidException;
 use Liquid\BlankFileSystem;
 use Liquid\Regexp;
@@ -87,7 +88,7 @@ class TagIf extends Decision
 		$context->push();
 
 		$logicalRegex = new Regexp('/\s+(and|or)\s+/');
-		$conditionalRegex = new Regexp('/(' . LIQUID_QUOTED_FRAGMENT . ')\s*([=!<>a-z_]+)?\s*(' . LIQUID_QUOTED_FRAGMENT . ')?/');
+		$conditionalRegex = new Regexp('/(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')\s*([=!<>a-z_]+)?\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')?/');
 
 		$result = '';
 

@@ -50,21 +50,25 @@ class LocalFileSystem extends BlankFileSystem
 	 * @return string
 	 */
 	public function fullPath($templatePath) {
-		$nameRegex = LIQUID_INCLUDE_ALLOW_EXT ? new Regexp('/^[^.\/][a-zA-Z0-9_\.\/]+$/') : new Regexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
+		$nameRegex = Liquid::LIQUID_INCLUDE_ALLOW_EXT
+			? new Regexp('/^[^.\/][a-zA-Z0-9_\.\/]+$/')
+			: new Regexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
 
 		if (!$nameRegex->match($templatePath)) {
 			throw new LiquidException("Illegal template name '$templatePath'");
 		}
 
 		if (strpos($templatePath, '/') !== false) {
-			//LIQUID_INCLUDE_ALLOW_EXT
-			$fullPath = LIQUID_INCLUDE_ALLOW_EXT ? $this->_root . dirname($templatePath) . '/' . basename($templatePath) : $this->_root . dirname($templatePath) . '/' . LIQUID_INCLUDE_PREFIX . basename($templatePath) . '.' . LIQUID_INCLUDE_SUFFIX;
+			$fullPath = Liquid::LIQUID_INCLUDE_ALLOW_EXT
+				? $this->_root . dirname($templatePath) . '/' . basename($templatePath)
+				: $this->_root . dirname($templatePath) . '/' . Liquid::LIQUID_INCLUDE_PREFIX . basename($templatePath) . '.' . Liquid::LIQUID_INCLUDE_SUFFIX;
 		} else {
-			$fullPath = LIQUID_INCLUDE_ALLOW_EXT ? $this->_root . $templatePath : $this->_root . LIQUID_INCLUDE_PREFIX . $templatePath . '.' . LIQUID_INCLUDE_SUFFIX;
+			$fullPath = Liquid::LIQUID_INCLUDE_ALLOW_EXT
+				? $this->_root . $templatePath
+				: $this->_root . Liquid::LIQUID_INCLUDE_PREFIX . $templatePath . '.' . Liquid::LIQUID_INCLUDE_SUFFIX;
 		}
 
 		$rootRegex = new Regexp('/' . preg_quote(realpath($this->_root), '/') . '/');
-
 
 		if (!$rootRegex->match(realpath($fullPath))) {
 			throw new LiquidException("Illegal template path '" . realpath($fullPath) . "'");

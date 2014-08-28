@@ -3,6 +3,7 @@
 namespace Liquid\Tag;
 
 use Liquid\Context;
+use Liquid\Liquid;
 use Liquid\LiquidException;
 use Liquid\BlankFileSystem;
 use Liquid\Regexp;
@@ -66,7 +67,7 @@ class TagInclude extends AbstractTag
 	 * @param BlankFileSystem $fileSystem
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
-		$regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . LIQUID_QUOTED_FRAGMENT . '+))?/');
+		$regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . Liquid::LIQUID_QUOTED_FRAGMENT . '+))?/');
 
 		if ($regex->match($markup)) {
 

@@ -3,6 +3,7 @@
 namespace Liquid\Tag;
 
 use Liquid\Context;
+use Liquid\Liquid;
 use Liquid\LiquidException;
 use Liquid\BlankFileSystem;
 use Liquid\Regexp;
@@ -62,7 +63,7 @@ class TagCase extends Decision
 
 		parent::__construct($markup, $tokens, $fileSystem);
 
-		$syntaxRegexp = new Regexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
+		$syntaxRegexp = new Regexp('/' . Liquid::LIQUID_QUOTED_FRAGMENT . '/');
 
 		if ($syntaxRegexp->match($markup)) {
 			$this->left = $syntaxRegexp->matches[0];
@@ -87,7 +88,7 @@ class TagCase extends Decision
 	 * @param array $tokens
 	 */
 	public function unknownTag($tag, $params, &$tokens) {
-		$whenSyntaxRegexp = new Regexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
+		$whenSyntaxRegexp = new Regexp('/' . Liquid::LIQUID_QUOTED_FRAGMENT . '/');
 
 		switch ($tag) {
 			case 'when':

@@ -4,6 +4,7 @@ namespace Liquid\Tag;
 
 use Liquid\BlankFileSystem;
 use Liquid\Context;
+use Liquid\Liquid;
 use Liquid\Regexp;
 
 /**
@@ -63,7 +64,7 @@ abstract class AbstractTag
 	public function extractAttributes($markup) {
 		$this->_attributes = array();
 
-		$attribute_regexp = new Regexp(LIQUID_TAG_ATTRIBUTES);
+		$attribute_regexp = new Regexp(Liquid::LIQUID_TAG_ATTRIBUTES);
 
 		$matches = $attribute_regexp->scan($markup);
 

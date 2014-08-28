@@ -2,6 +2,7 @@
 
 namespace Liquid\Tag;
 
+use Liquid\Liquid;
 use Liquid\Context;
 use Liquid\LiquidException;
 use Liquid\BlankFileSystem;
@@ -49,7 +50,7 @@ class TagTablerow extends AbstractBlock
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		parent::__construct($markup, $tokens, $fileSystem);
 
-		$syntax = new Regexp("/(\w+)\s+in\s+(" . LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
+		$syntax = new Regexp("/(\w+)\s+in\s+(" . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 
 		if ($syntax->match($markup)) {
 			$this->variableName = $syntax->matches[1];

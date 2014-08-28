@@ -2,6 +2,7 @@
 
 namespace Liquid\Tag;
 
+use Liquid\Liquid;
 use Liquid\Context;
 use Liquid\LiquidException;
 use Liquid\BlankFileSystem;
@@ -48,7 +49,7 @@ class TagFor extends AbstractBlock
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		parent::__construct($markup, $tokens, $fileSystem);
 
-		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
+		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
 
 		if ($syntaxRegexp->match($markup)) {
 			$this->_variableName = $syntaxRegexp->matches[1];

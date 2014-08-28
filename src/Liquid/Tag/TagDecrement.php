@@ -2,6 +2,7 @@
 
 namespace Liquid\Tag;
 
+use Liquid\Liquid;
 use Liquid\Context;
 use Liquid\LiquidException;
 use Liquid\BlankFileSystem;
@@ -34,7 +35,7 @@ class TagDecrement extends AbstractTag
 	 * @param BlankFileSystem $fileSystem
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
-		$syntax = new Regexp("/(" . LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
+		$syntax = new Regexp("/(" . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 
 		if ($syntax->match($markup)) {
 			$this->_toDecrement = $syntax->matches[0];
