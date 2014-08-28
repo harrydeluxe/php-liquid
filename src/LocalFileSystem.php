@@ -10,76 +10,66 @@ namespace Liquid;
  */
 class LocalFileSystem extends BlankFileSystem
 {
-    /**
-     * The root path
-     *
-     * @var string
-     */
-    private $_root;
+	/**
+	 * The root path
+	 *
+	 * @var string
+	 */
+	private $_root;
 
-
-    /**
-     * Constructor
-     *
-     * @param string $root The root path for templates
-     *
+	/**
+	 * Constructor
+	 *
+	 * @param string $root The root path for templates
+	 *
 	 * @return LocalFileSystem
-     */
-    public function __construct($root)
-    {
-        $this->_root = $root;
-    }
+	 */
+	public function __construct($root) {
+		$this->_root = $root;
+	}
+
+	/**
+	 * Retrieve a template file
+	 *
+	 * @param string $templatePath
+	 *
+	 * @return string
+	 */
+	public function readTemplateFile($templatePath) {
+		if (!($fullPath = $this->fullPath($templatePath))) {
+			throw new LiquidException("No such template '$templatePath'");
+		}
+		return file_get_contents($fullPath);
+	}
+
+	/**
+	 * Resolves a given path to a full template file path, making sure it's valid
+	 *
+	 * @param string $templatePath
+	 *
+	 * @return string
+	 */
+	public function fullPath($templatePath) {
+		$nameRegex = LIQUID_INCLUDE_ALLOW_EXT ? new Regexp('/^[^.\/][a-zA-Z0-9_\.\/]+$/') : new Regexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
+
+		if (!$nameRegex->match($templatePath)) {
+			throw new LiquidException("Illegal template name '$templatePath'");
+		}
+
+		if (strpos($templatePath, '/') !== false) {
+			//LIQUID_INCLUDE_ALLOW_EXT
+			$fullPath = LIQUID_INCLUDE_ALLOW_EXT ? $this->_root . dirname($templatePath) . '/' . basename($templatePath) : $this->_root . dirname($templatePath) . '/' . LIQUID_INCLUDE_PREFIX . basename($templatePath) . '.' . LIQUID_INCLUDE_SUFFIX;
+		} else {
+			$fullPath = LIQUID_INCLUDE_ALLOW_EXT ? $this->_root . $templatePath : $this->_root . LIQUID_INCLUDE_PREFIX . $templatePath . '.' . LIQUID_INCLUDE_SUFFIX;
+		}
+
+		$rootRegex = new Regexp('/' . preg_quote(realpath($this->_root), '/') . '/');
 
 
-    /**
-     * Retrieve a template file
-     *
-     * @param string $templatePath
-     * @return string
-     */
-    public function readTemplateFile($templatePath)
-    {
-        if (!($fullPath = $this->fullPath($templatePath)))
-        {
-            throw new LiquidException("No such template '$templatePath'");
-        }
-        return file_get_contents($fullPath);
-    }
+		if (!$rootRegex->match(realpath($fullPath))) {
+			throw new LiquidException("Illegal template path '" . realpath($fullPath) . "'");
+		}
 
-
-    /**
-     * Resolves a given path to a full template file path, making sure it's valid
-     *
-     * @param string $templatePath
-     * @return string
-     */
-    public function fullPath($templatePath)
-    {
-        $nameRegex = LIQUID_INCLUDE_ALLOW_EXT ? new LiquidRegexp('/^[^.\/][a-zA-Z0-9_\.\/]+$/') : new LiquidRegexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
-
-        if (!$nameRegex->match($templatePath))
-        {
-            throw new LiquidException("Illegal template name '$templatePath'");
-        }
-
-        if (strpos($templatePath, '/') !== false)
-        {
-            //LIQUID_INCLUDE_ALLOW_EXT
-            $fullPath = LIQUID_INCLUDE_ALLOW_EXT ? $this->_root . dirname($templatePath) . '/' . basename($templatePath) : $this->_root . dirname($templatePath) . '/' . LIQUID_INCLUDE_PREFIX . basename($templatePath) . '.' . LIQUID_INCLUDE_SUFFIX;
-        }
-        else
-        {
-            $fullPath = LIQUID_INCLUDE_ALLOW_EXT ? $this->_root . $templatePath : $this->_root . LIQUID_INCLUDE_PREFIX . $templatePath . '.' . LIQUID_INCLUDE_SUFFIX;
-        }
-
-        $rootRegex = new LiquidRegexp('/' . preg_quote(realpath($this->_root), '/') . '/');
-
-
-        if (!$rootRegex->match(realpath($fullPath)))
-        {
-            throw new LiquidException("Illegal template path '" . realpath($fullPath) . "'");
-        }
-
-        return $fullPath;
-    }
+		return $fullPath;
+	}
 }
