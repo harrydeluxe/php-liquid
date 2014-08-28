@@ -1,21 +1,23 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Liquid;
+use Liquid\Regexp;
+use Liquid\LiquidException;
+use Liquid\Context;
+use Liquid\Template;
+use Liquid\Variable;
+
 /**
  * Base class for blocks.
- *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
  */
-
-class LiquidBlock extends LiquidTag
+class AbstractBlock extends AbstractTag
 {
     /**
      * @var array
      */
     protected $_nodelist;
-
 
     /**
      *
@@ -35,9 +37,9 @@ class LiquidBlock extends LiquidTag
      */
     public function parse(&$tokens)
     {
-        $startRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '/');
-        $tagRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*(\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
-        $variableStartRegexp = new LiquidRegexp('/^' . LIQUID_VARIABLE_START . '/');
+        $startRegexp = new Regexp('/^' . LIQUID_TAG_START . '/');
+        $tagRegexp = new Regexp('/^' . LIQUID_TAG_START . '\s*(\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
+        $variableStartRegexp = new Regexp('/^' . LIQUID_VARIABLE_START . '/');
 
         $this->_nodelist = array();
 
@@ -46,7 +48,7 @@ class LiquidBlock extends LiquidTag
             return;
         }
 
-        $tags = LiquidTemplate::getTags();
+        $tags = Template::getTags();
 
         while(count($tokens))
         {
@@ -161,13 +163,13 @@ class LiquidBlock extends LiquidTag
      * Create a variable for the given token
      *
      * @param string $token
-     * @return LiquidVariable
+     * @return Variable
      */
     private function _createVariable($token)
     {
-        $variableRegexp = new LiquidRegexp('/^' . LIQUID_VARIABLE_START . '(.*)' . LIQUID_VARIABLE_END . '$/');
+        $variableRegexp = new Regexp('/^' . LIQUID_VARIABLE_START . '(.*)' . LIQUID_VARIABLE_END . '$/');
         if ($variableRegexp->match($token))
-            return new LiquidVariable($variableRegexp->matches[1]);
+            return new Variable($variableRegexp->matches[1]);
 
         throw new LiquidException("Variable $token was not properly terminated");
     }
@@ -176,7 +178,7 @@ class LiquidBlock extends LiquidTag
     /**
      * Render the block.
      *
-     * @param LiquiContext $context
+     * @param Context $context
      * @return string
      */
     public function render(&$context)
@@ -187,7 +189,7 @@ class LiquidBlock extends LiquidTag
 
     /**
      * This method is called at the end of parsing, and will through an error unless
-     * this method is subclassed, like it is for LiquidDocument
+     * this method is subclassed, like it is for Document
      *
      * @return bool
      */
@@ -201,7 +203,7 @@ class LiquidBlock extends LiquidTag
      * Renders all the given nodelist's nodes
      *
      * @param array $list
-     * @param LiquidContext $context
+     * @param Context $context
      * @return string
      */
     protected function renderAll(array $list, &$context)

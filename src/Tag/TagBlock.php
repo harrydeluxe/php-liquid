@@ -1,4 +1,12 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+
 /**
  * Marks a section of a template as being reusable.
  *
@@ -10,7 +18,7 @@
  * @license http://harrydeluxe.mit-license.org
  */
 
-class LiquidTagBlock extends LiquidBlock
+class TagBlock extends AbstractBlock
 {
     /**
      * The variable to assign to
@@ -19,18 +27,17 @@ class LiquidTagBlock extends LiquidBlock
      */
     private $_block;
 
-
     /**
      * Constructor
      *
      * @param string $markup
      * @param Array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return CaptureLiquidTag
+     * @param BlankFileSystem $fileSystem
+     * @return TagCapture
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $syntaxRegexp = new LiquidRegexp('/(\w+)/');
+        $syntaxRegexp = new Regexp('/(\w+)/');
 
         if ($syntaxRegexp->match($markup))
         {
@@ -47,7 +54,7 @@ class LiquidTagBlock extends LiquidBlock
     /**
      * Renders the block
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     public function render(&$context)
     {

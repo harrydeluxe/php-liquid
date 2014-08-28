@@ -1,4 +1,12 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+
 /**
  * A switch statememt
  * 
@@ -12,7 +20,7 @@
  * @license http://harrydeluxe.mit-license.org
  */
 
-class LiquidTagCase extends LiquidDecisionBlock
+class TagCase extends Decision
 {
     /**
      * Stack of nodelists
@@ -48,8 +56,7 @@ class LiquidTagCase extends LiquidDecisionBlock
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return CaseLiquidTag
+     * @param BlankFileSystem $fileSystem
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
@@ -58,7 +65,7 @@ class LiquidTagCase extends LiquidDecisionBlock
 
         parent::__construct($markup, $tokens, $fileSystem);
 
-        $syntaxRegexp = new LiquidRegexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
+        $syntaxRegexp = new Regexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
 
         if ($syntaxRegexp->match($markup))
         {
@@ -90,7 +97,7 @@ class LiquidTagCase extends LiquidDecisionBlock
      */
     public function unknownTag($tag, $params, &$tokens)
     {
-        $whenSyntaxRegexp = new LiquidRegexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
+        $whenSyntaxRegexp = new Regexp('/' . LIQUID_QUOTED_FRAGMENT . '/');
 
         switch ($tag)
         {
@@ -141,7 +148,7 @@ class LiquidTagCase extends LiquidDecisionBlock
     /**
      * Renders the node
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     public function render(&$context)
     {

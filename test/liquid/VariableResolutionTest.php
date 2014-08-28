@@ -13,14 +13,14 @@ class VariableResolutionTest extends UnitTestCase {
 	
 	function test_simple_variable()
 	{		
-		$template = new LiquidTemplate();
+		$template = new Template();
 		$template->parse("{{test}}");
 		$this->assertEqual('worked', $template->render(array('test'=>'worked')));		
 	}
 	
 	function test_simple_with_whitespaces()
 	{
-		$template = new LiquidTemplate();
+		$template = new Template();
 
 	    $template->parse('  {{ test }}  ');
 		$this->assertEqual('  worked  ', $template->render(array('test' => 'worked')));
@@ -29,7 +29,7 @@ class VariableResolutionTest extends UnitTestCase {
 	
 	function test_ignore_unknown()
 	{
-		$template = new LiquidTemplate();
+		$template = new Template();
 		
 		$template->parse('{{ test }}');
 		$this->assertEqual('', $template->render());		
@@ -37,7 +37,7 @@ class VariableResolutionTest extends UnitTestCase {
 	
 	function test_array_scoping()
 	{
-		$template = new LiquidTemplate();
+		$template = new Template();
 		
 		$template->parse('{{ test.test }}');
 		$this->assertEqual('worked', $template->render(array('test'=>array('test'=>'worked'))));

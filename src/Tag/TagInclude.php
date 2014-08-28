@@ -1,4 +1,13 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+use Liquid\Template;
+
 /**
  * Includes another, partial, template
  * 
@@ -22,8 +31,7 @@
  * based on Liquid for Ruby (c) 2006 Tobias Luetke
  * @license http://harrydeluxe.mit-license.org
  */
-
-class LiquidTagInclude extends LiquidTag
+class TagInclude extends \Liquid\Tag\AbstractTag
 {
     /**
      * @var string The name of the template
@@ -41,7 +49,7 @@ class LiquidTagInclude extends LiquidTag
     private $_variable;
 
     /**
-     * @var LiquidDocument The LiquidDocument that represents the included template
+     * @var Document The Document that represents the included template
      */
     private $_document;
 
@@ -56,12 +64,11 @@ class LiquidTagInclude extends LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return IncludeLiquidTag
+     * @param BlankFileSystem $fileSystem
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $regex = new LiquidRegexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . LIQUID_QUOTED_FRAGMENT . '+))?/');
+        $regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . LIQUID_QUOTED_FRAGMENT . '+))?/');
 
         if ($regex->match($markup))
         {
@@ -102,7 +109,7 @@ class LiquidTagInclude extends LiquidTag
 
         $this->_hash = md5($source);
 
-        $cache = LiquidTemplate::getCache();
+        $cache = Template::getCache();
 
         if (isset($cache))
         {
@@ -111,13 +118,13 @@ class LiquidTagInclude extends LiquidTag
             }
             else
             {
-                $this->_document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->_fileSystem);
+                $this->_document = new Document(Template::tokenize($source), $this->_fileSystem);
                 $cache->write($this->_hash, $this->_document);
             }
         }
         else
         {
-            $this->_document = new LiquidDocument(LiquidTemplate::tokenize($source), $this->_fileSystem);
+            $this->_document = new Document(Template::tokenize($source), $this->_fileSystem);
         }
     }
 
@@ -129,7 +136,7 @@ class LiquidTagInclude extends LiquidTag
      */
     public function checkIncludes()
     {
-        $cache = LiquidTemplate::getCache();
+        $cache = Template::getCache();
 
         if ($this->_document->checkIncludes() == true)
             return true;
@@ -146,7 +153,7 @@ class LiquidTagInclude extends LiquidTag
     /**
      * Renders the node
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     public function render(&$context)
     {

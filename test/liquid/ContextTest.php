@@ -16,7 +16,7 @@ class HundredCentes {
 	
 }
 
-class CentsDrop extends LiquidDrop {
+class CentsDrop extends Drop {
 	function amount() {
 		return new HundredCentes();
 	}
@@ -49,13 +49,13 @@ class ContextTest extends UnitTestCase
 {
 	
 	/**
-	 * @var LiquidContext
+	 * @var Context
 	 */
 	var $context;
 	
 	function setup()
 	{
-		$this->context = new LiquidContext();
+		$this->context = new Context();
 		
 	}
 
@@ -91,11 +91,11 @@ class ContextTest extends UnitTestCase
 	
 	function test_add_filter()
 	{
-		$context = new LiquidContext();
+		$context = new Context();
 		$context->addFilters(new HiFilter());
 		$this->assertEqual('hi? hi!', $context->invoke('hi', 'hi?'));
 
-		$context = new LiquidContext();
+		$context = new Context();
 		$this->assertEqual('hi?', $context->invoke('hi', 'hi?'));
 			
 		$context->addFilters(new HiFilter());
@@ -106,7 +106,7 @@ class ContextTest extends UnitTestCase
 	// skip this one for now, as we haven't implemented global filters yet
 	function test_override_global_filter()
 	{		
-		$template = new LiquidTemplate();
+		$template = new Template();
 		$template->registerFilter(new GlobalFilter());
 		
 		$template->parse("{{'test' | notice }}");

@@ -1,4 +1,12 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+
 /**
  * Captures the output inside a block and assigns it to a variable
  * 
@@ -12,7 +20,7 @@
  * @license http://harrydeluxe.mit-license.org
  */
 
-class LiquidTagCapture extends LiquidBlock
+class TagCapture extends AbstractBlock
 {
     /**
      * The variable to assign to
@@ -27,12 +35,11 @@ class LiquidTagCapture extends LiquidBlock
      *
      * @param string $markup
      * @param Array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return CaptureLiquidTag
+     * @param BlankFileSystem $fileSystem
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $syntaxRegexp = new LiquidRegexp('/(\w+)/');
+        $syntaxRegexp = new Regexp('/(\w+)/');
 
         if ($syntaxRegexp->match($markup))
         {
@@ -49,7 +56,7 @@ class LiquidTagCapture extends LiquidBlock
     /**
      * Renders the block
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     public function render(&$context)
     {

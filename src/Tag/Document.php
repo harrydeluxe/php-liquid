@@ -1,25 +1,21 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\BlankFileSystem;
+
 /**
- * This class represents the entire template document
- *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ * This class represents the entire template document.
  */
-
-class LiquidDocument extends LiquidBlock
+class Document extends AbstractBlock
 {
-
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return LiquidDocument
+     * @param BlankFileSystem $fileSystem
      */
-    function __construct($tokens, &$fileSystem)
+    public function __construct($tokens, &$fileSystem)
     {
         $this->_fileSystem = $fileSystem;
         $this->parse($tokens);
@@ -54,7 +50,7 @@ class LiquidDocument extends LiquidBlock
      *
      * @return string
      */
-    function blockDelimiter()
+    public function blockDelimiter()
     {
         return '';
     }
@@ -62,9 +58,8 @@ class LiquidDocument extends LiquidBlock
 
     /**
      * Document blocks don't need to be terminated since they are not actually opened
-     *
      */
-    function assertMissingDelimitation()
+    public function assertMissingDelimitation()
     {
     }
 }

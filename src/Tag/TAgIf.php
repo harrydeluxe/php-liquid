@@ -1,4 +1,12 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+
 /**
  * An if statement
  * 
@@ -14,8 +22,7 @@
  * based on Liquid for Ruby (c) 2006 Tobias Luetke
  * @license http://harrydeluxe.mit-license.org
  */
-
-class LiquidTagIf extends LiquidDecisionBlock
+class TagIf extends Decision
 {
 
     /**
@@ -38,8 +45,7 @@ class LiquidTagIf extends LiquidDecisionBlock
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return IfLiquidTag
+     * @param BlankFileSystem $fileSystem
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
@@ -84,14 +90,14 @@ class LiquidTagIf extends LiquidDecisionBlock
     /**
      * Render the tag
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     public function render(&$context)
     {
         $context->push();
 
-        $logicalRegex = new LiquidRegexp('/\s+(and|or)\s+/');
-        $conditionalRegex = new LiquidRegexp('/(' . LIQUID_QUOTED_FRAGMENT . ')\s*([=!<>a-z_]+)?\s*(' . LIQUID_QUOTED_FRAGMENT . ')?/');
+        $logicalRegex = new Regexp('/\s+(and|or)\s+/');
+        $conditionalRegex = new Regexp('/(' . LIQUID_QUOTED_FRAGMENT . ')\s*([=!<>a-z_]+)?\s*(' . LIQUID_QUOTED_FRAGMENT . ')?/');
 
         $result = '';
 

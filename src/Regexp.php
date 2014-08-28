@@ -1,18 +1,13 @@
 <?php
+
+namespace Liquid;
+
 /**
  * A support class for regular expressions and
  * non liquid specific support classes and functions.
- *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
  */
-
-class LiquidRegexp
+class Regexp
 {
-
     /**
      * The regexp pattern
      *

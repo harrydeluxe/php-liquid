@@ -1,4 +1,11 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\Regexp;
+
 /**
  * Cycles between a list of values; calls to the tag will return each value in turn
  * 
@@ -21,7 +28,7 @@
  * @license http://harrydeluxe.mit-license.org
  */
 
-class LiquidTagCycle extends LiquidTag
+class Cycle extends AbstractTag
 {
     /**
      * @var string The name of the cycle; if none is given one is created using the value list
@@ -39,12 +46,11 @@ class LiquidTagCycle extends LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @return CycleLiquidTag
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $simpleSyntax = new LiquidRegexp("/" . LIQUID_QUOTED_FRAGMENT . "/");
-        $namedSyntax = new LiquidRegexp("/(" . LIQUID_QUOTED_FRAGMENT . ")\s*\:\s*(.*)/");
+        $simpleSyntax = new Regexp("/" . LIQUID_QUOTED_FRAGMENT . "/");
+        $namedSyntax = new Regexp("/(" . LIQUID_QUOTED_FRAGMENT . ")\s*\:\s*(.*)/");
 
         if ($namedSyntax->match($markup))
         {
@@ -66,7 +72,7 @@ class LiquidTagCycle extends LiquidTag
     /**
      * Renders the tag
      * 
-     * @var LiquidContext $context
+     * @var Context $context
      * @return string
      */
     public function render(&$context)
@@ -109,7 +115,7 @@ class LiquidTagCycle extends LiquidTag
      */
     private function _variablesFromString($markup)
     {
-        $regexp = new LiquidRegexp('/\s*(' . LIQUID_QUOTED_FRAGMENT . ')\s*/');
+        $regexp = new Regexp('/\s*(' . LIQUID_QUOTED_FRAGMENT . ')\s*/');
         $parts = explode(',', $markup);
         $result = array();
 

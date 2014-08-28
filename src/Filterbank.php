@@ -1,16 +1,12 @@
 <?php
+
+namespace Liquid;
+
 /**
  * The filter bank is where all registered filters are stored, and where filter invocation is handled
- * it supports a variety of different filter types; objects, class, and simple methods
- *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ * it supports a variety of different filter types; objects, class, and simple methods.
  */
-
-class LiquidFilterbank
+class Filterbank
 {
     /**
      * The registerd filter objects
@@ -29,7 +25,7 @@ class LiquidFilterbank
     /**
      * Reference to the current context object
      *
-     * @var LiquidContext
+     * @var Context
      */
     public $context;
 
@@ -37,13 +33,13 @@ class LiquidFilterbank
     /**
      * Constructor
      *
-     * @return LiquidFilterbank
+     * @return Filterbank
      */
     public function __construct(&$context)
     {
         $this->context = $context;
 
-        $this->addFilter('LiquidStandardFilters');
+        $this->addFilter('StandardFilters');
     }
 
 

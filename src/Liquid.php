@@ -1,12 +1,9 @@
 <?php
+
+namespace Liquid;
+
 /**
  * Liquid for PHP
- * 
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
  */
 
 /**
@@ -117,7 +114,6 @@ defined('LIQUID_PATH') or define('LIQUID_PATH', dirname(__FILE__));
 
 
 defined('LIQUID_AUTOLOAD') or define('LIQUID_AUTOLOAD', true);
-
 
 class Liquid
 {

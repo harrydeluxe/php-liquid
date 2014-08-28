@@ -1,20 +1,18 @@
 <?php
+
+namespace Liquid;
+
 /**
- * The template class.
+ * The Template class.
  * 
- * @example 
- * $tpl = new LiquidTemplate();
- * $tpl->parse(template_source);
- * $tpl->render(array('foo'=>1, 'bar'=>2);
+ * Example:
  *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ *     $tpl = new \Liquid\Template();
+ *     $tpl->parse(template_source);
+ *     $tpl->render(array('foo'=>1, 'bar'=>2);
  */
 
-class LiquidTemplate
+class Template
 {
     /**
      * @var LiquidDocument The _root of the node tree
@@ -43,7 +41,7 @@ class LiquidTemplate
     /**
      * Constructor
      *
-     * @return LiquidTemplate
+     * @return Template
      */
     public function __construct($path = null, $cache = null)
     {
@@ -170,13 +168,13 @@ class LiquidTemplate
             }
             else
             {
-                $this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->_fileSystem);
+                $this->_root = new LiquidDocument(Template::tokenize($source), $this->_fileSystem);
                 $cache->write(md5($source), $this->_root);
             }
         }
         else
         {
-            $this->_root = new LiquidDocument(LiquidTemplate::tokenize($source), $this->_fileSystem);
+            $this->_root = new LiquidDocument(Template::tokenize($source), $this->_fileSystem);
         }
         return $this;
     }
@@ -192,7 +190,7 @@ class LiquidTemplate
      */
     public function render(array $assigns = array(), $filters = null, $registers = null)
     {
-        $context = new LiquidContext($assigns, $registers);
+        $context = new Context($assigns, $registers);
 
         if (!is_null($filters))
         {

@@ -322,7 +322,7 @@ XPCTD;
 
 	function test_include_tag()
 	{
-		$template = new LiquidTemplate();
+		$template = new Template();
 		$template->setFileSystem(new LiquidTestFileSystem());
 		
 		$template->parse("Outer-{% include 'inner' with 'value' other:23 %}-Outer{% include 'inner' for var other:'loop' %}");
@@ -334,7 +334,7 @@ XPCTD;
 	
 	function test_include_tag_no_with()
 	{
-		$template = new LiquidTemplate();
+		$template = new Template();
 		$template->setFileSystem(new LiquidTestFileSystem());
 		
 		$template->parse("Outer-{% include 'inner' %}-Outer-{% include 'inner' other:'23' %}");

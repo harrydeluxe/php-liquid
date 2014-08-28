@@ -1,4 +1,13 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+use Liquid\Template;
+
 /**
  * Extends a template by another one.
  *
@@ -9,8 +18,7 @@
  * @copyright Copyright (c) 2011-2012 Harald Hanek
  * @license http://harrydeluxe.mit-license.org
  */
-
-class LiquidTagExtends extends LiquidTag
+class TagExtends extends AbstractTag
 {
     /**
      * @var string The name of the template
@@ -18,7 +26,7 @@ class LiquidTagExtends extends LiquidTag
     private $_templateName;
 
     /**
-     * @var LiquidDocument The LiquidDocument that represents the included template
+     * @var Document The Document that represents the included template
      */
     private $_document;
 
@@ -33,12 +41,11 @@ class LiquidTagExtends extends LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return IncludeLiquidTag
+     * @param BlankFileSystem $fileSystem
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $regex = new LiquidRegexp('/("[^"]+"|\'[^\']+\')?/');
+        $regex = new Regexp('/("[^"]+"|\'[^\']+\')?/');
 
         if ($regex->match($markup))
         {
@@ -55,8 +62,8 @@ class LiquidTagExtends extends LiquidTag
 
     private function _findBlocks($tokens)
     {
-        $blockstartRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
-        $blockendRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
+        $blockstartRegexp = new Regexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
+        $blockendRegexp = new Regexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
 
         $b = array();
         $name = null;
@@ -101,9 +108,9 @@ class LiquidTagExtends extends LiquidTag
         $source = $this->_fileSystem->readTemplateFile($this->_templateName);
 
         // tokens in this new document
-        $maintokens = LiquidTemplate::tokenize($source);
+        $maintokens = Template::tokenize($source);
         
-        $eRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*extends (.*)?' . LIQUID_TAG_END . '$/');
+        $eRegexp = new Regexp('/^' . LIQUID_TAG_START . '\s*extends (.*)?' . LIQUID_TAG_END . '$/');
         foreach($maintokens as $maintoken)
             if($eRegexp->match($maintoken))
             {
@@ -119,8 +126,8 @@ class LiquidTagExtends extends LiquidTag
         {
             $childtokens = $this->_findBlocks($tokens);
 
-            $blockstartRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
-            $blockendRegexp = new LiquidRegexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
+            $blockstartRegexp = new Regexp('/^' . LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . LIQUID_TAG_END . '$/');
+            $blockendRegexp = new Regexp('/^' . LIQUID_TAG_START . '\s*endblock\s*?' . LIQUID_TAG_END . '$/');
 
             $b = array();
             $name = null;
@@ -156,7 +163,7 @@ class LiquidTagExtends extends LiquidTag
 
         $this->_hash = md5($source);
 
-        $cache = LiquidTemplate::getCache();
+        $cache = Template::getCache();
 
         if (isset($cache))
         {
@@ -165,13 +172,13 @@ class LiquidTagExtends extends LiquidTag
             }
             else
             {
-                $this->_document = new LiquidDocument($rest, $this->_fileSystem);
+                $this->_document = new Document($rest, $this->_fileSystem);
                 $cache->write($this->_hash, $this->_document);
             }
         }
         else
         {
-            $this->_document = new LiquidDocument($rest, $this->_fileSystem);
+            $this->_document = new Document($rest, $this->_fileSystem);
         }
     }
 
@@ -183,7 +190,7 @@ class LiquidTagExtends extends LiquidTag
      */
     public function checkIncludes()
     {
-        $cache = LiquidTemplate::getCache();
+        $cache = Template::getCache();
 
         if ($this->_document->checkIncludes() == true)
             return true;
@@ -200,7 +207,7 @@ class LiquidTagExtends extends LiquidTag
     /**
      * Renders the node
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     public function render(&$context)
     {

@@ -30,7 +30,7 @@ class AssignTest extends UnitTestCase
 		//$this->setExpectedException('LiquidException');
 		$this->expectException('LiquidException');
 
-		$template = new LiquidTemplate;
+		$template = new Template;
 
 		$template->parse('{% assign test %}');
 		$this->assertTrue($template->render() === 'hello');
@@ -43,7 +43,7 @@ class AssignTest extends UnitTestCase
 	 */
 	public function testSimpleAssign()
 	{
-		$template = new LiquidTemplate;
+		$template = new Template;
 
 		$template->parse('{% assign test = "hello" %}{{ test }}');
 		$this->assertTrue($template->render() === 'hello');
@@ -56,7 +56,7 @@ class AssignTest extends UnitTestCase
 	 */
 	public function testAssignWithFilters()
 	{
-		$template = new LiquidTemplate;
+		$template = new Template;
 
 		$template->parse('{% assign test = "hello" | upcase %}{{ test }}');
 		$this->assertTrue($template->render() === 'HELLO');

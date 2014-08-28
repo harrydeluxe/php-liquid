@@ -42,18 +42,18 @@ class FilterTest extends UnitTestCase
 	/**
 	 * The current context
 	 *
-	 * @var LiquidContext
+	 * @var Context
 	 */
 	var $context;
 	
 	function setup()
 	{
-		$this->context = new LiquidContext();		
+		$this->context = new Context();
 	}
 	
 	function test_local_filter()
 	{
-		$var = new LiquidVariable('var | money');
+		$var = new Variable('var | money');
 		$this->context->set('var', 1000);
 		$this->context->addFilters(new MoneyFilter());
 		$this->assertIdentical(' 1000$ ', $var->render($this->context));		
@@ -61,7 +61,7 @@ class FilterTest extends UnitTestCase
 	
 	function test_underscore_in_filter_name()
 	{
-		$var = new LiquidVariable('var | money_with_underscore ');
+		$var = new Variable('var | money_with_underscore ');
 		$this->context->set('var', 1000);
 		$this->context->addFilters(new MoneyFilter());
 		$this->assertIdentical(' 1000$ ', $var->render($this->context));				
@@ -69,7 +69,7 @@ class FilterTest extends UnitTestCase
 
 	function test_second_filter_overwrites_first()
 	{
-		$var = new LiquidVariable('var | money ');
+		$var = new Variable('var | money ');
 		$this->context->set('var', 1000);
 		$this->context->addFilters(new MoneyFilter(), 'money');
 		$this->context->addFilters(new CanadianMoneyFilter(), 'money');
@@ -78,7 +78,7 @@ class FilterTest extends UnitTestCase
 	
 	function test_size()
 	{
-		$var = new LiquidVariable("var | size");
+		$var = new Variable("var | size");
 		$this->context->set('var', 1000);
 		//$this->context->addFilters(new MoneyFilter());
 		$this->assertEqual(4, $var->render($this->context));		
@@ -86,7 +86,7 @@ class FilterTest extends UnitTestCase
 	
 	function test_join()
 	{
-		$var = new LiquidVariable("var | join");
+		$var = new Variable("var | join");
 	
 		$this->context->set('var', array(1, 2, 3, 4));
 		$this->assertEqual("1 2 3 4", $var->render($this->context));		
@@ -94,7 +94,7 @@ class FilterTest extends UnitTestCase
 	
 	function test_strip_html()
 	{
-		$var = new LiquidVariable("var | strip_html");
+		$var = new Variable("var | strip_html");
 		
  	    $this->context->set('var', "<b>bla blub</a>");
  	    $this->assertEqual("bla blub", $var->render($this->context));  
@@ -107,7 +107,7 @@ class LiquidFiltersInTemplate extends UnitTestCase
 	
 	function test_local_global()
 	{
-		$template = new LiquidTemplate;
+		$template = new Template;
 		$template->registerFilter(new MoneyFilter());
 		
 		$template->parse('{{1000 | money}}');

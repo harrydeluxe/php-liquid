@@ -13,13 +13,13 @@ class LiquidRegexpTest extends UnitTestCase
 {
 
 	/**
-	 * @var LiquidRegexp
+	 * @var Regexp
 	 */
 	var $regexp;
 	
 	function setup()
 	{
-		$this->regexp = new LiquidRegexp('/'.LIQUID_QUOTED_FRAGMENT.'/');
+		$this->regexp = new Regexp('/'.LIQUID_QUOTED_FRAGMENT.'/');
 	}
 	
 	function test_empty()

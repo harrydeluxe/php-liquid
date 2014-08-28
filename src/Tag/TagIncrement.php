@@ -1,4 +1,12 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+
 /**
  * Used to increment a counter into a template
  * 
@@ -9,8 +17,7 @@
  *
  * @package Liquid
  */
-
-class LiquidTagIncrement extends LiquidTag
+class TagIncrement extends AbstractTag
 {
     /**
      * Name of the variable to increment
@@ -24,12 +31,11 @@ class LiquidTagIncrement extends LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return AssignLiquidTag
+     * @param BlankFileSystem $fileSystem
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $syntax = new LiquidRegexp("/(" . LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
+        $syntax = new Regexp("/(" . LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 
         if ($syntax->match($markup))
         {
@@ -44,7 +50,7 @@ class LiquidTagIncrement extends LiquidTag
     /**
      * Renders the tag
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     public function render(&$context)
     {

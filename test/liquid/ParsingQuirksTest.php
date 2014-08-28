@@ -15,7 +15,7 @@ class ParsingQuirksTest extends UnitTestCase
 	function test_error_with_css()
 	{
 		$text = " div { font-weight: bold; } ";
-		$template = new LiquidTemplate();
+		$template = new Template();
 		$template->parse($text);
 		
 		$nodelist = $template->getRoot()->getNodelist();

@@ -1,15 +1,11 @@
 <?php
-/**
- * Implements a template variable
- *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
- */
 
-class LiquidVariable
+namespace Liquid;
+
+/**
+ * Implements a template variable.
+ */
+class Variable
 {
     /**
      * @var array The filters to execute on the variable
@@ -35,11 +31,11 @@ class LiquidVariable
     {
         $this->_markup = $markup;
 
-        $quotedFragmentRegexp = new LiquidRegexp('/\s*(' . LIQUID_QUOTED_FRAGMENT . ')/');
-        $filterSeperatorRegexp = new LiquidRegexp('/' . LIQUID_FILTER_SEPARATOR . '\s*(.*)/');
-        $filterSplitRegexp = new LiquidRegexp('/' . LIQUID_FILTER_SEPARATOR . '/');
-        $filterNameRegexp = new LiquidRegexp('/\s*(\w+)/');
-        $filterArgumentRegexp = new LiquidRegexp('/(?:' . LIQUID_FILTER_ARGUMENT_SEPARATOR . '|' . LIQUID_ARGUMENT_SEPARATOR . ')\s*(' . LIQUID_QUOTED_FRAGMENT . ')/');
+        $quotedFragmentRegexp = new Regexp('/\s*(' . LIQUID_QUOTED_FRAGMENT . ')/');
+        $filterSeperatorRegexp = new Regexp('/' . LIQUID_FILTER_SEPARATOR . '\s*(.*)/');
+        $filterSplitRegexp = new Regexp('/' . LIQUID_FILTER_SEPARATOR . '/');
+        $filterNameRegexp = new Regexp('/\s*(\w+)/');
+        $filterArgumentRegexp = new Regexp('/(?:' . LIQUID_FILTER_ARGUMENT_SEPARATOR . '|' . LIQUID_ARGUMENT_SEPARATOR . ')\s*(' . LIQUID_QUOTED_FRAGMENT . ')/');
 
         $quotedFragmentRegexp->match($markup);
 
@@ -95,7 +91,7 @@ class LiquidVariable
     /**
      * Renders the variable with the data in the context
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     function render($context)
     {

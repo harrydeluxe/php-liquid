@@ -1,4 +1,9 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+
 /**
  * Creates a comment; everything inside will be ignored
  *
@@ -12,12 +17,12 @@
  * @license http://harrydeluxe.mit-license.org
  */
 
-class LiquidTagComment extends LiquidBlock
+class TagComment extends AbstractBlock
 {
     /**
      * Renders the block
      *
-     * @param LiquidContext $context
+     * @param Context $context
      * @return string
      */
     public function render(&$context)

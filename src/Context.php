@@ -1,15 +1,11 @@
 <?php
-/**
- * Context keeps the variable stack and resolves variables, as well as keywords
- * 
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
- */
 
-class LiquidContext
+namespace Liquid;
+
+/**
+ * Context keeps the variable stack and resolves variables, as well as keywords.
+ */
+class Context
 {
     /**
      * Local scopes
@@ -169,7 +165,7 @@ class LiquidContext
     /**
      * Resolve a key by either returning the appropriate literal or by looking up the appropriate variable
      * 
-     * Test for empty has been moved to interpret condition, in LiquidDecisionBlock
+     * Test for empty has been moved to interpret condition, in Decision
      *
      * @param string $key
      * @return mixed
@@ -243,7 +239,7 @@ class LiquidContext
             {
                 $obj = $scope[$key];
 
-                if ($obj instanceof LiquidDrop)
+                if ($obj instanceof Drop)
                     $obj->setContext($this);
 
                 return $obj;
@@ -282,7 +278,7 @@ class LiquidContext
         {
             while(count($parts) > 0)
             {
-                if ($object instanceof LiquidDrop)
+                if ($object instanceof Drop)
                     $object->setContext($this);
 
                 $nextPartName = array_shift($parts);
@@ -307,7 +303,7 @@ class LiquidContext
                 }
                 elseif (is_object($object))
                 {
-                    if ($object instanceof LiquidDrop)
+                    if ($object instanceof Drop)
                     {
                         // if the object is a drop, make sure it supports the given method
                         if (!$object->hasKey($nextPartName))

@@ -1,4 +1,12 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+
 /**
  * Loops over an array, assigning the current value to a given variable
  * 
@@ -13,8 +21,7 @@
  * based on Liquid for Ruby (c) 2006 Tobias Luetke
  * @license http://harrydeluxe.mit-license.org
  */
-
-class LiquidTagFor extends LiquidBlock
+class TagFor extends \Liquid\Tag\AbstractBlock
 {
     /**
      * @var array The collection to loop over
@@ -37,14 +44,13 @@ class LiquidTagFor extends LiquidBlock
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return ForLiquidTag
+     * @param BlankFileSystem $fileSystem
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
         parent::__construct($markup, $tokens, $fileSystem);
 
-        $syntaxRegexp = new LiquidRegexp('/(\w+)\s+in\s+(' . LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
+        $syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
 
         if ($syntaxRegexp->match($markup))
         {
@@ -63,7 +69,7 @@ class LiquidTagFor extends LiquidBlock
     /**
      * Renders the tag
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     public function render(&$context)
     {

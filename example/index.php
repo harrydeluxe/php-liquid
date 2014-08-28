@@ -7,7 +7,7 @@ require_once('../Liquid.class.php');
 define('PROTECTED_PATH', dirname(__FILE__).'/protected/');
 
 
-$liquid = new LiquidTemplate(PROTECTED_PATH.'templates/');
+$liquid = new Template(PROTECTED_PATH.'templates/');
 
 //$cache = array('cache' => 'file', 'cache_dir' => PROTECTED_PATH.'cache/');
 //$cache = array('cache' => 'apc');

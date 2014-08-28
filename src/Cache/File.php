@@ -1,18 +1,20 @@
 <?php
-/**
- * LiquidCacheFile class file
- *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek
- * @license http://harrydeluxe.mit-license.org
- */
 
-class LiquidCacheFile extends LiquidCache
+namespace Liquid\Cache;
+
+use Liquid\Cache;
+use Liquid\LiquidException;
+
+/**
+ * Implements cache stored in files.
+ */
+class File extends Cache
 {
     /**
-     * Initializes this component.
+     * Constructor.
      * 
-     * It checks the availability of apccache.
+     * It checks the availability of cache directory.
+	 *
      * @throws LiquidException if Cachedir not exists.
      */
     public function __construct($options = array())
@@ -25,13 +27,9 @@ class LiquidCacheFile extends LiquidCache
             throw new LiquidException('Cachedir not exists or not writable');
     }
 
-
-    /**
-     * Retrieves a value from cache with a specified key.
-     *
-     * @param string $key a unique key identifying the cached value
-     * @return string the value stored in cache, false if the value is not in the cache or expired.
-     */
+	/**
+	 * {@inheritdoc}
+	 */
     public function read($key, $unserialize = true)
     {
         if (!$this->exists($key))
@@ -43,13 +41,9 @@ class LiquidCacheFile extends LiquidCache
         return file_get_contents($this->_path . $this->_prefix . $key);
     }
 
-
-    /**
-     * Check if specified key exists in cache.
-     *
-     * @param string $key a unique key identifying the cached value
-     * @return boolean true if the key is in cache, false otherwise
-     */
+	/**
+	 * {@inheritdoc}
+	 */
     public function exists($key)
     {
         $cacheFile = $this->_path . $this->_prefix . $key;
@@ -60,15 +54,10 @@ class LiquidCacheFile extends LiquidCache
         return true;
     }
 
-
-    /**
-     * Stores a value identified by a key in cache.
-     *
-     * @param string $key the key identifying the value to be cached
-     * @param string $value the value to be cached
-     * @return boolean true if the value is successfully stored into cache, false otherwise
-     */
-    public function write($key, &$value, $serialize = true)
+	/**
+	 * {@inheritdoc}
+	 */
+    public function write($key, $value, $serialize = true)
     {
         if (@file_put_contents($this->_path . $this->_prefix . $key, $serialize ? serialize($value) : $value) !== false)
         {
@@ -79,12 +68,9 @@ class LiquidCacheFile extends LiquidCache
         throw new LiquidException('Can not write cache file');
     }
 
-
-    /**
-     * Deletes all values from cache.
-     *
-     * @return boolean whether the flush operation was successful.
-     */
+	/**
+	 * {@inheritdoc}
+	 */
     public function flush($expiredOnly = false)
     {
         foreach(glob($this->_path . $this->_prefix . '*') as $file)
@@ -99,12 +85,9 @@ class LiquidCacheFile extends LiquidCache
         }
     }
 
-
-    /**
-     * Removes expired cache files.
-     * 
-     * 
-     */
+	/**
+	 * {@inheritdoc}
+	 */
     protected function gc()
     {
         $this->flush(true);

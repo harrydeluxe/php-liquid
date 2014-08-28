@@ -1,15 +1,15 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\LiquidException;
+use Liquid\Context;
+
 /**
- * Base class for blocks that make logical decisions
- *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek
- * @license http://harrydeluxe.mit-license.org
+ * Base class for blocks that make logical decisions.
  */
-
-class LiquidDecisionBlock extends LiquidBlock
+class Decision extends AbstractBlock
 {
-
     /**
      * The current left variable to compare
      *
@@ -62,8 +62,9 @@ class LiquidDecisionBlock extends LiquidBlock
      *
      * @param string $left
      * @param string $right
-     * @param LiquidContext $context
-     * @return bool
+     * @param Context $context
+     *
+	 * @return bool
      */
     protected function _equalVariables($left, $right, &$context)
     {
@@ -81,8 +82,9 @@ class LiquidDecisionBlock extends LiquidBlock
      * @param string $left
      * @param string $right
      * @param string $op
-     * @param LiquidContext $context
-     * @return bool
+     * @param Context $context
+     *
+	 * @return bool
      */
     protected function _interpretCondition($left, $right, $op = null, &$context)
     {

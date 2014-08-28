@@ -9,7 +9,7 @@
  * @license http://www.opensource.org/licenses/mit-license.php
  */
 
-class ContextDrop extends LiquidDrop
+class ContextDrop extends Drop
 {
 	function _beforeMethod($method)
 	{
@@ -18,7 +18,7 @@ class ContextDrop extends LiquidDrop
 }
 
 
-class TextDrop extends LiquidDrop
+class TextDrop extends Drop
 {
 	function get_array()
 	{
@@ -31,7 +31,7 @@ class TextDrop extends LiquidDrop
 	}
 }
 
-class CatchallDrop extends LiquidDrop
+class CatchallDrop extends Drop
 {
 	function _beforeMethod($method)
 	{
@@ -40,7 +40,7 @@ class CatchallDrop extends LiquidDrop
 	
 }
 
-class ProductDrop extends LiquidDrop
+class ProductDrop extends Drop
 {
 	function top_sales()
 	{
@@ -76,14 +76,14 @@ class DropTest extends UnitTestCase
 	
 	function test_product_drop()
 	{		
-		$template = new LiquidTemplate;
+		$template = new Template;
 		$template->parse('  ');
 		//$template->render(array('product' => new ProductDrop));
 		//$this->assertNoErrors();
         $this->assertTrue($template->render(array('product' => new ProductDrop)));
 		
 		
-	    $template = new LiquidTemplate;
+	    $template = new Template;
 		$template->parse( ' {{ product.top_sales }} '  );
 		$this->expectError('worked');
 	    $template->render(array('product' => new ProductDrop));
@@ -92,12 +92,12 @@ class DropTest extends UnitTestCase
 	function test_text_drop()
 	{
 		
-		$template = new LiquidTemplate;
+		$template = new Template;
 		$template->parse(' {{ product.texts.text }} ');
 		$output = $template->render(array('product' => new ProductDrop()));	
 		$this->assertEqual(' text1 ', $output);
 
-		$template = new LiquidTemplate;
+		$template = new Template;
 		$template->parse(' {{ product.catchall.unknown }} ');
 		$output = $template->render(array('product' => new ProductDrop()));	
 		$this->assertEqual(' method: unknown ', $output);				
@@ -107,7 +107,7 @@ class DropTest extends UnitTestCase
 	
 	function test_text_array_drop()
 	{
-		$template = new LiquidTemplate;
+		$template = new Template;
 		$template->parse('{% for text in product.texts.get_array %} {{text}} {% endfor %}');
 		$output = $template->render(array('product' => new ProductDrop()));
 		
@@ -117,7 +117,7 @@ class DropTest extends UnitTestCase
 	
 	function test_context_drop()
 	{
-		$template = new LiquidTemplate;
+		$template = new Template;
 		$template->parse(' {{ context.bar }} ');
 		$output = $template->render(array('context' => new ContextDrop(), 'bar'=>'carrot'));	
 		$this->assertEqual(' carrot ', $output);				
@@ -125,7 +125,7 @@ class DropTest extends UnitTestCase
 	
 	function test_nested_context_drop()
 	{
-		$template = new LiquidTemplate;
+		$template = new Template;
 		$template->parse(' {{ product.context.foo }} ');
 		$output = $template->render(array('product' => new ProductDrop(), 'foo'=>'monkey'));	
 		$this->assertEqual(' monkey ', $output);		

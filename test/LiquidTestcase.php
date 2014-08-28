@@ -12,7 +12,7 @@ class LiquidTestcase extends UnitTestCase
 			$assigns = array();
 		}
 		
-		$result = new LiquidTemplate;
+		$result = new Template;
 
 		$result->parse($template);
 
@@ -26,7 +26,7 @@ class LiquidTestcase extends UnitTestCase
 	
 	public function assertTrueHelper($templateString, $expected, $data = array())
 	{
-		$template = new LiquidTemplate;
+		$template = new Template;
 		$template->parse($templateString);
 		$this->assertTrue($template->render($data) === $expected);
 	}

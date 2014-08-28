@@ -1,4 +1,13 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Liquid;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+use Liquid\Context;
+
 /**
  * Performs an assignment of one variable to another
  * 
@@ -13,7 +22,7 @@
  * @license http://harrydeluxe.mit-license.org
  */
 
-class LiquidTagAssign extends LiquidTag
+class TagAssign extends AbstractTag
 {
     /**
      * @var string The variable to assign from
@@ -31,17 +40,16 @@ class LiquidTagAssign extends LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return AssignLiquidTag
+     * @param BlankFileSystem $fileSystem
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
-        $syntaxRegexp = new LiquidRegexp('/(\w+)\s*=\s*(' . LIQUID_QUOTED_FRAGMENT . '+)/');
+        $syntaxRegexp = new Regexp('/(\w+)\s*=\s*(' . LIQUID_QUOTED_FRAGMENT . '+)/');
 
-        $filterSeperatorRegexp = new LiquidRegexp('/' . LIQUID_FILTER_SEPARATOR . '\s*(.*)/');
-        $filterSplitRegexp = new LiquidRegexp('/' . LIQUID_FILTER_SEPARATOR . '/');
-        $filterNameRegexp = new LiquidRegexp('/\s*(\w+)/');
-        $filterArgumentRegexp = new LiquidRegexp('/(?:' . LIQUID_FILTER_ARGUMENT_SEPARATOR . '|' . LIQUID_ARGUMENT_SEPARATOR . ')\s*(' . LIQUID_QUOTED_FRAGMENT . ')/');
+        $filterSeperatorRegexp = new Regexp('/' . LIQUID_FILTER_SEPARATOR . '\s*(.*)/');
+        $filterSplitRegexp = new Regexp('/' . LIQUID_FILTER_SEPARATOR . '/');
+        $filterNameRegexp = new Regexp('/\s*(\w+)/');
+        $filterArgumentRegexp = new Regexp('/(?:' . LIQUID_FILTER_ARGUMENT_SEPARATOR . '|' . LIQUID_ARGUMENT_SEPARATOR . ')\s*(' . LIQUID_QUOTED_FRAGMENT . ')/');
 
         $this->filters = array();
 
@@ -78,7 +86,7 @@ class LiquidTagAssign extends LiquidTag
     /**
      * Renders the tag
      *
-     * @param LiquidContext $context
+     * @param Context $context
      */
     public function render(&$context)
     {

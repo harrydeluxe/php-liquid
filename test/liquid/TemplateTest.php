@@ -14,25 +14,25 @@ class TemplateTest extends UnitTestCase
 
 	function test_tokenize_strings()
 	{
- 	    $this->assertEqual(array(' '), LiquidTemplate::tokenize(' '));
- 	    $this->assertEqual(array('hello world'), LiquidTemplate::tokenize('hello world'));
+ 	    $this->assertEqual(array(' '), Template::tokenize(' '));
+ 	    $this->assertEqual(array('hello world'), Template::tokenize('hello world'));
 	}
 	
 	function test_tokenize_variables()
 	{
-		$this->assertEqual(array('{{funk}}'), LiquidTemplate::tokenize('{{funk}}'));
-		$this->assertEqual(array(' ', '{{funk}}', ' '), LiquidTemplate::tokenize(' {{funk}} '));
-		$this->assertEqual(array(' ', '{{funk}}', ' ', '{{so}}', ' ', '{{brother}}', ' '), LiquidTemplate::tokenize(' {{funk}} {{so}} {{brother}} '));
-		$this->assertEqual(array(' ', '{{  funk  }}', ' '), LiquidTemplate::tokenize(' {{  funk  }} '));
+		$this->assertEqual(array('{{funk}}'), Template::tokenize('{{funk}}'));
+		$this->assertEqual(array(' ', '{{funk}}', ' '), Template::tokenize(' {{funk}} '));
+		$this->assertEqual(array(' ', '{{funk}}', ' ', '{{so}}', ' ', '{{brother}}', ' '), Template::tokenize(' {{funk}} {{so}} {{brother}} '));
+		$this->assertEqual(array(' ', '{{  funk  }}', ' '), Template::tokenize(' {{  funk  }} '));
 		
 		
 	}
 
 	function test_tokenize_blocks() {
-		$this->assertEqual(array('{%comment%}'), LiquidTemplate::tokenize('{%comment%}'));
-		$this->assertEqual(array(' ', '{%comment%}', ' '), LiquidTemplate::tokenize(' {%comment%} '));
-		$this->assertEqual(array(' ', '{%comment%}', ' ', '{%endcomment%}', ' '), LiquidTemplate::tokenize(' {%comment%} {%endcomment%} '));
-		$this->assertEqual(array('  ', '{% comment %}', ' ', '{% endcomment %}', ' '), LiquidTemplate::tokenize("  {% comment %} {% endcomment %} "));
+		$this->assertEqual(array('{%comment%}'), Template::tokenize('{%comment%}'));
+		$this->assertEqual(array(' ', '{%comment%}', ' '), Template::tokenize(' {%comment%} '));
+		$this->assertEqual(array(' ', '{%comment%}', ' ', '{%endcomment%}', ' '), Template::tokenize(' {%comment%} {%endcomment%} '));
+		$this->assertEqual(array('  ', '{% comment %}', ' ', '{% endcomment %}', ' '), Template::tokenize("  {% comment %} {% endcomment %} "));
 	}
 		
 }

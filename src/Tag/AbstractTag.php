@@ -1,15 +1,15 @@
 <?php
-/**
- * Base class for tags
- * 
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
- */
 
-abstract class LiquidTag
+namespace Liquid\Tag;
+
+use Liquid\BlankFileSystem;
+use Liquid\Context;
+use Liquid\Regexp;
+
+/**
+ * Base class for tags.
+ */
+abstract class AbstractTag
 {
     /**
      * The markup for the tag
@@ -21,7 +21,7 @@ abstract class LiquidTag
     /**
      * Filesystem object is used to load included template files
      *
-     * @var LiquidFileSystem
+     * @var BlankFileSystem
      */
     protected $_fileSystem;
 
@@ -38,8 +38,9 @@ abstract class LiquidTag
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return LiquidTag
+     * @param BlankFileSystem $fileSystem
+     *
+	 * @return AbstractTag
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
@@ -68,7 +69,7 @@ abstract class LiquidTag
     {
         $this->_attributes = array();
 
-        $attribute_regexp = new LiquidRegexp(LIQUID_TAG_ATTRIBUTES);
+        $attribute_regexp = new Regexp(LIQUID_TAG_ATTRIBUTES);
 
         $matches = $attribute_regexp->scan($markup);
 
@@ -93,7 +94,7 @@ abstract class LiquidTag
     /**
      * Render the tag with the given context
      *
-     * @param LiquidContext $context
+     * @param Context $context
      * @return string
      */
     public function render(&$context)

@@ -1,4 +1,12 @@
 <?php
+
+namespace Liquid\Tag;
+
+use Liquid\Context;
+use Liquid\LiquidException;
+use Liquid\BlankFileSystem;
+use Liquid\Regexp;
+
 /**
  * Quickly create a table from a collection
  *
@@ -8,10 +16,8 @@
  * based on Liquid for Ruby (c) 2006 Tobias Luetke
  * @license http://harrydeluxe.mit-license.org
  */
-
-class LiquidTagTablerow extends LiquidBlock
+class TagTablerow extends \Liquid\Tag\AbstractBlock
 {
-
     /**
      * The variable name of the table tag
      *
@@ -39,14 +45,13 @@ class LiquidTagTablerow extends LiquidBlock
      *
      * @param string $markup
      * @param array $tokens
-     * @param LiquidFileSystem $fileSystem
-     * @return TableRowLiquidTag
+     * @param BlankFileSystem $fileSystem
      */
     public function __construct($markup, &$tokens, &$fileSystem)
     {
         parent::__construct($markup, $tokens, $fileSystem);
 
-        $syntax = new LiquidRegexp("/(\w+)\s+in\s+(" . LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
+        $syntax = new Regexp("/(\w+)\s+in\s+(" . LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 
         if ($syntax->match($markup))
         {
@@ -65,7 +70,7 @@ class LiquidTagTablerow extends LiquidBlock
     /**
      * Renders the current node
      *
-     * @param LiquidContext $context
+     * @param Context $context
      * @return string
      */
     public function render(&$context)

@@ -1,4 +1,7 @@
 <?php
+
+namespace Liquid;
+
 /** 
  * A drop in liquid is a class which allows you to to export DOM like things to liquid
  * Methods of drops are callable. 
@@ -8,28 +11,20 @@
  *
  * Example:
  *
- * class ProductDrop extends LiquidDrop {
- *   function top_sales() {
- *      Products::find('all', array('order' => 'sales', 'limit' => 10 ));
- *   }
- * }
+ *     class ProductDrop extends LiquidDrop {
+ *         function top_sales() {
+ *             Products::find('all', array('order' => 'sales', 'limit' => 10 ));
+ *         }
+ *     }
  *  
  * tmpl = Liquid::Template.parse( ' {% for product in product.top_sales %} {{ product.name }} {%endfor%} '  )
  * tmpl.render('product' => ProductDrop.new ) * will invoke top_sales query. 
  *
  * Your drop can either implement the methods sans any parameters or implement the _beforeMethod(name) method which is a 
- * catch all
- * 
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ * catch all.
  */
-
-abstract class LiquidDrop
+abstract class Drop
 {
-
     /**
      * @var LiquidContext
      */
