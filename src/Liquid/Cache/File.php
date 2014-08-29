@@ -20,10 +20,11 @@ class File extends Cache
 	public function __construct($options = array()) {
 		parent::__construct($options);
 
-		if (isset($options['cache_dir']) && is_writable($options['cache_dir']))
-			$this->_path = realpath($options['cache_dir']) . DIRECTORY_SEPARATOR;
-		else
+		if (isset($options['cache_dir']) && is_writable($options['cache_dir'])) {
+			$this->path = realpath($options['cache_dir']) . DIRECTORY_SEPARATOR;
+		} else {
 			throw new LiquidException('Cachedir not exists or not writable');
+		}
 	}
 
 	/**
@@ -33,20 +34,22 @@ class File extends Cache
 		if (!$this->exists($key))
 			return false;
 
-		if ($unserialize)
-			return unserialize(file_get_contents($this->_path . $this->_prefix . $key));
+		if ($unserialize) {
+			return unserialize(file_get_contents($this->path . $this->prefix . $key));
+		}
 
-		return file_get_contents($this->_path . $this->_prefix . $key);
+		return file_get_contents($this->path . $this->prefix . $key);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function exists($key) {
-		$cacheFile = $this->_path . $this->_prefix . $key;
+		$cacheFile = $this->path . $this->prefix . $key;
 
-		if (!file_exists($cacheFile) || @filemtime($cacheFile) + $this->_expire < time())
+		if (!file_exists($cacheFile) || filemtime($cacheFile) + $this->expire < time()) {
 			return false;
+		}
 
 		return true;
 	}
@@ -55,7 +58,7 @@ class File extends Cache
 	 * {@inheritdoc}
 	 */
 	public function write($key, $value, $serialize = true) {
-		if (@file_put_contents($this->_path . $this->_prefix . $key, $serialize ? serialize($value) : $value) !== false) {
+		if (file_put_contents($this->path . $this->prefix . $key, $serialize ? serialize($value) : $value) !== false) {
 			$this->gc();
 			return true;
 		}
@@ -67,12 +70,14 @@ class File extends Cache
 	 * {@inheritdoc}
 	 */
 	public function flush($expiredOnly = false) {
-		foreach (glob($this->_path . $this->_prefix . '*') as $file) {
+		foreach (glob($this->path . $this->prefix . '*') as $file) {
 			if ($expiredOnly) {
-				if (@filemtime($file) + $this->_expire < time())
-					@unlink($file);
-			} else
-				@unlink($file);
+				if (filemtime($file) + $this->expire < time()) {
+					unlink($file);
+				}
+			} else {
+				unlink($file);
+			}
 		}
 	}
 

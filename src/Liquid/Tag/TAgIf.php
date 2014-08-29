@@ -11,17 +11,12 @@ use Liquid\Regexp;
 /**
  * An if statement
  *
- * @example
- * {% if true %} YES {% else %} NO {% endif %}
+ * Example:
  *
- * will return:
- * YES
+ *     {% if true %} YES {% else %} NO {% endif %}
  *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ *     will return:
+ *     YES
  */
 class TagIf extends Decision
 {
@@ -30,14 +25,14 @@ class TagIf extends Decision
 	 *
 	 * @var array
 	 */
-	private $_nodelistHolders = array();
+	private $nodelistHolders = array();
 
 	/**
 	 * Array holding the block type, block markup (conditions) and block nodelist
 	 *
 	 * @var array
 	 */
-	private $_blocks = array();
+	private $blocks = array();
 
 	/**
 	 * Constructor
@@ -45,16 +40,15 @@ class TagIf extends Decision
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
-		$this->_nodelist = & $this->_nodelistHolders[count($this->_blocks)];
+		$this->nodelist = & $this->nodelistHolders[count($this->blocks)];
 
-		array_push($this->_blocks, array(
-			'if', $markup, &$this->_nodelist
-		));
+		array_push($this->blocks, array('if', $markup, &$this->nodelist));
 
 		parent::__construct($markup, $tokens, $fileSystem);
-
 	}
 
 	/**
@@ -64,15 +58,14 @@ class TagIf extends Decision
 	 * @param array $params
 	 * @param array $tokens
 	 */
-	public function unknownTag($tag, $params, &$tokens) {
+	public function unknownTag($tag, $params, array &$tokens) {
+		// todo: tag names
 		if ($tag == 'else' || $tag == 'elsif') {
 			/* Update reference to nodelistHolder for this block */
-			$this->_nodelist = & $this->_nodelistHolders[count($this->_blocks) + 1];
-			$this->_nodelistHolders[count($this->_blocks) + 1] = array();
+			$this->nodelist = & $this->nodelistHolders[count($this->blocks) + 1];
+			$this->nodelistHolders[count($this->blocks) + 1] = array();
 
-			array_push($this->_blocks, array(
-				$tag, $params, &$this->_nodelist
-			));
+			array_push($this->blocks, array($tag, $params, &$this->nodelist));
 
 		} else {
 			parent::unknownTag($tag, $params, $tokens);
@@ -83,6 +76,9 @@ class TagIf extends Decision
 	 * Render the tag
 	 *
 	 * @param Context $context
+	 *
+	 * @throws \Liquid\LiquidException
+	 * @return string
 	 */
 	public function render(&$context) {
 		$context->push();
@@ -92,7 +88,7 @@ class TagIf extends Decision
 
 		$result = '';
 
-		foreach ($this->_blocks as $i => $block) {
+		foreach ($this->blocks as $i => $block) {
 			if ($block[0] == 'else') {
 				$result = $this->renderAll($block[2], $context);
 
@@ -133,15 +129,15 @@ class TagIf extends Decision
 
 					foreach ($logicalOperators as $k => $logicalOperator) {
 						if ($logicalOperator == 'and') {
-							$display = $this->_interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) && $this->_interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
+							$display = $this->interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) && $this->interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
 						} else {
-							$display = $this->_interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) || $this->_interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
+							$display = $this->interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) || $this->interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
 						}
 					}
 
 				} else {
 					/* If statement is a single condition */
-					$display = $this->_interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
+					$display = $this->interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
 				}
 
 				if ($display) {

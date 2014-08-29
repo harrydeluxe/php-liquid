@@ -11,12 +11,11 @@ use Liquid\Regexp;
 /**
  * Used to increment a counter into a template
  *
- * @example
- * {% increment value %}
+ * Example:
+ *
+ *     {% increment value %}
  *
  * @author Viorel Dram
- *
- * @package Liquid
  */
 class TagIncrement extends AbstractTag
 {
@@ -25,7 +24,7 @@ class TagIncrement extends AbstractTag
 	 *
 	 * @var string
 	 */
-	private $_toIncrement;
+	private $toIncrement;
 
 	/**
 	 * Constructor
@@ -33,12 +32,16 @@ class TagIncrement extends AbstractTag
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		$syntax = new Regexp("/(" . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 
 		if ($syntax->match($markup)) {
-			$this->_toIncrement = $syntax->matches[0];
+			$this->toIncrement = $syntax->matches[0];
 		} else {
 			throw new LiquidException("Syntax Error in 'increment' - Valid syntax: increment [var]");
 		}
@@ -48,19 +51,23 @@ class TagIncrement extends AbstractTag
 	 * Renders the tag
 	 *
 	 * @param Context $context
+	 *
+	 * @return string|void
 	 */
 	public function render(&$context) {
 		// if the value is not set in the environment check to see if it
 		// exists in the context, and if not set it to -1
-		if (!isset($context->environments[0][$this->_toIncrement])) {
+		if (!isset($context->environments[0][$this->toIncrement])) {
 			// check for a context value
-			$from_context = $context->get($this->_toIncrement);
+			$from_context = $context->get($this->toIncrement);
 
 			// we already have a value in the context
-			$context->environments[0][$this->_toIncrement] = (null !== $from_context) ? $from_context : -1;
+			$context->environments[0][$this->toIncrement] = (null !== $from_context) ? $from_context : -1;
 		}
 
 		// increment the value
-		$context->environments[0][$this->_toIncrement]++;
+		$context->environments[0][$this->toIncrement]++;
+
+		return '';
 	}
 }

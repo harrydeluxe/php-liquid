@@ -10,17 +10,17 @@ class Variable
 	/**
 	 * @var array The filters to execute on the variable
 	 */
-	private $_filters;
+	private $filters;
 
 	/**
 	 * @var string The name of the variable
 	 */
-	private $_name;
+	private $name;
 
 	/**
 	 * @var string The markup of the variable
 	 */
-	private $_markup;
+	private $markup;
 
 	/**
 	 * Constructor
@@ -28,7 +28,7 @@ class Variable
 	 * @param string $markup
 	 */
 	public function __construct($markup) {
-		$this->_markup = $markup;
+		$this->markup = $markup;
 
 		$quotedFragmentRegexp = new Regexp('/\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')/');
 		$filterSeperatorRegexp = new Regexp('/' . Liquid::LIQUID_FILTER_SEPARATOR . '\s*(.*)/');
@@ -38,8 +38,7 @@ class Variable
 
 		$quotedFragmentRegexp->match($markup);
 
-		$this->_name = (isset($quotedFragmentRegexp->matches[1])) ? $quotedFragmentRegexp->matches[1] : null;
-
+		$this->name = (isset($quotedFragmentRegexp->matches[1])) ? $quotedFragmentRegexp->matches[1] : null;
 
 		if ($filterSeperatorRegexp->match($markup)) {
 			$filters = $filterSplitRegexp->split($filterSeperatorRegexp->matches[1]);
@@ -51,13 +50,11 @@ class Variable
 				$filterArgumentRegexp->match_all($filter);
 				$matches = Liquid::array_flatten($filterArgumentRegexp->matches[1]);
 
-				$this->_filters[] = array(
-					$filtername, $matches
-				);
+				$this->filters[] = array($filtername, $matches);
 			}
 
 		} else {
-			$this->_filters = array();
+			$this->filters = array();
 		}
 	}
 
@@ -67,7 +64,7 @@ class Variable
 	 * @return string The name of the variable
 	 */
 	public function getName() {
-		return $this->_name;
+		return $this->name;
 	}
 
 	/**
@@ -76,18 +73,20 @@ class Variable
 	 * @return array
 	 */
 	public function getFilters() {
-		return $this->_filters;
+		return $this->filters;
 	}
 
 	/**
 	 * Renders the variable with the data in the context
 	 *
 	 * @param Context $context
+	 *
+	 * @return mixed|string
 	 */
-	function render($context) {
-		$output = $context->get($this->_name);
+	public function render($context) {
+		$output = $context->get($this->name);
 
-		foreach ($this->_filters as $filter) {
+		foreach ($this->filters as $filter) {
 			list($filtername, $filterArgKeys) = $filter;
 
 			$filterArgValues = array();

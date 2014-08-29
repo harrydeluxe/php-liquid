@@ -10,14 +10,9 @@ use Liquid\Regexp;
 /**
  * Captures the output inside a block and assigns it to a variable
  *
- * @example
- * {% capture foo %} bar {% endcapture %}
+ * Example:
  *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ *     {% capture foo %} bar {% endcapture %}
  */
 class TagCapture extends AbstractBlock
 {
@@ -26,7 +21,7 @@ class TagCapture extends AbstractBlock
 	 *
 	 * @var string
 	 */
-	private $_to;
+	private $to;
 
 	/**
 	 * Constructor
@@ -34,12 +29,16 @@ class TagCapture extends AbstractBlock
 	 * @param string $markup
 	 * @param Array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		$syntaxRegexp = new Regexp('/(\w+)/');
 
 		if ($syntaxRegexp->match($markup)) {
-			$this->_to = $syntaxRegexp->matches[1];
+			$this->to = $syntaxRegexp->matches[1];
 			parent::__construct($markup, $tokens, $fileSystem);
 		} else {
 			throw new LiquidException("Syntax Error in 'capture' - Valid syntax: assign [var] = [source]"); // harry
@@ -50,10 +49,14 @@ class TagCapture extends AbstractBlock
 	 * Renders the block
 	 *
 	 * @param Context $context
+	 *
+	 * @return string
 	 */
 	public function render(&$context) {
 		$output = parent::render($context);
 
-		$context->set($this->_to, $output);
+		$context->set($this->to, $output);
+		// todo: return '' or output?
+		return '';
 	}
 }

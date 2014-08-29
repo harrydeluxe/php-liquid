@@ -11,12 +11,11 @@ use Liquid\Regexp;
 /**
  * Used to decrement a counter into a template
  *
- * @example
- * {% decrement value %}
+ * Example:
+ *
+ *     {% decrement value %}
  *
  * @author Viorel Dram
- *
- * @package Liquid
  */
 class TagDecrement extends AbstractTag
 {
@@ -25,7 +24,7 @@ class TagDecrement extends AbstractTag
 	 *
 	 * @var int
 	 */
-	private $_toDecrement;
+	private $toDecrement;
 
 	/**
 	 * Constructor
@@ -33,12 +32,16 @@ class TagDecrement extends AbstractTag
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		$syntax = new Regexp("/(" . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 
 		if ($syntax->match($markup)) {
-			$this->_toDecrement = $syntax->matches[0];
+			$this->toDecrement = $syntax->matches[0];
 		} else {
 			throw new LiquidException("Syntax Error in 'decrement' - Valid syntax: decrement [var]");
 		}
@@ -48,19 +51,23 @@ class TagDecrement extends AbstractTag
 	 * Renders the tag
 	 *
 	 * @param Context $context
+	 *
+	 * @return string|void
 	 */
 	public function render(&$context) {
 		// if the value is not set in the environment check to see if it
 		// exists in the context, and if not set it to 0
-		if (!isset($context->environments[0][$this->_toDecrement])) {
+		if (!isset($context->environments[0][$this->toDecrement])) {
 			// check for a context value
-			$from_context = $context->get($this->_toDecrement);
+			$from_context = $context->get($this->toDecrement);
 
 			// we already have a value in the context
-			$context->environments[0][$this->_toDecrement] = (null !== $from_context) ? $from_context : 0;
+			$context->environments[0][$this->toDecrement] = (null !== $from_context) ? $from_context : 0;
 		}
 
 		// decrement the environment value
-		$context->environments[0][$this->_toDecrement]--;
+		$context->environments[0][$this->toDecrement]--;
+
+		return '';
 	}
 }

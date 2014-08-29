@@ -28,14 +28,14 @@ class Apc extends Cache
 	 * {@inheritdoc}
 	 */
 	public function read($key, $unserialize = true) {
-		return apc_fetch($this->_prefix . $key);
+		return apc_fetch($this->prefix . $key);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function exists($key) {
-		apc_fetch($this->_prefix . $key, $success);
+		apc_fetch($this->prefix . $key, $success);
 		return $success;
 	}
 
@@ -43,7 +43,7 @@ class Apc extends Cache
 	 * {@inheritdoc}
 	 */
 	public function write($key, $value, $serialize = true) {
-		return apc_store($this->_prefix . $key, $value, $this->_expire);
+		return apc_store($this->prefix . $key, $value, $this->expire);
 	}
 
 	/**

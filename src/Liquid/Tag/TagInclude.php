@@ -12,52 +12,47 @@ use Liquid\Template;
 /**
  * Includes another, partial, template
  *
- * @example
- * {% include 'foo' %}
+ * Example:
  *
- * Will include the template called 'foo'
+ *     {% include 'foo' %}
  *
- * {% include 'foo' with 'bar' %}
+ *     Will include the template called 'foo'
  *
- * Will include the template called 'foo', with a variable called foo that will have the value of 'bar'
+ *     {% include 'foo' with 'bar' %}
  *
- * {% include 'foo' for 'bar' %}
+ *     Will include the template called 'foo', with a variable called foo that will have the value of 'bar'
  *
- * Will loop over all the values of bar, including the template foo, passing a variable called foo
- * with each value of bar
+ *     {% include 'foo' for 'bar' %}
  *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ *     Will loop over all the values of bar, including the template foo, passing a variable called foo
+ *     with each value of bar
  */
 class TagInclude extends AbstractTag
 {
 	/**
 	 * @var string The name of the template
 	 */
-	private $_templateName;
+	private $templateName;
 
 	/**
 	 * @var bool True if the variable is a collection
 	 */
-	private $_collection;
+	private $collection;
 
 	/**
 	 * @var mixed The value to pass to the child template as the template name
 	 */
-	private $_variable;
+	private $variable;
 
 	/**
 	 * @var Document The Document that represents the included template
 	 */
-	private $_document;
+	private $document;
 
 	/**
 	 * @var string The Source Hash
 	 */
-	protected $_hash;
+	protected $hash;
 
 	/**
 	 * Constructor
@@ -65,17 +60,21 @@ class TagInclude extends AbstractTag
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . Liquid::LIQUID_QUOTED_FRAGMENT . '+))?/');
 
 		if ($regex->match($markup)) {
 
-			$this->_templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
+			$this->templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
 
 			if (isset($regex->matches[1])) {
-				$this->_collection = (isset($regex->matches[3])) ? ($regex->matches[3] == "for") : null;
-				$this->_variable = (isset($regex->matches[4])) ? $regex->matches[4] : null;
+				$this->collection = (isset($regex->matches[3])) ? ($regex->matches[3] == "for") : null;
+				$this->variable = (isset($regex->matches[4])) ? $regex->matches[4] : null;
 			}
 
 			$this->extractAttributes($markup);
@@ -90,45 +89,49 @@ class TagInclude extends AbstractTag
 	 * Parses the tokens
 	 *
 	 * @param array $tokens
+	 *
+	 * @throws \Liquid\LiquidException
 	 */
 	public function parse(&$tokens) {
-		if (!isset($this->_fileSystem)) {
+		if (!isset($this->fileSystem)) {
 			throw new LiquidException("No file system");
 		}
 
 		// read the source of the template and create a new sub document
-		$source = $this->_fileSystem->readTemplateFile($this->_templateName);
+		$source = $this->fileSystem->readTemplateFile($this->templateName);
 
-		$this->_hash = md5($source);
+		$this->hash = md5($source);
 
 		$cache = Template::getCache();
 
 		if (isset($cache)) {
-			if (($this->_document = $cache->read($this->_hash)) != false && $this->_document->checkIncludes() != true) {
+			if (($this->document = $cache->read($this->hash)) != false && $this->document->checkIncludes() != true) {
 			} else {
-				$this->_document = new Document(Template::tokenize($source), $this->_fileSystem);
-				$cache->write($this->_hash, $this->_document);
+				$this->document = new Document(Template::tokenize($source), $this->fileSystem);
+				$cache->write($this->hash, $this->document);
 			}
 		} else {
-			$this->_document = new Document(Template::tokenize($source), $this->_fileSystem);
+			$this->document = new Document(Template::tokenize($source), $this->fileSystem);
 		}
 	}
 
 	/**
 	 * check for cached includes
 	 *
-	 * @return string
+	 * @return boolean
 	 */
 	public function checkIncludes() {
 		$cache = Template::getCache();
 
-		if ($this->_document->checkIncludes() == true)
+		if ($this->document->checkIncludes() == true) {
 			return true;
+		}
 
-		$source = $this->_fileSystem->readTemplateFile($this->_templateName);
+		$source = $this->fileSystem->readTemplateFile($this->templateName);
 
-		if ($cache->exists(md5($source)) && $this->_hash == md5($source))
+		if ($cache->exists(md5($source)) && $this->hash == md5($source)) {
 			return false;
+		}
 
 		return true;
 	}
@@ -137,28 +140,30 @@ class TagInclude extends AbstractTag
 	 * Renders the node
 	 *
 	 * @param Context $context
+	 *
+	 * @return string
 	 */
 	public function render(&$context) {
 		$result = '';
-		$variable = $context->get($this->_variable);
+		$variable = $context->get($this->variable);
 
 		$context->push();
 
-		foreach ($this->_attributes as $key => $value) {
+		foreach ($this->attributes as $key => $value) {
 			$context->set($key, $context->get($value));
 		}
 
-		if ($this->_collection) {
+		if ($this->collection) {
 			foreach ($variable as $item) {
-				$context->set($this->_templateName, $item);
-				$result .= $this->_document->render($context);
+				$context->set($this->templateName, $item);
+				$result .= $this->document->render($context);
 			}
 		} else {
-			if (!is_null($this->_variable)) {
-				$context->set($this->_templateName, $variable);
+			if (!is_null($this->variable)) {
+				$context->set($this->templateName, $variable);
 			}
 
-			$result .= $this->_document->render($context);
+			$result .= $this->document->render($context);
 		}
 
 		$context->pop();

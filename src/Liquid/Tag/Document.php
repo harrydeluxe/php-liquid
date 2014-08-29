@@ -14,42 +14,52 @@ class Document extends AbstractBlock
 	 *
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * todo: reference?
 	 */
-	public function __construct($tokens, &$fileSystem) {
-		$this->_fileSystem = $fileSystem;
+	public function __construct(array $tokens, &$fileSystem) {
+		$this->fileSystem = $fileSystem;
 		$this->parse($tokens);
 	}
 
 	/**
-	 * check for cached includes
+	 * Check for cached includes
 	 *
 	 * @return string
 	 */
 	public function checkIncludes() {
-		$return = false;
-		foreach ($this->_nodelist as $token) {
+		// todo: isObject
+
+		foreach ($this->nodelist as $token) {
 			if (is_object($token)) {
-				if (get_class($token) == 'LiquidTagInclude' || get_class($token) == 'LiquidTagExtends') {
-					if ($token->checkIncludes() == true)
-						$return = true;
+				if ($token instanceof TagInclude || $token instanceof TagExtends) {
+					/** @var TagInclude|TagExtends $token */
+					if ($token->checkIncludes() == true) {
+						return true;
+					}
 				}
 			}
 		}
-		return $return;
+
+		return false;
 	}
 
 	/**
 	 * There isn't a real delimiter
 	 *
 	 * @return string
+	 *
+	 * todo: need?
 	 */
-	public function blockDelimiter() {
+	protected function blockDelimiter() {
 		return '';
 	}
 
 	/**
 	 * Document blocks don't need to be terminated since they are not actually opened
+	 *
+	 * todo: need?
 	 */
-	public function assertMissingDelimitation() {
+	protected function assertMissingDelimitation() {
 	}
 }

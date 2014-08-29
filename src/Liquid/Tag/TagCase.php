@@ -11,14 +11,9 @@ use Liquid\Regexp;
 /**
  * A switch statememt
  *
- * @example
- * {% case condition %}{% when foo %} foo {% else %} bar {% endcase %}
+ * Example:
  *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ *     {% case condition %}{% when foo %} foo {% else %} bar {% endcase %}
  */
 class TagCase extends Decision
 {
@@ -56,6 +51,10 @@ class TagCase extends Decision
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		$this->nodelists = array();
@@ -74,7 +73,6 @@ class TagCase extends Decision
 
 	/**
 	 * Pushes the last nodelist onto the stack
-	 *
 	 */
 	public function endTag() {
 		$this->push_nodelist();
@@ -84,10 +82,14 @@ class TagCase extends Decision
 	 * Unknown tag handler
 	 *
 	 * @param string $tag
-	 * @param array $params
+	 * @param string $params
 	 * @param array $tokens
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
-	public function unknownTag($tag, $params, &$tokens) {
+	public function unknownTag($tag, $params, array &$tokens) {
 		$whenSyntaxRegexp = new Regexp('/' . Liquid::LIQUID_QUOTED_FRAGMENT . '/');
 
 		switch ($tag) {
@@ -96,7 +98,7 @@ class TagCase extends Decision
 				if ($whenSyntaxRegexp->match($params)) {
 					$this->push_nodelist();
 					$this->right = $whenSyntaxRegexp->matches[0];
-					$this->_nodelist = array();
+					$this->nodelist = array();
 
 				} else {
 					throw new LiquidException("Syntax Error in tag 'case' - Valid when condition: when [condition]"); // harry
@@ -107,8 +109,8 @@ class TagCase extends Decision
 				// push the last nodelist onto the stack and prepare to recieve the else nodes
 				$this->push_nodelist();
 				$this->right = null;
-				$this->elseNodelist = & $this->_nodelist;
-				$this->_nodelist = array();
+				$this->elseNodelist = & $this->nodelist;
+				$this->nodelist = array();
 				break;
 
 			default:
@@ -118,12 +120,11 @@ class TagCase extends Decision
 
 	/**
 	 * Pushes the current right value and nodelist into the nodelist stack
-	 *
 	 */
 	public function push_nodelist() {
 		if (!is_null($this->right)) {
 			$this->nodelists[] = array(
-				$this->right, $this->_nodelist
+				$this->right, $this->nodelist
 			);
 		}
 	}
@@ -132,6 +133,8 @@ class TagCase extends Decision
 	 * Renders the node
 	 *
 	 * @param Context $context
+	 *
+	 * @return string
 	 */
 	public function render(&$context) {
 		$output = ''; // array();
@@ -140,7 +143,7 @@ class TagCase extends Decision
 		foreach ($this->nodelists as $data) {
 			list($right, $nodelist) = $data;
 
-			if ($this->_equalVariables($this->left, $right, $context)) {
+			if ($this->equalVariables($this->left, $right, $context)) {
 				$run_else_block = false;
 
 				$context->push();

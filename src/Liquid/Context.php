@@ -12,7 +12,7 @@ class Context
 	 *
 	 * @var array
 	 */
-	private $_assigns;
+	private $assigns;
 
 	/**
 	 * Registers for non-variable state data
@@ -26,7 +26,7 @@ class Context
 	 *
 	 * @var Filterbank
 	 */
-	private $_filterbank;
+	private $filterbank;
 
 	/**
 	 * Global scopes
@@ -41,14 +41,10 @@ class Context
 	 * @param array $assigns
 	 * @param array $registers
 	 */
-	public function __construct($assigns = null, $registers = array()) {
-		$this->_assigns = (isset($assigns)) ? array(
-			$assigns
-		) : array(
-			array()
-		);
+	public function __construct(array $assigns = array(), array $registers = array()) {
+		$this->assigns = array($assigns);
 		$this->registers = $registers;
-		$this->_filterbank = new Filterbank($this);
+		$this->filterbank = new Filterbank($this);
 	}
 
 	/**
@@ -57,7 +53,7 @@ class Context
 	 * @param mixed $filter
 	 */
 	public function addFilters($filter) {
-		$this->_filterbank->addFilter($filter);
+		$this->filterbank->addFilter($filter);
 	}
 
 	/**
@@ -69,8 +65,8 @@ class Context
 	 *
 	 * @return string
 	 */
-	public function invoke($name, $value, $args = null) {
-		return $this->_filterbank->invoke($name, $value, $args);
+	public function invoke($name, $value, array $args = array()) {
+		return $this->filterbank->invoke($name, $value, $args);
 	}
 
 	/**
@@ -79,7 +75,7 @@ class Context
 	 * @param array $newAssigns
 	 */
 	public function merge($newAssigns) {
-		$this->_assigns[0] = array_merge($this->_assigns[0], $newAssigns);
+		$this->assigns[0] = array_merge($this->assigns[0], $newAssigns);
 	}
 
 	/**
@@ -88,24 +84,27 @@ class Context
 	 * @return bool
 	 */
 	public function push() {
-		array_unshift($this->_assigns, array());
+		array_unshift($this->assigns, array());
 		return true;
 	}
 
 	/**
 	 * Pops the current scope from the stack.
 	 *
+	 * @throws LiquidException
 	 * @return bool
 	 */
 	public function pop() {
-		if (count($this->_assigns) == 1) {
+		if (count($this->assigns) == 1) {
 			throw new LiquidException('No elements to pop');
 		}
 
-		array_shift($this->_assigns);
+		array_shift($this->assigns);
 	}
 
 	/**
+	 * todo: ArrayAccess?
+	 *
 	 * Replaces []
 	 *
 	 * @param string
@@ -125,11 +124,12 @@ class Context
 	 */
 	public function set($key, $value, $global = false) {
 		if ($global) {
-			for ($i = 0; $i < count($this->_assigns); $i++) {
-				$this->_assigns[$i][$key] = $value;
+			for ($i = 0; $i < count($this->assigns); $i++) {
+				$this->assigns[$i][$key] = $value;
 			}
-		} else
-			$this->_assigns[0][$key] = $value;
+		} else {
+			$this->assigns[0][$key] = $value;
+		}
 	}
 
 	/**
@@ -150,10 +150,11 @@ class Context
 	 *
 	 * @param string $key
 	 *
+	 * @throws LiquidException
 	 * @return mixed
 	 */
 	public function resolve($key) {
-		// this shouldn't happen
+		// This shouldn't happen
 		if (is_array($key)) {
 			throw new LiquidException("Cannot resolve arrays as key");
 		}
@@ -203,16 +204,19 @@ class Context
 			}
 		}
 
-		foreach ($this->_assigns as $scope) {
+		foreach ($this->assigns as $scope) {
 			if (array_key_exists($key, $scope)) {
 				$obj = $scope[$key];
 
-				if ($obj instanceof Drop)
+				if ($obj instanceof Drop) {
 					$obj->setContext($this);
+				}
 
 				return $obj;
 			}
 		}
+
+		return null;
 	}
 
 	/**
@@ -220,10 +224,13 @@ class Context
 	 *
 	 * @param string $key
 	 *
+	 * @throws LiquidException
 	 * @return mixed
+	 *
+	 * todo: return type
 	 */
 	public function variable($key) {
-		/* Support [0] style array indicies */
+		// Support [0] style array indicies
 		if (preg_match("|\[[0-9]+\]|", $key)) {
 			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
 		}
@@ -239,63 +246,62 @@ class Context
 			$object = $object->toLiquid();
 		}
 
-		if (!is_null($object)) {
-			while (count($parts) > 0) {
-				if ($object instanceof Drop)
-					$object->setContext($this);
+		if ($object == null) {
+			return null;
+		}
 
-				$nextPartName = array_shift($parts);
+		while (count($parts) > 0) {
+			if ($object instanceof Drop) {
+				$object->setContext($this);
+			}
 
-				if (is_array($object)) {
-					// if the last part of the context variable is .size we just return the count
-					if ($nextPartName == 'size' && count($parts) == 0 && !array_key_exists('size', $object)) {
-						return count($object);
-					}
+			$nextPartName = array_shift($parts);
 
-					if (array_key_exists($nextPartName, $object)) {
-						$object = $object[$nextPartName];
-					} else {
+			if (is_array($object)) {
+				// if the last part of the context variable is .size we just return the count
+				if ($nextPartName == 'size' && count($parts) == 0 && !array_key_exists('size', $object)) {
+					return count($object);
+				}
+
+				if (array_key_exists($nextPartName, $object)) {
+					$object = $object[$nextPartName];
+				} else {
+					return null;
+				}
+
+			} elseif (is_object($object)) {
+				if ($object instanceof Drop) {
+					// if the object is a drop, make sure it supports the given method
+					if (!$object->hasKey($nextPartName)) {
 						return null;
 					}
 
-				} elseif (is_object($object)) {
-					if ($object instanceof Drop) {
-						// if the object is a drop, make sure it supports the given method
-						if (!$object->hasKey($nextPartName)) {
-							return null;
-						}
-
-						// php4 doesn't support array access, so we have
-						// to use the invoke method instead
-						$object = $object->invokeDrop($nextPartName);
-
-					} elseif (method_exists($object, Liquid::LIQUID_HAS_PROPERTY_METHOD)) {
-
-						if (!call_user_method(Liquid::LIQUID_HAS_PROPERTY_METHOD, $object, $nextPartName)) {
-							return null;
-						}
-
-						$object = call_user_method(Liquid::LIQUID_GET_PROPERTY_METHOD, $object, $nextPartName);
-
-
-					} else {
-						// if it's just a regular object, attempt to access a property
-						if (!property_exists($object, $nextPartName)) {
-							return null;
-						}
-
-						$object = $object->$nextPartName;
+					// php4 doesn't support array access, so we have
+					// to use the invoke method instead
+					$object = $object->invokeDrop($nextPartName);
+				} elseif (method_exists($object, Liquid::LIQUID_HAS_PROPERTY_METHOD)) {
+					// todo: remove deprecated method
+					if (!call_user_method(Liquid::LIQUID_HAS_PROPERTY_METHOD, $object, $nextPartName)) {
+						return null;
 					}
-				}
 
-				if (is_object($object) && method_exists($object, 'toLiquid')) {
-					$object = $object->toLiquid();
+					// todo: remove deprecated method
+					$object = call_user_method(Liquid::LIQUID_GET_PROPERTY_METHOD, $object, $nextPartName);
+				} else {
+					// if it's just a regular object, attempt to access a property
+					if (!property_exists($object, $nextPartName)) {
+						return null;
+					}
+
+					$object = $object->$nextPartName;
 				}
 			}
 
-			return $object;
-		} else {
-			return null;
+			if (is_object($object) && method_exists($object, 'toLiquid')) {
+				$object = $object->toLiquid();
+			}
 		}
+
+		return $object;
 	}
 }

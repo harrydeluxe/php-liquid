@@ -6,56 +6,56 @@ use Liquid\Liquid;
 use Liquid\Context;
 use Liquid\LiquidException;
 use Liquid\Regexp;
+use Liquid\Variable;
 
 /**
  * Cycles between a list of values; calls to the tag will return each value in turn
  *
- * @example
- * {%cycle "one", "two"%} {%cycle "one", "two"%} {%cycle "one", "two"%}
+ * Example:
+ *     {%cycle "one", "two"%} {%cycle "one", "two"%} {%cycle "one", "two"%}
  *
- * this will return:
- * one two one
+ *     this will return:
+ *     one two one
  *
- * Cycles can also be named, to differentiate between multiple cycle with the same values:
- * {%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %} {%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %}
+ *     Cycles can also be named, to differentiate between multiple cycle with the same values:
+ *     {%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %} {%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %}
  *
- * will return
- * one one two two
- *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ *     will return
+ *     one one two two
  */
 class Cycle extends AbstractTag
 {
 	/**
 	 * @var string The name of the cycle; if none is given one is created using the value list
 	 */
-	private $_name;
+	private $name;
 
 	/**
-	 * @var array The variables to cycle between
+	 * @var Variable[] The variables to cycle between
 	 */
-	private $_variables;
+	private $variables = array();
 
 	/**
 	 * Constructor
 	 *
 	 * @param string $markup
 	 * @param array $tokens
+	 * @param \Liquid\BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		$simpleSyntax = new Regexp("/" . Liquid::LIQUID_QUOTED_FRAGMENT . "/");
 		$namedSyntax = new Regexp("/(" . Liquid::LIQUID_QUOTED_FRAGMENT . ")\s*\:\s*(.*)/");
 
 		if ($namedSyntax->match($markup)) {
-			$this->_variables = $this->_variablesFromString($namedSyntax->matches[2]);
-			$this->_name = $namedSyntax->matches[1];
+			$this->variables = $this->variablesFromString($namedSyntax->matches[2]);
+			$this->name = $namedSyntax->matches[1];
 		} elseif ($simpleSyntax->match($markup)) {
-			$this->_variables = $this->_variablesFromString($markup);
-			$this->_name = "'" . implode($this->_variables) . "'";
+			$this->variables = $this->variablesFromString($markup);
+			$this->name = "'" . implode($this->variables) . "'";
 		} else {
 			throw new LiquidException("Syntax Error in 'cycle' - Valid syntax: cycle [name :] var [, var2, var3 ...]");
 		}
@@ -70,7 +70,7 @@ class Cycle extends AbstractTag
 	public function render(&$context) {
 		$context->push();
 
-		$key = $context->get($this->_name);
+		$key = $context->get($this->name);
 
 		if (isset($context->registers['cycle'][$key])) {
 			$iteration = $context->registers['cycle'][$key];
@@ -78,11 +78,11 @@ class Cycle extends AbstractTag
 			$iteration = 0;
 		}
 
-		$result = $context->get($this->_variables[$iteration]);
+		$result = $context->get($this->variables[$iteration]);
 
 		$iteration += 1;
 
-		if ($iteration >= count($this->_variables)) {
+		if ($iteration >= count($this->variables)) {
 			$iteration = 0;
 		}
 
@@ -100,7 +100,7 @@ class Cycle extends AbstractTag
 	 *
 	 * @return array;
 	 */
-	private function _variablesFromString($markup) {
+	private function variablesFromString($markup) {
 		$regexp = new Regexp('/\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')\s*/');
 		$parts = explode(',', $markup);
 		$result = array();

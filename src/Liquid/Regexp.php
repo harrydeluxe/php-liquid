@@ -30,7 +30,9 @@ class Regexp
 	 * @return Regexp
 	 */
 	public function __construct($pattern) {
-		$this->pattern = (substr($pattern, '0', 1) != '/') ? '/' . $this->quote($pattern) . '/' : $pattern;
+		$this->pattern = (substr($pattern, '0', 1) != '/')
+			? '/' . $this->quote($pattern) . '/'
+			: $pattern;
 	}
 
 	/**
@@ -52,7 +54,7 @@ class Regexp
 	 * @return array
 	 */
 	public function scan($string) {
-		$result = preg_match_all($this->pattern, $string, $matches);
+		preg_match_all($this->pattern, $string, $matches);
 
 		if (count($matches) == 1) {
 			return $matches[0];

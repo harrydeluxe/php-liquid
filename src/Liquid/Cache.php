@@ -7,19 +7,23 @@ namespace Liquid;
  */
 abstract class Cache
 {
-	protected $_expire = 3600;
+	/** @var int */
+	protected $expire = 3600;
+	/** @var string */
+	protected $prefix = 'liquid_';
+	/** @var string  */
+	protected $path;
 
-	protected $_prefix = 'liquid_';
-
-	protected $_path;
-
+	/**
+	 * @param array $options
+	 */
 	public function __construct($options = array()) {
 		if (isset($options['cache_expire'])) {
-			$this->_expire = $options['cache_expire'];
+			$this->expire = $options['cache_expire'];
 		}
 
 		if (isset($options['cache_prefix'])) {
-			$this->_prefix = $options['cache_prefix'];
+			$this->prefix = $options['cache_prefix'];
 		}
 	}
 

@@ -10,12 +10,6 @@ use Liquid\Regexp;
 
 /**
  * Quickly create a table from a collection
- *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
  */
 class TagTablerow extends AbstractBlock
 {
@@ -46,6 +40,10 @@ class TagTablerow extends AbstractBlock
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		parent::__construct($markup, $tokens, $fileSystem);
@@ -79,15 +77,15 @@ class TagTablerow extends AbstractBlock
 		// discard keys
 		$collection = array_values($collection);
 
-		if (isset($this->_attributes['limit']) || isset($this->_attributes['offset'])) {
-			$limit = $context->get($this->_attributes['limit']);
-			$offset = $context->get($this->_attributes['offset']);
+		if (isset($this->attributes['limit']) || isset($this->attributes['offset'])) {
+			$limit = $context->get($this->attributes['limit']);
+			$offset = $context->get($this->attributes['offset']);
 			$collection = array_slice($collection, $offset, $limit);
 		}
 
 		$length = count($collection);
 
-		$cols = $context->get($this->_attributes['cols']);
+		$cols = $context->get($this->attributes['cols']);
 
 		$row = 1;
 		$col = 0;
@@ -108,7 +106,7 @@ class TagTablerow extends AbstractBlock
 				'last' => (int)($index == $length - 1)
 			));
 
-			$result .= "<td class=\"col" . (++$col) . "\">" . $this->renderAll($this->_nodelist, $context) . "</td>";
+			$result .= "<td class=\"col" . (++$col) . "\">" . $this->renderAll($this->nodelist, $context) . "</td>";
 
 			if ($col == $cols && !($index == $length - 1)) {
 				$col = 0;

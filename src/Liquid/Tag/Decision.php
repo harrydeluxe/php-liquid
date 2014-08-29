@@ -29,10 +29,11 @@ class Decision extends AbstractBlock
 	 *
 	 * @param mixed $value
 	 *
+	 * @throws \Liquid\LiquidException
 	 * @return string
 	 */
-	private function _stringValue($value) {
-		// objects should have a to_string a value to compare to
+	private function stringValue($value) {
+		// Objects should have a to_string a value to compare to
 		if (is_object($value)) {
 			if (method_exists($value, 'to_string')) {
 				$value = $value->to_string();
@@ -42,7 +43,7 @@ class Decision extends AbstractBlock
 
 		}
 
-		// arrays simply return true
+		// Arrays simply return true
 		if (is_array($value)) {
 			return $value;
 		}
@@ -58,10 +59,12 @@ class Decision extends AbstractBlock
 	 * @param Context $context
 	 *
 	 * @return bool
+	 *
+	 *  todo: reference
 	 */
-	protected function _equalVariables($left, $right, &$context) {
-		$left = $this->_stringValue($context->get($left));
-		$right = $this->_stringValue($context->get($right));
+	protected function equalVariables($left, $right, &$context) {
+		$left = $this->stringValue($context->get($left));
+		$right = $this->stringValue($context->get($right));
 
 		return ($left == $right);
 
@@ -75,11 +78,14 @@ class Decision extends AbstractBlock
 	 * @param string $op
 	 * @param Context $context
 	 *
+	 * @throws \Liquid\LiquidException
 	 * @return bool
+	 *
+	 * todo: reference
 	 */
-	protected function _interpretCondition($left, $right, $op = null, &$context) {
+	protected function interpretCondition($left, $right, $op = null, &$context) {
 		if (is_null($op)) {
-			$value = $this->_stringValue($context->get($left));
+			$value = $this->stringValue($context->get($left));
 			return $value;
 		}
 
@@ -96,8 +102,8 @@ class Decision extends AbstractBlock
 			$left = $context->get($left);
 			$right = $context->get($right);
 
-			$left = $this->_stringValue($left);
-			$right = $this->_stringValue($right);
+			$left = $this->stringValue($left);
+			$right = $this->stringValue($right);
 		}
 
 		// special rules for null values

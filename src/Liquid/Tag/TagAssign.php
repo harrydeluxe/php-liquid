@@ -11,27 +11,22 @@ use Liquid\Context;
 /**
  * Performs an assignment of one variable to another
  *
- * @example
- * {% assign var = var %}
- * {% assign var = "hello" | upcase %}
+ * Example:
  *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ *     {% assign var = var %}
+ *     {% assign var = "hello" | upcase %}
  */
 class TagAssign extends AbstractTag
 {
 	/**
 	 * @var string The variable to assign from
 	 */
-	private $_from;
+	private $from;
 
 	/**
 	 * @var string The variable to assign to
 	 */
-	private $_to;
+	private $to;
 
 	/**
 	 * Constructor
@@ -39,6 +34,10 @@ class TagAssign extends AbstractTag
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 *  todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		$syntaxRegexp = new Regexp('/(\w+)\s*=\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . '+)/');
@@ -60,15 +59,13 @@ class TagAssign extends AbstractTag
 				$filterArgumentRegexp->match_all($filter);
 				$matches = Liquid::array_flatten($filterArgumentRegexp->matches[1]);
 
-				array_push($this->filters, array(
-					$filtername, $matches
-				));
+				array_push($this->filters, array($filtername, $matches));
 			}
 		}
 
 		if ($syntaxRegexp->match($markup)) {
-			$this->_to = $syntaxRegexp->matches[1];
-			$this->_from = $syntaxRegexp->matches[2];
+			$this->to = $syntaxRegexp->matches[1];
+			$this->from = $syntaxRegexp->matches[2];
 		} else {
 			throw new LiquidException("Syntax Error in 'assign' - Valid syntax: assign [var] = [source]");
 		}
@@ -78,9 +75,11 @@ class TagAssign extends AbstractTag
 	 * Renders the tag
 	 *
 	 * @param Context $context
+	 *
+	 * @return string|void
 	 */
 	public function render(&$context) {
-		$output = $context->get($this->_from);
+		$output = $context->get($this->from);
 
 		foreach ($this->filters as $filter) {
 			list($filtername, $filterArgKeys) = $filter;
@@ -94,6 +93,6 @@ class TagAssign extends AbstractTag
 			$output = $context->invoke($filtername, $output, $filterArgValues);
 		}
 
-		$context->set($this->_to, $output, true);
+		$context->set($this->to, $output, true);
 	}
 }

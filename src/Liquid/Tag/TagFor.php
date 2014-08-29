@@ -11,33 +11,28 @@ use Liquid\Regexp;
 /**
  * Loops over an array, assigning the current value to a given variable
  *
- * @example
- * {%for item in array%} {{item}} {%endfor%}
+ * Example:
  *
- * With an array of 1, 2, 3, 4, will return 1 2 3 4
+ *     {%for item in array%} {{item}} {%endfor%}
  *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek,
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://harrydeluxe.mit-license.org
+ *     With an array of 1, 2, 3, 4, will return 1 2 3 4
  */
 class TagFor extends AbstractBlock
 {
 	/**
 	 * @var array The collection to loop over
 	 */
-	private $_collectionName;
+	private $collectionName;
 
 	/**
 	 * @var string The variable name to assign collection elements to
 	 */
-	private $_variableName;
+	private $variableName;
 
 	/**
 	 * @var string The name of the loop, which is a compound of the collection and variable names
 	 */
-	private $_name;
+	private $name;
 
 	/**
 	 * Constructor
@@ -45,6 +40,10 @@ class TagFor extends AbstractBlock
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		parent::__construct($markup, $tokens, $fileSystem);
@@ -52,9 +51,9 @@ class TagFor extends AbstractBlock
 		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
 
 		if ($syntaxRegexp->match($markup)) {
-			$this->_variableName = $syntaxRegexp->matches[1];
-			$this->_collectionName = $syntaxRegexp->matches[2];
-			$this->_name = $syntaxRegexp->matches[1] . '-' . $syntaxRegexp->matches[2];
+			$this->variableName = $syntaxRegexp->matches[1];
+			$this->collectionName = $syntaxRegexp->matches[2];
+			$this->name = $syntaxRegexp->matches[1] . '-' . $syntaxRegexp->matches[2];
 			$this->extractAttributes($markup);
 		} else {
 			throw new LiquidException("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]");
@@ -65,13 +64,15 @@ class TagFor extends AbstractBlock
 	 * Renders the tag
 	 *
 	 * @param Context $context
+	 *
+	 * @return null|string
 	 */
 	public function render(&$context) {
 		if (!isset($context->registers['for'])) {
 			$context->registers['for'] = array();
 		}
 
-		$collection = $context->get($this->_collectionName);
+		$collection = $context->get($this->collectionName);
 
 		if (is_null($collection) || !is_array($collection) || count($collection) == 0) {
 			return '';
@@ -81,15 +82,14 @@ class TagFor extends AbstractBlock
 			0, count($collection)
 		);
 
-		if (isset($this->_attributes['limit']) || isset($this->_attributes['offset'])) {
+		if (isset($this->attributes['limit']) || isset($this->attributes['offset'])) {
 			$offset = 0;
 
-			if (isset($this->_attributes['offset'])) {
-				$offset = ($this->_attributes['offset'] == 'continue') ? $context->registers['for'][$this->_name] : $context->get($this->_attributes['offset']);
+			if (isset($this->attributes['offset'])) {
+				$offset = ($this->attributes['offset'] == 'continue') ? $context->registers['for'][$this->name] : $context->get($this->attributes['offset']);
 			}
 
-			//$limit = $context->get($this->_attributes['limit']);
-			$limit = (isset($this->_attributes['limit'])) ? $context->get($this->_attributes['limit']) : null;
+			$limit = (isset($this->attributes['limit'])) ? $context->get($this->attributes['limit']) : null;
 
 			$range_end = $limit ? $limit : count($collection) - $offset;
 
@@ -97,7 +97,7 @@ class TagFor extends AbstractBlock
 				$offset, $range_end
 			);
 
-			$context->registers['for'][$this->_name] = $range_end + $offset;
+			$context->registers['for'][$this->name] = $range_end + $offset;
 
 		}
 
@@ -113,17 +113,14 @@ class TagFor extends AbstractBlock
 
 		$length = count($segment);
 
-		/**
-		 * @todo If $segment keys are not integer, forloop not work
-		 * array_values is only a little help without being tested.
-		 */
+		 // todo: If $segment keys are not integer, forloop not work
+		 // array_values is only a little help without being tested.
 		$segment = array_values($segment);
 
-
 		foreach ($segment as $index => $item) {
-			$context->set($this->_variableName, $item);
+			$context->set($this->variableName, $item);
 			$context->set('forloop', array(
-				'name' => $this->_name,
+				'name' => $this->name,
 				'length' => $length,
 				'index' => $index + 1,
 				'index0' => $index,
@@ -133,7 +130,7 @@ class TagFor extends AbstractBlock
 				'last' => (int)($index == $length - 1)
 			));
 
-			$result .= $this->renderAll($this->_nodelist, $context);
+			$result .= $this->renderAll($this->nodelist, $context);
 		}
 
 		$context->pop();

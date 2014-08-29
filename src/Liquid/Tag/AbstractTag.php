@@ -17,79 +17,84 @@ abstract class AbstractTag
 	 *
 	 * @var string
 	 */
-	protected $_markup;
+	protected $markup;
 
 	/**
 	 * Filesystem object is used to load included template files
 	 *
 	 * @var BlankFileSystem
 	 */
-	protected $_fileSystem;
+	protected $fileSystem;
 
 	/**
 	 * Additional attributes
 	 *
 	 * @var array
 	 */
-	protected $_attributes;
+	protected $attributes = array();
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
 	 *
-	 * @return AbstractTag
+	 * todo: return?
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
-		$this->_markup = $markup;
-		$this->_fileSystem = $fileSystem;
+		$this->markup = $markup;
+		$this->fileSystem = $fileSystem;
 		return $this->parse($tokens);
 	}
 
 	/**
-	 * Parse the given tokens
+	 * Parse the given tokens.
 	 *
 	 * @param array $tokens
+	 *
+	 * todo: reference? empty or abstract?
 	 */
 	public function parse(&$tokens) {
+		// Do nothing by default
 	}
 
 	/**
-	 * Extracts tag attributes from a markup string
+	 * Render the tag with the given context.
+	 *
+	 * @param Context $context
+	 *
+	 * @return string
+	 *
+	 * todo: reference, abstract?
+	 */
+	public function render(&$context) {
+		return '';
+	}
+
+	/**
+	 * Extracts tag attributes from a markup string.
 	 *
 	 * @param string $markup
 	 */
-	public function extractAttributes($markup) {
-		$this->_attributes = array();
+	protected function extractAttributes($markup) {
+		$this->attributes = array();
 
 		$attribute_regexp = new Regexp(Liquid::LIQUID_TAG_ATTRIBUTES);
 
 		$matches = $attribute_regexp->scan($markup);
 
 		foreach ($matches as $match) {
-			$this->_attributes[$match[0]] = $match[1];
+			$this->attributes[$match[0]] = $match[1];
 		}
 	}
 
 	/**
-	 * Returns the name of the tag
+	 * Returns the name of the tag.
 	 *
 	 * @return string
 	 */
-	public function name() {
+	protected function name() {
 		return strtolower(get_class($this));
-	}
-
-	/**
-	 * Render the tag with the given context
-	 *
-	 * @param Context $context
-	 *
-	 * @return string
-	 */
-	public function render(&$context) {
-		return '';
 	}
 }

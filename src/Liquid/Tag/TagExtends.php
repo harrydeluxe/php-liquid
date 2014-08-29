@@ -12,29 +12,26 @@ use Liquid\Template;
 /**
  * Extends a template by another one.
  *
- * @example
- * {% extends "base" %}
+ * Example:
  *
- * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek
- * @license http://harrydeluxe.mit-license.org
+ *     {% extends "base" %}
  */
 class TagExtends extends AbstractTag
 {
 	/**
 	 * @var string The name of the template
 	 */
-	private $_templateName;
+	private $templateName;
 
 	/**
 	 * @var Document The Document that represents the included template
 	 */
-	private $_document;
+	private $document;
 
 	/**
 	 * @var string The Source Hash
 	 */
-	protected $_hash;
+	protected $hash;
 
 	/**
 	 * Constructor
@@ -42,12 +39,16 @@ class TagExtends extends AbstractTag
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
+	 *
+	 * @throws \Liquid\LiquidException
+	 *
+	 * todo: reference
 	 */
 	public function __construct($markup, &$tokens, &$fileSystem) {
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\')?/');
 
 		if ($regex->match($markup)) {
-			$this->_templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
+			$this->templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
 		} else {
 			throw new LiquidException("Error in tag 'extends' - Valid syntax: extends '[template name]'");
 		}
@@ -55,7 +56,12 @@ class TagExtends extends AbstractTag
 		parent::__construct($markup, $tokens, $fileSystem);
 	}
 
-	private function _findBlocks($tokens) {
+	/**
+	 * @param array $tokens
+	 *
+	 * @return array
+	 */
+	private function findBlocks(array $tokens) {
 		$blockstartRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . Liquid::LIQUID_TAG_END . '$/');
 		$blockendRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '\s*endblock\s*?' . Liquid::LIQUID_TAG_END . '$/');
 
@@ -82,14 +88,16 @@ class TagExtends extends AbstractTag
 	 * Parses the tokens
 	 *
 	 * @param array $tokens
+	 *
+	 * @throws \Liquid\LiquidException
 	 */
 	public function parse(&$tokens) {
-		if (!isset($this->_fileSystem)) {
+		if (!isset($this->fileSystem)) {
 			throw new LiquidException("No file system");
 		}
 
 		// read the source of the template and create a new sub document
-		$source = $this->_fileSystem->readTemplateFile($this->_templateName);
+		$source = $this->fileSystem->readTemplateFile($this->templateName);
 
 		// tokens in this new document
 		$maintokens = Template::tokenize($source);
@@ -104,12 +112,11 @@ class TagExtends extends AbstractTag
 		if (isset($m)) {
 			$rest = array_merge($maintokens, $tokens);
 		} else {
-			$childtokens = $this->_findBlocks($tokens);
+			$childtokens = $this->findBlocks($tokens);
 
 			$blockstartRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '\s*block (\w+)\s*(.*)?' . Liquid::LIQUID_TAG_END . '$/');
 			$blockendRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '\s*endblock\s*?' . Liquid::LIQUID_TAG_END . '$/');
 
-			$b = array();
 			$name = null;
 
 			$rest = array();
@@ -137,36 +144,38 @@ class TagExtends extends AbstractTag
 			}
 		}
 
-		$this->_hash = md5($source);
+		$this->hash = md5($source);
 
 		$cache = Template::getCache();
 
 		if (isset($cache)) {
-			if (($this->_document = $cache->read($this->_hash)) != false && $this->_document->checkIncludes() != true) {
+			if (($this->document = $cache->read($this->hash)) != false && $this->document->checkIncludes() != true) {
 			} else {
-				$this->_document = new Document($rest, $this->_fileSystem);
-				$cache->write($this->_hash, $this->_document);
+				$this->document = new Document($rest, $this->fileSystem);
+				$cache->write($this->hash, $this->document);
 			}
 		} else {
-			$this->_document = new Document($rest, $this->_fileSystem);
+			$this->document = new Document($rest, $this->fileSystem);
 		}
 	}
 
 	/**
-	 * check for cached includes
+	 * Check for cached includes
 	 *
-	 * @return string
+	 * @return boolean
 	 */
 	public function checkIncludes() {
 		$cache = Template::getCache();
 
-		if ($this->_document->checkIncludes() == true)
+		if ($this->document->checkIncludes() == true) {
 			return true;
+		}
 
-		$source = $this->_fileSystem->readTemplateFile($this->_templateName);
+		$source = $this->fileSystem->readTemplateFile($this->templateName);
 
-		if ($cache->exists(md5($source)) && $this->_hash == md5($source))
+		if ($cache->exists(md5($source)) && $this->hash == md5($source)) {
 			return false;
+		}
 
 		return true;
 	}
@@ -175,10 +184,12 @@ class TagExtends extends AbstractTag
 	 * Renders the node
 	 *
 	 * @param Context $context
+	 *
+	 * @return string
 	 */
 	public function render(&$context) {
 		$context->push();
-		$result = $this->_document->render($context);
+		$result = $this->document->render($context);
 		$context->pop();
 		return $result;
 	}

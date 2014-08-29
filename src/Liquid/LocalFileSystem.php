@@ -15,17 +15,15 @@ class LocalFileSystem extends BlankFileSystem
 	 *
 	 * @var string
 	 */
-	private $_root;
+	private $root;
 
 	/**
 	 * Constructor
 	 *
 	 * @param string $root The root path for templates
-	 *
-	 * @return LocalFileSystem
 	 */
 	public function __construct($root) {
-		$this->_root = $root;
+		$this->root = $root;
 	}
 
 	/**
@@ -33,12 +31,14 @@ class LocalFileSystem extends BlankFileSystem
 	 *
 	 * @param string $templatePath
 	 *
-	 * @return string
+	 * @throws LiquidException
+	 * @return string template content
 	 */
 	public function readTemplateFile($templatePath) {
 		if (!($fullPath = $this->fullPath($templatePath))) {
 			throw new LiquidException("No such template '$templatePath'");
 		}
+
 		return file_get_contents($fullPath);
 	}
 
@@ -47,6 +47,7 @@ class LocalFileSystem extends BlankFileSystem
 	 *
 	 * @param string $templatePath
 	 *
+	 * @throws LiquidException
 	 * @return string
 	 */
 	public function fullPath($templatePath) {
@@ -60,15 +61,15 @@ class LocalFileSystem extends BlankFileSystem
 
 		if (strpos($templatePath, '/') !== false) {
 			$fullPath = Liquid::LIQUID_INCLUDE_ALLOW_EXT
-				? $this->_root . dirname($templatePath) . '/' . basename($templatePath)
-				: $this->_root . dirname($templatePath) . '/' . Liquid::LIQUID_INCLUDE_PREFIX . basename($templatePath) . '.' . Liquid::LIQUID_INCLUDE_SUFFIX;
+				? $this->root . dirname($templatePath) . '/' . basename($templatePath)
+				: $this->root . dirname($templatePath) . '/' . Liquid::LIQUID_INCLUDE_PREFIX . basename($templatePath) . '.' . Liquid::LIQUID_INCLUDE_SUFFIX;
 		} else {
 			$fullPath = Liquid::LIQUID_INCLUDE_ALLOW_EXT
-				? $this->_root . $templatePath
-				: $this->_root . Liquid::LIQUID_INCLUDE_PREFIX . $templatePath . '.' . Liquid::LIQUID_INCLUDE_SUFFIX;
+				? $this->root . $templatePath
+				: $this->root . Liquid::LIQUID_INCLUDE_PREFIX . $templatePath . '.' . Liquid::LIQUID_INCLUDE_SUFFIX;
 		}
 
-		$rootRegex = new Regexp('/' . preg_quote(realpath($this->_root), '/') . '/');
+		$rootRegex = new Regexp('/' . preg_quote(realpath($this->root), '/') . '/');
 
 		if (!$rootRegex->match(realpath($fullPath))) {
 			throw new LiquidException("Illegal template path '" . realpath($fullPath) . "'");
