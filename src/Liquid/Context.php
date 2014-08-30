@@ -226,8 +226,6 @@ class Context
 	 *
 	 * @throws LiquidException
 	 * @return mixed
-	 *
-	 * todo: return type
 	 */
 	public function variable($key) {
 		// Support [0] style array indicies

@@ -63,8 +63,6 @@ abstract class AbstractTag
 	 * @param Context $context
 	 *
 	 * @return string
-	 *
-	 * todo: abstract?
 	 */
 	public function render(Context $context) {
 		return '';

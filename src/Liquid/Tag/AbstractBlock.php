@@ -32,7 +32,7 @@ class AbstractBlock extends AbstractTag
 	 * @param array $tokens
 	 *
 	 * @throws \Liquid\LiquidException
-	 * @return array|bool|void
+	 * @return void
 	 */
 	public function parse(array $tokens) {
 		$startRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '/');
@@ -42,7 +42,7 @@ class AbstractBlock extends AbstractTag
 		$this->nodelist = array();
 
 		if (!is_array($tokens)) {
-			return array();
+			return;
 		}
 
 		$tags = Template::getTags();
@@ -54,23 +54,25 @@ class AbstractBlock extends AbstractTag
 				if ($tagRegexp->match($token)) {
 					// If we found the proper block delimitor just end parsing here and let the outer block proceed
 					if ($tagRegexp->matches[1] == $this->blockDelimiter()) {
-						return $this->endTag();
+						return;
 					}
 
+					$tagName = null;
 					if (array_key_exists($tagRegexp->matches[1], $tags)) {
 						$tagName = $tags[$tagRegexp->matches[1]];
 					} else {
-						$tagName = 'LiquidTag' . ucwords($tagRegexp->matches[1]);
-						// Search for a defined class of the right name, instead of searching in an array
-						$tagName = (Liquid::classExists($tagName) === true) ? $tagName : null;
+						$tagName = '\Liquid\Tag' . ucwords($tagRegexp->matches[1]);
+						$tagName = (class_exists($tagName) === true) ? $tagName : null;
 					}
 
-					if (class_exists($tagName)) {
+					if ($tagName !== null) {
 						$this->nodelist[] = new $tagName($tagRegexp->matches[2], $tokens, $this->fileSystem);
+						// todo: tag names
 						if ($tagRegexp->matches[1] == 'extends') {
-							return true;
+							return;
 						}
 					} else {
+						// todo: check this logic
 						$this->unknownTag($tagRegexp->matches[1], $tagRegexp->matches[2], $tokens);
 					}
 				} else {
@@ -86,8 +88,6 @@ class AbstractBlock extends AbstractTag
 		}
 
 		$this->assertMissingDelimitation();
-
-		// todo: return?
 	}
 
 	/**
@@ -122,8 +122,6 @@ class AbstractBlock extends AbstractTag
 
 	/**
 	 * An action to execute when the end tag is reached
-	 *
-	 * todo: return value
 	 */
 	protected function endTag() {
 		// Do nothing by default
@@ -133,14 +131,12 @@ class AbstractBlock extends AbstractTag
 	 * Handler for unknown tags
 	 *
 	 * @param string $tag
-	 * @param array $params
+	 * @param string $params
 	 * @param array $tokens
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	protected function unknownTag($tag, array $params, array $tokens) {
+	protected function unknownTag($tag, $params, array $tokens) {
 		switch ($tag) {
 			case 'else':
 				throw new LiquidException($this->blockName() . " does not expect else tag");

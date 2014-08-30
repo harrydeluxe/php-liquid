@@ -35,7 +35,7 @@ abstract class Drop
 	 *
 	 * @param string $method
 	 *
-	 * @return mixed
+	 * @return null
 	 */
 	protected function beforeMethod($method) {
 		return null;
@@ -71,8 +71,6 @@ abstract class Drop
 	 * @param string $name
 	 *
 	 * @return bool
-	 *
-	 * todo: need?
 	 */
 	public function hasKey($name) {
 		return true;
