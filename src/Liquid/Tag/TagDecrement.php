@@ -34,10 +34,8 @@ class TagDecrement extends AbstractTag
 	 * @param BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$syntax = new Regexp("/(" . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 
 		if ($syntax->match($markup)) {
@@ -54,15 +52,15 @@ class TagDecrement extends AbstractTag
 	 *
 	 * @return string|void
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		// if the value is not set in the environment check to see if it
 		// exists in the context, and if not set it to 0
 		if (!isset($context->environments[0][$this->toDecrement])) {
 			// check for a context value
-			$from_context = $context->get($this->toDecrement);
+			$fromContext = $context->get($this->toDecrement);
 
 			// we already have a value in the context
-			$context->environments[0][$this->toDecrement] = (null !== $from_context) ? $from_context : 0;
+			$context->environments[0][$this->toDecrement] = (null !== $fromContext) ? $fromContext : 0;
 		}
 
 		// decrement the environment value

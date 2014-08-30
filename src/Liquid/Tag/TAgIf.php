@@ -40,10 +40,8 @@ class TagIf extends Decision
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$this->nodelist = & $this->nodelistHolders[count($this->blocks)];
 
 		array_push($this->blocks, array('if', $markup, &$this->nodelist));
@@ -58,10 +56,11 @@ class TagIf extends Decision
 	 * @param array $params
 	 * @param array $tokens
 	 */
-	public function unknownTag($tag, $params, array &$tokens) {
+	public function unknownTag($tag, $params, array $tokens) {
 		// todo: tag names
 		if ($tag == 'else' || $tag == 'elsif') {
-			/* Update reference to nodelistHolder for this block */
+			// Update reference to nodelistHolder for this block
+			// todo: reference?
 			$this->nodelist = & $this->nodelistHolders[count($this->blocks) + 1];
 			$this->nodelistHolders[count($this->blocks) + 1] = array();
 
@@ -80,29 +79,29 @@ class TagIf extends Decision
 	 * @throws \Liquid\LiquidException
 	 * @return string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		$context->push();
 
 		$logicalRegex = new Regexp('/\s+(and|or)\s+/');
 		$conditionalRegex = new Regexp('/(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')\s*([=!<>a-z_]+)?\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')?/');
 
 		$result = '';
-
-		foreach ($this->blocks as $i => $block) {
+		foreach ($this->blocks as $block) {
 			if ($block[0] == 'else') {
 				$result = $this->renderAll($block[2], $context);
 
 				break;
 			}
 
+			// todo: tag names
 			if ($block[0] == 'if' || $block[0] == 'elsif') {
-				/* Extract logical operators */
+				// Extract logical operators
 				$logicalRegex->match($block[1]);
 
 				$logicalOperators = $logicalRegex->matches;
 				array_shift($logicalOperators);
 
-				/* Extract individual conditions */
+				// Extract individual conditions
 				$temp = $logicalRegex->split($block[1]);
 
 				$conditions = array();
@@ -124,7 +123,7 @@ class TagIf extends Decision
 				}
 
 				if (count($logicalOperators)) {
-					/* If statement contains and/or */
+					// If statement contains and/or
 					$display = true;
 
 					foreach ($logicalOperators as $k => $logicalOperator) {
@@ -136,7 +135,7 @@ class TagIf extends Decision
 					}
 
 				} else {
-					/* If statement is a single condition */
+					// If statement is a single condition
 					$display = $this->interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
 				}
 

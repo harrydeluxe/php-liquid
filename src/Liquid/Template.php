@@ -166,7 +166,7 @@ class Template
 	 *
 	 * @return string
 	 */
-	public function render(array $assigns = array(), $filters = null, $registers = null) {
+	public function render(array $assigns = array(), $filters = null, array $registers = array()) {
 		$context = new Context($assigns, $registers);
 
 		if (!is_null($filters)) {

@@ -39,13 +39,11 @@ abstract class AbstractTag
 	 * @param string $markup
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
-	 *
-	 * todo: return?
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$this->markup = $markup;
 		$this->fileSystem = $fileSystem;
-		return $this->parse($tokens);
+		$this->parse($tokens);
 	}
 
 	/**
@@ -53,9 +51,9 @@ abstract class AbstractTag
 	 *
 	 * @param array $tokens
 	 *
-	 * todo: reference? empty or abstract?
+	 * todo: empty or abstract?
 	 */
-	public function parse(&$tokens) {
+	public function parse(array $tokens) {
 		// Do nothing by default
 	}
 
@@ -66,9 +64,9 @@ abstract class AbstractTag
 	 *
 	 * @return string
 	 *
-	 * todo: reference, abstract?
+	 * todo: abstract?
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		return '';
 	}
 
@@ -80,9 +78,9 @@ abstract class AbstractTag
 	protected function extractAttributes($markup) {
 		$this->attributes = array();
 
-		$attribute_regexp = new Regexp(Liquid::LIQUID_TAG_ATTRIBUTES);
+		$attributeRegexp = new Regexp(Liquid::LIQUID_TAG_ATTRIBUTES);
 
-		$matches = $attribute_regexp->scan($markup);
+		$matches = $attributeRegexp->scan($markup);
 
 		foreach ($matches as $match) {
 			$this->attributes[$match[0]] = $match[1];

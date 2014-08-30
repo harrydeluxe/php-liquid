@@ -33,6 +33,7 @@ class Decision extends AbstractBlock
 	 * @return string
 	 */
 	private function stringValue($value) {
+		// todo: to_string?
 		// Objects should have a to_string a value to compare to
 		if (is_object($value)) {
 			if (method_exists($value, 'to_string')) {
@@ -59,15 +60,12 @@ class Decision extends AbstractBlock
 	 * @param Context $context
 	 *
 	 * @return bool
-	 *
-	 *  todo: reference
 	 */
-	protected function equalVariables($left, $right, &$context) {
+	protected function equalVariables($left, $right, Context $context) {
 		$left = $this->stringValue($context->get($left));
 		$right = $this->stringValue($context->get($right));
 
 		return ($left == $right);
-
 	}
 
 	/**
@@ -80,10 +78,9 @@ class Decision extends AbstractBlock
 	 *
 	 * @throws \Liquid\LiquidException
 	 * @return bool
-	 *
-	 * todo: reference
 	 */
-	protected function interpretCondition($left, $right, $op = null, &$context) {
+	protected function interpretCondition($left, $right, $op = null, Context $context) {
+		// todo: is_null or === null? which is faster?
 		if (is_null($op)) {
 			$value = $this->stringValue($context->get($left));
 			return $value;

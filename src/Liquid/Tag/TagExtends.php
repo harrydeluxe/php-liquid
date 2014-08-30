@@ -41,10 +41,8 @@ class TagExtends extends AbstractTag
 	 * @param BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\')?/');
 
 		if ($regex->match($markup)) {
@@ -75,7 +73,7 @@ class TagExtends extends AbstractTag
 			} else if ($blockendRegexp->match($token)) {
 				$name = null;
 			} else {
-				if (isset($name)) {
+				if ($name !== null) {
 					array_push($b[$name], $token);
 				}
 			}
@@ -91,8 +89,8 @@ class TagExtends extends AbstractTag
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function parse(&$tokens) {
-		if (!isset($this->fileSystem)) {
+	public function parse(array $tokens) {
+		if ($this->fileSystem === null) {
 			throw new LiquidException("No file system");
 		}
 
@@ -129,13 +127,15 @@ class TagExtends extends AbstractTag
 					if (isset($childtokens[$name])) {
 						$aufzeichnen = true;
 						array_push($rest, $maintokens[$i]);
-						foreach ($childtokens[$name] as $item)
+						foreach ($childtokens[$name] as $item) {
 							array_push($rest, $item);
+						}
 					}
 
 				}
-				if (!$aufzeichnen)
+				if (!$aufzeichnen) {
 					array_push($rest, $maintokens[$i]);
+				}
 
 				if ($blockendRegexp->match($maintokens[$i]) && $aufzeichnen === true) {
 					$aufzeichnen = false;
@@ -187,7 +187,7 @@ class TagExtends extends AbstractTag
 	 *
 	 * @return string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		$context->push();
 		$result = $this->document->render($context);
 		$context->pop();

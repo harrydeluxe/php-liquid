@@ -34,7 +34,7 @@ class AbstractBlock extends AbstractTag
 	 * @throws \Liquid\LiquidException
 	 * @return array|bool|void
 	 */
-	public function parse(&$tokens) {
+	public function parse(array $tokens) {
 		$startRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '/');
 		$tagRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '\s*(\w+)\s*(.*)?' . Liquid::LIQUID_TAG_END . '$/');
 		$variableStartRegexp = new Regexp('/^' . Liquid::LIQUID_VARIABLE_START . '/');
@@ -97,7 +97,7 @@ class AbstractBlock extends AbstractTag
 	 *
 	 * @return string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		return $this->renderAll($this->nodelist, $context);
 	}
 
@@ -109,9 +109,10 @@ class AbstractBlock extends AbstractTag
 	 *
 	 * @return string
 	 */
-	protected function renderAll(array $list, &$context) {
+	protected function renderAll(array $list, Context $context) {
 		$result = '';
 
+		// todo: token objects
 		foreach ($list as $token) {
 			$result .= (is_object($token) && method_exists($token, 'render')) ? $token->render($context) : $token;
 		}
@@ -139,7 +140,7 @@ class AbstractBlock extends AbstractTag
 	 *
 	 * todo: reference
 	 */
-	protected function unknownTag($tag, array $params, array &$tokens) {
+	protected function unknownTag($tag, array $params, array $tokens) {
 		switch ($tag) {
 			case 'else':
 				throw new LiquidException($this->blockName() . " does not expect else tag");

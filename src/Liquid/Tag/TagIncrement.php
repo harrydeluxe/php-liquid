@@ -34,10 +34,8 @@ class TagIncrement extends AbstractTag
 	 * @param BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$syntax = new Regexp("/(" . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
 
 		if ($syntax->match($markup)) {
@@ -54,8 +52,8 @@ class TagIncrement extends AbstractTag
 	 *
 	 * @return string|void
 	 */
-	public function render(&$context) {
-		// if the value is not set in the environment check to see if it
+	public function render(Context $context) {
+		// If the value is not set in the environment check to see if it
 		// exists in the context, and if not set it to -1
 		if (!isset($context->environments[0][$this->toIncrement])) {
 			// check for a context value
@@ -65,7 +63,7 @@ class TagIncrement extends AbstractTag
 			$context->environments[0][$this->toIncrement] = (null !== $from_context) ? $from_context : -1;
 		}
 
-		// increment the value
+		// Increment the value
 		$context->environments[0][$this->toIncrement]++;
 
 		return '';

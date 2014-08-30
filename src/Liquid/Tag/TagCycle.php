@@ -23,7 +23,7 @@ use Liquid\Variable;
  *     will return
  *     one one two two
  */
-class Cycle extends AbstractTag
+class TagCycle extends AbstractTag
 {
 	/**
 	 * @var string The name of the cycle; if none is given one is created using the value list
@@ -43,10 +43,8 @@ class Cycle extends AbstractTag
 	 * @param \Liquid\BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$simpleSyntax = new Regexp("/" . Liquid::LIQUID_QUOTED_FRAGMENT . "/");
 		$namedSyntax = new Regexp("/(" . Liquid::LIQUID_QUOTED_FRAGMENT . ")\s*\:\s*(.*)/");
 
@@ -67,7 +65,7 @@ class Cycle extends AbstractTag
 	 * @var Context $context
 	 * @return string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		$context->push();
 
 		$key = $context->get($this->name);

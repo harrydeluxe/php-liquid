@@ -91,7 +91,7 @@ class Regexp
 	 *
 	 * @return int The number of matches
 	 */
-	public function match_all($string) {
+	public function matchAll($string) {
 		return preg_match_all($this->pattern, $string, $this->matches);
 	}
 

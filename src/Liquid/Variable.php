@@ -47,7 +47,7 @@ class Variable
 				$filterNameRegexp->match($filter);
 				$filtername = $filterNameRegexp->matches[1];
 
-				$filterArgumentRegexp->match_all($filter);
+				$filterArgumentRegexp->matchAll($filter);
 				$matches = Liquid::array_flatten($filterArgumentRegexp->matches[1]);
 
 				$this->filters[] = array($filtername, $matches);
@@ -83,7 +83,7 @@ class Variable
 	 *
 	 * @return mixed|string
 	 */
-	public function render($context) {
+	public function render(Context $context) {
 		$output = $context->get($this->name);
 
 		foreach ($this->filters as $filter) {

@@ -20,7 +20,7 @@ class TagComment extends AbstractBlock
 	 *
 	 * @return string empty string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		return '';
 	}
 }

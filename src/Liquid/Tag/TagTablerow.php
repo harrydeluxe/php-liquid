@@ -42,10 +42,8 @@ class TagTablerow extends AbstractBlock
 	 * @param BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		parent::__construct($markup, $tokens, $fileSystem);
 
 		$syntax = new Regexp("/(\w+)\s+in\s+(" . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
@@ -67,7 +65,7 @@ class TagTablerow extends AbstractBlock
 	 *
 	 * @return string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		$collection = $context->get($this->collectionName);
 
 		if (!is_array($collection)) {

@@ -62,14 +62,11 @@ class TagInclude extends AbstractTag
 	 * @param BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . Liquid::LIQUID_QUOTED_FRAGMENT . '+))?/');
 
 		if ($regex->match($markup)) {
-
 			$this->templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
 
 			if (isset($regex->matches[1])) {
@@ -92,8 +89,8 @@ class TagInclude extends AbstractTag
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function parse(&$tokens) {
-		if (!isset($this->fileSystem)) {
+	public function parse(array $tokens) {
+		if ($this->fileSystem === null) {
 			throw new LiquidException("No file system");
 		}
 
@@ -143,7 +140,7 @@ class TagInclude extends AbstractTag
 	 *
 	 * @return string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		$result = '';
 		$variable = $context->get($this->variable);
 

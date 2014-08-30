@@ -36,10 +36,8 @@ class TagAssign extends AbstractTag
 	 * @param BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 *  todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$syntaxRegexp = new Regexp('/(\w+)\s*=\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . '+)/');
 
 		$filterSeperatorRegexp = new Regexp('/' . Liquid::LIQUID_FILTER_SEPARATOR . '\s*(.*)/');
@@ -56,7 +54,7 @@ class TagAssign extends AbstractTag
 				$filterNameRegexp->match($filter);
 				$filtername = $filterNameRegexp->matches[1];
 
-				$filterArgumentRegexp->match_all($filter);
+				$filterArgumentRegexp->matchAll($filter);
 				$matches = Liquid::array_flatten($filterArgumentRegexp->matches[1]);
 
 				array_push($this->filters, array($filtername, $matches));
@@ -78,7 +76,7 @@ class TagAssign extends AbstractTag
 	 *
 	 * @return string|void
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		$output = $context->get($this->from);
 
 		foreach ($this->filters as $filter) {

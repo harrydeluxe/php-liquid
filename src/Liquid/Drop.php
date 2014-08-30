@@ -12,13 +12,13 @@ namespace Liquid;
  * Example:
  *
  *     class ProductDrop extends LiquidDrop {
- *         function top_sales() {
+ *         public function topSales() {
  *             Products::find('all', array('order' => 'sales', 'limit' => 10 ));
  *         }
  *     }
  *
  * tmpl = Liquid::Template.parse( ' {% for product in product.top_sales %} {{ product.name }} {%endfor%} '  )
- * tmpl.render('product' => ProductDrop.new ) * will invoke top_sales query.
+ * tmpl.render('product' => ProductDrop.new ) // will invoke topSales query.
  *
  * Your drop can either implement the methods sans any parameters or implement the beforeMethod(name) method which is a
  * catch all.
@@ -42,11 +42,9 @@ abstract class Drop
 	}
 
 	/**
-	 * Enter description here...
-	 *
-	 * @param object $context
+	 * @param Context $context
 	 */
-	public function setContext($context) {
+	public function setContext(Context $context) {
 		$this->context = $context;
 	}
 
@@ -73,6 +71,8 @@ abstract class Drop
 	 * @param string $name
 	 *
 	 * @return bool
+	 *
+	 * todo: need?
 	 */
 	public function hasKey($name) {
 		return true;
@@ -87,6 +87,8 @@ abstract class Drop
 
 	/**
 	 * @return string
+	 *
+	 * todo: get_class?
 	 */
 	public function __toString() {
 		return get_class($this);

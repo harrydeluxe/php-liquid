@@ -34,7 +34,7 @@ class Filterbank
 	 *
 	 * @param $context
 	 */
-	public function __construct(&$context) {
+	public function __construct(Context $context) {
 		$this->context = $context;
 
 		$this->addFilter('\Liquid\StandardFilters');

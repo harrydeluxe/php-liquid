@@ -17,7 +17,7 @@ abstract class Cache
 	/**
 	 * @param array $options
 	 */
-	public function __construct($options = array()) {
+	public function __construct(array $options = array()) {
 		if (isset($options['cache_expire'])) {
 			$this->expire = $options['cache_expire'];
 		}

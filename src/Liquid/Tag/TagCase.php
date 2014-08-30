@@ -53,10 +53,8 @@ class TagCase extends Decision
 	 * @param BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$this->nodelists = array();
 		$this->elseNodelist = array();
 
@@ -75,7 +73,7 @@ class TagCase extends Decision
 	 * Pushes the last nodelist onto the stack
 	 */
 	public function endTag() {
-		$this->push_nodelist();
+		$this->pushNodelist();
 	}
 
 	/**
@@ -89,14 +87,14 @@ class TagCase extends Decision
 	 *
 	 * todo: reference
 	 */
-	public function unknownTag($tag, $params, array &$tokens) {
+	public function unknownTag($tag, $params, array $tokens) {
 		$whenSyntaxRegexp = new Regexp('/' . Liquid::LIQUID_QUOTED_FRAGMENT . '/');
 
 		switch ($tag) {
 			case 'when':
 				// push the current nodelist onto the stack and prepare for a new one
 				if ($whenSyntaxRegexp->match($params)) {
-					$this->push_nodelist();
+					$this->pushNodelist();
 					$this->right = $whenSyntaxRegexp->matches[0];
 					$this->nodelist = array();
 
@@ -107,9 +105,9 @@ class TagCase extends Decision
 
 			case 'else':
 				// push the last nodelist onto the stack and prepare to recieve the else nodes
-				$this->push_nodelist();
+				$this->pushNodelist();
 				$this->right = null;
-				$this->elseNodelist = & $this->nodelist;
+				$this->elseNodelist = $this->nodelist;
 				$this->nodelist = array();
 				break;
 
@@ -121,11 +119,9 @@ class TagCase extends Decision
 	/**
 	 * Pushes the current right value and nodelist into the nodelist stack
 	 */
-	public function push_nodelist() {
+	public function pushNodelist() {
 		if (!is_null($this->right)) {
-			$this->nodelists[] = array(
-				$this->right, $this->nodelist
-			);
+			$this->nodelists[] = array($this->right, $this->nodelist);
 		}
 	}
 
@@ -136,15 +132,15 @@ class TagCase extends Decision
 	 *
 	 * @return string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		$output = ''; // array();
-		$run_else_block = true;
+		$runElseBlock = true;
 
 		foreach ($this->nodelists as $data) {
 			list($right, $nodelist) = $data;
 
 			if ($this->equalVariables($this->left, $right, $context)) {
-				$run_else_block = false;
+				$runElseBlock = false;
 
 				$context->push();
 				$output .= $this->renderAll($nodelist, $context);
@@ -152,7 +148,7 @@ class TagCase extends Decision
 			}
 		}
 
-		if ($run_else_block) {
+		if ($runElseBlock) {
 			$context->push();
 			$output .= $this->renderAll($this->elseNodelist, $context);
 			$context->pop();

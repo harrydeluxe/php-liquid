@@ -31,10 +31,8 @@ class TagCapture extends AbstractBlock
 	 * @param BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		$syntaxRegexp = new Regexp('/(\w+)/');
 
 		if ($syntaxRegexp->match($markup)) {
@@ -52,7 +50,7 @@ class TagCapture extends AbstractBlock
 	 *
 	 * @return string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		$output = parent::render($context);
 
 		$context->set($this->to, $output);

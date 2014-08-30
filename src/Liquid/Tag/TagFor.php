@@ -42,10 +42,8 @@ class TagFor extends AbstractBlock
 	 * @param BlankFileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
-	public function __construct($markup, &$tokens, &$fileSystem) {
+	public function __construct($markup, array $tokens, $fileSystem) {
 		parent::__construct($markup, $tokens, $fileSystem);
 
 		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');
@@ -67,7 +65,7 @@ class TagFor extends AbstractBlock
 	 *
 	 * @return null|string
 	 */
-	public function render(&$context) {
+	public function render(Context $context) {
 		if (!isset($context->registers['for'])) {
 			$context->registers['for'] = array();
 		}
@@ -78,9 +76,7 @@ class TagFor extends AbstractBlock
 			return '';
 		}
 
-		$range = array(
-			0, count($collection)
-		);
+		$range = array(0, count($collection));
 
 		if (isset($this->attributes['limit']) || isset($this->attributes['offset'])) {
 			$offset = 0;
@@ -90,27 +86,19 @@ class TagFor extends AbstractBlock
 			}
 
 			$limit = (isset($this->attributes['limit'])) ? $context->get($this->attributes['limit']) : null;
+			$rangeEnd = $limit ? $limit : count($collection) - $offset;
+			$range = array($offset, $rangeEnd);
 
-			$range_end = $limit ? $limit : count($collection) - $offset;
-
-			$range = array(
-				$offset, $range_end
-			);
-
-			$context->registers['for'][$this->name] = $range_end + $offset;
-
+			$context->registers['for'][$this->name] = $rangeEnd + $offset;
 		}
 
 		$result = '';
-
 		$segment = array_slice($collection, $range[0], $range[1]);
-
 		if (!count($segment)) {
 			return null;
 		}
 
 		$context->push();
-
 		$length = count($segment);
 
 		 // todo: If $segment keys are not integer, forloop not work

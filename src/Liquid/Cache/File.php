@@ -15,9 +15,11 @@ class File extends Cache
 	 *
 	 * It checks the availability of cache directory.
 	 *
+	 * @param array $options
+	 *
 	 * @throws LiquidException if Cachedir not exists.
 	 */
-	public function __construct($options = array()) {
+	public function __construct(array $options = array()) {
 		parent::__construct($options);
 
 		if (isset($options['cache_dir']) && is_writable($options['cache_dir'])) {
