@@ -107,6 +107,8 @@ class StandardFilters
 	 * @param int $characters
 	 *
 	 * @return string
+	 *
+	 * todo: accept string as third parameter
 	 */
 	public static function truncate($input, $characters = 100) {
 		if (is_string($input) || is_numeric($input)) {
@@ -125,6 +127,8 @@ class StandardFilters
 	 * @param int $words
 	 *
 	 * @return string
+	 *
+	 * todo: accept string as third parameter
 	 */
 	public static function truncatewords($input, $words = 3) {
 		if (is_string($input)) {

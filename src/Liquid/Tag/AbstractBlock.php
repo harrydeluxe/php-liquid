@@ -61,7 +61,7 @@ class AbstractBlock extends AbstractTag
 					if (array_key_exists($tagRegexp->matches[1], $tags)) {
 						$tagName = $tags[$tagRegexp->matches[1]];
 					} else {
-						$tagName = '\Liquid\Tag' . ucwords($tagRegexp->matches[1]);
+						$tagName = '\Liquid\Tag\Tag' . ucwords($tagRegexp->matches[1]);
 						$tagName = (class_exists($tagName) === true) ? $tagName : null;
 					}
 
@@ -112,7 +112,6 @@ class AbstractBlock extends AbstractTag
 	protected function renderAll(array $list, Context $context) {
 		$result = '';
 
-		// todo: token objects
 		foreach ($list as $token) {
 			$result .= (is_object($token) && method_exists($token, 'render')) ? $token->render($context) : $token;
 		}
