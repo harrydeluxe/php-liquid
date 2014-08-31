@@ -46,8 +46,6 @@ class Document extends AbstractBlock
 	 * There isn't a real delimiter
 	 *
 	 * @return string
-	 *
-	 * todo: need?
 	 */
 	protected function blockDelimiter() {
 		return '';
@@ -55,8 +53,6 @@ class Document extends AbstractBlock
 
 	/**
 	 * Document blocks don't need to be terminated since they are not actually opened
-	 *
-	 * todo: need?
 	 */
 	protected function assertMissingDelimitation() {
 	}

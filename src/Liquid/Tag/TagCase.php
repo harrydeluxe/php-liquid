@@ -9,7 +9,9 @@ use Liquid\BlankFileSystem;
 use Liquid\Regexp;
 
 /**
- * A switch statememt
+ * todo: else is required?
+ *
+ * A switch statement
  *
  * Example:
  *
