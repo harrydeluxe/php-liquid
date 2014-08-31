@@ -58,8 +58,9 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function capitalize($input) {
-		// todo: deprecated "e"
-		return preg_replace("!(^|[^\p{L}'])([\p{Ll}])!ue", "'\\1'.ucfirst('\\2')", ucwords($input));
+		return preg_replace_callback("/(^|[^\p{L}'])([\p{Ll}])/u", function($matches) {
+			return $matches[1] . ucfirst($matches[2]);
+		}, ucwords($input));
 	}
 
 	/**
