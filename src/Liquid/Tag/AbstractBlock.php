@@ -172,7 +172,8 @@ class AbstractBlock extends AbstractTag
 	 * @return string
 	 */
 	private function blockName() {
-		return str_replace('liquidtag', '', strtolower(get_class($this)));
+		$reflection = new \ReflectionClass($this);
+		return str_replace('tag', '', strtolower($reflection->getShortName()));
 	}
 
 	/**
