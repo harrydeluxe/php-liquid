@@ -104,11 +104,13 @@ class TagInclude extends AbstractTag
 		if (isset($cache)) {
 			if (($this->document = $cache->read($this->hash)) != false && $this->document->checkIncludes() != true) {
 			} else {
-				$this->document = new Document(Template::tokenize($source), $this->fileSystem);
+				$tokens = Template::tokenize($source);
+				$this->document = new Document($tokens, $this->fileSystem);
 				$cache->write($this->hash, $this->document);
 			}
 		} else {
-			$this->document = new Document(Template::tokenize($source), $this->fileSystem);
+			$tokens = Template::tokenize($source);
+			$this->document = new Document($tokens, $this->fileSystem);
 		}
 	}
 

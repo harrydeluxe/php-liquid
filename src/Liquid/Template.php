@@ -147,11 +147,13 @@ class Template
 		if (self::$cache !== null) {
 			if (($this->root = self::$cache->read(md5($source))) != false && $this->root->checkIncludes() != true) {
 			} else {
-				$this->root = new Document(Template::tokenize($source), $this->fileSystem);
+				$tokens = Template::tokenize($source);
+				$this->root = new Document($tokens, $this->fileSystem);
 				self::$cache->write(md5($source), $this->root);
 			}
 		} else {
-			$this->root = new Document(Template::tokenize($source), $this->fileSystem);
+			$tokens = Template::tokenize($source);
+			$this->root = new Document($tokens, $this->fileSystem);
 		}
 
 		return $this;
