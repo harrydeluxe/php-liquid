@@ -34,7 +34,7 @@ class AbstractBlock extends AbstractTag
 	 * @throws \Liquid\LiquidException
 	 * @return void
 	 */
-	public function parse(array $tokens) {
+	public function parse(array &$tokens) {
 		$startRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '/');
 		$tagRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '\s*(\w+)\s*(.*)?' . Liquid::LIQUID_TAG_END . '$/');
 		$variableStartRegexp = new Regexp('/^' . Liquid::LIQUID_VARIABLE_START . '/');

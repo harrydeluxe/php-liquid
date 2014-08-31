@@ -32,7 +32,7 @@ class TagBlock extends AbstractBlock
 	 * @throws \Liquid\LiquidException
 	 * @return \Liquid\Tag\TagBlock
 	 */
-	public function __construct($markup, array $tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, $fileSystem) {
 		$syntaxRegexp = new Regexp('/(\w+)/');
 
 		if ($syntaxRegexp->match($markup)) {

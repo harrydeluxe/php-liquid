@@ -40,7 +40,7 @@ abstract class AbstractTag
 	 * @param array $tokens
 	 * @param BlankFileSystem $fileSystem
 	 */
-	public function __construct($markup, array $tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, $fileSystem) {
 		$this->markup = $markup;
 		$this->fileSystem = $fileSystem;
 		$this->parse($tokens);
@@ -53,7 +53,7 @@ abstract class AbstractTag
 	 *
 	 * todo: empty or abstract?
 	 */
-	public function parse(array $tokens) {
+	public function parse(array &$tokens) {
 		// Do nothing by default
 	}
 

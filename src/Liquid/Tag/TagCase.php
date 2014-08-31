@@ -54,7 +54,7 @@ class TagCase extends Decision
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array $tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, $fileSystem) {
 		$this->nodelists = array();
 		$this->elseNodelist = array();
 

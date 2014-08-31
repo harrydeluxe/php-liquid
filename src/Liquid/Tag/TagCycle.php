@@ -44,7 +44,7 @@ class TagCycle extends AbstractTag
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array $tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, $fileSystem) {
 		$simpleSyntax = new Regexp("/" . Liquid::LIQUID_QUOTED_FRAGMENT . "/");
 		$namedSyntax = new Regexp("/(" . Liquid::LIQUID_QUOTED_FRAGMENT . ")\s*\:\s*(.*)/");
 

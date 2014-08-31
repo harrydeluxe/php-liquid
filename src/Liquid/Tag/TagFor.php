@@ -43,7 +43,7 @@ class TagFor extends AbstractBlock
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array $tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, $fileSystem) {
 		parent::__construct($markup, $tokens, $fileSystem);
 
 		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');

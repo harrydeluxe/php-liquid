@@ -37,7 +37,7 @@ class TagAssign extends AbstractTag
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array $tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, $fileSystem) {
 		$syntaxRegexp = new Regexp('/(\w+)\s*=\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . '+)/');
 
 		$filterSeperatorRegexp = new Regexp('/' . Liquid::LIQUID_FILTER_SEPARATOR . '\s*(.*)/');

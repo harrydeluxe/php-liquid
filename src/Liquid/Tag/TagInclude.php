@@ -63,7 +63,7 @@ class TagInclude extends AbstractTag
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array $tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, $fileSystem) {
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . Liquid::LIQUID_QUOTED_FRAGMENT . '+))?/');
 
 		if ($regex->match($markup)) {
@@ -89,7 +89,7 @@ class TagInclude extends AbstractTag
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function parse(array $tokens) {
+	public function parse(array &$tokens) {
 		if ($this->fileSystem === null) {
 			throw new LiquidException("No file system");
 		}
