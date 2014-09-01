@@ -5,7 +5,7 @@ namespace Liquid\Tag;
 use Liquid\Liquid;
 use Liquid\Context;
 use Liquid\LiquidException;
-use Liquid\BlankFileSystem;
+use Liquid\FileSystem;
 use Liquid\Regexp;
 
 /**
@@ -39,11 +39,11 @@ class TagFor extends AbstractBlock
 	 *
 	 * @param string $markup
 	 * @param array $tokens
-	 * @param BlankFileSystem $fileSystem
+	 * @param FileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		parent::__construct($markup, $tokens, $fileSystem);
 
 		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . '+)/');

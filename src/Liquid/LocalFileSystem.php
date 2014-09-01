@@ -8,7 +8,7 @@ namespace Liquid;
  *
  * For security reasons, template paths are only allowed to contain letters, numbers, and underscore.
  */
-class LocalFileSystem extends BlankFileSystem
+class LocalFileSystem implements FileSystem
 {
 	/**
 	 * The root path

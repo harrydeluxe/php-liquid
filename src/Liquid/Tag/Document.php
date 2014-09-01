@@ -2,7 +2,7 @@
 
 namespace Liquid\Tag;
 
-use Liquid\BlankFileSystem;
+use Liquid\FileSystem;
 
 /**
  * This class represents the entire template document.
@@ -13,9 +13,9 @@ class Document extends AbstractBlock
 	 * Constructor.
 	 *
 	 * @param array $tokens
-	 * @param BlankFileSystem $fileSystem
+	 * @param FileSystem $fileSystem
 	 */
-	public function __construct(array &$tokens, $fileSystem) {
+	public function __construct(array &$tokens, FileSystem $fileSystem = null) {
 		$this->fileSystem = $fileSystem;
 		$this->parse($tokens);
 	}

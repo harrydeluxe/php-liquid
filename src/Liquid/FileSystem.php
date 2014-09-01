@@ -10,17 +10,14 @@ namespace Liquid;
  *
  * You can add additional instance variables, arguments, or methods as needed.
  */
-class BlankFileSystem
+interface FileSystem
 {
 	/**
 	 * Retrieve a template file.
 	 *
 	 * @param string $templatePath
 	 *
-	 * @throws LiquidException
 	 * @return string
 	 */
-	public function readTemplateFile($templatePath) {
-		throw new LiquidException('This liquid context does not allow includes.');
-	}
+	public function readTemplateFile($templatePath);
 }

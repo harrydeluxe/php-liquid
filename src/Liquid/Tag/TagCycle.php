@@ -7,6 +7,7 @@ use Liquid\Context;
 use Liquid\LiquidException;
 use Liquid\Regexp;
 use Liquid\Variable;
+use Liquid\FileSystem;
 
 /**
  * Cycles between a list of values; calls to the tag will return each value in turn
@@ -40,11 +41,11 @@ class TagCycle extends AbstractTag
 	 *
 	 * @param string $markup
 	 * @param array $tokens
-	 * @param \Liquid\BlankFileSystem $fileSystem
+	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws LiquidException
 	 */
-	public function __construct($markup, array &$tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		$simpleSyntax = new Regexp("/" . Liquid::LIQUID_QUOTED_FRAGMENT . "/");
 		$namedSyntax = new Regexp("/(" . Liquid::LIQUID_QUOTED_FRAGMENT . ")\s*\:\s*(.*)/");
 

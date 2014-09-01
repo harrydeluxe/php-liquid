@@ -2,7 +2,7 @@
 
 namespace Liquid\Tag;
 
-use Liquid\BlankFileSystem;
+use Liquid\FileSystem;
 use Liquid\Context;
 use Liquid\Liquid;
 use Liquid\Regexp;
@@ -22,7 +22,7 @@ abstract class AbstractTag
 	/**
 	 * Filesystem object is used to load included template files
 	 *
-	 * @var BlankFileSystem
+	 * @var FileSystem
 	 */
 	protected $fileSystem;
 
@@ -38,9 +38,9 @@ abstract class AbstractTag
 	 *
 	 * @param string $markup
 	 * @param array $tokens
-	 * @param BlankFileSystem $fileSystem
+	 * @param FileSystem $fileSystem
 	 */
-	public function __construct($markup, array &$tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		$this->markup = $markup;
 		$this->fileSystem = $fileSystem;
 		$this->parse($tokens);
@@ -89,6 +89,8 @@ abstract class AbstractTag
 	 * Returns the name of the tag.
 	 *
 	 * @return string
+	 *
+	 * todo: get_class
 	 */
 	protected function name() {
 		return strtolower(get_class($this));

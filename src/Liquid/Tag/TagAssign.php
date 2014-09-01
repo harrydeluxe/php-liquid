@@ -4,7 +4,7 @@ namespace Liquid\Tag;
 
 use Liquid\Liquid;
 use Liquid\LiquidException;
-use Liquid\BlankFileSystem;
+use Liquid\FileSystem;
 use Liquid\Regexp;
 use Liquid\Context;
 
@@ -33,11 +33,11 @@ class TagAssign extends AbstractTag
 	 *
 	 * @param string $markup
 	 * @param array $tokens
-	 * @param BlankFileSystem $fileSystem
+	 * @param FileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		$syntaxRegexp = new Regexp('/(\w+)\s*=\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . '+)/');
 
 		$filterSeperatorRegexp = new Regexp('/' . Liquid::LIQUID_FILTER_SEPARATOR . '\s*(.*)/');

@@ -16,13 +16,12 @@ use Liquid\Tag\Document;
 class Template
 {
 	/**
-	 * @var Document The _root of the node tree
+	 * @var Document The root of the node tree
 	 */
 	private $root;
 
 	/**
-	 * todo
-	 * @var BlankFileSystem The file system to use for includes
+	 * @var FileSystem The file system to use for includes
 	 */
 	private $fileSystem;
 
@@ -52,16 +51,15 @@ class Template
 	public function __construct($path = null, $cache = null) {
 		$this->fileSystem = $path !== null
 			? new LocalFileSystem($path)
-			: new BlankFileSystem();
+			: null;
 
 		$this->setCache($cache);
 	}
 
 	/**
-	 * // todo
-	 * @param string $fileSystem
+	 * @param FileSystem $fileSystem
 	 */
-	public function setFileSystem($fileSystem) {
+	public function setFileSystem(FileSystem $fileSystem) {
 		$this->fileSystem = $fileSystem;
 	}
 

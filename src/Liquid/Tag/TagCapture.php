@@ -4,7 +4,7 @@ namespace Liquid\Tag;
 
 use Liquid\Context;
 use Liquid\LiquidException;
-use Liquid\BlankFileSystem;
+use Liquid\FileSystem;
 use Liquid\Regexp;
 
 /**
@@ -28,11 +28,11 @@ class TagCapture extends AbstractBlock
 	 *
 	 * @param string $markup
 	 * @param Array $tokens
-	 * @param BlankFileSystem $fileSystem
+	 * @param FileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		$syntaxRegexp = new Regexp('/(\w+)/');
 
 		if ($syntaxRegexp->match($markup)) {

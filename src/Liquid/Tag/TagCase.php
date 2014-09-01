@@ -5,7 +5,7 @@ namespace Liquid\Tag;
 use Liquid\Context;
 use Liquid\Liquid;
 use Liquid\LiquidException;
-use Liquid\BlankFileSystem;
+use Liquid\FileSystem;
 use Liquid\Regexp;
 
 /**
@@ -52,11 +52,11 @@ class TagCase extends Decision
 	 *
 	 * @param string $markup
 	 * @param array $tokens
-	 * @param BlankFileSystem $fileSystem
+	 * @param FileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, $fileSystem) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		$this->nodelists = array();
 		$this->elseNodelist = array();
 
