@@ -50,8 +50,6 @@ abstract class AbstractTag
 	 * Parse the given tokens.
 	 *
 	 * @param array $tokens
-	 *
-	 * todo: empty or abstract?
 	 */
 	public function parse(array &$tokens) {
 		// Do nothing by default
@@ -89,8 +87,6 @@ abstract class AbstractTag
 	 * Returns the name of the tag.
 	 *
 	 * @return string
-	 *
-	 * todo: get_class
 	 */
 	protected function name() {
 		return strtolower(get_class($this));

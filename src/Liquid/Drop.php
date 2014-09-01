@@ -3,7 +3,7 @@
 namespace Liquid;
 
 /**
- * A drop in liquid is a class which allows you to to export DOM like things to liquid
+ * A drop in liquid is a class which allows you to to export DOM like things to liquid.
  * Methods of drops are callable.
  * The main use for liquid drops is the implement lazy loaded objects.
  * If you would like to make data available to the web designers which you don't want loaded unless needed then
@@ -85,8 +85,6 @@ abstract class Drop
 
 	/**
 	 * @return string
-	 *
-	 * todo: get_class?
 	 */
 	public function __toString() {
 		return get_class($this);

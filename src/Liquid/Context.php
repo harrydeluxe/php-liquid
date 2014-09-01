@@ -103,8 +103,6 @@ class Context
 	}
 
 	/**
-	 * todo: ArrayAccess?
-	 *
 	 * Replaces []
 	 *
 	 * @param string
@@ -275,17 +273,13 @@ class Context
 						return null;
 					}
 
-					// php4 doesn't support array access, so we have
-					// to use the invoke method instead
 					$object = $object->invokeDrop($nextPartName);
 				} elseif (method_exists($object, Liquid::LIQUID_HAS_PROPERTY_METHOD)) {
-					// todo: remove deprecated method
-					if (!call_user_method(Liquid::LIQUID_HAS_PROPERTY_METHOD, $object, $nextPartName)) {
+					if (!call_user_func(array($object, Liquid::LIQUID_HAS_PROPERTY_METHOD), $nextPartName)) {
 						return null;
 					}
 
-					// todo: remove deprecated method
-					$object = call_user_method(Liquid::LIQUID_GET_PROPERTY_METHOD, $object, $nextPartName);
+					call_user_func(array($object, Liquid::LIQUID_GET_PROPERTY_METHOD), $nextPartName);
 				} else {
 					// if it's just a regular object, attempt to access a property
 					if (!property_exists($object, $nextPartName)) {
