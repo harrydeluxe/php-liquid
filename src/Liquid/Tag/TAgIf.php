@@ -60,7 +60,6 @@ class TagIf extends Decision
 	public function unknownTag($tag, $params, array $tokens) {
 		if ($tag == 'else' || $tag == 'elsif') {
 			// Update reference to nodelistHolder for this block
-			// todo: reference?
 			$this->nodelist = & $this->nodelistHolders[count($this->blocks) + 1];
 			$this->nodelistHolders[count($this->blocks) + 1] = array();
 
