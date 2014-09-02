@@ -60,7 +60,6 @@ class AbstractBlock extends AbstractTag
 
 					if ($tagName !== null) {
 						$this->nodelist[] = new $tagName($tagRegexp->matches[2], $tokens, $this->fileSystem);
-						// todo: tag names
 						if ($tagRegexp->matches[1] == 'extends') {
 							return;
 						}

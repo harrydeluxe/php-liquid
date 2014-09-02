@@ -58,7 +58,6 @@ class TagIf extends Decision
 	 * @param array $tokens
 	 */
 	public function unknownTag($tag, $params, array $tokens) {
-		// todo: tag names
 		if ($tag == 'else' || $tag == 'elsif') {
 			// Update reference to nodelistHolder for this block
 			// todo: reference?
@@ -94,7 +93,6 @@ class TagIf extends Decision
 				break;
 			}
 
-			// todo: tag names
 			if ($block[0] == 'if' || $block[0] == 'elsif') {
 				// Extract logical operators
 				$logicalRegex->match($block[1]);
