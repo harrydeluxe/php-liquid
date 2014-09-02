@@ -68,8 +68,8 @@ class Template
 	 */
 	public function setCache($cache) {
 		if (is_array($cache)) {
-			if (isset($cache['cache']) && class_exists('\Liquid\Cache' . ucwords($cache['cache']))) {
-				$classname = '\Liquid\Cache' . ucwords($cache['cache']);
+			if (isset($cache['cache']) && class_exists('\Liquid\Cache\\' . ucwords($cache['cache']))) {
+				$classname = '\Liquid\Cache\\' . ucwords($cache['cache']);
 				self::$cache = new $classname($cache);
 			} else {
 				throw new LiquidException('Invalid cache options!');

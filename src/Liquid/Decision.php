@@ -77,7 +77,6 @@ class Decision extends AbstractBlock
 	 * @return bool
 	 */
 	protected function interpretCondition($left, $right, $op = null, Context $context) {
-		// todo: is_null or === null? which is faster?
 		if (is_null($op)) {
 			$value = $this->stringValue($context->get($left));
 			return $value;

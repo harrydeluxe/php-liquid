@@ -27,8 +27,6 @@ class Document extends AbstractBlock
 	 * @return string
 	 */
 	public function checkIncludes() {
-		// todo: isObject
-
 		foreach ($this->nodelist as $token) {
 			if (is_object($token)) {
 				if ($token instanceof TagInclude || $token instanceof TagExtends) {
