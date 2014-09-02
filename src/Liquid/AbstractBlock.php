@@ -64,7 +64,6 @@ class AbstractBlock extends AbstractTag
 							return;
 						}
 					} else {
-						// todo: check this logic
 						$this->unknownTag($tagRegexp->matches[1], $tagRegexp->matches[2], $tokens);
 					}
 				} else {

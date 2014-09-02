@@ -10,8 +10,6 @@ use Liquid\FileSystem;
 use Liquid\Regexp;
 
 /**
- * todo: else is required?
- *
  * A switch statement
  *
  * Example:
@@ -87,8 +85,6 @@ class TagCase extends Decision
 	 * @param array $tokens
 	 *
 	 * @throws \Liquid\LiquidException
-	 *
-	 * todo: reference
 	 */
 	public function unknownTag($tag, $params, array $tokens) {
 		$whenSyntaxRegexp = new Regexp('/' . Liquid::LIQUID_QUOTED_FRAGMENT . '/');
