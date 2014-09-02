@@ -82,7 +82,7 @@ class TagIf extends Decision
 		$context->push();
 
 		$logicalRegex = new Regexp('/\s+(and|or)\s+/');
-		$conditionalRegex = new Regexp('/(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')\s*([=!<>a-z_]+)?\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')?/');
+		$conditionalRegex = new Regexp('/(' . Liquid::get('QUOTED_FRAGMENT') . ')\s*([=!<>a-z_]+)?\s*(' . Liquid::get('QUOTED_FRAGMENT') . ')?/');
 
 		$result = '';
 		foreach ($this->blocks as $block) {

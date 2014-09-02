@@ -66,7 +66,7 @@ class TagInclude extends AbstractTag
 	 * @throws \Liquid\LiquidException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
-		$regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . Liquid::LIQUID_QUOTED_FRAGMENT . '+))?/');
+		$regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . Liquid::get('QUOTED_FRAGMENT') . '+))?/');
 
 		if ($regex->match($markup)) {
 			$this->templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);

@@ -30,11 +30,11 @@ class Variable
 	public function __construct($markup) {
 		$this->markup = $markup;
 
-		$quotedFragmentRegexp = new Regexp('/\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')/');
-		$filterSeperatorRegexp = new Regexp('/' . Liquid::LIQUID_FILTER_SEPARATOR . '\s*(.*)/');
-		$filterSplitRegexp = new Regexp('/' . Liquid::LIQUID_FILTER_SEPARATOR . '/');
+		$quotedFragmentRegexp = new Regexp('/\s*(' . Liquid::get('QUOTED_FRAGMENT') . ')/');
+		$filterSeperatorRegexp = new Regexp('/' . Liquid::get('FILTER_SEPARATOR') . '\s*(.*)/');
+		$filterSplitRegexp = new Regexp('/' . Liquid::get('FILTER_SEPARATOR') . '/');
 		$filterNameRegexp = new Regexp('/\s*(\w+)/');
-		$filterArgumentRegexp = new Regexp('/(?:' . Liquid::LIQUID_FILTER_ARGUMENT_SEPARATOR . '|' . Liquid::LIQUID_ARGUMENT_SEPARATOR . ')\s*(' . Liquid::LIQUID_QUOTED_FRAGMENT . ')/');
+		$filterArgumentRegexp = new Regexp('/(?:' . Liquid::get('FILTER_ARGUMENT_SEPARATOR') . '|' . Liquid::get('ARGUMENT_SEPARATOR') . ')\s*(' . Liquid::get('QUOTED_FRAGMENT') . ')/');
 
 		$quotedFragmentRegexp->match($markup);
 
@@ -48,7 +48,7 @@ class Variable
 				$filtername = $filterNameRegexp->matches[1];
 
 				$filterArgumentRegexp->matchAll($filter);
-				$matches = Liquid::array_flatten($filterArgumentRegexp->matches[1]);
+				$matches = Liquid::arrayFlatten($filterArgumentRegexp->matches[1]);
 
 				$this->filters[] = array($filtername, $matches);
 			}

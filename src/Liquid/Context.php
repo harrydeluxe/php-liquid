@@ -231,7 +231,7 @@ class Context
 			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
 		}
 
-		$parts = explode(Liquid::LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR, $key);
+		$parts = explode(Liquid::get('VARIABLE_ATTRIBUTE_SEPARATOR'), $key);
 
 		$object = $this->fetch(array_shift($parts));
 
@@ -274,12 +274,12 @@ class Context
 					}
 
 					$object = $object->invokeDrop($nextPartName);
-				} elseif (method_exists($object, Liquid::LIQUID_HAS_PROPERTY_METHOD)) {
-					if (!call_user_func(array($object, Liquid::LIQUID_HAS_PROPERTY_METHOD), $nextPartName)) {
+				} elseif (method_exists($object, Liquid::get('HAS_PROPERTY_METHOD'))) {
+					if (!call_user_func(array($object, Liquid::get('HAS_PROPERTY_METHOD')), $nextPartName)) {
 						return null;
 					}
 
-					call_user_func(array($object, Liquid::LIQUID_GET_PROPERTY_METHOD), $nextPartName);
+					call_user_func(array($object, Liquid::get('GET_PROPERTY_METHOD')), $nextPartName);
 				} else {
 					// if it's just a regular object, attempt to access a property
 					if (!property_exists($object, $nextPartName)) {

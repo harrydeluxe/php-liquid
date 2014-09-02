@@ -51,7 +51,7 @@ class LocalFileSystem implements FileSystem
 	 * @return string
 	 */
 	public function fullPath($templatePath) {
-		$nameRegex = Liquid::LIQUID_INCLUDE_ALLOW_EXT
+		$nameRegex = Liquid::get('INCLUDE_ALLOW_EXT')
 			? new Regexp('/^[^.\/][a-zA-Z0-9_\.\/]+$/')
 			: new Regexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
 
@@ -60,13 +60,13 @@ class LocalFileSystem implements FileSystem
 		}
 
 		if (strpos($templatePath, '/') !== false) {
-			$fullPath = Liquid::LIQUID_INCLUDE_ALLOW_EXT
+			$fullPath = Liquid::get('INCLUDE_ALLOW_EXT')
 				? $this->root . dirname($templatePath) . '/' . basename($templatePath)
-				: $this->root . dirname($templatePath) . '/' . Liquid::LIQUID_INCLUDE_PREFIX . basename($templatePath) . '.' . Liquid::LIQUID_INCLUDE_SUFFIX;
+				: $this->root . dirname($templatePath) . '/' . Liquid::get('INCLUDE_PREFIX') . basename($templatePath) . '.' . Liquid::get('INCLUDE_SUFFIX');
 		} else {
-			$fullPath = Liquid::LIQUID_INCLUDE_ALLOW_EXT
+			$fullPath = Liquid::get('INCLUDE_ALLOW_EXT')
 				? $this->root . $templatePath
-				: $this->root . Liquid::LIQUID_INCLUDE_PREFIX . $templatePath . '.' . Liquid::LIQUID_INCLUDE_SUFFIX;
+				: $this->root . Liquid::get('INCLUDE_PREFIX') . $templatePath . '.' . Liquid::get('INCLUDE_SUFFIX');
 		}
 
 		$rootRegex = new Regexp('/' . preg_quote(realpath($this->root), '/') . '/');

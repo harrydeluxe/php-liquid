@@ -37,7 +37,7 @@ class TagDecrement extends AbstractTag
 	 * @throws \Liquid\LiquidException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
-		$syntax = new Regexp("/(" . Liquid::LIQUID_ALLOWED_VARIABLE_CHARS . "+)/");
+		$syntax = new Regexp("/(" . Liquid::get('ALLOWED_VARIABLE_CHARS') . "+)/");
 
 		if ($syntax->match($markup)) {
 			$this->toDecrement = $syntax->matches[0];

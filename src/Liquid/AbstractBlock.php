@@ -28,9 +28,9 @@ class AbstractBlock extends AbstractTag
 	 * @return void
 	 */
 	public function parse(array &$tokens) {
-		$startRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '/');
-		$tagRegexp = new Regexp('/^' . Liquid::LIQUID_TAG_START . '\s*(\w+)\s*(.*)?' . Liquid::LIQUID_TAG_END . '$/');
-		$variableStartRegexp = new Regexp('/^' . Liquid::LIQUID_VARIABLE_START . '/');
+		$startRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '/');
+		$tagRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '\s*(\w+)\s*(.*)?' . Liquid::get('TAG_END') . '$/');
+		$variableStartRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . '/');
 
 		$this->nodelist = array();
 
@@ -176,7 +176,7 @@ class AbstractBlock extends AbstractTag
 	 * @return Variable
 	 */
 	private function createVariable($token) {
-		$variableRegexp = new Regexp('/^' . Liquid::LIQUID_VARIABLE_START . '(.*)' . Liquid::LIQUID_VARIABLE_END . '$/');
+		$variableRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . '(.*)' . Liquid::get('VARIABLE_END') . '$/');
 		if ($variableRegexp->match($token)) {
 			return new Variable($variableRegexp->matches[1]);
 		}

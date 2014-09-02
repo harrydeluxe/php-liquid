@@ -8,91 +8,93 @@ namespace Liquid;
 class Liquid
 {
 	/**
-	 * The method is called on objects when resolving variables to see
-	 * if a given property exists.
+	 * We cannot make settings constants, because we cannot create compound
+	 * constants in PHP (before 5.6).
+	 *
+	 * @var array configuration array
 	 */
-	const LIQUID_HAS_PROPERTY_METHOD = 'field_exists';
+	public static $config = array(
+		// The method is called on objects when resolving variables to see
+		// if a given property exists.
+		'HAS_PROPERTY_METHOD' => 'field_exists',
+
+		// This method is called on object when resolving variables when
+		// a given property exists.
+		'GET_PROPERTY_METHOD' => 'get',
+
+		// Separator between filters.
+		'FILTER_SEPARATOR' => '\|',
+
+		// Separator for arguments.
+		'ARGUMENT_SEPARATOR' => ',',
+
+		// Separator for argument names and values.
+		'FILTER_ARGUMENT_SEPARATOR' => ':',
+
+		// Separator for variable attributes.
+		'VARIABLE_ATTRIBUTE_SEPARATOR' => '.',
+
+		// Allow template names with extension in include and extends tags.
+		'INCLUDE_ALLOW_EXT' => false,
+
+		// Suffix for include files.
+		'INCLUDE_SUFFIX' => 'liquid',
+
+		// Prefix for include files.
+		'INCLUDE_PREFIX' => '_',
+
+		// Tag start.
+		'TAG_START' => '{%',
+
+		// Tag end.
+		'TAG_END' => '%}',
+
+		// Variable start.
+		'VARIABLE_START' => '{{',
+
+		// Variable end.
+		'VARIABLE_END' => '}}',
+
+		// The characters allowed in a variable.
+		'ALLOWED_VARIABLE_CHARS' => '[a-zA-Z_.-]',
+
+		'QUOTED_STRING' => '"[^":]*"|\'[^\':]*\'',
+	);
 
 	/**
-	 * This method is called on object when resolving variables when
-	 * a given property exists.
+	 * Get a configuration setting.
+	 *
+	 * @param string $key setting key
+	 *
+	 * @return string
 	 */
-	const LIQUID_GET_PROPERTY_METHOD = 'get';
+	public static function get($key) {
+		if (array_key_exists($key, self::$config)) {
+			return self::$config[$key];
+		} else {
+			// This case is needed for compound settings
+			switch ($key) {
+				case 'QUOTED_FRAGMENT':
+					return self::$config['QUOTED_STRING'] . '|(?:[^\s:,\|\'"]|' . self::$config['QUOTED_STRING'] . ')+';
+				case 'TAG_ATTRIBUTES':
+					return '/(\w+)\s*\:\s*(' . self::get('QUOTED_FRAGMENT') . ')/';
+				case 'TOKENIZATION_REGEXP':
+					return '/(' . self::$config['TAG_START'] . '.*?' . self::$config['TAG_END'] . '|' . self::$config['VARIABLE_START'] . '.*?' . self::$config['VARIABLE_END'] . ')/';
+				default:
+					return null;
+			}
+		}
+	}
 
 	/**
-	 * Separator between filters.
+	 * Changes/creates a setting.
+	 *
+	 * @param string $key
+	 * @param string $value
 	 */
-	const LIQUID_FILTER_SEPARATOR =  '\|';
-
-	/**
-	 * Separator for arguments.
-	 */
-	const LIQUID_ARGUMENT_SEPARATOR =  ',';
-
-	/**
-	 * Separator for argument names and values.
-	 */
-	const LIQUID_FILTER_ARGUMENT_SEPARATOR =  ':';
-
-	/**
-	 * Separator for variable attributes.
-	 */
-	const LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR =  '.';
-
-	/**
-	 * Allow template names with extension in include and extends tags.
-	 */
-	const LIQUID_INCLUDE_ALLOW_EXT = false;
-
-	/**
-	 * Suffix for include files.
-	 */
-	const LIQUID_INCLUDE_SUFFIX = 'liquid';
-
-	/**
-	 * Prefix for include files.
-	 */
-	const LIQUID_INCLUDE_PREFIX = '_';
-
-	/**
-	 * Tag start.
-	 */
-	const LIQUID_TAG_START = '{%';
-
-	/**
-	 * Tag end.
-	 */
-	const LIQUID_TAG_END = '%}';
-
-	/**
-	 * Variable start.
-	 */
-	const LIQUID_VARIABLE_START = '{{';
-
-	/**
-	 * Variable end.
-	 */
-	const LIQUID_VARIABLE_END = '}}';
-
-	/**
-	 * The characters allowed in a variable.
-	 */
-	const LIQUID_ALLOWED_VARIABLE_CHARS = '[a-zA-Z_.-]';
-
-	/**
-	 * Regex for quoted fragments.
-	 */
-	const LIQUID_QUOTED_FRAGMENT = '"[^":]*"|\'[^\':]*\'|(?:[^\s:,\|\'"]|"[^":]*"|\'[^\':]*\')+';
-
-	/**
-	 * Regex for recognizing tab attributes.
-	 */
-	const LIQUID_TAG_ATTRIBUTES = '/(\w+)\s*\:\s*("[^"]+"|\'[^\']+\'|[^\s,|]+)/';
-
-	/**
-	 * Regex used to split tokens.
-	 */
-	const LIQUID_TOKENIZATION_REGEXP = '/({%.*?%}|{{.*?}})/';
+	public static function set($key, $value) {
+		self::$config[$key] = $value;
+	}
 
 	/**
 	 * Flatten a multidimensional array into a single array. Does not maintain keys.
@@ -101,12 +103,12 @@ class Liquid
 	 *
 	 * @return array
 	 */
-	public static function array_flatten($array) {
+	public static function arrayFlatten($array) {
 		$return = array();
 
 		foreach ($array as $element) {
 			if (is_array($element)) {
-				$return = array_merge($return, self::array_flatten($element));
+				$return = array_merge($return, self::arrayFlatten($element));
 			} else {
 				$return[] = $element;
 			}

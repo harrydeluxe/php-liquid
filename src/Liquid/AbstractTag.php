@@ -69,7 +69,7 @@ abstract class AbstractTag
 	protected function extractAttributes($markup) {
 		$this->attributes = array();
 
-		$attributeRegexp = new Regexp(Liquid::LIQUID_TAG_ATTRIBUTES);
+		$attributeRegexp = new Regexp(Liquid::get('TAG_ATTRIBUTES'));
 
 		$matches = $attributeRegexp->scan($markup);
 
