@@ -105,15 +105,14 @@ class StandardFilters
 	 *
 	 * @param string $input
 	 * @param int $characters
+	 * @param string $ending string to append if truncated
 	 *
 	 * @return string
-	 *
-	 * todo: accept string as third parameter
 	 */
-	public static function truncate($input, $characters = 100) {
+	public static function truncate($input, $characters = 100, $ending = '...') {
 		if (is_string($input) || is_numeric($input)) {
 			if (strlen($input) > $characters) {
-				return substr($input, 0, $characters) . '&hellip;';
+				return substr($input, 0, $characters) . $ending;
 			}
 		}
 
@@ -125,17 +124,16 @@ class StandardFilters
 	 *
 	 * @param string $input
 	 * @param int $words
+	 * @param string $ending string to append if truncated
 	 *
 	 * @return string
-	 *
-	 * todo: accept string as third parameter
 	 */
-	public static function truncatewords($input, $words = 3) {
+	public static function truncatewords($input, $words = 3, $ending = '...') {
 		if (is_string($input)) {
 			$wordlist = explode(" ", $input);
 
 			if (count($wordlist) > $words) {
-				return implode(" ", array_slice($wordlist, 0, $words)) . '&hellip;';
+				return implode(" ", array_slice($wordlist, 0, $words)) . $ending;
 			}
 		}
 
