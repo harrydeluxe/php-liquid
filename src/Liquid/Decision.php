@@ -30,15 +30,13 @@ class Decision extends AbstractBlock
 	 * @return string
 	 */
 	private function stringValue($value) {
-		// todo: to_string?
-		// Objects should have a to_string a value to compare to
+		// Objects should have a __toString method to get a value to compare to
 		if (is_object($value)) {
-			if (method_exists($value, 'to_string')) {
-				$value = $value->to_string();
+			if (method_exists($value, '__toString')) {
+				$value = (string) $value;
 			} else {
 				throw new LiquidException("Cannot convert $value to string"); // harry
 			}
-
 		}
 
 		// Arrays simply return true
