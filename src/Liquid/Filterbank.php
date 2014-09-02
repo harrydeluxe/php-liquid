@@ -100,19 +100,14 @@ class Filterbank
 
 			// If we have a registered object for the class, use that instead
 			if (isset($this->filters[$class])) {
-				// todo: reference
-				$class = & $this->filters[$class];
-
+				$class = $this->filters[$class];
 			}
 
 			// If we're calling a function
 			if ($class === false) {
 				return call_user_func_array($name, $args);
 			} else {
-				// todo: reference
-				return call_user_func_array(array(
-					&$class, $name
-				), $args);
+				return call_user_func_array(array($class, $name), $args);
 			}
 		}
 
