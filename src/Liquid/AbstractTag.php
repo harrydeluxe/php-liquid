@@ -1,11 +1,6 @@
 <?php
 
-namespace Liquid\Tag;
-
-use Liquid\FileSystem;
-use Liquid\Context;
-use Liquid\Liquid;
-use Liquid\Regexp;
+namespace Liquid;
 
 /**
  * Base class for tags.

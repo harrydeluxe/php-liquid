@@ -1,13 +1,6 @@
 <?php
 
-namespace Liquid\Tag;
-
-use Liquid\Liquid;
-use Liquid\Regexp;
-use Liquid\LiquidException;
-use Liquid\Context;
-use Liquid\Template;
-use Liquid\Variable;
+namespace Liquid;
 
 /**
  * Base class for blocks.

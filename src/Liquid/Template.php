@@ -2,8 +2,6 @@
 
 namespace Liquid;
 
-use Liquid\Tag\Document;
-
 /**
  * The Template class.
  *

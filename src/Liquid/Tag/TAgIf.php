@@ -2,6 +2,7 @@
 
 namespace Liquid\Tag;
 
+use Liquid\Decision;
 use Liquid\Context;
 use Liquid\Liquid;
 use Liquid\LiquidException;

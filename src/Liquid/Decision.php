@@ -1,9 +1,6 @@
 <?php
 
-namespace Liquid\Tag;
-
-use Liquid\LiquidException;
-use Liquid\Context;
+namespace Liquid;
 
 /**
  * Base class for blocks that make logical decisions.

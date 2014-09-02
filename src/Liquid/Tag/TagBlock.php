@@ -2,6 +2,7 @@
 
 namespace Liquid\Tag;
 
+use Liquid\AbstractBlock;
 use Liquid\LiquidException;
 use Liquid\FileSystem;
 use Liquid\Regexp;

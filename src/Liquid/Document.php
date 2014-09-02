@@ -1,8 +1,9 @@
 <?php
 
-namespace Liquid\Tag;
+namespace Liquid;
 
-use Liquid\FileSystem;
+use Liquid\Tag\TagInclude;
+use Liquid\Tag\TagExtends;
 
 /**
  * This class represents the entire template document.
