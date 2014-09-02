@@ -82,7 +82,7 @@ class Liquid
 	/**
 	 * Regex for quoted fragments.
 	 */
-	const LIQUID_QUOTED_FRAGMENT = '"[^"]+"|\'[^\']+\'|[^\s,|]+';
+	const LIQUID_QUOTED_FRAGMENT = '"[^":]*"|\'[^\':]*\'|(?:[^\s:,\|\'"]|"[^":]*"|\'[^\':]*\')+';
 
 	/**
 	 * Regex for recognizing tab attributes.
