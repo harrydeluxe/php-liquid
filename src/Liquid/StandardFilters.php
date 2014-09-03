@@ -333,6 +333,25 @@ class StandardFilters
 	}
 
 	/**
+	 * Map/collect on a given property
+	 *
+	 * @param array $input
+	 * @param string $property
+	 *
+	 * @return string
+	 */
+	public static function map(array $input, $property) {
+		return array_reduce($input, function($result, $elem) use ($property) {
+			if (is_callable($elem)) {
+				return $result . $elem();
+			} elseif (is_array($elem) && array_key_exists($property, $elem)) {
+				return $result . $elem[$property];
+			}
+			return $result . '';
+		}, '');
+	}
+
+	/**
 	 * Formats a date using strftime
 	 *
 	 * @param mixed $input
