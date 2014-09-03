@@ -433,4 +433,34 @@ class StandardFilters
 	public static function modulo($input, $operand) {
 		return (int)$input % (int)$operand;
 	}
+
+	/**
+	 * Round a number
+	 *
+	 * @param float $input
+	 * @param int $n precision
+	 *
+	 * @return float
+	 */
+	public static function round($input, $n = 0) {
+		return round((float)$input, (int)$n);
+	}
+
+	/**
+	 * @param mixed $input number
+	 *
+	 * @return int
+	 */
+	public static function ceil($input) {
+		return (int) ceil((float)$input);
+	}
+
+	/**
+	 * @param mixed $input number
+	 *
+	 * @return int
+	 */
+	public static function floor($input) {
+		return (int) floor((float)$input);
+	}
 }
