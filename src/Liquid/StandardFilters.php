@@ -110,6 +110,36 @@ class StandardFilters
 	}
 
 	/**
+	 * Replace occurrences of a string with another
+	 *
+	 * @param string $input
+	 * @param string $string
+	 * @param string $replacement
+	 *
+	 * @return string
+	 */
+	public static function replace($input, $string, $replacement = '') {
+		return str_replace($string, $replacement, $input);
+	}
+
+	/**
+	 * Replace the first occurrences of a string with another
+	 *
+	 * @param string $input
+	 * @param string $string
+	 * @param string $replacement
+	 *
+	 * @return string
+	 */
+	public static function replace_first($input, $string, $replacement = '') {
+		if (($pos = strpos($input, $string)) !== false) {
+			$input = substr_replace($input, $replacement, $pos, strlen($string));
+		}
+
+		return $input;
+	}
+
+	/**
 	 * Remove a substring
 	 *
 	 * @param string $input
