@@ -110,6 +110,34 @@ class StandardFilters
 	}
 
 	/**
+	 * Remove a substring
+	 *
+	 * @param string $input
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function remove($input, $string) {
+		return str_replace($string, '', $input);
+	}
+
+	/**
+	 * Remove the first occurrences of a substring
+	 *
+	 * @param string $input
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function remove_first($input, $string) {
+		if (($pos = strpos($input, $string)) !== false) {
+			$input = substr_replace($input, '', $pos, strlen($string));
+		}
+
+		return $input;
+	}
+
+	/**
 	 * Add one string to another
 	 *
 	 * @param string $input
