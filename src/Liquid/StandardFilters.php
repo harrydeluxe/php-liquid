@@ -110,6 +110,30 @@ class StandardFilters
 	}
 
 	/**
+	 * Add one string to another
+	 *
+	 * @param string $input
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function append($input, $string) {
+		return $input . $string;
+	}
+
+	/**
+	 * Prepend a string to another
+	 *
+	 * @param string $input
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function prepend($input, $string) {
+		return $string . $input;
+	}
+
+	/**
 	 * Truncate a string down to x characters
 	 *
 	 * @param string $input
