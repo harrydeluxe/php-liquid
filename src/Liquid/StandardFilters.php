@@ -192,6 +192,23 @@ class StandardFilters
 	}
 
 	/**
+	 * @param array|string $input
+	 * @param int $offset
+	 * @param int $length
+	 *
+	 * @return array|string
+	 */
+	public static function slice($input, $offset, $length = null) {
+		if (is_array($input)) {
+			$input = array_slice($input, $offset, $length);
+		} elseif (is_string($input)) {
+			$input = substr($input, $offset, $length);
+		}
+
+		return $input;
+	}
+
+	/**
 	 * Truncate a string down to x characters
 	 *
 	 * @param string $input
