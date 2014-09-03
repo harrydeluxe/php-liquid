@@ -14,7 +14,7 @@ namespace Liquid\Tag;
 use Liquid\TestCase;
 
 /**
- * Basic tests for the assignment of one variable to another. This also tests the 
+ * Basic tests for the assignment of one variable to another. This also tests the
  * assignment of filtered values to another variable.
  */
 class AssignTest extends TestCase
@@ -24,8 +24,7 @@ class AssignTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testInvalidAssign()
-	{
+	public function testInvalidAssign() {
 		//$this->setExpectedException('LiquidException');
 		$this->expectException('LiquidException');
 
@@ -40,8 +39,7 @@ class AssignTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testSimpleAssign()
-	{
+	public function testSimpleAssign() {
 		$template = new Template;
 
 		$template->parse('{% assign test = "hello" %}{{ test }}');
@@ -53,8 +51,7 @@ class AssignTest extends TestCase
 	 *
 	 * @return void
 	 */
-	public function testAssignWithFilters()
-	{
+	public function testAssignWithFilters() {
 		$template = new Template;
 
 		$template->parse('{% assign test = "hello" | upcase %}{{ test }}');
