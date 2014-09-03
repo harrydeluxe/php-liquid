@@ -1,15 +1,17 @@
 <?php
+
 /**
- * Liquid for PHP
- * 
+ * This file is part of the Liquid package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
  * @package Liquid
- * @copyright Copyright (c) 2011 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://www.opensource.org/licenses/mit-license.php
  */
 
-class VariableResolutionTest extends UnitTestCase {
+namespace Liquid;
+
+class VariableResolutionTest extends TestCase {
 	
 	function test_simple_variable()
 	{		

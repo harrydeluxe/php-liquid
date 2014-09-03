@@ -1,17 +1,18 @@
 <?php
+
 /**
- * Liquid for PHP
- * 
+ * This file is part of the Liquid package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
  * @package Liquid
- * @copyright Copyright (c) 2011 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://www.opensource.org/licenses/mit-license.php
  */
+
+namespace Liquid;
 
 class MoneyFilter
 {
-	
 	function money($value)
 	{
 		return sprintf(' %d$ ', $value);		
@@ -24,10 +25,8 @@ class MoneyFilter
 	
 }
 
-
 class CanadianMoneyFilter
 {
-	
 	function money($value)
 	{
 		return sprintf(' %d$ CAD ', $value);		
@@ -35,10 +34,8 @@ class CanadianMoneyFilter
 	
 }
 
-
-class FilterTest extends UnitTestCase
+class FilterTest extends TestCase
 {
-	
 	/**
 	 * The current context
 	 *
@@ -102,9 +99,8 @@ class FilterTest extends UnitTestCase
 }
 
 
-class LiquidFiltersInTemplate extends UnitTestCase
+class LiquidFiltersInTemplate extends TestCase
 {
-	
 	function test_local_global()
 	{
 		$template = new Template;

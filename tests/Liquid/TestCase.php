@@ -9,7 +9,9 @@
  * @package Liquid
  */
 
-class LiquidTestcase extends PHPUnit_Framework_TestCase
+namespace Liquid;
+
+class TestCase extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var mixed Filters
@@ -23,7 +25,7 @@ class LiquidTestcase extends PHPUnit_Framework_TestCase
 	 * @param string $message
 	 */
 	public function assertTemplateResult($expected, $templateString, array $assigns = array(), $message = "%s") {
-		$template = new \Liquid\Template();
+		$template = new Template();
 		$template->parse($templateString);
 
 		$this->assertEquals($expected, $template->render($assigns, $this->filters), $message);

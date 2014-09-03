@@ -1,24 +1,23 @@
 <?php
+
 /**
- * Liquid for PHP
- * 
+ * This file is part of the Liquid package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
  * @package Liquid
- * @copyright Copyright (c) 2011 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://www.opensource.org/licenses/mit-license.php
  */
 
+namespace Liquid\Tag;
+
+use Liquid\TestCase;
 
 /**
  * Basic tests for the assignment of one variable to another. This also tests the 
  * assignment of filtered values to another variable.
- *
- * @author Viorel Dram
- *
- * @package Liquid
  */
-class AssignTest extends UnitTestCase
+class AssignTest extends TestCase
 {
 	/**
 	 * Tests the normal behavior of throwing an exception when the assignment is incorrect

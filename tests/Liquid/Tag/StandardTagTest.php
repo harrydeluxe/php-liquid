@@ -1,36 +1,41 @@
 <?php
+
 /**
- * Liquid for PHP
- * 
+ * This file is part of the Liquid package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
  * @package Liquid
- * @copyright Copyright (c) 2011 Harald Hanek, 
- * fork of php-liquid (c) 2006 Mateo Murphy,
- * based on Liquid for Ruby (c) 2006 Tobias Luetke
- * @license http://www.opensource.org/licenses/mit-license.php
  */
 
+namespace Liquid\Tag;
 
+use Liquid\FileSystem;
+use Liquid\TestCase;
+use Liquid\Template;
 
-
-
-class LiquidTestFileSystem extends LiquidBlankFileSystem 
+/**
+ * Helper FileSytem
+ */
+class LiquidTestFileSystem implements FileSystem
 {
-	
-	function readTemplateFile($templatePath)
-	{
+	/**
+	 * @param string $templatePath
+	 *
+	 * @return string
+	 */
+	public function readTemplateFile($templatePath) {
 		if ($templatePath == 'inner') {
 			return "Inner: {{ inner }}{{ other }}";
-			
-		}		
+		}
+
+		return '';
 	}
-	
 }
 
-
-class LiquidStandardTagTest extends LiquidTestcase
+class LiquidStandardTagTest extends TestCase
 {
-	
-	
 	function test_no_transform()
 	{
 		
@@ -329,7 +334,7 @@ XPCTD;
 		
 		$output = $template->render(array("var" => array(1,2,3)));
 		
-		$this->assertEqual("Outer-Inner: value23-OuterInner: 1loopInner: 2loopInner: 3loop", $output);
+		$this->assertEquals("Outer-Inner: value23-OuterInner: 1loopInner: 2loopInner: 3loop", $output);
 	}
 	
 	function test_include_tag_no_with()
@@ -341,7 +346,7 @@ XPCTD;
 
 		$output = $template->render(array("inner"=>"orig", "var" => array(1,2,3)));
 		
-		$this->assertEqual("Outer-Inner: orig-Outer-Inner: orig23", $output);
+		$this->assertEquals("Outer-Inner: orig-Outer-Inner: orig23", $output);
 	}
 
 }
