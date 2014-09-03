@@ -9,8 +9,6 @@
  * @package Liquid
  */
 
-$loader = require __DIR__ . '../vendor/autoload.php';
+$loader = require __DIR__ . '/../vendor/autoload.php';
+$loader->addPsr4('Liquid\\', __DIR__ . '/../src/Liquid');
 $loader->addPsr4('Liquid\\', __DIR__ . '/Liquid');
-
-\Liquid\Liquid::set('INCLUDE_SUFFIX', 'tpl');
-\Liquid\Liquid::set('INCLUDE_PREFIX', '');
