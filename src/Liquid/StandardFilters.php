@@ -173,6 +173,45 @@ class StandardFilters
 	}
 
 	/**
+	 * Sort the elements of an array
+	 *
+	 * @param array $input
+	 * @param string $property use this property of an array element
+	 *
+	 * @return array
+	 */
+	public static function sort(array $input, $property = null) {
+		if ($property === null) {
+			asort($input);
+		} else {
+			$first = reset($input);
+			if ($first !== false && is_array($first) && array_key_exists($property, $first)) {
+				uasort($input, function($a, $b) use ($property) {
+					if ($a[$property] == $b[$property]) {
+						return 0;
+					}
+
+					return $a[$property] < $b[$property] ? -1 : 1;
+				});
+			}
+		}
+
+		return $input;
+	}
+
+	/**
+	 * Sort an array by key.
+	 *
+	 * @param array $input
+	 *
+	 * @return array
+	 */
+	public static function sort_key(array $input) {
+		ksort($input);
+		return $input;
+	}
+
+	/**
 	 * Formats a date using strftime
 	 *
 	 * @param mixed $input
