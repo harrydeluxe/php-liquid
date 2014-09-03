@@ -294,6 +294,17 @@ class StandardFilters
 	}
 
 	/**
+	 * Reverse the elements of an array
+	 *
+	 * @param array $input
+	 *
+	 * @return array
+	 */
+	public static function reverse(array $input) {
+		return array_reverse($input);
+	}
+
+	/**
 	 * Formats a date using strftime
 	 *
 	 * @param mixed $input
