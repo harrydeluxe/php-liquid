@@ -65,7 +65,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{best_cars}} ";
 		$expected = " bmw ";
 		
-		$this->assert_template_result($expected, $text, $this->assigns);		
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 	
 	function test_variable_trasversing()
@@ -73,7 +73,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{car.bmw}} {{car.gm}} {{car.bmw}} ";
 		
 		$expected = " good bad good ";
-		$this->assert_template_result($expected, $text, $this->assigns);
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 	
 	function test_variable_piping()
@@ -81,7 +81,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{ car.gm | make_funny }} ";
 		$expectd = " LOL ";
 		
-		$this->assert_template_result($expectd, $text, $this->assigns);
+		$this->assertTemplateResult($expectd, $text, $this->assigns);
 	}
 	
 	function test_variable_piping_with_input()
@@ -89,7 +89,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{ car.gm | cite_funny }} ";
 		$expectd = " LOL: bad ";
 		
-		$this->assert_template_result($expectd, $text, $this->assigns);
+		$this->assertTemplateResult($expectd, $text, $this->assigns);
 	}
 
 	function test_variable_piping_with_args()
@@ -97,7 +97,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{ car.gm | add_smiley : ':-(' }} ";
 		$expected = " bad :-( ";
 		
-		$this->assert_template_result($expected, $text, $this->assigns);
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 	
 	function text_variable_piping_with_no_args()
@@ -105,7 +105,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{ car.gm | add_smile }} ";
 		$expected = " bad :-( ";
 		
-		$this->assert_template_result($expected, $text, $this->assigns);
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 	
 	
@@ -114,7 +114,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{ car.gm | add_smiley : ':-(' | add_smiley : ':-('}} ";
 		$expected = " bad :-( :-( ";
 
-		$this->assert_template_result($expected, $text, $this->assigns);		
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 		
 	function test_variable_piping_with_two_args()
@@ -122,7 +122,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{ car.gm | add_tag : 'span', 'bar'}} ";
 		$expected = " <span id=\"bar\">bad</span> ";
 		
-		$this->assert_template_result($expected, $text, $this->assigns);				
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 		
 		
@@ -131,7 +131,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{ car.gm | add_tag : 'span', car.bmw}} ";
 		$expected = " <span id=\"good\">bad</span> ";
 		
-		$this->assert_template_result($expected, $text, $this->assigns);				
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 
 	function test_multiple_pipings()
@@ -139,7 +139,7 @@ class OutputTest extends LiquidTestcase
 		$text = " {{ best_cars | cite_funny | paragraph }} ";
 		$expected = " <p>LOL: bmw</p> ";
 		
-		$this->assert_template_result($expected, $text, $this->assigns);				
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}		
 		
 	function test_link_to()
@@ -147,6 +147,6 @@ class OutputTest extends LiquidTestcase
 		$text = " {{ 'Typo' | link_to: 'http://typo.leetsoft.com' }} ";
 		$expected = " <a href=\"http://typo.leetsoft.com\">Typo</a> ";
 		
-		$this->assert_template_result($expected, $text, $this->assigns);				
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}	
 }

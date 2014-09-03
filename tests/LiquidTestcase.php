@@ -1,33 +1,31 @@
 <?php
 
+/**
+ * This file is part of the Liquid package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @package Liquid
+ */
 
-class LiquidTestcase extends UnitTestCase
+class LiquidTestcase extends PHPUnit_Framework_TestCase
 {
-
+	/**
+	 * @var mixed Filters
+	 */
 	public $filters;
-	
-	public function assert_template_result($expected, $template, $assigns = null, $message = "%s", $debug = false) {
-	
-		if (is_null($assigns)) {
-			$assigns = array();
-		}
-		
-		$result = new Template;
 
-		$result->parse($template);
-
-		if ($debug) {
-			debug($result);
-		}
-		
-		$this->assertEqual($expected, $result->render($assigns, $this->filters), $message);
-	}
-
-	
-	public function assertTrueHelper($templateString, $expected, $data = array())
-	{
-		$template = new Template;
+	/**
+	 * @param mixed $expected
+	 * @param string $templateString
+	 * @param array $assigns
+	 * @param string $message
+	 */
+	public function assertTemplateResult($expected, $templateString, array $assigns = array(), $message = "%s") {
+		$template = new \Liquid\Template();
 		$template->parse($templateString);
-		$this->assertTrue($template->render($data) === $expected);
+
+		$this->assertEquals($expected, $template->render($assigns, $this->filters), $message);
 	}
 }
