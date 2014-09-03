@@ -311,6 +311,17 @@ class StandardFilters
 	}
 
 	/**
+	 * Remove duplicate elements from an array
+	 *
+	 * @param array $input
+	 *
+	 * @return array
+	 */
+	public static function uniq(array $input) {
+		return array_unique($input);
+	}
+
+	/**
 	 * Reverse the elements of an array
 	 *
 	 * @param array $input
