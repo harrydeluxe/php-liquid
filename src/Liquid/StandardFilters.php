@@ -348,6 +348,33 @@ class StandardFilters
 	}
 
 	/**
+	 * @param string $input
+	 *
+	 * @return string
+	 */
+	public static function strip($input) {
+		return trim($input);
+	}
+
+	/**
+	 * @param string $input
+	 *
+	 * @return string
+	 */
+	public static function lstrip($input) {
+		return ltrim($input);
+	}
+
+	/**
+	 * @param string $input
+	 *
+	 * @return string
+	 */
+	public static function rstrip($input) {
+		return rtrim($input);
+	}
+
+	/**
 	 * addition
 	 *
 	 * @param int $input
