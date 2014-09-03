@@ -21,6 +21,9 @@
     "require": {
 		"php": ">= 5.3"
 	},
+	"require-dev": {
+		"phpunit/phpunit": "*"
+	},
 	"autoload": {
 		"psr-4": {
 			"Liquid\\": "src/Liquid"
