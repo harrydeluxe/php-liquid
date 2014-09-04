@@ -13,100 +13,97 @@ namespace Liquid;
 
 class VariableTest extends TestCase
 {
-	function test_variable() {
+	public function testVariable() {
 		$var = new Variable('hello');
-		$this->assertEqual('hello', $var->getName());
+		$this->assertEquals('hello', $var->getName());
 	}
 
-	function test_filters() {
+	public function testFilters() {
 		$var = new Variable('hello | textileze');
-		$this->assertEqual('hello', $var->getName());
-		$this->assertEqual(array(array('textileze', array())), $var->getFilters());
+		$this->assertEquals('hello', $var->getName());
+		$this->assertEquals(array(array('textileze', array())), $var->getFilters());
 
 		$var = new Variable('hello | textileze | paragraph');
-		$this->assertEqual('hello', $var->getName());
-		$this->assertEqual(array(array('textileze', array()), array('paragraph', array())), $var->getFilters());
+		$this->assertEquals('hello', $var->getName());
+		$this->assertEquals(array(array('textileze', array()), array('paragraph', array())), $var->getFilters());
 
 		$var = new Variable(" hello | strftime: '%Y'");
-		$this->assertEqual('hello', $var->getName());
-		$this->assertEqual(array(array('strftime', array("'%Y'"))), $var->getFilters());
+		$this->assertEquals('hello', $var->getName());
+		$this->assertEquals(array(array('strftime', array("'%Y'"))), $var->getFilters());
 
 		$var = new Variable(" 'typo' | link_to: 'Typo', true ");
-		$this->assertEqual("'typo'", $var->getName());
-		$this->assertEqual(array(array('link_to', array("'Typo'", "true"))), $var->getFilters());
+		$this->assertEquals("'typo'", $var->getName());
+		$this->assertEquals(array(array('link_to', array("'Typo'", "true"))), $var->getFilters());
 
 		$var = new Variable(" 'typo' | link_to: 'Typo', false ");
-		$this->assertEqual("'typo'", $var->getName());
-		$this->assertEqual(array(array('link_to', array("'Typo'", "false"))), $var->getFilters());
+		$this->assertEquals("'typo'", $var->getName());
+		$this->assertEquals(array(array('link_to', array("'Typo'", "false"))), $var->getFilters());
 
 		$var = new Variable(" 'foo' | repeat: 3 ");
-		$this->assertEqual("'foo'", $var->getName());
-		$this->assertEqual(array(array('repeat', array("3"))), $var->getFilters());
+		$this->assertEquals("'foo'", $var->getName());
+		$this->assertEquals(array(array('repeat', array("3"))), $var->getFilters());
 
 		$var = new Variable(" 'foo' | repeat: 3, 3");
-		$this->assertEqual("'foo'", $var->getName());
-		$this->assertEqual(array(array('repeat', array("3", "3"))), $var->getFilters());
+		$this->assertEquals("'foo'", $var->getName());
+		$this->assertEquals(array(array('repeat', array("3", "3"))), $var->getFilters());
 
 		$var = new Variable(" 'foo' | repeat: 3, 3, 3 ");
-		$this->assertEqual("'foo'", $var->getName());
-		$this->assertEqual(array(array('repeat', array("3", "3", "3"))), $var->getFilters());
+		$this->assertEquals("'foo'", $var->getName());
+		$this->assertEquals(array(array('repeat', array("3", "3", "3"))), $var->getFilters());
 
 		$var = new Variable(" hello | strftime: '%Y, okay?'");
-		$this->assertEqual('hello', $var->getName());
-		$this->assertEqual(array(array('strftime', array("'%Y, okay?'"))), $var->getFilters());
+		$this->assertEquals('hello', $var->getName());
+		$this->assertEquals(array(array('strftime', array("'%Y, okay?'"))), $var->getFilters());
 
 		$var = new Variable(" hello | things: \"%Y, okay?\", 'the other one'");
-		$this->assertEqual('hello', $var->getName());
-		$this->assertEqual(array(array('things', array('"%Y, okay?"', "'the other one'"))), $var->getFilters());
-
+		$this->assertEquals('hello', $var->getName());
+		$this->assertEquals(array(array('things', array('"%Y, okay?"', "'the other one'"))), $var->getFilters());
 	}
 
-	function test_filters_without_whitespace() {
+	public function testFiltersWithoutWhitespace() {
 		$var = new Variable('hello | textileze | paragraph');
-		$this->assertEqual('hello', $var->getName());
-		$this->assertEqual(array(array('textileze', array()), array('paragraph', array())), $var->getFilters());
+		$this->assertEquals('hello', $var->getName());
+		$this->assertEquals(array(array('textileze', array()), array('paragraph', array())), $var->getFilters());
 
 		$var = new Variable('hello|textileze|paragraph');
-		$this->assertEqual('hello', $var->getName());
-		$this->assertEqual(array(array('textileze', array()), array('paragraph', array())), $var->getFilters());
-
+		$this->assertEquals('hello', $var->getName());
+		$this->assertEquals(array(array('textileze', array()), array('paragraph', array())), $var->getFilters());
 	}
 
-	function test_symbol() {
+	public function testSymbol() {
 		$var = new Variable("http://disney.com/logo.gif | image: 'med' ");
-		$this->assertEqual('http://disney.com/logo.gif', $var->getName());
-		$this->assertEqual(array(array('image', array("'med'"))), $var->getFilters());
-
+		$this->assertEquals('http://disney.com/logo.gif', $var->getName());
+		$this->assertEquals(array(array('image', array("'med'"))), $var->getFilters());
 	}
 
-	function test_string_single_quoted() {
+	public function testStringSingleQuoted() {
 		$var = new Variable(' "hello" ');
-		$this->assertEqual('"hello"', $var->getName());
+		$this->assertEquals('"hello"', $var->getName());
 	}
 
-	function test_string_double_quoted() {
+	public function testStringDoubleQuoted() {
 		$var = new Variable(" 'hello' ");
-		$this->assertEqual("'hello'", $var->getName());
+		$this->assertEquals("'hello'", $var->getName());
 	}
 
-	function test_integer() {
+	public function testInteger() {
 		$var = new Variable(' 1000 ');
-		$this->assertEqual('1000', $var->getName());
+		$this->assertEquals('1000', $var->getName());
 	}
 
-	function test_float() {
+	public function testFloat() {
 		$var = new Variable(' 1000.01 ');
-		$this->assertEqual('1000.01', $var->getName());
+		$this->assertEquals('1000.01', $var->getName());
 	}
 
-	function test_string_with_special_chars() {
+	public function testStringWithSpecialChars() {
 		$var = new Variable("'hello! $!@.;\"ddasd\" ' ");
-		$this->assertEqual("'hello! $!@.;\"ddasd\" '", $var->getName());
+		$this->assertEquals("'hello! $!@.;\"ddasd\" '", $var->getName());
 	}
 
-	function test_string_dot() {
+	public function testStringDot() {
 		$var = new Variable(" test.test ");
-		$this->assertEqual('test.test', $var->getName());
+		$this->assertEquals('test.test', $var->getName());
 	}
 }
 

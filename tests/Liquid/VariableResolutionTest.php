@@ -13,37 +13,31 @@ namespace Liquid;
 
 class VariableResolutionTest extends TestCase
 {
-
-	function test_simple_variable() {
+	public function testSimpleVariable() {
 		$template = new Template();
 		$template->parse("{{test}}");
-		$this->assertEqual('worked', $template->render(array('test' => 'worked')));
+		$this->assertEquals('worked', $template->render(array('test' => 'worked')));
 	}
 
-	function test_simple_with_whitespaces() {
+	public function testSimpleWithWhitespaces() {
 		$template = new Template();
 
 		$template->parse('  {{ test }}  ');
-		$this->assertEqual('  worked  ', $template->render(array('test' => 'worked')));
-		$this->assertEqual('  worked wonderfully  ', $template->render(array('test' => 'worked wonderfully')));
+		$this->assertEquals('  worked  ', $template->render(array('test' => 'worked')));
+		$this->assertEquals('  worked wonderfully  ', $template->render(array('test' => 'worked wonderfully')));
 	}
 
-	function test_ignore_unknown() {
+	public function testIgnoreUnknown() {
 		$template = new Template();
 
 		$template->parse('{{ test }}');
-		$this->assertEqual('', $template->render());
+		$this->assertEquals('', $template->render());
 	}
 
-	function test_array_scoping() {
+	public function testArrayScoping() {
 		$template = new Template();
 
 		$template->parse('{{ test.test }}');
-		$this->assertEqual('worked', $template->render(array('test' => array('test' => 'worked'))));
-
-		// this wasn't working properly in if tests, test seperately
-		$template->parse('{{ foo.bar }}');
-		$this->dump($template->render(array('foo' => array())));
+		$this->assertEquals('worked', $template->render(array('test' => array('test' => 'worked'))));
 	}
-
 }
