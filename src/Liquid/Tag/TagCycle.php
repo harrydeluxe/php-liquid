@@ -117,7 +117,7 @@ class TagCycle extends AbstractTag
 		foreach ($parts as $part) {
 			$regexp->match($part);
 
-			if ($regexp->matches[1]) {
+			if (!empty($regexp->matches[1])) {
 				$result[] = $regexp->matches[1];
 			}
 		}

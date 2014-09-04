@@ -22,7 +22,7 @@ class Regexp
 	 *
 	 * @var string
 	 */
-	public $pattern;
+	private $pattern;
 
 	/**
 	 * The matches from the last method called

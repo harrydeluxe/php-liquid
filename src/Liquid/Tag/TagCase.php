@@ -115,7 +115,7 @@ class TagCase extends Decision
 				// push the last nodelist onto the stack and prepare to recieve the else nodes
 				$this->pushNodelist();
 				$this->right = null;
-				$this->elseNodelist = $this->nodelist;
+				$this->elseNodelist = &$this->nodelist;
 				$this->nodelist = array();
 				break;
 

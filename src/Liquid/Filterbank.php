@@ -22,21 +22,21 @@ class Filterbank
 	 *
 	 * @var array
 	 */
-	public $filters;
+	private $filters;
 
 	/**
 	 * A map of all filters and the class that contain them (in the case of methods)
 	 *
 	 * @var array
 	 */
-	public $methodMap;
+	private $methodMap;
 
 	/**
 	 * Reference to the current context object
 	 *
 	 * @var Context
 	 */
-	public $context;
+	private $context;
 
 	/**
 	 * Constructor

@@ -160,7 +160,7 @@ class Context
 	 * @throws LiquidException
 	 * @return mixed
 	 */
-	public function resolve($key) {
+	private function resolve($key) {
 		// This shouldn't happen
 		if (is_array($key)) {
 			throw new LiquidException("Cannot resolve arrays as key");
@@ -204,7 +204,7 @@ class Context
 	 *
 	 * @return mixed
 	 */
-	public function fetch($key) {
+	private function fetch($key) {
 		foreach ($this->environments as $environment) {
 			if (array_key_exists($key, $environment)) {
 				return $environment[$key];
@@ -234,7 +234,7 @@ class Context
 	 * @throws LiquidException
 	 * @return mixed
 	 */
-	public function variable($key) {
+	private function variable($key) {
 		// Support [0] style array indicies
 		if (preg_match("|\[[0-9]+\]|", $key)) {
 			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
@@ -252,7 +252,7 @@ class Context
 			$object = $object->toLiquid();
 		}
 
-		if ($object == null) {
+		if ($object === null) {
 			return null;
 		}
 

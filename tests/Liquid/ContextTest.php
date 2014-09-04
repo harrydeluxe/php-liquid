@@ -13,178 +13,198 @@ namespace Liquid;
 
 class HundredCentes
 {
-	function toLiquid() {
+	public function toLiquid() {
 		return 100;
 	}
-
 }
 
 class CentsDrop extends Drop
 {
-	function amount() {
+	public function amount() {
 		return new HundredCentes();
 	}
-
 }
+
+class NoToLiquid {}
 
 class HiFilter
 {
-	function hi($value) {
+	public function hi($value) {
 		return $value . ' hi!';
 	}
-
 }
 
 class GlobalFilter
 {
-	function notice($value) {
+	public function notice($value) {
 		return "Global $value";
 	}
-
 }
 
 class LocalFilter
 {
-	function notice($value) {
+	public function notice($value) {
 		return "Local $value";
 	}
-
 }
 
 class ContextTest extends TestCase
 {
-	/**
-	 * @var Context
-	 */
+	/** @var Context */
 	var $context;
 
-	function setup() {
+	public function setup() {
+		parent::setUp();
+
 		$this->context = new Context();
-
 	}
 
-	function test_variables() {
-		$this->context->set('test', 'test');
-		$this->assertEqual('test', $this->context->get('test'));
-
-		// we add this text to make sure we can return values that evaluate to false properly
-		$this->context->set('test_0', 0);
-		$this->assertEqual('0', $this->context->get('test_0'));
-	}
-
-	function test_variables_not_existing() {
-		$this->assertNull($this->context->get('test'));
-
-	}
-
-	function test_scoping() {
+	public function testScoping() {
 		$this->context->push();
 		$this->assertNull($this->context->pop());
-
 	}
 
-	function test_length_query() {
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testNoScopeToPop() {
+		$this->context->pop();
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testGetArray() {
+		$this->context->get(array());
+	}
+
+	public function testGetNotVariable() {
+		$data = array(
+			null => null,
+			'null' => null,
+			'true' => true,
+			'false' => false,
+			"'quoted_string'" => 'quoted_string',
+			'"double_quoted_string"' => "double_quoted_string",
+		);
+
+		foreach ($data as $key => $expected) {
+			$this->assertEquals($expected, $this->context->get($key));
+		}
+
+		$this->assertEquals(42.00, $this->context->get(42.00));
+	}
+
+	public function testVariablesNotExisting() {
+		$this->assertNull($this->context->get('test'));
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testVariableIsObjectWithNoToLiquid() {
+		$this->context->set('test', new NoToLiquid());
+		$this->context->get('test');
+	}
+
+	public function testVariables() {
+		$this->context->set('test', 'test');
+		$this->assertEquals('test', $this->context->get('test'));
+
+		// We add this text to make sure we can return values that evaluate to false properly
+		$this->context->set('test_0', 0);
+		$this->assertEquals('0', $this->context->get('test_0'));
+	}
+
+	public function testLengthQuery() {
 		$this->context->set('numbers', array(1, 2, 3, 4));
-		$this->assertEqual(4, $this->context->get('numbers.size'));
+		$this->assertEquals(4, $this->context->get('numbers.size'));
 	}
 
-
-	function test_add_filter() {
-		$context = new Context();
-		$context->addFilters(new HiFilter());
-		$this->assertEqual('hi? hi!', $context->invoke('hi', 'hi?'));
-
-		$context = new Context();
-		$this->assertEqual('hi?', $context->invoke('hi', 'hi?'));
-
-		$context->addFilters(new HiFilter());
-		$this->assertEqual('hi? hi!', $context->invoke('hi', 'hi?'));
+	public function testOverrideSize() {
+		$this->context->set('hash', array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'size' => '5000'));
+		$this->assertEquals(5000, $this->context->get('hash.size'));
 	}
 
+	public function testHierchalData() {
+		$this->context->set('hash', array('name' => 'tobi'));
+		$this->assertEquals('tobi', $this->context->get('hash.name'));
+	}
 
-	// skip this one for now, as we haven't implemented global filters yet
-	function test_override_global_filter() {
+	public function testHierchalDataNoKey() {
+		$this->context->set('hash', array('name' => 'tobi'));
+		$this->assertNotNull('tobi', $this->context->get('hash.no_key'));
+	}
+
+	public function testAddFilter() {
+		$context = new Context();
+		$context->addFilters(new HiFilter());
+		$this->assertEquals('hi? hi!', $context->invoke('hi', 'hi?'));
+
+		$context = new Context();
+		$this->assertEquals('hi?', $context->invoke('hi', 'hi?'));
+
+		$context->addFilters(new HiFilter());
+		$this->assertEquals('hi? hi!', $context->invoke('hi', 'hi?'));
+	}
+
+	public function testOverrideGlobalFilter() {
 		$template = new Template();
 		$template->registerFilter(new GlobalFilter());
 
 		$template->parse("{{'test' | notice }}");
-		$this->assertEqual('Global test', $template->render());
-		$this->assertEqual('Local test', $template->render(array(), new LocalFilter()));
+		$this->assertEquals('Global test', $template->render());
+		$this->assertEquals('Local test', $template->render(array(), new LocalFilter()));
 	}
 
-	function test_add_item_in_outer_scope() {
+	public function testAddItemInOuterScope() {
 		$this->context->set('test', 'test');
 		$this->context->push();
-		$this->assertEqual('test', $this->context->get('test'));
+		$this->assertEquals('test', $this->context->get('test'));
 		$this->context->pop();
-		$this->assertEqual('test', $this->context->get('test'));
+		$this->assertEquals('test', $this->context->get('test'));
 	}
 
-	function test_add_item_in_inner_scope() {
+	public function testAddItemInInnerScope() {
 		$this->context->push();
 		$this->context->set('test', 'test');
-		$this->assertEqual('test', $this->context->get('test'));
+		$this->assertEquals('test', $this->context->get('test'));
 		$this->context->pop();
-		$this->assertEqual(null, $this->context->get('test'));
+		$this->assertEquals(null, $this->context->get('test'));
 	}
 
-	function test_hierchal_data() {
-		$this->context->set('hash', array('name' => 'tobi'));
-		$this->assertEqual('tobi', $this->context->get('hash.name'));
-	}
-
-	function test_keywords() {
-		$this->assertEqual(true, $this->context->get('true'));
-		$this->assertEqual(false, $this->context->get('false'));
-	}
-
-	function test_digits() {
-		$this->assertEqual(100, $this->context->get(100));
-		$this->assertEqual(100.00, $this->context->get(100.00));
-	}
-
-	function test_string() {
-		$this->assertEqual("hello!", $this->context->get("'hello!'"));
-		$this->assertEqual("hello!", $this->context->get('"hello!"'));
-	}
-
-	function test_merge() {
+	public function testMerge() {
 		$this->context->merge(array('test' => 'test'));
-		$this->assertEqual('test', $this->context->get('test'));
+		$this->assertEquals('test', $this->context->get('test'));
 
 		$this->context->merge(array('test' => 'newvalue', 'foo' => 'bar'));
-		$this->assertEqual('newvalue', $this->context->get('test'));
-		$this->assertEqual('bar', $this->context->get('foo'));
-
+		$this->assertEquals('newvalue', $this->context->get('test'));
+		$this->assertEquals('bar', $this->context->get('foo'));
 	}
 
-	function test_cents() {
+	public function testCents() {
 		$this->context->merge(array('cents' => new HundredCentes()));
-		$this->assertEqual(100, $this->context->get('cents'));
+		$this->assertEquals(100, $this->context->get('cents'));
 	}
 
-
-	function test_nested_cents() {
+	public function testNestedCents() {
 		$this->context->merge(array('cents' => array('amount' => new HundredCentes())));
-		$this->assertEqual(100, $this->context->get('cents.amount'));
-
+		$this->assertEquals(100, $this->context->get('cents.amount'));
 
 		$this->context->merge(array('cents' => array('cents' => array('amount' => new HundredCentes()))));
-		$this->assertEqual(100, $this->context->get('cents.cents.amount'));
-
+		$this->assertEquals(100, $this->context->get('cents.cents.amount'));
 	}
 
-	function test_cents_through_drop() {
+	public function testCentsThroughDrop() {
 		$this->context->merge(array('cents' => new CentsDrop()));
-		$this->assertEqual(100, $this->context->get('cents.amount'));
-
+		$this->assertEquals(100, $this->context->get('cents.amount'));
 	}
 
-	function test_cents_through_drop_nestedly() {
+	public function testCentsThroughDropNestedly() {
 		$this->context->merge(array('cents' => array('cents' => new CentsDrop())));
-		$this->assertEqual(100, $this->context->get('cents.cents.amount'));
+		$this->assertEquals(100, $this->context->get('cents.cents.amount'));
 
 		$this->context->merge(array('cents' => array('cents' => array('cents' => new CentsDrop()))));
-		$this->assertEqual(100, $this->context->get('cents.cents.cents.amount'));
+		$this->assertEquals(100, $this->context->get('cents.cents.cents.amount'));
 	}
 }

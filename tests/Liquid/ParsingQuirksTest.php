@@ -13,15 +13,14 @@ namespace Liquid;
 
 class ParsingQuirksTest extends TestCase
 {
-	public function test_error_with_css() {
+	public function testErrorWithCss() {
 		$text = " div { font-weight: bold; } ";
 		$template = new Template();
 		$template->parse($text);
 
 		$nodelist = $template->getRoot()->getNodelist();
 
-		$this->assertEqual($text, $template->render());
-		$this->assertIsA($nodelist[0], 'string');
+		$this->assertEquals($text, $template->render());
+		$this->assertInternalType('string', $nodelist[0]);
 	}
-
 }

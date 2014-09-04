@@ -9,78 +9,111 @@
  * @package Liquid
  */
 
-namespace Liquid;
+namespace {
 
-function test_function_filter($value) {
-	return "worked";
+/**
+ * Global function acts as a filter.
+ *
+ * @param $value
+ *
+ * @return string
+ */
+function functionFilter($value) {
+	return 'worked';
 }
 
-class TestClassFilter
+/**
+ * Global filter class
+ */
+class ClassFilter
 {
+	private $variable = 'not set';
 
-	var $variable = 'not set';
-
-
-	function static_test() {
+	public static function static_test() {
 		return "worked";
-
 	}
 
-	function instance_test_one() {
+	public function instance_test_one() {
 		$this->variable = 'set';
 		return 'set';
 	}
 
-	function instance_test_two() {
+	public function instance_test_two() {
 		return $this->variable;
-
 	}
 }
 
+} // global namespace
+
+namespace Liquid {
+
 class FilterbankTest extends TestCase
 {
+	/** @var FilterBank */
+	private $filterBank;
+
+	/** @var Context */
+	private $context;
+
+	protected function setup() {
+		parent::setUp();
+
+		$this->context = new Context();
+		$this->filterBank = new FilterBank($this->context);
+	}
 
 	/**
-	 * @var Filterbank
+	 * @expectedException \Liquid\LiquidException
 	 */
-	var $context;
+	public function testAddFilterNotObjectAndString() {
+		$this->filterBank->addFilter(array());
+	}
 
-	function setup() {
-		$this->context = new Context();
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testAddFilterNoFunctionOrClass() {
+		$this->filterBank->addFilter('no_such_function_or_class');
+	}
+
+	public function testInvokeNoFilter() {
+		$value = 'value';
+		$this->assertEquals($value, $this->filterBank->invoke('non_existing_filter', $value));
 	}
 
 	/**
 	 * Test using a simple function
 	 */
-	function test_function_filter() {
-		$var = new Variable('var | test_function_filter');
+	public function testFunctionFilter() {
+		$var = new Variable('var | functionFilter');
 		$this->context->set('var', 1000);
-		$this->context->addFilters('test_function_filter');
-		$this->assertIdentical('worked', $var->render($this->context));
+		$this->context->addFilters('functionFilter');
+		$this->assertEquals('worked', $var->render($this->context));
 	}
 
 	/**
 	 * Test using a static class
 	 */
-	function test_static_class_filter() {
+	public function testStaticClassFilter() {
 		$var = new Variable('var | static_test');
 		$this->context->set('var', 1000);
-		$this->context->addFilters('TestClassFilter');
-		$this->assertIdentical('worked', $var->render($this->context));
+		$this->context->addFilters('\ClassFilter');
+		$this->assertEquals('worked', $var->render($this->context));
 	}
 
 	/**
-	 * test using an object as a filter; an object fiter will retain its state
-	 * between calls to its filters
+	 * Test using an object as a filter; an object fiter will retain its state
+	 * between calls to its filters.
 	 */
-	function test_object_filter() {
+	public function testObjectFilter() {
 		$var = new Variable('var | instance_test_one');
 		$this->context->set('var', 1000);
-		$this->context->addFilters(new TestClassFilter());
-		$this->assertIdentical('set', $var->render($this->context));
+		$this->context->addFilters(new \ClassFilter());
+		$this->assertEquals('set', $var->render($this->context));
 
 		$var = new Variable('var | instance_test_two');
-		$this->assertIdentical('set', $var->render($this->context));
-
+		$this->assertEquals('set', $var->render($this->context));
 	}
 }
+
+} // Liquid namespace
