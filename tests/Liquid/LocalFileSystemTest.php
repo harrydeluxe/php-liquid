@@ -16,6 +16,14 @@ class LocalFileSystemTest extends Testcase
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
+	public function testIllegalTemplateNameEmpty() {
+		$fileSystem = new LocalFileSystem('');
+		$fileSystem->fullPath('');
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
 	public function testIllegalTemplateNameIncludeExtension() {
 		Liquid::set('INCLUDE_ALLOW_EXT', false);
 
@@ -23,36 +31,58 @@ class LocalFileSystemTest extends Testcase
 		$fileSystem->fullPath('has_extension.ext');
 	}
 
-	/*
-	public function test_local() {
-		$root = dirname(__FILE__) . '/templates/';
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testIllegalTemplateNameNotIncludeExtension() {
+		Liquid::set('INCLUDE_ALLOW_EXT', true);
 
-		$file_system = new LiquidLocalFileSystem($root);
-		$this->assertEqual($root . "mypartial.tpl", $file_system->fullPath("mypartial"));
-		$this->assertEqual($root . "dir/mypartial.tpl", $file_system->fullPath("dir/mypartial"));
-
-
-		try {
-			$file_system->fullPath('../dir/mypartial');
-			$this->fail();
-		} catch (\Exception $e) {
-			$this->assertEqual($e->getMessage(), "Illegal template name '../dir/mypartial'");
-		}
-
-
-		try {
-			$file_system->fullPath("/dir/../../dir/mypartial");
-			$this->fail();
-		} catch (\Exception $e) {
-			$this->assertEqual($e->getMessage(), "Illegal template name '/dir/../../dir/mypartial'");
-		}
-
-		try {
-			$file_system->fullPath("/etc/passwd");
-			$this->fail();
-		} catch (\Exception $e) {
-			$this->assertEqual($e->getMessage(), "Illegal template name '/etc/passwd'");
-		}
+		$fileSystem = new LocalFileSystem('');
+		$fileSystem->fullPath('has_extension');
 	}
-	*/
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testIllegalTemplatePathNoRoot() {
+		$fileSystem = new LocalFileSystem('');
+		$fileSystem->fullPath('mypartial');
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testIllegalTemplatePathNoFileExists() {
+		$fileSystem = new LocalFileSystem(dirname(__DIR__));
+		$fileSystem->fullPath('no_such_file_exists');
+	}
+
+	public function testValidPathWithDefaultExtension() {
+		$root = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
+		$templateName = 'mypartial';
+
+		$fileSystem = new LocalFileSystem($root);
+		$this->assertEquals($root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
+	}
+
+	public function testValidPathWithCustomExtension() {
+		Liquid::set('INCLUDE_PREFIX', '');
+		Liquid::set('INCLUDE_SUFFIX', 'tpl');
+
+		$root = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
+		$templateName = 'mypartial';
+
+		$fileSystem = new LocalFileSystem($root);
+		$this->assertEquals($root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
+	}
+
+	public function testReadTemplateFile() {
+		Liquid::set('INCLUDE_PREFIX', '');
+		Liquid::set('INCLUDE_SUFFIX', 'tpl');
+
+		$root = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
+
+		$fileSystem = new LocalFileSystem($root);
+		$this->assertEquals('test content', trim($fileSystem->readTemplateFile('mypartial')));
+	}
 }
