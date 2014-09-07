@@ -1,7 +1,7 @@
 {% comment %}
 
 This is a comment block
-(c) 2012 Harald Hanek
+(c) 2014 Guz Alexander
 
 {% endcomment %}
 <!DOCTYPE HTML>
