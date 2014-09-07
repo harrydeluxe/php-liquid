@@ -19,7 +19,9 @@ Liquid was written to meet three templating library requirements: good performan
 
 ## Installing
 
-todo: via composer
+You can install this lib via [composer](https://getcomposer.org/):
+
+    composer create-project liquid/liquid
 
 ## Example template
 
