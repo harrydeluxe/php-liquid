@@ -1,3 +1,10 @@
+* 1.0 (2014-09-07)
+
+ * Add namespaces
+ * Add composer support
+ * Implement new standard filters
+ * Add 'raw' tag
+
 * 0.9.2 (2012-08-15)
 
  * context->set allows now global vars
