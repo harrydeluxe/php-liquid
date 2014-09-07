@@ -39,7 +39,7 @@ todo: via composer
 		</ul>
 	{% endif %}
 
-## Howto use Liquid
+## How to use Liquid
 
 The main class is `Liquid::Template` class. There are two separate stages of working with Liquid templates: parsing and rendering. Here is a simple example:
 
