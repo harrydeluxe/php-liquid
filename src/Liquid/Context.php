@@ -245,11 +245,13 @@ class Context
 		$object = $this->fetch(array_shift($parts));
 
 		if (is_object($object)) {
-			if (!method_exists($object, 'toLiquid')) {
-				throw new LiquidException("Method 'toLiquid' not exists!");
+			if (method_exists($object, 'toLiquid')) {
+				$object = $object->toLiquid();
+			} else if (method_exists($object, 'toArray')) {
+				$object = $object->toArray();
+			} else {
+				throw new LiquidException("Object has no `toLiquid` nor `toArray` method!");
 			}
-
-			$object = $object->toLiquid();
 		}
 
 		if ($object === null) {
