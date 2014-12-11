@@ -178,7 +178,7 @@ class Template
 
 		if (!is_null($filters)) {
 			if (is_array($filters)) {
-				array_merge($this->filters, $filters);
+				$this->filters = array_merge($this->filters, $filters);
 			} else {
 				$this->filters[] = $filters;
 			}
