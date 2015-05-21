@@ -42,7 +42,7 @@ class TagIf extends Decision
 	 *
 	 * @var array
 	 */
-	private $blocks = array();
+	protected $blocks = array();
 
 	/**
 	 * Constructor
