@@ -103,11 +103,10 @@ class TagIf extends Decision
 
 			if ($block[0] == 'if' || $block[0] == 'elsif') {
 				// Extract logical operators
-				$logicalRegex->match($block[1]);
+				$logicalRegex->matchAll($block[1]);
 
 				$logicalOperators = $logicalRegex->matches;
-				array_shift($logicalOperators);
-
+				$logicalOperators = $logicalOperators[1];
 				// Extract individual conditions
 				$temp = $logicalRegex->split($block[1]);
 
@@ -128,16 +127,14 @@ class TagIf extends Decision
 						throw new LiquidException("Syntax Error in tag 'if' - Valid syntax: if [condition]");
 					}
 				}
-
 				if (count($logicalOperators)) {
 					// If statement contains and/or
-					$display = true;
-
+					$display = $this->interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
 					foreach ($logicalOperators as $k => $logicalOperator) {
 						if ($logicalOperator == 'and') {
-							$display = $this->interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) && $this->interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
+							$display = ($display && $this->interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context));
 						} else {
-							$display = $this->interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context) || $this->interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context);
+							$display = ($display || $this->interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context));
 						}
 					}
 
