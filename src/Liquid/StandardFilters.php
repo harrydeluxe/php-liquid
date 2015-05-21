@@ -82,8 +82,9 @@ class StandardFilters
 	 *
 	 * @return string
 	 */
-	public static function default($input) {
-		return ''; // TBC !!!
+	public static function default($input, $default_value) {
+		$is_blank = $input == '' || $input === false || $input === null;
+		return $is_blank ? $default_value : $input;
 	}
 	
 	
@@ -120,7 +121,7 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function escape($input) {
-		return is_string($input) ? addslashes($input) : $input;
+		return is_string($input) ? str_replace($input, array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;')) : $input;
 	}
 	
 	
@@ -133,7 +134,18 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function escape_once($input) {
-		return ''; // TBC !!!
+		
+		preg_match('/["><\']|&(?!([a-zA-Z]+|(#\d+));)/', $input, $match);
+		if (sizeof($matches) > 0){
+			
+			$pos = strpos($input, $matches[0]);
+			if ($pos !== false) {
+			    $input = substr_replace($input, array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), strlen($needle));
+			}
+			
+		}
+		
+		return $input;
 	}
 	
 
