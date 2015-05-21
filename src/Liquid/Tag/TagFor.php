@@ -142,8 +142,10 @@ class TagFor extends AbstractBlock
 				 // array_values is only a little help without being tested.
 				$segment = array_values($segment);
 		
-				foreach ($segment as $index => $item) {
-					$context->set($this->variableName, $item);
+				$index = 0;
+				foreach ($segment as $key => $item) {
+					$value = is_numeric($key) ? $item : array($key, $item);
+					$context->set($this->variableName, $value);
 					$context->set('forloop', array(
 						'name' => $this->name,
 						'length' => $length,

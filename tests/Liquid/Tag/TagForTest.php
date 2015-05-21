@@ -55,6 +55,10 @@ HERE;
 		$this->assertTemplateResult('a b c', '{%for item in array%}{{item}}{%endfor%}', array('array' => array('a', ' ', 'b', ' ', 'c')));
 		$this->assertTemplateResult('abc', '{%for item in array%}{{item}}{%endfor%}', array('array' => array('a', '', 'b', '', 'c')));
 	}
+	
+	public function testForWithHash() {
+		$this->assertTemplateResult('a=b c=d e=f ', '{%for item in array%}{{item[0]}}={{item[1]}} {%endfor%}', array('array' => array('a' => 'b', 'c' => 'd', 'e' => 'f')));
+	}
 
 	public function testForHelpers() {
 		$assigns = array('array' => array(1, 2, 3));
