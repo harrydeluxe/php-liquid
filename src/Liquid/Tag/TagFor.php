@@ -26,6 +26,12 @@ use Liquid\Regexp;
  *     {%for item in array%} {{item}} {%endfor%}
  *
  *     With an array of 1, 2, 3, 4, will return 1 2 3 4
+ * 		
+ *	   or
+ *
+ *	   {%for i in (1..10)%} {{i}} {%endfor%}
+ *	   {%for i in (1..variable)%} {{i}} {%endfor%} 
+ *
  */
 class TagFor extends AbstractBlock
 {
@@ -43,6 +49,11 @@ class TagFor extends AbstractBlock
 	 * @var string The name of the loop, which is a compound of the collection and variable names
 	 */
 	private $name;
+	
+	/**
+	 * @var type The type of the loop (collection or digit)
+	*/
+	private $type = 'collection';
 
 	/**
 	 * Constructor
@@ -64,7 +75,18 @@ class TagFor extends AbstractBlock
 			$this->name = $syntaxRegexp->matches[1] . '-' . $syntaxRegexp->matches[2];
 			$this->extractAttributes($markup);
 		} else {
-			throw new LiquidException("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]");
+			
+			$syntax_regexp = new LiquidRegexp('/(\w+)\s+in\s+\((\d|'.LIQUID_ALLOWED_VARIABLE_CHARS.'+)\s*..\s*(\d|'.LIQUID_ALLOWED_VARIABLE_CHARS.'+)\)/');
+			if ($syntax_regexp->match($markup)){
+				$this->type = 'digit';
+				$this->variableName = $syntax_regexp->matches[1];
+				$this->start = $syntax_regexp->matches[2];
+				$this->collectionName = $syntax_regexp->matches[3];
+				$this->name = $syntax_regexp->matches[1].'-digit';
+				$this->extractAttributes($markup);
+			} else {			
+				throw new LiquidException("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]");
+			}
 		}
 	}
 
@@ -76,59 +98,107 @@ class TagFor extends AbstractBlock
 	 * @return null|string
 	 */
 	public function render(Context $context) {
+		
 		if (!isset($context->registers['for'])) {
 			$context->registers['for'] = array();
 		}
+		
+		switch ($this->_type){
+		
+			case 'collection':
 
-		$collection = $context->get($this->collectionName);
-
-		if (is_null($collection) || !is_array($collection) || count($collection) == 0) {
-			return '';
-		}
-
-		$range = array(0, count($collection));
-
-		if (isset($this->attributes['limit']) || isset($this->attributes['offset'])) {
-			$offset = 0;
-
-			if (isset($this->attributes['offset'])) {
-				$offset = ($this->attributes['offset'] == 'continue') ? $context->registers['for'][$this->name] : $context->get($this->attributes['offset']);
-			}
-
-			$limit = (isset($this->attributes['limit'])) ? $context->get($this->attributes['limit']) : null;
-			$rangeEnd = $limit ? $limit : count($collection) - $offset;
-			$range = array($offset, $rangeEnd);
-
-			$context->registers['for'][$this->name] = $rangeEnd + $offset;
-		}
-
-		$result = '';
-		$segment = array_slice($collection, $range[0], $range[1]);
-		if (!count($segment)) {
-			return null;
-		}
-
-		$context->push();
-		$length = count($segment);
-
-		 // todo: If $segment keys are not integer, forloop not work
-		 // array_values is only a little help without being tested.
-		$segment = array_values($segment);
-
-		foreach ($segment as $index => $item) {
-			$context->set($this->variableName, $item);
-			$context->set('forloop', array(
-				'name' => $this->name,
-				'length' => $length,
-				'index' => $index + 1,
-				'index0' => $index,
-				'rindex' => $length - $index,
-				'rindex0' => $length - $index - 1,
-				'first' => (int)($index == 0),
-				'last' => (int)($index == $length - 1)
-			));
-
-			$result .= $this->renderAll($this->nodelist, $context);
+				$collection = $context->get($this->collectionName);
+		
+				if (is_null($collection) || !is_array($collection) || count($collection) == 0) {
+					return '';
+				}
+		
+				$range = array(0, count($collection));
+		
+				if (isset($this->attributes['limit']) || isset($this->attributes['offset'])) {
+					$offset = 0;
+		
+					if (isset($this->attributes['offset'])) {
+						$offset = ($this->attributes['offset'] == 'continue') ? $context->registers['for'][$this->name] : $context->get($this->attributes['offset']);
+					}
+		
+					$limit = (isset($this->attributes['limit'])) ? $context->get($this->attributes['limit']) : null;
+					$rangeEnd = $limit ? $limit : count($collection) - $offset;
+					$range = array($offset, $rangeEnd);
+		
+					$context->registers['for'][$this->name] = $rangeEnd + $offset;
+				}
+		
+				$result = '';
+				$segment = array_slice($collection, $range[0], $range[1]);
+				if (!count($segment)) {
+					return null;
+				}
+		
+				$context->push();
+				$length = count($segment);
+		
+				 // todo: If $segment keys are not integer, forloop not work
+				 // array_values is only a little help without being tested.
+				$segment = array_values($segment);
+		
+				foreach ($segment as $index => $item) {
+					$context->set($this->variableName, $item);
+					$context->set('forloop', array(
+						'name' => $this->name,
+						'length' => $length,
+						'index' => $index + 1,
+						'index0' => $index,
+						'rindex' => $length - $index,
+						'rindex0' => $length - $index - 1,
+						'first' => (int)($index == 0),
+						'last' => (int)($index == $length - 1)
+					));
+		
+					$result .= $this->renderAll($this->nodelist, $context);
+				}
+				
+			break;
+			
+			case 'digit':
+			
+				$start = $this->start;
+				if (!is_integer($this->start)){
+					$start = $context->get($this->start);
+				}
+				
+				$end = $this->collectionName;
+				if (!is_integer($this->collectionName)){
+					$end = $context->get($this->collectionName);
+				}
+				
+				$range = array($start, $end);
+				
+				$context->push();
+				$result = '';
+				$index = 0;
+				$length = $range[1] - $range[0];
+				for ($i=$range[0]; $i<=$range[1]; $i++){
+				
+					$context->set($this->variableName, $i);
+					$context->set('forloop', array(
+						'name'		=> $this->name,
+						'length' 	=> $length,
+						'index' 	=> $index + 1,
+						'index0' 	=> $index,
+						'rindex'	=> $length - $index,
+						'rindex0'	=> $length - $index - 1,
+						'first'		=> (int)($index == 0),
+						'last'		=> (int)($index == $length - 1)
+					));
+					
+					$result .= $this->renderAll($this->nodelist, $context);
+					
+					$index++;
+				}
+			
+			break;
+			
 		}
 
 		$context->pop();
