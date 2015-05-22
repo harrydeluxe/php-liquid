@@ -13,7 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagIfTest extends TestCase
+class TagIfChangedTest extends TestCase
 {
 	public function testWorks() {
 		$text = " {% for i in array %}{% ifchanged %} {{ i }} {% endifchanged %}{% endfor %}";
