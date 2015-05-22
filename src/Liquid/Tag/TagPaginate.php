@@ -64,21 +64,17 @@ class TagPaginate extends AbstractBlock
      * @return ForLiquidTag
      */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
-    {
         parent::__construct($markup, $tokens, $fileSystem);
 
-        $syntax = new LiquidRegexp('/(' . LIQUID_ALLOWED_VARIABLE_CHARS . '+)\s+by\s+(\w+)/');
+        $syntax = new LiquidRegexp('/(' . Liquid::get('ALLOWED_VARIABLE_CHARS') . '+)\s+by\s+(\w+)/');
 
-        if ($syntax->match($markup))
-        {
+        if ($syntax->match($markup)){
             $this->collectionName = $syntax->matches[1];
             $this->numberItems = $syntax->matches[2];
             $this->currentPage = ( is_numeric($_GET['page']) ) ? $_GET['page'] : 1;
             $this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
             $this->extractAttributes($markup);
-        }
-        else
-        {
+        } else {
             throw new LiquidException("Syntax Error - Valid syntax: paginate [collection] by [items]");
         }
     }
@@ -88,8 +84,7 @@ class TagPaginate extends AbstractBlock
      *
      * @param LiquidContext $context
      */
-    public function render(&$context)
-    {
+    public function render(Context $context) {
     	$this->collection = $context->get($this->collectionName);
     	$this->collectionSize = count($this->collection);
     	$this->totalPages = ceil($this->collectionSize / $this->numberItems);
@@ -97,12 +92,9 @@ class TagPaginate extends AbstractBlock
     	
     	// Sets the collection if it's a key of another collection (ie search.results, collection.products, blog.articles)
     	$segments = explode('.',$this->collectionName);
-    	if ( count($segments) == 2 )
-    	{
+    	if ( count($segments) == 2 ){
 	    	$context->set($segments[0], array($segments[1] => $paginated_collection));
-    	} 
-    	else 
-    	{
+    	} else {
 	    	$context->set($this->collectionName, $paginated_collection);
     	}
     	
@@ -114,15 +106,13 @@ class TagPaginate extends AbstractBlock
     		'items' => $this->collectionSize
     	);
     	
-    	if ( $this->currentPage != 1 )
-    	{
+    	if ( $this->currentPage != 1 ){
 	    	$paginate['previous']['title'] = 'Previous';
 	    	$paginate['previous']['url'] = $this->currentUrl() . '?page=' . ($this->currentPage - 1);
     	
     	}
     	
-    	if ( $this->currentPage != $total_pages )
-    	{
+    	if ( $this->currentPage != $total_pages ){
 	    	$paginate['next']['title'] = 'Next';
 	    	$paginate['next']['url'] = $this->currentUrl() . '?page=' . ($this->currentPage + 1);
     	}
@@ -134,8 +124,7 @@ class TagPaginate extends AbstractBlock
     /**
      * Returns the current page URL
      */
-    public function currentUrl()
-    {
+    public function currentUrl(){
 	    $url = 'http';
 		if ($_SERVER['HTTPS'] == 'on') $url .= 's';
 		$url .= '://' . $_SERVER["HTTP_HOST"] . reset(explode('?', $_SERVER["REQUEST_URI"]));
