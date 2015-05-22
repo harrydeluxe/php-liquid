@@ -52,19 +52,22 @@ class TagUnless extends TagIf{
 	 *  a != 1 or b != 2
 	 */
 	protected function revertOperators() {
+		
 		// replace
-		$replacerOperators = [
+		$replacerOperators = array(
 			'==' => '!=',
 			'<=' => '>',
 			'>=' => '<',
 			'>'  => '<=',
 			'<'  => '>=',
 			'!=' => '=='
-		];
-		$replacerLogicalOperators = [
+		);
+		
+		$replacerLogicalOperators = array(
 			'or' => 'and',
 			'and' => 'or'
-		];
+		);
+		
 		if (count($this->blocks) > 0) {
 			if (count($this->blocks[0]) > 1)  {
 				$condition = $this->blocks[0][1];
