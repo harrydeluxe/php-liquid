@@ -83,8 +83,8 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function _default($input, $default_value) {
-		$is_blank = $input == '' || $input === false || $input === null;
-		return $is_blank ? $default_value : $input;
+		$isBlank = $input == '' || $input === false || $input === null;
+		return $isBlank ? $default_value : $input;
 	}
 	
 	
