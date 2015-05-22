@@ -106,7 +106,7 @@ class StandardFiltersTest extends TestCase
 
 	public function testEscape() {
 		$data = array(
-			"one Word's not" => "one Word\'s not",
+			"one Word's not" => "one Word&#39;s not",
 			3 => 3,
 		);
 
@@ -405,6 +405,10 @@ class StandardFiltersTest extends TestCase
 		$this->assertEquals($expected, StandardFilters::sort($original, 'b'), '', 0, 10, true);
 	}
 
+/*
+	
+	I've commented this out as its not one of the Ruby Standard Filters
+	
 	public function testSortKey() {
 		$data = array(
 			array(
@@ -421,7 +425,13 @@ class StandardFiltersTest extends TestCase
 			$this->assertEquals($item[1], StandardFilters::sort_key($item[0]));
 		}
 	}
+*/
 
+	public function testDefault() {
+		$this->assertEquals('hello', StandardFilters::_default('', 'hello'));
+		$this->assertEquals('world', StandardFilters::_default('world', 'hello'));
+	}
+	
 	public function testUnique() {
 		$data = array(
 			array(

@@ -82,7 +82,7 @@ class StandardFilters
 	 *
 	 * @return string
 	 */
-	public static function default($input, $default_value) {
+	public static function _default($input, $default_value) {
 		$is_blank = $input == '' || $input === false || $input === null;
 		return $is_blank ? $default_value : $input;
 	}
@@ -121,7 +121,7 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function escape($input) {
-		return is_string($input) ? str_replace($input, array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;')) : $input;
+		return is_string($input) ? str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $input) : $input;
 	}
 	
 	
@@ -595,5 +595,15 @@ class StandardFilters
 	public static function url_encode($input) {
 		return urlencode($input);
 	}
+	
+	
+	/**
+	 * Use overloading to get around reserved php words - in this case 'default'
+	 */
+	public function __call($name, $arguments) {
+        if ($name === 'default') {
+            return $this->_default($arguments[0], $arguments[1]);
+        }
+    }
 
 }
