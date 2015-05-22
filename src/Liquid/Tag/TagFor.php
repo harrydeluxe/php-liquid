@@ -51,8 +51,8 @@ class TagFor extends AbstractBlock
 	private $name;
 	
 	/**
-	 * @var type The type of the loop (collection or digit)
-	*/
+	 * @var string The type of the loop (collection or digit)
+	 */
 	private $type = 'collection';
 
 	/**
@@ -76,8 +76,8 @@ class TagFor extends AbstractBlock
 			$this->extractAttributes($markup);
 		} else {
 			
-			$syntax_regexp = new LiquidRegexp('/(\w+)\s+in\s+\((\d|'.LIQUID_ALLOWED_VARIABLE_CHARS.'+)\s*..\s*(\d|'.LIQUID_ALLOWED_VARIABLE_CHARS.'+)\)/');
-			if ($syntax_regexp->match($markup)){
+			$syntaxRegexp = new Regexp('/(\w+)\s+in\s+\((\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\s*..\s*(\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\)/');
+			if ($syntaxRegexp->match($markup)){
 				$this->type = 'digit';
 				$this->variableName = $syntax_regexp->matches[1];
 				$this->start = $syntax_regexp->matches[2];
@@ -103,7 +103,7 @@ class TagFor extends AbstractBlock
 			$context->registers['for'] = array();
 		}
 		
-		switch ($this->_type){
+		switch ($this->type){
 		
 			case 'collection':
 
