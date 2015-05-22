@@ -12,7 +12,6 @@
 namespace Liquid\Tag;
 
 use Liquid\AbstractBlock;
-use Liquid\Liquid;
 use Liquid\Context;
 use Liquid\LiquidException;
 use Liquid\FileSystem;
