@@ -52,7 +52,7 @@ class TagIfChanged extends AbstractBlock
 	public function render(Context $context) {
 		$output = parent::render($context);
 
-		if ($this->lastValue == $output){
+		if ($this->lastValue == $output) {
 			return '';
 		} else {
 			$this->lastValue = $output;

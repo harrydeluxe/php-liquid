@@ -70,14 +70,16 @@ class TagFor extends AbstractBlock
 		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::get('ALLOWED_VARIABLE_CHARS') . '+)/');
 
 		if ($syntaxRegexp->match($markup)) {
+			
 			$this->variableName = $syntaxRegexp->matches[1];
 			$this->collectionName = $syntaxRegexp->matches[2];
 			$this->name = $syntaxRegexp->matches[1] . '-' . $syntaxRegexp->matches[2];
 			$this->extractAttributes($markup);
+			
 		} else {
 			
 			$syntaxRegexp = new Regexp('/(\w+)\s+in\s+\((\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\s*..\s*(\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\)/');
-			if ($syntaxRegexp->match($markup)){
+			if ($syntaxRegexp->match($markup)) {
 				$this->type = 'digit';
 				$this->variableName = $syntax_regexp->matches[1];
 				$this->start = $syntax_regexp->matches[2];
@@ -163,12 +165,12 @@ class TagFor extends AbstractBlock
 			case 'digit':
 			
 				$start = $this->start;
-				if (!is_integer($this->start)){
+				if (!is_integer($this->start)) {
 					$start = $context->get($this->start);
 				}
 				
 				$end = $this->collectionName;
-				if (!is_integer($this->collectionName)){
+				if (!is_integer($this->collectionName)) {
 					$end = $context->get($this->collectionName);
 				}
 				
@@ -178,7 +180,7 @@ class TagFor extends AbstractBlock
 				$result = '';
 				$index = 0;
 				$length = $range[1] - $range[0];
-				for ($i=$range[0]; $i<=$range[1]; $i++){
+				for ($i=$range[0]; $i<=$range[1]; $i++) {
 				
 					$context->set($this->variableName, $i);
 					$context->set('forloop', array(
