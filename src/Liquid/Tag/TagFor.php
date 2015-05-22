@@ -138,10 +138,6 @@ class TagFor extends AbstractBlock
 				$context->push();
 				$length = count($segment);
 		
-				 // todo: If $segment keys are not integer, forloop not work
-				 // array_values is only a little help without being tested.
-				$segment = array_values($segment);
-		
 				$index = 0;
 				foreach ($segment as $key => $item) {
 					$value = is_numeric($key) ? $item : array($key, $item);
@@ -158,6 +154,8 @@ class TagFor extends AbstractBlock
 					));
 		
 					$result .= $this->renderAll($this->nodelist, $context);
+					
+					$index++;
 				}
 				
 			break;
