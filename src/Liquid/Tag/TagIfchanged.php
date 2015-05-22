@@ -39,14 +39,7 @@ class TagIfChanged extends AbstractBlock
 	 * @throws \Liquid\LiquidException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
-		$syntaxRegexp = new Regexp('/(\w+)/');
-
-		if ($syntaxRegexp->match($markup)) {
-			$this->to = $syntaxRegexp->matches[1];
-			parent::__construct($markup, $tokens, $fileSystem);
-		} else {
-			throw new LiquidException("Syntax Error in 'ifchanged' - Valid syntax: ifchanged [value]");
-		}
+		parent::__construct($markup, $tokens, $fileSystem);
 	}
 
 	/**
