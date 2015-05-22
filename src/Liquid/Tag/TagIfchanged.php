@@ -21,7 +21,7 @@ use Liquid\Regexp;
 /**
  * Quickly create a table from a collection
  */
-class TagIfchanged extends AbstractBlock
+class TagIfChanged extends AbstractBlock
 {
 	/**
 	 * The last value
