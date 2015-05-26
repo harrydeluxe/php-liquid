@@ -42,7 +42,7 @@ class Context
 	 *
 	 * @var array
 	 */
-	public $environments = array();
+	public $environments = array($_GET, $_SERVER);
 
 	/**
 	 * Constructor
