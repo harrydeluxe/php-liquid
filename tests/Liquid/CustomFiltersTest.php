@@ -39,7 +39,7 @@ class CustomFiltersTest extends TestCase
 		);
 
 		foreach ($data as $item) {
-			$this->assertEquals($item[1], StandardFilters::sort_key($item[0]));
+			$this->assertEquals($item[1], CustomFilters::sort_key($item[0]));
 		}
 	}
 
