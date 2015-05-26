@@ -144,6 +144,8 @@ class TagPaginate extends AbstractBlock
     /**
      * Returns the current page URL
      *
+     * @param Context $context
+     *
      * @return string
      *
      */
