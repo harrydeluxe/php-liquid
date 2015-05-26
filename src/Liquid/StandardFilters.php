@@ -79,6 +79,7 @@ class StandardFilters
 	 * Default
 	 *
 	 * @param string $input
+	 * @param string $default_value
 	 *
 	 * @return string
 	 */
