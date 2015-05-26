@@ -134,18 +134,7 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function escape_once($input) {
-		
-		preg_match('/["><\']|&(?!([a-zA-Z]+|(#\d+));)/', $input, $match);
-		if (sizeof($matches) > 0){
-			
-			$pos = strpos($input, $matches[0]);
-			if ($pos !== false) {
-			    $input = substr_replace($input, array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), strlen($needle));
-			}
-			
-		}
-		
-		return $input;
+		return is_string($input) ? str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $input, 1) : $input;
 	}
 	
 
@@ -599,6 +588,12 @@ class StandardFilters
 	
 	/**
 	 * Use overloading to get around reserved php words - in this case 'default'
+	 *
+	 * @param string $name
+	 * @param array $arguments
+	 *
+	 * @return string
+	 *
 	 */
 	public function __call($name, $arguments) {
         if ($name === 'default') {
