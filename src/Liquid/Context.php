@@ -42,7 +42,7 @@ class Context
 	 *
 	 * @var array
 	 */
-	public $environments = array($_GET, $_SERVER);
+	public $environments = array();
 
 	/**
 	 * Constructor
@@ -54,6 +54,7 @@ class Context
 		$this->assigns = array($assigns);
 		$this->registers = $registers;
 		$this->filterbank = new Filterbank($this);
+		$this->environments = array($_GET, $_SERVER);
 	}
 
 	/**
