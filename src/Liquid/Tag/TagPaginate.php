@@ -149,11 +149,13 @@ class TagPaginate extends AbstractBlock
      * @return string
      *
      */
-    public function currentUrl($context){
+    public function currentUrl($context) {
+	    
+	    $uri = explode('?', $context->get('REQUEST_URI'));
 	    
 	    $url = 'http';
 		if ($context->get('HTTPS') == 'on') $url .= 's';
-		$url .= '://' . $context->get('HTTP_HOST') . reset(explode('?', $context->get('REQUEST_URI')));
+		$url .= '://' . $context->get('HTTP_HOST') . reset($uri);
 		
 		return $url;
 		
