@@ -13,7 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagIfTest extends Testcase
+class TagIfTest extends TestCase
 {
 	public function testTrueEqlTrue() {
 		$text = " {% if true == true %} true {% else %} false {% endif %} ";
