@@ -60,6 +60,11 @@ class TagPaginate extends AbstractBlock
     private $currentPage;
     
     /**
+     * @var int The current offset (no of pages times no of items)
+     */
+    private $currentOffset;
+    
+    /**
      * @var int Total pages
      */
     private $totalPages;
