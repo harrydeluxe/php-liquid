@@ -122,9 +122,25 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function escape($input) {
-		return is_string($input) ? str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $input) : $input;
+		preg_match('/["><\']|&(?!([a-zA-Z]+|(#\d+));)/', $input, $match);
+		if (sizeof($matches) > 0){
+			
+			$pos = strpos($input, $matches[0]);			
+			if ($pos !== false) {
+				
+				$partial = substr($input, 0, $pos);
+				$remaining = substr($input, $pos + 1);
+				
+			    $partial = str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $partial);
+			    
+			    $input = $partial.$remaining;
+			    
+			}
+			
+		}
+		
+		return $input;
 	}
-	
 	
 	
 	/**
