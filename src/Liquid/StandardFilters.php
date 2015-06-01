@@ -122,7 +122,8 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function escape($input) {
-		preg_match('/["><\']|&(?!([a-zA-Z]+|(#\d+));)/', $input, $match);
+		
+		preg_match('/["><\']|&(?!([a-zA-Z]+|(#\d+));)/', $input, $matches);
 		if (sizeof($matches) > 0){
 			
 			$pos = strpos($input, $matches[0]);			
