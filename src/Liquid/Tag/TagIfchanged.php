@@ -20,7 +20,7 @@ use Liquid\Regexp;
 /**
  * Quickly create a table from a collection
  */
-class TagIfChanged extends AbstractBlock
+class TagIfchanged extends AbstractBlock
 {
 	/**
 	 * The last value
