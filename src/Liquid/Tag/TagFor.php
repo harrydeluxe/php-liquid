@@ -81,10 +81,10 @@ class TagFor extends AbstractBlock
 			$syntaxRegexp = new Regexp('/(\w+)\s+in\s+\((\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\s*..\s*(\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\)/');
 			if ($syntaxRegexp->match($markup)) {
 				$this->type = 'digit';
-				$this->variableName = $syntax_regexp->matches[1];
-				$this->start = $syntax_regexp->matches[2];
-				$this->collectionName = $syntax_regexp->matches[3];
-				$this->name = $syntax_regexp->matches[1].'-digit';
+				$this->variableName = $syntaxRegexp->matches[1];
+				$this->start = $syntaxRegexp->matches[2];
+				$this->collectionName = $syntaxRegexp->matches[3];
+				$this->name = $syntaxRegexp->matches[1].'-digit';
 				$this->extractAttributes($markup);
 			} else {			
 				throw new LiquidException("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]");
