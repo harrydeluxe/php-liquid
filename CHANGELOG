@@ -1,3 +1,10 @@
+* 1.1 (2015-06-01)
+
+ * New tags: "paginate", "unless", "ifchanged" were added
+ * Added support for "for in (range)" syntax
+ * Added support for multiple conditions in if statements
+ * Added support for hashes/objects in for loops
+
 * 1.0 (2014-09-07)
 
  * Add namespaces
