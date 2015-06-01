@@ -114,6 +114,17 @@ class StandardFiltersTest extends TestCase
 			$this->assertEquals($expected, StandardFilters::escape($element));
 		}
 	}
+	
+	public function testEscapeOnce() {
+		$data = array(
+			"one Word's not 'twas" => "one Word&#39;s not 'twas",
+			3 => 3,
+		);
+
+		foreach ($data as $element => $expected) {
+			$this->assertEquals($expected, StandardFilters::escape_once($element));
+		}
+	}
 
 	public function testStripNewLines() {
 		$data = array(

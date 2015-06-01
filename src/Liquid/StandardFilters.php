@@ -123,24 +123,8 @@ class StandardFilters
 	 */
 	public static function escape($input) {
 		
-		preg_match('/["><\']|&(?!([a-zA-Z]+|(#\d+));)/', $input, $matches);
-		if (sizeof($matches) > 0){
-			
-			$pos = strpos($input, $matches[0]);			
-			if ($pos !== false) {
-				
-				$partial = substr($input, 0, $pos);
-				$remaining = substr($input, $pos + 1);
-				
-			    $partial = str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $partial);
-			    
-			    $input = $partial.$remaining;
-			    
-			}
-			
-		}
-		
-		return $input;
+		return is_string($input) ? str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $input) : $input;
+
 	}
 	
 	
@@ -152,7 +136,26 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function escape_once($input) {
-		return is_string($input) ? str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $input, 1) : $input;
+		
+		preg_match('/["><\']|&(?!([a-zA-Z]+|(#\d+));)/', $input, $matches);
+		
+		if (sizeof($matches) > 0){
+			
+			$pos = strpos($input, $matches[0]);			
+			if ($pos !== false) {
+				
+				$partial = substr($input, 0, $pos + 1);
+				$remaining = substr($input, $pos + 1);
+				
+			    $partial = str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $partial);
+			    
+			    $input = $partial.$remaining;
+			    
+			}
+			
+		}
+		
+		return $input;
 	}
 	
 
