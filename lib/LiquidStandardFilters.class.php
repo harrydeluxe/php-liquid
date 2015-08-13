@@ -83,7 +83,7 @@ class LiquidStandardFilters
      */
     public static function escape($input)
     {
-        return is_string($input) ? addslashes($input) : $input;
+        return is_string($input) ? htmlspecialchars($input, ENT_QUOTES, "utf-8") : $input;
     }
 
 
