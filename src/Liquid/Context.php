@@ -251,7 +251,8 @@ class Context
 			} else if (method_exists($object, 'toArray')) {
 				$object = $object->toArray();
 			} else {
-				throw new LiquidException("Object has no `toLiquid` nor `toArray` method!");
+				// fetch public properties if nothing else works
+				$object = get_object_vars($object);
 			}
 		}
 

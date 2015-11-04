@@ -25,7 +25,9 @@ class CentsDrop extends Drop
 	}
 }
 
-class NoToLiquid {}
+class NoToLiquid {
+	public $answer = 42;
+}
 
 class HiFilter
 {
@@ -99,12 +101,9 @@ class ContextTest extends TestCase
 		$this->assertNull($this->context->get('test'));
 	}
 
-	/**
-	 * @expectedException \Liquid\LiquidException
-	 */
 	public function testVariableIsObjectWithNoToLiquid() {
 		$this->context->set('test', new NoToLiquid());
-		$this->context->get('test');
+		$this->assertEquals(42, $this->context->get('test.answer'));
 	}
 
 	public function testVariables() {
