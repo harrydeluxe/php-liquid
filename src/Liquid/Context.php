@@ -28,7 +28,7 @@ class Context
 	 *
 	 * @var array
 	 */
-	protected $registers;
+	public $registers;
 
 	/**
 	 * The filterbank holds all the filters
@@ -42,7 +42,7 @@ class Context
 	 *
 	 * @var array
 	 */
-	protected $environments = array();
+	public $environments = array();
 
 	/**
 	 * Constructor
