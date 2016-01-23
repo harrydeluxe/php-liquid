@@ -21,28 +21,28 @@ class Context
 	 *
 	 * @var array
 	 */
-	private $assigns;
+	protected $assigns;
 
 	/**
 	 * Registers for non-variable state data
 	 *
 	 * @var array
 	 */
-	public $registers;
+	protected $registers;
 
 	/**
 	 * The filterbank holds all the filters
 	 *
 	 * @var Filterbank
 	 */
-	private $filterbank;
+	protected $filterbank;
 
 	/**
 	 * Global scopes
 	 *
 	 * @var array
 	 */
-	public $environments = array();
+	protected $environments = array();
 
 	/**
 	 * Constructor
