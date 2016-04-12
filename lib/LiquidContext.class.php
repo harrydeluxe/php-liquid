@@ -142,7 +142,12 @@ class LiquidContext
      */
     public function set($key, $value, $global = false)
     {
-        if($global)
+        if ( is_numeric($value) )
+        {
+            $value = (int) $value;
+        }
+        
+        if ( $global )
         {
             for($i = 0; $i < count($this->_assigns); $i++)
             {
@@ -150,7 +155,9 @@ class LiquidContext
             }
         }
         else
+        {
             $this->_assigns[0][$key] = $value;
+        }
     }
 
 
