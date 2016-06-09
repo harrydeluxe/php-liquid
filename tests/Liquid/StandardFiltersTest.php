@@ -104,6 +104,18 @@ class StandardFiltersTest extends TestCase
 		}
 	}
 
+	public function testRaw()
+	{
+		$data = array(
+			"Anything" => "Anything",
+			3 => 3,
+		);
+
+		foreach ($data as $element => $expected) {
+			$this->assertEquals($expected, StandardFilters::raw($element));
+		}
+	}
+
 	public function testEscape() {
 		$data = array(
 			"one Word's not" => "one Word&#39;s not",

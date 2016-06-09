@@ -115,6 +115,17 @@ class StandardFilters
 	
 	
 	/**
+	 * Pseudo-filter: negates auto-added escape filter
+	 *
+	 * @param string $input
+	 *
+	 * @return string
+	 */
+	public static function raw($input) {
+		return $input;
+	}
+
+	/**
 	 * Escape a string
 	 *
 	 * @param string $input
