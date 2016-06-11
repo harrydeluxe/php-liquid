@@ -65,6 +65,30 @@ class Variable
 		} else {
 			$this->filters = array();
 		}
+
+		if (Liquid::get('ESCAPE_BY_DEFAULT')) {
+			// if auto_escape is enabled, and
+			// - there's no raw filter, and
+			// - no escape filter
+			// - no other standard html-adding filter
+			// then
+			// - add a mandatory escape filter
+
+			$addEscapeFilter = true;
+
+			foreach ($this->filters as $filter) {
+				// with empty filters set we would just move along
+				if (in_array($filter[0], array('escape', 'escape_once', 'raw', 'newline_to_br'))) {
+					// if we have any raw-like filter, stop
+					$addEscapeFilter = false;
+					break;
+				}
+			}
+
+			if ($addEscapeFilter) {
+				$this->filters[] = array('escape', array());
+			}
+		}
 	}
 
 	/**
