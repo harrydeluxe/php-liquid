@@ -21,7 +21,7 @@ class Context
 	 *
 	 * @var array
 	 */
-	private $assigns;
+	protected $assigns;
 
 	/**
 	 * Registers for non-variable state data
@@ -35,7 +35,7 @@ class Context
 	 *
 	 * @var Filterbank
 	 */
-	private $filterbank;
+	protected $filterbank;
 
 	/**
 	 * Global scopes
