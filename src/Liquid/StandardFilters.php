@@ -133,42 +133,21 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function escape($input) {
-		
-		return is_string($input) ? str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $input) : $input;
-
+		return is_string($input) ? htmlentities($input, ENT_QUOTES) : $input;
 	}
-	
-	
+
+
 	/**
-	 * Escape a string once
+	 * Escape a string once, keeping all previous HTML entities intact
 	 *
 	 * @param string $input
 	 *
 	 * @return string
 	 */
 	public static function escape_once($input) {
-		
-		preg_match('/["><\']|&(?!([a-zA-Z]+|(#\d+));)/', $input, $matches);
-		
-		if (sizeof($matches) > 0){
-			
-			$pos = strpos($input, $matches[0]);			
-			if ($pos !== false) {
-				
-				$partial = substr($input, 0, $pos + 1);
-				$remaining = substr($input, $pos + 1);
-				
-			    $partial = str_replace(array('&', '>', '<', '"', "'"), array('&amp;', '&gt;', '&lt;', '&quot;', '&#39;'), $partial);
-			    
-			    $input = $partial.$remaining;
-			    
-			}
-			
-		}
-		
-		return $input;
+		return is_string($input) ? htmlentities($input, ENT_QUOTES, null, false) : $input;
 	}
-	
+
 
 	/**
 	 * Returns the first element of an array
