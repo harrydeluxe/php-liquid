@@ -188,11 +188,11 @@ class Context
 			return $matches[1];
 		}
 
-		if (preg_match('/^(\d+)$/', $key, $matches)) {
+		if (preg_match('/^(-?\d+)$/', $key, $matches)) {
 			return $matches[1];
 		}
 
-		if (preg_match('/^(\d[\d\.]+)$/', $key, $matches)) {
+		if (preg_match('/^(-?\d[\d\.]+)$/', $key, $matches)) {
 			return $matches[1];
 		}
 
