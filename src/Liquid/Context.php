@@ -54,7 +54,8 @@ class Context
 		$this->assigns = array($assigns);
 		$this->registers = $registers;
 		$this->filterbank = new Filterbank($this);
-		$this->environments = array($_GET, $_SERVER);
+		// first empty array serves as source for ovverides, e.g. as in TagDecrement
+		$this->environments = array(array(), $_SERVER);
 	}
 
 	/**
@@ -206,6 +207,7 @@ class Context
 	 * @return mixed
 	 */
 	private function fetch($key) {
+		// TagDecrement depends on environments being checked before assigns
 		foreach ($this->environments as $environment) {
 			if (array_key_exists($key, $environment)) {
 				return $environment[$key];
