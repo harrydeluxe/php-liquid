@@ -224,4 +224,13 @@ class ContextTest extends TestCase
 		$this->context->merge(array('cents' => array('cents' => array('cents' => new CentsDrop()))));
 		$this->assertEquals(100, $this->context->get('cents.cents.cents.amount'));
 	}
+
+	public function testGetNoOverride() {
+		$_GET['test'] = '<script>alert()</script>';
+		// Previously $_GET would override directly set values
+		// It happend during class construction - we need to create a brand new instance right here
+		$context = new Context();
+		$context->set('test', 'test');
+		$this->assertEquals('test', $context->get('test'));
+	}
 }
