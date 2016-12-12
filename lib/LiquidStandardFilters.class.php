@@ -3,7 +3,7 @@
  * A selection of standard filters
  *
  * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
+ * @copyright Copyright (c) 2011-2012 Harald Hanek,
  * fork of php-liquid (c) 2006 Mateo Murphy,
  * based on Liquid for Ruby (c) 2006 Tobias Luetke
  * @license http://harrydeluxe.mit-license.org
@@ -328,52 +328,52 @@ class LiquidStandardFilters
     /**
      * addition
      *
-     * @param int $input
-     * @param int $operand
-     * @return int
+     * @param float $input
+     * @param float $operand
+     * @return float
      */
     public static function plus($input, $operand)
     {
-        return (int) $input + (int) $operand;
+        return (float) $input + (float) $operand;
     }
 
 
     /**
      * subtraction
      *
-     * @param int $input
-     * @param int $operand
-     * @return int
+     * @param float $input
+     * @param float $operand
+     * @return float
      */
     public static function minus($input, $operand)
     {
-        return (int) $input - (int) $operand;
+        return (float) $input - (float) $operand;
     }
 
 
     /**
      * multiplication
      *
-     * @param int $input
-     * @param int $operand
-     * @return int
+     * @param float $input
+     * @param float $operand
+     * @return float
      */
     public static function times($input, $operand)
     {
-        return (int) $input * (int) $operand;
+        return (float) $input * (float) $operand;
     }
 
 
     /**
      * division
      *
-     * @param int $input
-     * @param int $operand
-     * @return int
+     * @param float $input
+     * @param float $operand
+     * @return float
      */
     public static function divided_by($input, $operand)
     {
-        return (int) $input / (int) $operand;
+        return (float) $input / (float) $operand;
     }
 
 
