@@ -1,4 +1,4 @@
-# Liquid template engine for PHP [![Build Status](https://travis-ci.org/kalimatas/php-liquid.svg?branch=master)](https://travis-ci.org/kalimatas/php-liquid)
+# Liquid template engine for PHP [![Build Status](https://travis-ci.org/harrydeluxe/php-liquid.svg?branch=develop)](https://travis-ci.org/harrydeluxe/php-liquid)
 
 Liquid is a PHP port of the [Liquid template engine for Ruby](https://github.com/Shopify/liquid), which was written by Tobias Lutke. Although there are many other templating engines for PHP, including Smarty (from which Liquid was partially inspired), Liquid had some advantages that made porting worthwhile:
 
@@ -49,10 +49,10 @@ The main class is `Liquid::Template` class. There are two separate stages of wor
 
     $template = new Template();
     $template->parse("Hello, {{ name }}!");
-    echo $template->render(array('name' => 'Alex');
+    echo $template->render(array('name' => 'World');
 
 	// Will echo
-	// Hello, Alex!
+	// Hello, World!
 
 To find more examples have a look at the `examples` directory or at the original Ruby implementation repository's [wiki page](https://github.com/Shopify/liquid/wiki).
 
@@ -64,11 +64,11 @@ To find more examples have a look at the `examples` directory or at the original
 
 Have a bug? Please create an issue here on GitHub!
 
-[https://github.com/kalimatas/php-liquid/issues](https://github.com/kalimatas/php-liquid/issues)
+[https://github.com/harrydeluxe/php-liquid/issues](https://github.com/harrydeluxe/php-liquid/issues)
 
-## Fork notes
+## Fork notes and contributors
 
-This fork is based on [php-liquid](https://github.com/harrydeluxe/php-liquid) by Harald Hanek.
+This fork is based on [php-liquid](http://code.google.com/p/php-liquid/) by Mateo Murphy. [kalimatas](https://github.com/kalimatas/php-liquid) has contributed a lot in his fork to bring Liquid to the new state. Thank you so much!
 
 It contains several improvements:
 
