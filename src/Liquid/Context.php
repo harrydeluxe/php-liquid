@@ -103,7 +103,6 @@ class Context
 	 * Pops the current scope from the stack.
 	 *
 	 * @throws LiquidException
-	 * @return bool
 	 */
 	public function pop() {
 		if (count($this->assigns) == 1) {
@@ -242,6 +241,11 @@ class Context
 		if (preg_match("|\[[0-9]+\]|", $key)) {
 			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
 		}
+        // Support [var] style array indicies
+        elseif (preg_match("|\[(.*)\]|", $key, $matches)) {
+            $var = $this->fetch($matches[1]);
+            $key = preg_replace("|\[(.*)\]|", "." . $var, $key);
+        }
 
 		$parts = explode(Liquid::get('VARIABLE_ATTRIBUTE_SEPARATOR'), $key);
 
