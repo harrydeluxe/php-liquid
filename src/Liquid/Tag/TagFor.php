@@ -156,10 +156,10 @@ class TagFor extends AbstractBlock
 						'index0' => $index,
 						'rindex' => $length - $index,
 						'rindex0' => $length - $index - 1,
-						'first' => (int)($index == 0),
-						'last' => (int)($index == $length - 1)
+						'first' => $index == 0,
+						'last' => $index == $length - 1
 					));
-		
+
 					$result .= $this->renderAll($this->nodelist, $context);
 					
 					$index++;
@@ -182,7 +182,7 @@ class TagFor extends AbstractBlock
 				$context->push();
 				$result = '';
 				$index = 0;
-				$length = $end - $start;
+				$length = $end - $start + 1;
 
 				$limit = isset($this->attributes['limit']) ? (int) $context->get($this->attributes['limit']) : -1;
 				$offset = isset($this->attributes['offset']) ? (int) $context->get($this->attributes['offset']) : 0;
@@ -203,8 +203,8 @@ class TagFor extends AbstractBlock
 							'index0' 	=> $index,
 							'rindex'	=> $length - $index,
 							'rindex0'	=> $length - $index - 1,
-							'first'		=> (int)($index == 0),
-							'last'		=> (int)($index == $length - 1)
+							'first'		=> $index == 0,
+							'last'		=> $index == $length - 1
 						));
 
 						$result .= $this->renderAll($this->nodelist, $context);
@@ -232,8 +232,8 @@ class TagFor extends AbstractBlock
 							'index0' 	=> $index,
 							'rindex'	=> $length - $index,
 							'rindex0'	=> $length - $index - 1,
-							'first'		=> (int)($index == 0),
-							'last'		=> (int)($index == $length - 1)
+							'first'		=> $index == 0,
+							'last'		=> $index == $length - 1
 						));
 
 						$result .= $this->renderAll($this->nodelist, $context);

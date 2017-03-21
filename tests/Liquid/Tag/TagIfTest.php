@@ -15,6 +15,12 @@ use Liquid\TestCase;
 
 class TagIfTest extends TestCase
 {
+	public function testZero() {
+		$text = " {% if 0 %} true {% else %} false {% endif %} ";
+		$expected = "  true  ";
+		$this->assertTemplateResult($expected, $text);
+	}
+
 	public function testTrueEqlTrue() {
 		$text = " {% if true == true %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";

@@ -27,6 +27,13 @@ use Liquid\Regexp;
  *
  *     will return:
  *     YES
+ *     
+ * 0 is truthy
+ *
+ *     {% if 0 %} YES {% else %} NO {% endif %}
+ *
+ *     will return:
+ *     YES
  */
 class TagIf extends Decision
 {
@@ -142,10 +149,9 @@ class TagIf extends Decision
 					// If statement is a single condition
 					$display = $this->interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
 				}
-
-				if ($display) {
+				// 0 is truthy
+				if ($display || $display === '0' || $display === 0) {
 					$result = $this->renderAll($block[2], $context);
-
 					break;
 				}
 			}

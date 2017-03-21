@@ -68,8 +68,8 @@ HERE;
 		$this->assertTemplateResult(' 0  1  2 ', '{%for item in array%} {{forloop.index0}} {%endfor%}', $assigns);
 		$this->assertTemplateResult(' 2  1  0 ', '{%for item in array%} {{forloop.rindex0}} {%endfor%}', $assigns);
 		$this->assertTemplateResult(' 3  2  1 ', '{%for item in array%} {{forloop.rindex}} {%endfor%}', $assigns);
-		$this->assertTemplateResult(' 1  0  0 ', '{%for item in array%} {{forloop.first}} {%endfor%}', $assigns);
-		$this->assertTemplateResult(' 0  0  1 ', '{%for item in array%} {{forloop.last}} {%endfor%}', $assigns);
+		$this->assertTemplateResult(' 1     ', '{%for item in array%} {{forloop.first}} {%endfor%}', $assigns);
+		$this->assertTemplateResult('     1 ', '{%for item in array%} {{forloop.last}} {%endfor%}', $assigns);
 	}
 
 	public function testForAndIf() {
