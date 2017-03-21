@@ -70,7 +70,7 @@ class TagFor extends AbstractBlock
 		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::get('ALLOWED_VARIABLE_CHARS') . '+)/');
 
 		if ($syntaxRegexp->match($markup)) {
-			
+
 			$this->variableName = $syntaxRegexp->matches[1];
 			$this->collectionName = $syntaxRegexp->matches[2];
 			$this->name = $syntaxRegexp->matches[1] . '-' . $syntaxRegexp->matches[2];
@@ -114,12 +114,16 @@ class TagFor extends AbstractBlock
 				if (is_null($collection) || !is_array($collection) || count($collection) == 0) {
 					return '';
 				}
-		
+
+				if ($this->attributes['reversed']) {
+					$collection = array_reverse($collection);
+				}
+
 				$range = array(0, count($collection));
 		
 				if (isset($this->attributes['limit']) || isset($this->attributes['offset'])) {
 					$offset = 0;
-		
+
 					if (isset($this->attributes['offset'])) {
 						$offset = ($this->attributes['offset'] == 'continue') ? $context->registers['for'][$this->name] : $context->get($this->attributes['offset']);
 					}
@@ -133,13 +137,14 @@ class TagFor extends AbstractBlock
 		
 				$result = '';
 				$segment = array_slice($collection, $range[0], $range[1]);
+
 				if (!count($segment)) {
 					return null;
 				}
-		
+
 				$context->push();
 				$length = count($segment);
-		
+
 				$index = 0;
 				foreach ($segment as $key => $item) {
 					$value = is_numeric($key) ? $item : array($key, $item);
@@ -173,32 +178,75 @@ class TagFor extends AbstractBlock
 				if (!is_integer($this->collectionName)) {
 					$end = $context->get($this->collectionName);
 				}
-				
-				$range = array($start, $end);
-				
+
 				$context->push();
 				$result = '';
 				$index = 0;
-				$length = $range[1] - $range[0];
-				for ($i=$range[0]; $i<=$range[1]; $i++) {
-				
-					$context->set($this->variableName, $i);
-					$context->set('forloop', array(
-						'name'		=> $this->name,
-						'length' 	=> $length,
-						'index' 	=> $index + 1,
-						'index0' 	=> $index,
-						'rindex'	=> $length - $index,
-						'rindex0'	=> $length - $index - 1,
-						'first'		=> (int)($index == 0),
-						'last'		=> (int)($index == $length - 1)
-					));
-					
-					$result .= $this->renderAll($this->nodelist, $context);
-					
-					$index++;
+				$length = $end - $start;
+
+				$limit = isset($this->attributes['limit']) ? (int) $context->get($this->attributes['limit']) : -1;
+				$offset = isset($this->attributes['offset']) ? (int) $context->get($this->attributes['offset']) : 0;
+
+				if ($this->attributes['reversed']) {
+
+					for ($i=$end; $i>=$start; $i--) {
+
+						if ($offset > $end - $i) {
+							continue;
+						}
+
+						$context->set($this->variableName, $i);
+						$context->set('forloop', array(
+							'name'		=> $this->name,
+							'length' 	=> $length,
+							'index' 	=> $index + 1,
+							'index0' 	=> $index,
+							'rindex'	=> $length - $index,
+							'rindex0'	=> $length - $index - 1,
+							'first'		=> (int)($index == 0),
+							'last'		=> (int)($index == $length - 1)
+						));
+
+						$result .= $this->renderAll($this->nodelist, $context);
+						
+						$index++;
+
+						if ($index == $limit) {
+							break;
+						}
+					}
+
+				} else {
+
+					for ($i=$start; $i<=$end; $i++) {
+
+						if ($offset > $i - $start) {
+							continue;
+						}
+
+						$context->set($this->variableName, $i);
+						$context->set('forloop', array(
+							'name'		=> $this->name,
+							'length' 	=> $length,
+							'index' 	=> $index + 1,
+							'index0' 	=> $index,
+							'rindex'	=> $length - $index,
+							'rindex0'	=> $length - $index - 1,
+							'first'		=> (int)($index == 0),
+							'last'		=> (int)($index == $length - 1)
+						));
+
+						$result .= $this->renderAll($this->nodelist, $context);
+
+						$index++;
+
+						if ($index == $limit) {
+							break;
+						}
+
+					}
 				}
-			
+
 			break;
 			
 		}
@@ -206,5 +254,16 @@ class TagFor extends AbstractBlock
 		$context->pop();
 
 		return $result;
+	}
+
+	/**
+	 * Extracts reversed attributes from a markup string.
+	 *
+	 * @param string $markup
+	 */
+	protected function extractAttributes($markup) {
+		parent::extractAttributes($markup);
+		$reversedRegexp = new Regexp('/reversed/');
+		$this->attributes['reversed'] = !!$reversedRegexp->match($markup);
 	}
 }
