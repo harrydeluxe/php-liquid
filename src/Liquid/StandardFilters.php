@@ -468,6 +468,10 @@ class StandardFilters
 	 * @return array
 	 */
 	public static function split($input, $pattern) {
+		// Unlike PHP explode function, empty string after split filtering is empty array in Liquid.
+		if (!is_string($input) || $input === '') {
+			return array();
+		}
 		return explode($pattern, $input);
 	}
 

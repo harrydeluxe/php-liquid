@@ -566,7 +566,7 @@ class StandardFiltersTest extends TestCase
 		$data = array(
 			array(
 				'',
-				array(0 => ''),
+				array(),
 			),
 			array(
 				'two-one-three',
