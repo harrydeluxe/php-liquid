@@ -11,7 +11,12 @@
 
 namespace Liquid\Tag;
 
+use Liquid\Decision;
 use Liquid\Context;
+use Liquid\Liquid;
+use Liquid\LiquidException;
+use Liquid\FileSystem;
+use Liquid\Regexp;
 
 /**
  * An if statement
@@ -23,65 +28,54 @@ use Liquid\Context;
  *     will return:
  *     NO
  */
-
-class TagUnless extends TagIf{
+class TagUnless extends Decision
+{
+	/**
+	 * Array holding the nodes to render for each logical block
+	 *
+	 * @var array
+	 */
+	private $nodelistHolders = array();
 
 	/**
-	 * Replace first finded key in $subject to value
+	 * Array holding the block type, block markup (conditions) and block nodelist
 	 *
-	 * @param array $replacer (key => value array)
-	 * @param string $subject
-	 * @return string
+	 * @var array
 	 */
-	protected function strReplaceOne($replacer, $subject) {
-		$res = $subject;
-		foreach($replacer as $from => $to) {
-			$res = str_ireplace($from, $to, $subject, $count);
-			if ($count > 0) {
-				break;
-			}
-		}
-		return $res;
+	protected $blocks = array();
+
+	/**
+	 * Constructor
+	 *
+	 * @param string $markup
+	 * @param array $tokens
+	 * @param FileSystem $fileSystem
+	 */
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+		$this->nodelist = & $this->nodelistHolders[count($this->blocks)];
+
+		array_push($this->blocks, array('unless', $markup, &$this->nodelist));
+
+		parent::__construct($markup, $tokens, $fileSystem);
 	}
 
 	/**
-	 * Method revert operators in string
-	 * before
-	 *  a == 1 and b == 2
-	 * after
-	 *  a != 1 or b != 2
+	 * Handler for unknown tags, handle else tags
+	 *
+	 * @param string $tag
+	 * @param array $params
+	 * @param array $tokens
 	 */
-	protected function revertOperators() {
-		
-		// replace
-		$replacerOperators = array(
-			'==' => '!=',
-			'<=' => '>',
-			'>=' => '<',
-			'>'  => '<=',
-			'<'  => '>=',
-			'!=' => '=='
-		);
-		
-		$replacerLogicalOperators = array(
-			'or' => 'and',
-			'and' => 'or'
-		);
-		
-		if (count($this->blocks) > 0) {
-			if (count($this->blocks[0]) > 1)  {
-				$condition = $this->blocks[0][1];
+	public function unknownTag($tag, $params, array $tokens) {
+		if ($tag == 'else') {
+			// Update reference to nodelistHolder for this block
+			$this->nodelist = & $this->nodelistHolders[count($this->blocks) + 1];
+			$this->nodelistHolders[count($this->blocks) + 1] = array();
 
-				$condition = $this->strReplaceOne($replacerOperators, $condition);
-				$condition = $this->strReplaceOne($replacerLogicalOperators, $condition);
+			array_push($this->blocks, array($tag, $params, &$this->nodelist));
 
-				// if no operators was changed, then it means there is no operators
-				// soo make condition ==false
-				if ($this->blocks[0][1] === $condition) {
-					$condition .= '== false';
-				}
-				$this->blocks[0][1] = $condition;
-			}
+		} else {
+			parent::unknownTag($tag, $params, $tokens);
 		}
 	}
 
@@ -94,9 +88,69 @@ class TagUnless extends TagIf{
 	 * @return string
 	 */
 	public function render(Context $context) {
-		$this->revertOperators();
-		$res = parent::render($context);
-		return $res;
-	}
+		$context->push();
 
+		$logicalRegex = new Regexp('/\s+(and|or)\s+/');
+		$conditionalRegex = new Regexp('/(' . Liquid::get('QUOTED_FRAGMENT') . ')\s*([=!<>a-z_]+)?\s*(' . Liquid::get('QUOTED_FRAGMENT') . ')?/');
+
+		$result = '';
+		foreach ($this->blocks as $block) {
+			if ($block[0] == 'else') {
+				$result = $this->renderAll($block[2], $context);
+
+				break;
+			}
+
+			if ($block[0] == 'unless') {
+				// Extract logical operators
+				$logicalRegex->matchAll($block[1]);
+
+				$logicalOperators = $logicalRegex->matches;
+				$logicalOperators = array_merge(array('and'), $logicalOperators[1]);
+				// Extract individual conditions
+				$temp = $logicalRegex->split($block[1]);
+
+				$conditions = array();
+
+				foreach ($temp as $condition) {
+					if ($conditionalRegex->match($condition)) {
+						$left = (isset($conditionalRegex->matches[1])) ? $conditionalRegex->matches[1] : null;
+						$operator = (isset($conditionalRegex->matches[2])) ? $conditionalRegex->matches[2] : null;
+						$right = (isset($conditionalRegex->matches[3])) ? $conditionalRegex->matches[3] : null;
+
+						array_push($conditions, array(
+							'left' => $left,
+							'operator' => $operator,
+							'right' => $right
+						));
+					} else {
+						throw new LiquidException("Syntax Error in tag 'if' - Valid syntax: if [condition]");
+					}
+				}
+
+				$boolean = true;
+				$results = array();
+				foreach ($logicalOperators as $k => $logicalOperator) {
+					$r = $this->interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context);
+					if ($logicalOperator == 'and') {
+						$boolean = $boolean && Liquid::isTruthy($r);
+					} else {
+						$results[] = $boolean;
+						$boolean = Liquid::isTruthy($r);
+					}
+				}
+
+				$results[] = $boolean;
+
+				if (!in_array(true, $results)) {
+					$result = $this->renderAll($block[2], $context);
+					break;
+				}
+			}
+		}
+
+		$context->pop();
+
+		return $result;
+	}
 }

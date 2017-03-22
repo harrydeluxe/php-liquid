@@ -113,7 +113,7 @@ class TagIf extends Decision
 				$logicalRegex->matchAll($block[1]);
 
 				$logicalOperators = $logicalRegex->matches;
-				$logicalOperators = $logicalOperators[1];
+				$logicalOperators = array_merge(array('and'), $logicalOperators[1]);
 				// Extract individual conditions
 				$temp = $logicalRegex->split($block[1]);
 
@@ -134,23 +134,21 @@ class TagIf extends Decision
 						throw new LiquidException("Syntax Error in tag 'if' - Valid syntax: if [condition]");
 					}
 				}
-				if (count($logicalOperators)) {
-					// If statement contains and/or
-					$display = $this->interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
-					foreach ($logicalOperators as $k => $logicalOperator) {
-						if ($logicalOperator == 'and') {
-							$display = ($display && $this->interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context));
-						} else {
-							$display = ($display || $this->interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context));
-						}
-					}
 
-				} else {
-					// If statement is a single condition
-					$display = $this->interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
+				$boolean = true;
+				$results = array();
+				foreach ($logicalOperators as $k => $logicalOperator) {
+					$r = $this->interpretCondition($conditions[$k]['left'], $conditions[$k]['right'], $conditions[$k]['operator'], $context);
+					if ($logicalOperator == 'and') {
+						$boolean = $boolean && Liquid::isTruthy($r);
+					} else {
+						$results[] = $boolean;
+						$boolean = Liquid::isTruthy($r);
+					}
 				}
-				// 0 is truthy
-				if (Liquid::isTruthy($display)) {
+				$results[] = $boolean;
+
+				if (in_array(true, $results)) {
 					$result = $this->renderAll($block[2], $context);
 					break;
 				}
