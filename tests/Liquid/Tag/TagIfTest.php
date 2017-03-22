@@ -16,9 +16,19 @@ use Liquid\TestCase;
 class TagIfTest extends TestCase
 {
 	public function testZero() {
-		$text = " {% if 0 %} true {% else %} false {% endif %} ";
+		$this->assertTemplateResult("  true  ", " {% if 0 %} true {% else %} false {% endif %} ");
+	}
+
+	public function testEmptyString() {
+		$text = " {% if emptyString %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
-		$this->assertTemplateResult($expected, $text);
+		$this->assertTemplateResult($expected, $text, array('emptyString' => ''));
+	}
+
+	public function testEmptyArray() {
+		$text = " {% if emptyArray %} true {% else %} false {% endif %} ";
+		$expected = "  true  ";
+		$this->assertTemplateResult($expected, $text, array('emptyArray' => array()));
 	}
 
 	public function testTrueEqlTrue() {

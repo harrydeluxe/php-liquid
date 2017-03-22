@@ -130,4 +130,26 @@ class Liquid
 		}
 		return $return;
 	}
+
+	/**
+	 * All values in PHP Liquid are truthy except null and false.
+	 *
+	 * @param mixed $value
+	 *
+	 * @return bool
+	 */
+	public static function isTruthy($value) {
+		return !self::isFalsy($value);
+	}
+
+	/**
+	 * The falsy values in PHP Liquid are null and false.
+	 *
+	 * @param mixed $value
+	 *
+	 * @return bool
+	 */
+	public static function isFalsy($value) {
+		return $value === false || $value === null;
+	}
 }

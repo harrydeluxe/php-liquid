@@ -150,7 +150,7 @@ class TagIf extends Decision
 					$display = $this->interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
 				}
 				// 0 is truthy
-				if ($display || $display === '0' || $display === 0) {
+				if (Liquid::isTruthy($display)) {
 					$result = $this->renderAll($block[2], $context);
 					break;
 				}
