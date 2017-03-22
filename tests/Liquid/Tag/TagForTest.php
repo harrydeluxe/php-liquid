@@ -193,4 +193,19 @@ XPCTD;
 		$this->assertTemplateResult('54321', '{%for i in arr reversed%}{{i}}{%endfor%}', 
 			array('arr' => array(1,2,3,4,5)));
 	}
+
+	public function test_for_with_variable_range() {
+		$this->assertTemplateResult(' 1  2  3 ', '{%for item in (1..foobar) %} {{item}} {%endfor%}', array("foobar" => 3));
+	}
+
+	public function test_for_with_hash_value_range() {
+		$this->assertTemplateResult(' 1  2  3 ', '{%for item in (1..foobar.value) %} {{item}} {%endfor%}', array("foobar" => array('value' => 3)));
+	}
+
+	public function test_for_else() {
+		$this->assertTemplateResult('+++', '{%for item in array%}+{%else%}-{%endfor%}', array('array' => array(1, 2, 3)));
+		$this->assertTemplateResult('-',   '{%for item in array%}+{%else%}-{%endfor%}', array('array' => array()));
+		$this->assertTemplateResult('-',   '{%for item in array%}+{%else%}-{%endfor%}', array('array' => null));
+	}
+
 }

@@ -56,6 +56,20 @@ class TagFor extends AbstractBlock
 	private $type = 'collection';
 
 	/**
+	 * Array holding the nodes to render for each logical block
+	 *
+	 * @var array
+	 */
+	private $nodelistHolders = array();
+
+	/**
+	 * Array holding the block type, block markup (conditions) and block nodelist
+	 *
+	 * @var array
+	 */
+	protected $blocks = array();
+
+	/**
 	 * Constructor
 	 *
 	 * @param string $markup
@@ -65,6 +79,9 @@ class TagFor extends AbstractBlock
 	 * @throws \Liquid\LiquidException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+		$this->nodelist = & $this->nodelistHolders[count($this->blocks)];
+		array_push($this->blocks, array('for', $markup, &$this->nodelist));
+
 		parent::__construct($markup, $tokens, $fileSystem);
 
 		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::get('ALLOWED_VARIABLE_CHARS') . '+)/');
@@ -86,9 +103,28 @@ class TagFor extends AbstractBlock
 				$this->collectionName = $syntaxRegexp->matches[3];
 				$this->name = $syntaxRegexp->matches[1].'-digit';
 				$this->extractAttributes($markup);
-			} else {			
+			} else {
 				throw new LiquidException("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]");
 			}
+		}
+	}
+
+	/**
+	 * Handler for unknown tags, handle else tags
+	 *
+	 * @param string $tag
+	 * @param array $params
+	 * @param array $tokens
+	 */
+	public function unknownTag($tag, $params, array $tokens) {
+		if ($tag == 'else') {
+			// Update reference to nodelistHolder for this block
+			$this->nodelist = & $this->nodelistHolders[count($this->blocks) + 1];
+			$this->nodelistHolders[count($this->blocks) + 1] = array();
+
+			array_push($this->blocks, array($tag, $params, &$this->nodelist));
+		} else {
+			parent::unknownTag($tag, $params, $tokens);
 		}
 	}
 
@@ -100,19 +136,23 @@ class TagFor extends AbstractBlock
 	 * @return null|string
 	 */
 	public function render(Context $context) {
-		
+
 		if (!isset($context->registers['for'])) {
 			$context->registers['for'] = array();
 		}
-		
-		switch ($this->type){
+
+		switch ($this->type) {
 		
 			case 'collection':
 
 				$collection = $context->get($this->collectionName);
-		
+
 				if (is_null($collection) || !is_array($collection) || count($collection) == 0) {
-					return '';
+					$context->push();
+					$nodelist = array_pop($this->nodelistHolders);
+					$result = $this->renderAll($nodelist, $context);
+					$context->pop();
+					return $result;
 				}
 
 				if ($this->attributes['reversed']) {
@@ -144,8 +184,9 @@ class TagFor extends AbstractBlock
 
 				$context->push();
 				$length = count($segment);
-
 				$index = 0;
+				$nodelist = $this->nodelistHolders[0];
+
 				foreach ($segment as $key => $item) {
 					$value = is_numeric($key) ? $item : array($key, $item);
 					$context->set($this->variableName, $value);
@@ -160,7 +201,7 @@ class TagFor extends AbstractBlock
 						'last' => $index == $length - 1
 					));
 
-					$result .= $this->renderAll($this->nodelist, $context);
+					$result .= $this->renderAll($nodelist, $context);
 					
 					$index++;
 				}
@@ -173,7 +214,7 @@ class TagFor extends AbstractBlock
 				if (!is_integer($this->start)) {
 					$start = $context->get($this->start);
 				}
-				
+
 				$end = $this->collectionName;
 				if (!is_integer($this->collectionName)) {
 					$end = $context->get($this->collectionName);
@@ -183,6 +224,7 @@ class TagFor extends AbstractBlock
 				$result = '';
 				$index = 0;
 				$length = $end - $start + 1;
+				$nodelist = $this->nodelistHolders[0];
 
 				$limit = isset($this->attributes['limit']) ? (int) $context->get($this->attributes['limit']) : -1;
 				$offset = isset($this->attributes['offset']) ? (int) $context->get($this->attributes['offset']) : 0;
@@ -207,7 +249,7 @@ class TagFor extends AbstractBlock
 							'last'		=> $index == $length - 1
 						));
 
-						$result .= $this->renderAll($this->nodelist, $context);
+						$result .= $this->renderAll($nodelist, $context);
 						
 						$index++;
 
@@ -236,7 +278,7 @@ class TagFor extends AbstractBlock
 							'last'		=> $index == $length - 1
 						));
 
-						$result .= $this->renderAll($this->nodelist, $context);
+						$result .= $this->renderAll($nodelist, $context);
 
 						$index++;
 
