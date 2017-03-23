@@ -237,20 +237,20 @@ class Context
 	 * @return mixed
 	 */
 	private function variable($key) {
-		// Support [0] style array indicies
-		if (preg_match("|\[[0-9]+\]|", $key)) {
-			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
+		if (!preg_match_all("/(\[?[a-zA-Z0-9\s_-]+\]?)/", $key, $matches)) {
+			return null;
 		}
-        // Support [var] style array indicies
-        elseif (preg_match("|\[(.*)\]|", $key, $matches)) {
-            $var = $this->fetch($matches[1]);
-            $key = preg_replace("|\[(.*)\]|", "." . $var, $key);
-        }
 
-		$parts = explode(Liquid::get('VARIABLE_ATTRIBUTE_SEPARATOR'), $key);
+		$parts = array();
+		foreach ($matches[1] as $match) {
+			if (preg_match("/\[([a-zA-Z0-9\s_-]+)\]/i", $match, $m)) {
+				array_push($parts, is_numeric($m[1]) ? $m[1] : $this->fetch($m[1]));
+			} else {
+				array_push($parts, $match);
+			}
+		}
 
 		$object = $this->fetch(array_shift($parts));
-
 		if (is_object($object)) {
 			if (method_exists($object, 'toLiquid')) {
 				$object = $object->toLiquid();

@@ -233,4 +233,19 @@ class ContextTest extends TestCase
 		$context->set('test', 'test');
 		$this->assertEquals('test', $context->get('test'));
 	}
+
+	public function testArray() {
+		$assigns = array('a' => 'b');
+		$this->assertTemplateResult('b', '{{ a }}', $assigns);
+		$assigns = array('a' => array('b' => 'c'));
+		$this->assertTemplateResult('c', '{{ a.b }}', $assigns);
+		$this->assertTemplateResult('c', "{{ a['b'] }}", $assigns);
+		$assigns = array('a' => array('b' => array('c' => 'd')));
+		$this->assertTemplateResult('d', '{{ a.b.c }}', $assigns);
+		$this->assertTemplateResult('d', "{{ a['b'].c }}", $assigns);
+		$this->assertTemplateResult('d', "{{ a.b['c'] }}", $assigns);
+		$this->assertTemplateResult('d', "{{ a['b'].c }}", $assigns);
+		$this->assertTemplateResult('d', "{{ a['b']['c'] }}", $assigns);
+		$this->assertTemplateResult('d', "{% assign b = 'b' %}{{ a[b]['c'] }}", $assigns);
+	}
 }
