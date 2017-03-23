@@ -657,10 +657,9 @@ class StandardFiltersTest extends TestCase
 			array(
 				1.5,
 				2.7,
-				3,
+				4.2,
 			),
 		);
-
 		foreach ($data as $item) {
 			$this->assertSame($item[2], StandardFilters::plus($item[0], $item[1]));
 		}
@@ -849,4 +848,11 @@ class StandardFiltersTest extends TestCase
 		$this->context->addFilters(new CanadianMoneyFilter(), 'money');
 		$this->assertEquals(' 1000$ CAD ', $var->render($this->context));
 	}
+
+	public function test_plus() {
+		$this->assertTemplateResult('2', '{{ 1 | plus: 1 }}');
+		$this->assertTemplateResult('2.0', '{{ 1 | plus: 1.0 }}');
+		$this->assertTemplateResult('5', "{{ price | plus: '2' }}", array('price' => 3));
+	}
+
 }

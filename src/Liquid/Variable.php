@@ -131,6 +131,12 @@ class Variable
 			$output = $context->invoke($filtername, $output, $filterArgValues);
 		}
 
+		if (is_float($output)) {
+			if ($output == (int)$output) {
+				return number_format($output, 1);
+			}
+		}
+
 		return $output;
 	}
 }

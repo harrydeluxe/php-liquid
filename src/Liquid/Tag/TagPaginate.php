@@ -110,9 +110,9 @@ class TagPaginate extends AbstractBlock
         $this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
     	$this->collection = $context->get($this->collectionName);
     	$this->collectionSize = count($this->collection);
-    	$this->totalPages = ceil($this->collectionSize / $this->numberItems);
+    	$this->totalPages = (int) ceil($this->collectionSize / $this->numberItems);
     	$paginatedCollection =  array_slice($this->collection, $this->currentOffset, $this->numberItems);
-    	    	
+
     	// Sets the collection if it's a key of another collection (ie search.results, collection.products, blog.articles)
     	$segments = explode('.', $this->collectionName);
     	if (count($segments) == 2) {
