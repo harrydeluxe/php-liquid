@@ -64,5 +64,7 @@ class TagAssignTest extends TestCase
 
 		$template->parse('{% assign test = var1 | join : "." %}{{ test }}');
 		$this->assertTrue($template->render(array('var1' => array('a', 'b', 'c'))) === 'a.b.c');
+
+		$this->assertTemplateResult("true", "{% assign emptyArray = '' | split: ', ' %}{% if emptyArray %}true{% endif %}");
 	}
 }

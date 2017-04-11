@@ -68,8 +68,8 @@ HERE;
 		$this->assertTemplateResult(' 0  1  2 ', '{%for item in array%} {{forloop.index0}} {%endfor%}', $assigns);
 		$this->assertTemplateResult(' 2  1  0 ', '{%for item in array%} {{forloop.rindex0}} {%endfor%}', $assigns);
 		$this->assertTemplateResult(' 3  2  1 ', '{%for item in array%} {{forloop.rindex}} {%endfor%}', $assigns);
-		$this->assertTemplateResult(' 1  0  0 ', '{%for item in array%} {{forloop.first}} {%endfor%}', $assigns);
-		$this->assertTemplateResult(' 0  0  1 ', '{%for item in array%} {{forloop.last}} {%endfor%}', $assigns);
+		$this->assertTemplateResult(' 1     ', '{%for item in array%} {{forloop.first}} {%endfor%}', $assigns);
+		$this->assertTemplateResult('     1 ', '{%for item in array%} {{forloop.last}} {%endfor%}', $assigns);
 	}
 
 	public function testForAndIf() {
@@ -180,4 +180,32 @@ next
 XPCTD;
 		$this->assertTemplateResult($expected, $markup, $assigns);
 	}
+
+	public function testForTagParameters() {
+		$this->assertTemplateResult('12345678910', '{%for i in (1..10)%}{{i}}{%endfor%}');
+		$this->assertTemplateResult('1', '{%for i in (1..10) limit:1%}{{i}}{%endfor%}');
+		$this->assertTemplateResult('45', '{%for i in (1..5) offset:3%}{{i}}{%endfor%}');
+		$this->assertTemplateResult('54321', '{%for i in (1..5) reversed%}{{i}}{%endfor%}');
+		$this->assertTemplateResult('1', '{%for i in arr limit:1%}{{i}}{%endfor%}', 
+			array('arr' => array(1,2,3,4,5)));
+		$this->assertTemplateResult('45', '{%for i in arr offset:3%}{{i}}{%endfor%}', 
+			array('arr' => array(1,2,3,4,5)));
+		$this->assertTemplateResult('54321', '{%for i in arr reversed%}{{i}}{%endfor%}', 
+			array('arr' => array(1,2,3,4,5)));
+	}
+
+	public function test_for_with_variable_range() {
+		$this->assertTemplateResult(' 1  2  3 ', '{%for item in (1..foobar) %} {{item}} {%endfor%}', array("foobar" => 3));
+	}
+
+	public function test_for_with_hash_value_range() {
+		$this->assertTemplateResult(' 1  2  3 ', '{%for item in (1..foobar.value) %} {{item}} {%endfor%}', array("foobar" => array('value' => 3)));
+	}
+
+	public function test_for_else() {
+		$this->assertTemplateResult('+++', '{%for item in array%}+{%else%}-{%endfor%}', array('array' => array(1, 2, 3)));
+		$this->assertTemplateResult('-',   '{%for item in array%}+{%else%}-{%endfor%}', array('array' => array()));
+		$this->assertTemplateResult('-',   '{%for item in array%}+{%else%}-{%endfor%}', array('array' => null));
+	}
+
 }

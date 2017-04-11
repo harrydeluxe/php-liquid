@@ -269,15 +269,17 @@ class StandardFilters
 	/**
 	 * addition
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function plus($input, $operand) {
-		return (int)$input + (int)$operand;
-	}	
-	
+		$input = is_numeric($input) ? $input : 0;
+		$operand = is_numeric($operand) ? $operand : 0;
+		return $input + $operand;
+	}
+
 
 	/**
 	 * Prepend a string to another
@@ -468,6 +470,10 @@ class StandardFilters
 	 * @return array
 	 */
 	public static function split($input, $pattern) {
+		// Unlike PHP explode function, empty string after split filtering is empty array in Liquid.
+		if (!is_string($input) || $input === '') {
+			return array();
+		}
 		return explode($pattern, $input);
 	}
 
