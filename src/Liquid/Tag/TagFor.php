@@ -204,6 +204,14 @@ class TagFor extends AbstractBlock
 					$result .= $this->renderAll($nodelist, $context);
 					
 					$index++;
+
+				if (isset($context->registers['break'])) {
+					unset($context->registers['break']);
+					break;
+				}
+				if (isset($context->registers['continue'])) {
+					unset($context->registers['continue']);
+				}
 				}
 				
 			break;
@@ -256,6 +264,14 @@ class TagFor extends AbstractBlock
 						if ($index == $limit) {
 							break;
 						}
+
+					if (isset($context->registers['break'])) {
+						unset($context->registers['break']);
+						break;
+					}
+					if (isset($context->registers['continue'])) {
+						unset($context->registers['continue']);
+					}
 					}
 
 				} else {
@@ -286,6 +302,13 @@ class TagFor extends AbstractBlock
 							break;
 						}
 
+					if (isset($context->registers['break'])) {
+						unset($context->registers['break']);
+						break;
+					}
+					if (isset($context->registers['continue'])) {
+						unset($context->registers['continue']);
+					}
 					}
 				}
 
