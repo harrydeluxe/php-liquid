@@ -84,7 +84,7 @@ class TagPaginate extends AbstractBlock
        
         parent::__construct($markup, $tokens, $fileSystem);
 
-        $syntax = new Regexp('/(' . Liquid::get('ALLOWED_VARIABLE_CHARS') . '+)\s+by\s+(\w+)/');
+        $syntax = new Regexp('/(' . Liquid::get('VARIABLE_NAME') . ')\s+by\s+(\w+)/');
 
         if ($syntax->match($markup)) {
             $this->collectionName = $syntax->matches[1];

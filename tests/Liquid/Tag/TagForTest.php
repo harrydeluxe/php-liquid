@@ -72,6 +72,18 @@ HERE;
 		$this->assertTemplateResult(' 0  0  1 ', '{%for item in array%} {{forloop.last}} {%endfor%}', $assigns);
 	}
 
+	public function testForHelpersWithOffsetAndLimit() {
+		$assigns = array('array' => array(0, 1, 2, 3, 4));
+
+		$this->assertTemplateResult(' 1/3  2/3  3/3 ', '{%for item in array offset:1 limit:3%} {{forloop.index}}/{{forloop.length}} {%endfor%}', $assigns);
+		$this->assertTemplateResult(' 1  2  3 ', '{%for item in array offset:1 limit:3%} {{forloop.index}} {%endfor%}', $assigns);
+		$this->assertTemplateResult(' 0  1  2 ', '{%for item in array offset:1 limit:3%} {{forloop.index0}} {%endfor%}', $assigns);
+		$this->assertTemplateResult(' 2  1  0 ', '{%for item in array offset:1 limit:3%} {{forloop.rindex0}} {%endfor%}', $assigns);
+		$this->assertTemplateResult(' 3  2  1 ', '{%for item in array offset:1 limit:3%} {{forloop.rindex}} {%endfor%}', $assigns);
+		$this->assertTemplateResult(' 1  0  0 ', '{%for item in array offset:1 limit:3%} {{forloop.first}} {%endfor%}', $assigns);
+		$this->assertTemplateResult(' 0  0  1 ', '{%for item in array offset:1 limit:3%} {{forloop.last}} {%endfor%}', $assigns);
+	}
+
 	public function testForAndIf() {
 		$assigns = array('array' => array(1, 2, 3));
 		$this->assertTemplateResult(' yay     ', '{%for item in array%} {% if forloop.first %}yay{% endif %} {%endfor%}', $assigns);

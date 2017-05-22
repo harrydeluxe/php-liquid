@@ -67,7 +67,7 @@ class TagFor extends AbstractBlock
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		parent::__construct($markup, $tokens, $fileSystem);
 
-		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::get('ALLOWED_VARIABLE_CHARS') . '+)/');
+		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::get('VARIABLE_NAME') . ')/');
 
 		if ($syntaxRegexp->match($markup)) {
 			
@@ -78,7 +78,7 @@ class TagFor extends AbstractBlock
 			
 		} else {
 			
-			$syntaxRegexp = new Regexp('/(\w+)\s+in\s+\((\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\s*..\s*(\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\)/');
+			$syntaxRegexp = new Regexp('/(\w+)\s+in\s+\((\d+|' . Liquid::get('VARIABLE_NAME') . ')\s*\.\.\s*(\d+|' . Liquid::get('VARIABLE_NAME') . ')\)/');
 			if ($syntaxRegexp->match($markup)) {
 				$this->type = 'digit';
 				$this->variableName = $syntaxRegexp->matches[1];
