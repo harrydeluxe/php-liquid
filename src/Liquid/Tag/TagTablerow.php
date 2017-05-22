@@ -78,6 +78,10 @@ class TagTablerow extends AbstractBlock
 	public function render(Context $context) {
 		$collection = $context->get($this->collectionName);
 
+		if ($collection instanceof \Traversable) {
+			$collection = iterator_to_array($collection);
+		}
+
 		if (!is_array($collection)) {
 			die('not array, ' . var_export($collection, true));
 		}
