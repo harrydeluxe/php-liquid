@@ -143,7 +143,7 @@ class AbstractBlock extends AbstractTag
 			case 'end':
 				throw new LiquidException("'end' is not a valid delimiter for " . $this->blockName() . " tags. Use " . $this->blockDelimiter());
 			default:
-				throw new LiquidException("Unkown tag $tag");
+				throw new LiquidException("Unknown tag $tag");
 		}
 	}
 

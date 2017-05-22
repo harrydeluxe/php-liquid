@@ -27,7 +27,7 @@ use Liquid\Context;
 class TagUnless extends TagIf{
 
 	/**
-	 * Replace first finded key in $subject to value
+	 * Replace first found key in $subject to value
 	 *
 	 * @param array $replacer (key => value array)
 	 * @param string $subject

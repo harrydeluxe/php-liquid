@@ -428,7 +428,7 @@ class StandardFilters
 		}
 
 		return $input;
-	}	
+	}
 	
 	
 	/**
