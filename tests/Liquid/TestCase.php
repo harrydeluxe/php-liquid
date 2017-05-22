@@ -37,7 +37,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 			'TAG_END' => '%}',
 			'VARIABLE_START' => '{{',
 			'VARIABLE_END' => '}}',
-			'ALLOWED_VARIABLE_CHARS' => '[a-zA-Z_.-]',
+			'VARIABLE_NAME' => '[a-zA-Z_][a-zA-Z0-9_.-]*',
 			'QUOTED_STRING' => '"[^":]*"|\'[^\':]*\'',
 		);
 
