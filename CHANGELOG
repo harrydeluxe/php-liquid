@@ -1,3 +1,29 @@
+* 1.2.1 (2016-12-12)
+
+ * Remove content injection from $_GET.
+ * Add PHP 5.6, 7.0, 7.1 to Travis file.
+
+* 1.2 (2016-06-11)
+
+ * Added "ESCAPE_BY_DEFAULT" setting for context-aware auto-escaping.
+ * Made "Context" work with plain objects.
+ * "escape" now uses "htmlentities".
+ * Fixed "escape_now".
+
+* 1.1 (2015-06-01)
+
+ * New tags: "paginate", "unless", "ifchanged" were added
+ * Added support for "for in (range)" syntax
+ * Added support for multiple conditions in if statements
+ * Added support for hashes/objects in for loops
+
+* 1.0 (2014-09-07)
+
+ * Add namespaces
+ * Add composer support
+ * Implement new standard filters
+ * Add 'raw' tag
+
 * 0.9.2 (2012-08-15)
 
  * context->set allows now global vars
