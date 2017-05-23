@@ -37,6 +37,19 @@ class NoToLiquid {
 	}
 }
 
+class GetSetObject
+{
+	public function field_exists($name) {
+		return $name == 'answer';
+	}
+
+	public function get($prop) {
+		if ($prop == 'answer') {
+			return 42;
+		}
+	}
+}
+
 class HiFilter
 {
 	public function hi($value) {
@@ -114,6 +127,12 @@ class ContextTest extends TestCase
 		$this->assertEquals(42, $this->context->get('test.answer'));
 		$this->assertEquals(1, $this->context->get('test.count'));
 		$this->assertEquals("forty two", $this->context->get('test'));
+	}
+
+	public function testGetSetObject() {
+		$this->context->set('object', new GetSetObject());
+		$this->assertEquals(42, $this->context->get('object.answer'));
+		$this->assertNull($this->context->get('object.invalid'));
 	}
 
 	/**
