@@ -54,7 +54,7 @@ class AbstractBlock extends AbstractTag
 
 			if ($startRegexp->match($token)) {
 				if ($tagRegexp->match($token)) {
-					// If we found the proper block delimitor just end parsing here and let the outer block proceed
+					// If we found the proper block delimiter just end parsing here and let the outer block proceed
 					if ($tagRegexp->matches[1] == $this->blockDelimiter()) {
 						$this->endTag();
 						return;
@@ -143,7 +143,7 @@ class AbstractBlock extends AbstractTag
 			case 'end':
 				throw new LiquidException("'end' is not a valid delimiter for " . $this->blockName() . " tags. Use " . $this->blockDelimiter());
 			default:
-				throw new LiquidException("Unkown tag $tag");
+				throw new LiquidException("Unknown tag $tag");
 		}
 	}
 

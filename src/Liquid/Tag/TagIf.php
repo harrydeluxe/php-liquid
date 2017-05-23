@@ -27,7 +27,7 @@ use Liquid\Regexp;
  *
  *     will return:
  *     YES
- *     
+ *
  * 0 is truthy
  *
  *     {% if 0 %} YES {% else %} NO {% endif %}

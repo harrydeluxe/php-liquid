@@ -34,7 +34,7 @@ This is a comment block
                     <p>Blogentry has tag: freestyle</p>
                 {% endif %}
 
-            </li>      
+            </li>
           {% endfor %}
         </ul>
         {% endif %}

@@ -30,7 +30,7 @@ use Liquid\Regexp;
  *	   or
  *
  *	   {%for i in (1..10)%} {{i}} {%endfor%}
- *	   {%for i in (1..variable)%} {{i}} {%endfor%} 
+ *	   {%for i in (1..variable)%} {{i}} {%endfor%}
  *
  */
 class TagFor extends AbstractBlock
@@ -147,6 +147,10 @@ class TagFor extends AbstractBlock
 
 				$collection = $context->get($this->collectionName);
 
+				if ($collection instanceof \Traversable) {
+					$collection = iterator_to_array($collection);
+				}
+		
 				if (is_null($collection) || !is_array($collection) || count($collection) == 0) {
 					$context->push();
 					$nodelist = array_pop($this->nodelistHolders);

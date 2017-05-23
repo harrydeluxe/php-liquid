@@ -75,7 +75,5 @@ class TagDecrement extends AbstractTag
 
 		// decrement the environment value
 		$context->environments[0][$this->toDecrement]--;
-
-		return '';
 	}
 }
