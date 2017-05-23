@@ -37,6 +37,21 @@ class NoToLiquid {
 	}
 }
 
+class NestedObject
+{
+	public $property;
+	public $value = -1;
+
+	public function toLiquid() {
+		// we intentionally made the value different so
+		// that we could see where it is coming from
+		return array(
+			'property' => $this->property,
+			'value' => 42,
+		);
+	}
+}
+
 class GetSetObject
 {
 	public function field_exists($name) {
@@ -127,6 +142,15 @@ class ContextTest extends TestCase
 		$this->assertEquals(42, $this->context->get('test.answer'));
 		$this->assertEquals(1, $this->context->get('test.count'));
 		$this->assertEquals("forty two", $this->context->get('test'));
+	}
+
+	public function testNestedObject() {
+		$object = new NestedObject();
+		$object->property = new NestedObject();
+		$this->context->set('object', $object);
+		$this->assertEquals(42, $this->context->get('object.value'));
+		$this->assertEquals(42, $this->context->get('object.property.value'));
+		$this->assertNull($this->context->get('object.property.value.invalid'));
 	}
 
 	public function testGetSetObject() {
