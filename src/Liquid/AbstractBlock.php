@@ -115,6 +115,13 @@ class AbstractBlock extends AbstractTag
 
 		foreach ($list as $token) {
 			$result .= (is_object($token) && method_exists($token, 'render')) ? $token->render($context) : $token;
+
+            if (isset($context->registers['break'])) {
+                break;
+            }
+            if (isset($context->registers['continue'])) {
+                break;
+            }
 		}
 
 		return $result;
