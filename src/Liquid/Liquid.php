@@ -64,8 +64,8 @@ class Liquid
 		// Variable end.
 		'VARIABLE_END' => '}}',
 
-		// The characters allowed in a variable.
-		'ALLOWED_VARIABLE_CHARS' => '[a-zA-Z_.-]',
+		// Variable name.
+		'VARIABLE_NAME' => '[a-zA-Z_][a-zA-Z_0-9.-]*',
 
 		'QUOTED_STRING' => '"[^"]*"|\'[^\']*\'',
 		'QUOTED_STRING_FILTER_ARGUMENT' => '"[^":]*"|\'[^\':]*\'',
@@ -82,6 +82,10 @@ class Liquid
 	 * @return string
 	 */
 	public static function get($key) {
+		// backward compatibility
+		if ($key === 'ALLOWED_VARIABLE_CHARS') {
+			return substr(self::$config['VARIABLE_NAME'], 0, -1);
+		}
 		if (array_key_exists($key, self::$config)) {
 			return self::$config[$key];
 		} else {
@@ -108,6 +112,11 @@ class Liquid
 	 * @param string $value
 	 */
 	public static function set($key, $value) {
+		// backward compatibility
+		if ($key === 'ALLOWED_VARIABLE_CHARS') {
+			$key = 'VARIABLE_NAME';
+			$value .= '+';
+		}
 		self::$config[$key] = $value;
 	}
 

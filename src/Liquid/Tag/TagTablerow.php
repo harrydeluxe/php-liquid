@@ -56,7 +56,7 @@ class TagTablerow extends AbstractBlock
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		parent::__construct($markup, $tokens, $fileSystem);
 
-		$syntax = new Regexp("/(\w+)\s+in\s+(" . Liquid::get('ALLOWED_VARIABLE_CHARS') . "+)/");
+		$syntax = new Regexp('/(\w+)\s+in\s+(' . Liquid::get('VARIABLE_NAME') . ')/');
 
 		if ($syntax->match($markup)) {
 			$this->variableName = $syntax->matches[1];
