@@ -38,6 +38,6 @@ class TagDecrementTest extends TestCase
 	}
 
 	public function testVariableNameContainingNumber() {
-        $this->assertTemplateResult(42, '{% decrement var123 %}{{ var123 }}', array('var123' => 43));
-    }
+		$this->assertTemplateResult(42, '{% decrement var123 %}{{ var123 }}', array('var123' => 43));
+	}
 }

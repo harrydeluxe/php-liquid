@@ -24,7 +24,7 @@ class TextDrop extends Drop
 		return array('text1', 'text2');
 	}
 
-	public 	function text() {
+	public function text() {
 		return 'text1';
 	}
 }

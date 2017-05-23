@@ -36,5 +36,5 @@ $assigns = array(
 		'copyright' => '&copy; Copyright 2014 Guz Alexander - All rights reserved.'
 	)
 );
-		
+
 echo $liquid->render($assigns);
