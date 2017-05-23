@@ -292,7 +292,7 @@ class Context
 						return null;
 					}
 
-					call_user_func(array($object, Liquid::get('GET_PROPERTY_METHOD')), $nextPartName);
+					$object = call_user_func(array($object, Liquid::get('GET_PROPERTY_METHOD')), $nextPartName);
 				} else {
 					// if it's just a regular object, attempt to access a property
 					if (property_exists($object, $nextPartName)) {
