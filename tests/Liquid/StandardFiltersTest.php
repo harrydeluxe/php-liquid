@@ -261,7 +261,7 @@ class StandardFiltersTest extends TestCase
 	}
 
 	public function testSlice() {
-		// Slize up to the end
+		// Slice up to the end
 		$data = array(
 			array(
 				array(),
@@ -289,7 +289,7 @@ class StandardFiltersTest extends TestCase
 			$this->assertEquals($item[1], StandardFilters::slice($item[0], 2));
 		}
 
-		// Slize a few elements
+		// Slice a few elements
 		$data = array(
 			array(
 				array(),

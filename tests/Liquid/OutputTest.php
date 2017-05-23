@@ -69,16 +69,16 @@ class OutputTest extends TestCase
 
 	public function testVariablePiping() {
 		$text = " {{ car.gm | make_funny }} ";
-		$expectd = " LOL ";
+		$expected = " LOL ";
 
-		$this->assertTemplateResult($expectd, $text, $this->assigns);
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 
 	public function testVariablePipingWithInput() {
 		$text = " {{ car.gm | cite_funny }} ";
-		$expectd = " LOL: bad ";
+		$expected = " LOL: bad ";
 
-		$this->assertTemplateResult($expectd, $text, $this->assigns);
+		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 
 	public function testVariablePipingWithArgs() {

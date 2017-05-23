@@ -37,7 +37,7 @@ class TagCapture extends AbstractBlock
 	 * Constructor
 	 *
 	 * @param string $markup
-	 * @param Array $tokens
+	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException

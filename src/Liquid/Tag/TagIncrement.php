@@ -75,7 +75,5 @@ class TagIncrement extends AbstractTag
 
 		// Increment the value
 		$context->environments[0][$this->toIncrement]++;
-
-		return '';
 	}
 }

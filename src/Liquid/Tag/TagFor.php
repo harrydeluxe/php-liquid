@@ -30,7 +30,7 @@ use Liquid\Regexp;
  *	   or
  *
  *	   {%for i in (1..10)%} {{i}} {%endfor%}
- *	   {%for i in (1..variable)%} {{i}} {%endfor%} 
+ *	   {%for i in (1..variable)%} {{i}} {%endfor%}
  *
  */
 class TagFor extends AbstractBlock

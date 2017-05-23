@@ -186,11 +186,11 @@ XPCTD;
 		$this->assertTemplateResult('1', '{%for i in (1..10) limit:1%}{{i}}{%endfor%}');
 		$this->assertTemplateResult('45', '{%for i in (1..5) offset:3%}{{i}}{%endfor%}');
 		$this->assertTemplateResult('54321', '{%for i in (1..5) reversed%}{{i}}{%endfor%}');
-		$this->assertTemplateResult('1', '{%for i in arr limit:1%}{{i}}{%endfor%}', 
+		$this->assertTemplateResult('1', '{%for i in arr limit:1%}{{i}}{%endfor%}',
 			array('arr' => array(1,2,3,4,5)));
-		$this->assertTemplateResult('45', '{%for i in arr offset:3%}{{i}}{%endfor%}', 
+		$this->assertTemplateResult('45', '{%for i in arr offset:3%}{{i}}{%endfor%}',
 			array('arr' => array(1,2,3,4,5)));
-		$this->assertTemplateResult('54321', '{%for i in arr reversed%}{{i}}{%endfor%}', 
+		$this->assertTemplateResult('54321', '{%for i in arr reversed%}{{i}}{%endfor%}',
 			array('arr' => array(1,2,3,4,5)));
 	}
 

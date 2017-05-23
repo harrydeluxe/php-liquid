@@ -20,7 +20,7 @@ class TagUnlessTest extends TestCase
 		$this->assertTemplateResult('  ', ' {% unless true %} this text should not go into the output {% endunless %} ');
 		$this->assertTemplateResult('  this text should go into the output  ',
       ' {% unless false %} this text should go into the output {% endunless %} ');
-    	$this->assertTemplateResult('  you rock ?', 
+    	$this->assertTemplateResult('  you rock ?',
     		'{% unless true %} you suck {% endunless %} {% unless false %} you rock {% endunless %}?');
 	}
 
@@ -31,19 +31,19 @@ class TagUnlessTest extends TestCase
 	}
 
 	public function testUnlessInLoop() {
-		$this->assertTemplateResult('23', 
+		$this->assertTemplateResult('23',
 			'{% for i in choices %}{% unless i %}{{ forloop.index }}{% endunless %}{% endfor %}',
 			array('choices' => array(1, null, false)));
 	}
 
 	public function testUnlessElseInLoop() {
-		$this->assertTemplateResult(' TRUE  2  3 ', 
-			'{% for i in choices %}{% unless i %} {{ forloop.index }} {% else %} TRUE {% endunless %}{% endfor %}', 
+		$this->assertTemplateResult(' TRUE  2  3 ',
+			'{% for i in choices %}{% unless i %} {{ forloop.index }} {% else %} TRUE {% endunless %}{% endfor %}',
 			array('choices' => array(1, null, false)));
 	}
 
 	public function testEmpty() {
-		$this->assertTemplateResult(" false ", 
+		$this->assertTemplateResult(" false ",
 			"{% assign emptyString = '' %}{% unless emptyString %} true {% else %} false {% endunless %}");
 	}
 

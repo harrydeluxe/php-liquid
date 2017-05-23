@@ -19,11 +19,11 @@ use Liquid\FileSystem;
 use Liquid\Regexp;
 
 /**
- * The paginate tag works in conjunction with the for tag to split content into numerous pages. 
+ * The paginate tag works in conjunction with the for tag to split content into numerous pages.
  *
  * Example:
  *
- *	{% paginate collection.products by 5 %}  
+ *	{% paginate collection.products by 5 %}
  * 		{% for product in collection.products %}
  * 			<!--show product details here -->
  * 		{% endfor %}
@@ -34,7 +34,7 @@ use Liquid\Regexp;
 class TagPaginate extends AbstractBlock
 {
 	/**
-     * @var array The collection to paginate
+     * @var string The collection to paginate
      */
     private $collectionName;
 
@@ -42,7 +42,7 @@ class TagPaginate extends AbstractBlock
      * @var array The collection object
      */
     private $collection;
-    
+
     /**
      *
      * @var int The size of the collection
@@ -53,23 +53,23 @@ class TagPaginate extends AbstractBlock
      * @var int The number of items to paginate by
      */
     private $numberItems;
-    
+
     /**
      * @var int The current page
      */
     private $currentPage;
-    
+
     /**
      * @var int The current offset (no of pages times no of items)
      */
     private $currentOffset;
-    
+
     /**
      * @var int Total pages
      */
     private $totalPages;
 
-    
+
     /**
      * Constructor
      *
@@ -81,7 +81,7 @@ class TagPaginate extends AbstractBlock
      *
      */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
-       
+
         parent::__construct($markup, $tokens, $fileSystem);
 
         $syntax = new Regexp('/(' . Liquid::get('ALLOWED_VARIABLE_CHARS') . '+)\s+by\s+(\w+)/');
@@ -93,7 +93,7 @@ class TagPaginate extends AbstractBlock
         } else {
             throw new LiquidException("Syntax Error - Valid syntax: paginate [collection] by [items]");
         }
-        
+
     }
 
     /**
@@ -105,7 +105,7 @@ class TagPaginate extends AbstractBlock
      *
      */
     public function render(Context $context) {
-	    
+
         $this->currentPage = ( is_numeric($context->get('page')) ) ? $context->get('page') : 1;
         $this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
     	$this->collection = $context->get($this->collectionName);
@@ -143,9 +143,9 @@ class TagPaginate extends AbstractBlock
     	$context->set('paginate', $paginate);
     	
         return parent::render($context);
-        
+
     }
-    
+
     /**
      * Returns the current page URL
      *
@@ -155,9 +155,9 @@ class TagPaginate extends AbstractBlock
      *
      */
     public function currentUrl($context) {
-	    
+
 	    $uri = explode('?', $context->get('REQUEST_URI'));
-	    
+
 	    $url = 'http';
 		if ($context->get('HTTPS') == 'on') $url .= 's';
 		$url .= '://' . $context->get('HTTP_HOST') . reset($uri);
@@ -165,5 +165,5 @@ class TagPaginate extends AbstractBlock
 		return $url;
 		
     }
-    
+
 }
