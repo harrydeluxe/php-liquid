@@ -28,6 +28,12 @@ class CentsDrop extends Drop
 class NoToLiquid {
 	public $answer = 42;
 
+	private $name = null;
+
+	public function name() {
+		return 'example';
+	}
+
 	public function count() {
 		return 1;
 	}
@@ -142,6 +148,7 @@ class ContextTest extends TestCase
 		$this->assertEquals(42, $this->context->get('test.answer'));
 		$this->assertEquals(1, $this->context->get('test.count'));
 		$this->assertEquals("forty two", $this->context->get('test'));
+		$this->assertEquals("example", $this->context->get('test.name'));
 	}
 
 	public function testNestedObject() {
