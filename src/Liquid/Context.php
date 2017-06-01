@@ -317,15 +317,15 @@ class Context
 				continue;
 			}
 
-			// if it's just a regular object, attempt to access a property
-			if (property_exists($object, $nextPartName)) {
-				$object = $object->$nextPartName;
+			// if it's just a regular object, attempt to access a public method
+			if (is_callable(array($object, $nextPartName))) {
+				$object = call_user_func(array($object, $nextPartName));
 				continue;
 			}
 
-			// then try a method
-			if (method_exists($object, $nextPartName)) {
-				$object = call_user_func(array($object, $nextPartName));
+			// then try a property (independent of accessibility)
+			if (property_exists($object, $nextPartName)) {
+				$object = $object->$nextPartName;
 				continue;
 			}
 
