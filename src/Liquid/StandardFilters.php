@@ -63,6 +63,12 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function date($input, $format) {
+
+        if ( empty($input) )
+        {
+            return $input;
+        }
+
 		if (!is_numeric($input)) {
 			$input = strtotime($input);
 		}
