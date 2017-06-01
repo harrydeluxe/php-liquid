@@ -304,7 +304,7 @@ class StandardFilters
 	 *
 	 * @param float $input
 	 * @param float $operand
-	 *minus
+	 *
 	 * @return float
 	 */
 	public static function plus($input, $operand) {
