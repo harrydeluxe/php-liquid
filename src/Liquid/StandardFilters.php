@@ -98,10 +98,10 @@ class StandardFilters
 	/**
 	 * division
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function divided_by($input, $operand) {
 		return (float)$input / (float)$operand;
@@ -262,10 +262,10 @@ class StandardFilters
 	/**
 	 * subtraction
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function minus($input, $operand) {
 		return (float)$input - (float)$operand;
@@ -562,10 +562,10 @@ class StandardFilters
 	/**
 	 * multiplication
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function times($input, $operand) {
 		return (float)$input * (float)$operand;
