@@ -104,7 +104,7 @@ class StandardFilters
 	 * @return int
 	 */
 	public static function divided_by($input, $operand) {
-		return (int)$input / (int)$operand;
+		return (float)$input / (float)$operand;
 	}
 		
 	
@@ -268,7 +268,7 @@ class StandardFilters
 	 * @return int
 	 */
 	public static function minus($input, $operand) {
-		return (int)$input - (int)$operand;
+		return (float)$input - (float)$operand;
 	}
 	
 	
@@ -304,7 +304,7 @@ class StandardFilters
 	 *
 	 * @param float $input
 	 * @param float $operand
-	 *
+	 *minus
 	 * @return float
 	 */
 	public static function plus($input, $operand) {
@@ -568,7 +568,7 @@ class StandardFilters
 	 * @return int
 	 */
 	public static function times($input, $operand) {
-		return (int)$input * (int)$operand;
+		return (float)$input * (float)$operand;
 	}
 	
 
