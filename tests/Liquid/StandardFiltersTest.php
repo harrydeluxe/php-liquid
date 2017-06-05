@@ -793,10 +793,15 @@ class StandardFiltersTest extends TestCase
 				2.7,
 				-1,
 			),
+			array(
+			    3.1,
+			    3.1,
+			    0
+			)
 		);
 
 		foreach ($data as $item) {
-			$this->assertSame($item[2], StandardFilters::minus($item[0], $item[1]));
+			$this->assertSame($item[2], StandardFilters::minus($item[0], $item[1]), '', 0.2);
 		}
 	}
 
@@ -815,12 +820,17 @@ class StandardFiltersTest extends TestCase
 			array(
 				1.5,
 				2.7,
-				2,
+				4.05,
 			),
+			array(
+			      7.5,
+			      0,
+			      0
+			)
 		);
 
 		foreach ($data as $item) {
-			$this->assertSame($item[2], StandardFilters::times($item[0], $item[1]));
+			$this->assertSame($item[2], StandardFilters::times($item[0], $item[1]), '', 0.2);
 		}
 	}
 
@@ -849,7 +859,7 @@ class StandardFiltersTest extends TestCase
 		);
 
 		foreach ($data as $item) {
-			$this->assertSame($item[2], StandardFilters::divided_by($item[0], $item[1]));
+			$this->assertSame($item[2], StandardFilters::divided_by($item[0], $item[1]), '', 0.2);
 		}
 	}
 
@@ -941,6 +951,10 @@ class StandardFiltersTest extends TestCase
 		foreach ($data as $item) {
 			$this->assertSame($item[1], StandardFilters::floor($item[0]));
 		}
+	}
+
+	public function test_date() {
+
 	}
 
 	public function testLocalFilter() {
