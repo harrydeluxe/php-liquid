@@ -63,6 +63,12 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function date($input, $format) {
+
+        if ( empty($input) )
+        {
+            return $input;
+        }
+
 		if (!is_numeric($input)) {
 			$input = strtotime($input);
 		}
@@ -92,13 +98,13 @@ class StandardFilters
 	/**
 	 * division
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function divided_by($input, $operand) {
-		return (int)$input / (int)$operand;
+		return (float)$input / (float)$operand;
 	}
 		
 	
@@ -256,13 +262,13 @@ class StandardFilters
 	/**
 	 * subtraction
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function minus($input, $operand) {
-		return (int)$input - (int)$operand;
+		return (float)$input - (float)$operand;
 	}
 	
 	
@@ -556,13 +562,13 @@ class StandardFilters
 	/**
 	 * multiplication
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function times($input, $operand) {
-		return (int)$input * (int)$operand;
+		return (float)$input * (float)$operand;
 	}
 	
 
@@ -643,7 +649,17 @@ class StandardFilters
 	public static function url_encode($input) {
 		return urlencode($input);
 	}
-	
+
+    /**
+     * Decodes a URL-encoded string
+     *
+     * @param string $input
+     *
+     * @return string
+     */
+    public static function url_decode($input) {
+        return urldecode($input);
+    }
 	
 	/**
 	 * Use overloading to get around reserved php words - in this case 'default'
