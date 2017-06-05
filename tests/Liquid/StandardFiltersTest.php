@@ -841,6 +841,11 @@ class StandardFiltersTest extends TestCase
 				200,
 				0,
 			),
+			array(
+				5.0,
+				2.0,
+				2.5
+			)
 		);
 
 		foreach ($data as $item) {
