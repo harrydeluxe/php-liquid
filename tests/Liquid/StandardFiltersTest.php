@@ -817,6 +817,11 @@ class StandardFiltersTest extends TestCase
 				2.7,
 				-1.2,
 			),
+			array(
+			    3.1,
+			    3.1,
+			    0
+			)
 		);
 
 		foreach ($data as $item) {
@@ -841,6 +846,11 @@ class StandardFiltersTest extends TestCase
 				2.7,
 				4.05,
 			),
+			array(
+			      7.5,
+			      0,
+			      0
+			)
 		);
 
 		foreach ($data as $item) {
@@ -970,6 +980,10 @@ class StandardFiltersTest extends TestCase
 				0.42,
 				0,
 			),
+			array(
+				2.5,
+				2,
+			)
 		);
 
 		foreach ($data as $item) {
