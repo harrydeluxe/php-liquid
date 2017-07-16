@@ -849,4 +849,14 @@ class StandardFiltersTest extends TestCase
 		$this->context->addFilters(new CanadianMoneyFilter(), 'money');
 		$this->assertEquals(' 1000$ CAD ', $var->render($this->context));
 	}
+
+	public function testDate() {
+		$var = new Variable('var | date, "%Y"');
+		$this->context->set('var', '2017-07-01 21:00:00');
+		$this->assertEquals('2017', $var->render($this->context));
+
+		$var = new Variable("var | date: '%d/%m/%Y %l:%M %p'");
+		$this->context->set('var', '2017-07-01 21:00:00');
+		$this->assertEquals('01/07/2017  9:00 PM', $var->render($this->context));
+	}
 }
