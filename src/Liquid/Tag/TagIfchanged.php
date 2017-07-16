@@ -13,9 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\AbstractBlock;
 use Liquid\Context;
-use Liquid\LiquidException;
 use Liquid\FileSystem;
-use Liquid\Regexp;
 
 /**
  * Quickly create a table from a collection
@@ -33,7 +31,7 @@ class TagIfchanged extends AbstractBlock
 	 * Constructor
 	 *
 	 * @param string $markup
-	 * @param Array $tokens
+	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
 	 * @throws \Liquid\LiquidException

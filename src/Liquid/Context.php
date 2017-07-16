@@ -54,7 +54,7 @@ class Context
 		$this->assigns = array($assigns);
 		$this->registers = $registers;
 		$this->filterbank = new Filterbank($this);
-		// first empty array serves as source for ovverides, e.g. as in TagDecrement
+		// first empty array serves as source for overrides, e.g. as in TagDecrement
 		$this->environments = array(array(), $_SERVER);
 	}
 
@@ -308,7 +308,7 @@ class Context
 		}
 
 		// finally, resolve objects to values
-		if (is_object($object)) {
+		if (is_object($object) && !($object instanceof \Traversable)) {
 			if (method_exists($object, '__toString')) {
 				$object = (string) $object;
 			} elseif (method_exists($object, 'toLiquid')) {
@@ -317,7 +317,7 @@ class Context
 		}
 
 		// if everything else fails, throw up
-		if (is_object($object)) {
+		if (is_object($object) && !($object instanceof \Traversable)) {
 			$class = get_class($object);
 			throw new LiquidException("Value of type $class has no `toLiquid` nor `__toString` method");
 		}

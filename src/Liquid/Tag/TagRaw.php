@@ -43,7 +43,7 @@ class TagRaw extends AbstractBlock
 			$token = array_shift($tokens);
 
 			if ($tagRegexp->match($token)) {
-				// If we found the proper block delimitor just end parsing here and let the outer block proceed
+				// If we found the proper block delimiter just end parsing here and let the outer block proceed
 				if ($tagRegexp->matches[1] == $this->blockDelimiter()) {
 					return;
 				}

@@ -152,11 +152,15 @@ class StandardFilters
 	/**
 	 * Returns the first element of an array
 	 *
-	 * @param array $input
+	 * @param array|\Iterator $input
 	 *
 	 * @return mixed
 	 */
 	public static function first($input) {
+		if ($input instanceof \Iterator) {
+			$input->rewind();
+			return $input->current();
+		}
 		return is_array($input) ? reset($input) : $input;
 	}	
 	
@@ -174,12 +178,22 @@ class StandardFilters
 	/**
 	 * Joins elements of an array with a given character between them
 	 *
-	 * @param array $input
+	 * @param array|\Traversable $input
 	 * @param string $glue
 	 *
 	 * @return string
 	 */
 	public static function join($input, $glue = ' ') {
+		if ($input instanceof \Traversable) {
+			$str = '';
+			foreach ($input as $elem) {
+				if ($str) {
+					$str .= $glue;
+				}
+				$str .= $elem;
+			}
+			return $str;
+		}
 		return is_array($input) ? implode($glue, $input) : $input;
 	}
 	
@@ -187,11 +201,18 @@ class StandardFilters
 	/**
 	 * Returns the last element of an array
 	 *
-	 * @param array $input
+	 * @param array|\Traversable $input
 	 *
 	 * @return mixed
 	 */
 	public static function last($input) {
+		if ($input instanceof \Traversable) {
+			$last = null;
+			foreach ($input as $elem){
+				$last = $elem;
+			}
+			return $last;
+		}
 		return is_array($input) ? end($input) : $input;
 	}	
 	
@@ -209,20 +230,26 @@ class StandardFilters
 	/**
 	 * Map/collect on a given property
 	 *
-	 * @param array $input
+	 * @param array|\Traversable $input
 	 * @param string $property
 	 *
 	 * @return string
 	 */
-	public static function map(array $input, $property) {
-		return array_reduce($input, function($result, $elem) use ($property) {
+	public static function map($input, $property) {
+		if ($input instanceof \Traversable) {
+			$input = iterator_to_array($input);
+		}
+		if (!is_array($input)) {
+			return $input;
+		}
+		return array_map(function ($elem) use ($property) {
 			if (is_callable($elem)) {
-				return $result . $elem();
+				return $elem();
 			} elseif (is_array($elem) && array_key_exists($property, $elem)) {
-				return $result . $elem[$property];
+				return $elem[$property];
 			}
-			return $result . '';
-		}, '');
+			return null;
+		}, $input);
 	}
 	
 
@@ -357,11 +384,14 @@ class StandardFilters
 	/**
 	 * Reverse the elements of an array
 	 *
-	 * @param array $input
+	 * @param array|\Traversable $input
 	 *
 	 * @return array
 	 */
-	public static function reverse(array $input) {
+	public static function reverse($input) {
+		if ($input instanceof \Traversable) {
+			$input = iterator_to_array($input);
+		}
 		return array_reverse($input);
 	}
 	
@@ -397,6 +427,9 @@ class StandardFilters
 	 * @return int
 	 */
 	public static function size($input) {
+		if ($input instanceof \Iterator) {
+			return iterator_count($input);
+		}
 		if (is_string($input) || is_numeric($input)) {
 			return strlen($input);
 		} elseif (is_array($input)) {
@@ -412,13 +445,16 @@ class StandardFilters
 	
 
 	/**
-	 * @param array|string $input
+	 * @param array|\Iterator|string $input
 	 * @param int $offset
 	 * @param int $length
 	 *
-	 * @return array|string
+	 * @return array|\Iterator|string
 	 */
 	public static function slice($input, $offset, $length = null) {
+		if ($input instanceof \Iterator) {
+			$input = iterator_to_array($input);
+		}
 		if (is_array($input)) {
 			$input = array_slice($input, $offset, $length);
 		} elseif (is_string($input)) {
@@ -428,18 +464,21 @@ class StandardFilters
 		}
 
 		return $input;
-	}	
+	}
 	
 	
 	/**
 	 * Sort the elements of an array
 	 *
-	 * @param array $input
+	 * @param array|\Traversable $input
 	 * @param string $property use this property of an array element
 	 *
 	 * @return array
 	 */
-	public static function sort(array $input, $property = null) {
+	public static function sort($input, $property = null) {
+		if ($input instanceof \Traversable) {
+			$input = iterator_to_array($input);
+		}
 		if ($property === null) {
 			asort($input);
 		} else {
@@ -566,11 +605,14 @@ class StandardFilters
 	/**
 	 * Remove duplicate elements from an array
 	 *
-	 * @param array $input
+	 * @param array|\Traversable $input
 	 *
 	 * @return array
 	 */
-	public static function uniq(array $input) {
+	public static function uniq($input) {
+		if ($input instanceof \Traversable) {
+			$input = iterator_to_array($input);
+		}
 		return array_unique($input);
 	}
 	
