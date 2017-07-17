@@ -328,6 +328,11 @@ class Context
 			// we'll try casting this object in the next iteration
 		}
 
+		// Traversable objects are taken care of inside filters
+		if ($object instanceof \Traversable) {
+			return $object;
+		}
+
 		// finally, resolve an object to a string or a plain value
 		if (method_exists($object, '__toString')) {
 			$object = (string) $object;
@@ -336,7 +341,7 @@ class Context
 		}
 
 		// if everything else fails, throw up
-		if (is_object($object) && !($object instanceof \Traversable)) {
+		if (is_object($object)) {
 			$class = get_class($object);
 			throw new LiquidException("Value of type $class has no `toLiquid` nor `__toString` methods");
 		}
