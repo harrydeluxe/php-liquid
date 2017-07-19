@@ -49,7 +49,7 @@ The main class is `Liquid::Template` class. There are two separate stages of wor
 
     $template = new Template();
     $template->parse("Hello, {{ name }}!");
-    echo $template->render(array('name' => 'Alex');
+    echo $template->render(array('name' => 'Alex'));
 
 	// Will echo
 	// Hello, Alex!
