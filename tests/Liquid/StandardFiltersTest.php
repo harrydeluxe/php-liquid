@@ -768,12 +768,12 @@ class StandardFiltersTest extends TestCase
 			array(
 				1.5,
 				2.7,
-				3,
+				4.2,
 			),
 		);
 
 		foreach ($data as $item) {
-			$this->assertSame($item[2], StandardFilters::plus($item[0], $item[1]));
+			$this->assertEquals($item[2], StandardFilters::plus($item[0], $item[1]), '', 0.00001);
 		}
 	}
 
@@ -792,12 +792,12 @@ class StandardFiltersTest extends TestCase
 			array(
 				1.5,
 				2.7,
-				-1,
+				-1.2,
 			),
 		);
 
 		foreach ($data as $item) {
-			$this->assertSame($item[2], StandardFilters::minus($item[0], $item[1]));
+			$this->assertEquals($item[2], StandardFilters::minus($item[0], $item[1]), '', 0.00001);
 		}
 	}
 
@@ -816,12 +816,12 @@ class StandardFiltersTest extends TestCase
 			array(
 				1.5,
 				2.7,
-				2,
+				4.05,
 			),
 		);
 
 		foreach ($data as $item) {
-			$this->assertSame($item[2], StandardFilters::times($item[0], $item[1]));
+			$this->assertEquals($item[2], StandardFilters::times($item[0], $item[1]), '', 0.00001);
 		}
 	}
 
@@ -842,10 +842,15 @@ class StandardFiltersTest extends TestCase
 				200,
 				0,
 			),
+			array(
+				10,
+				0.5,
+				20,
+			),
 		);
 
 		foreach ($data as $item) {
-			$this->assertSame($item[2], StandardFilters::divided_by($item[0], $item[1]));
+			$this->assertEquals($item[2], StandardFilters::divided_by($item[0], $item[1]), '', 0.00001);
 		}
 	}
 
@@ -864,6 +869,11 @@ class StandardFiltersTest extends TestCase
 			array(
 				8,
 				3,
+				2,
+			),
+			array(
+				8.9,
+				3.5,
 				2,
 			),
 		);

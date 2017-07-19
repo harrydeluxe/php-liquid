@@ -92,13 +92,13 @@ class StandardFilters
 	/**
 	 * division
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function divided_by($input, $operand) {
-		return (int)$input / (int)$operand;
+		return (float)$input / (float)$operand;
 	}
 		
 	
@@ -256,27 +256,27 @@ class StandardFilters
 	/**
 	 * subtraction
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function minus($input, $operand) {
-		return (int)$input - (int)$operand;
+		return (float)$input - (float)$operand;
 	}
 	
 	
 	/**
 	 * modulo
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
 	 * @return int
 	 */
 	public static function modulo($input, $operand) {
-		return (int)$input % (int)$operand;
-	}	
+		return (float)$input % (float)$operand;
+	}
 	
 	
 	/**
@@ -296,14 +296,14 @@ class StandardFilters
 	/**
 	 * addition
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function plus($input, $operand) {
-		return (int)$input + (int)$operand;
-	}	
+		return (float)$input + (float)$operand;
+	}
 	
 
 	/**
@@ -550,13 +550,13 @@ class StandardFilters
 	/**
 	 * multiplication
 	 *
-	 * @param int $input
-	 * @param int $operand
+	 * @param float $input
+	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function times($input, $operand) {
-		return (int)$input * (int)$operand;
+		return (float)$input * (float)$operand;
 	}
 	
 
