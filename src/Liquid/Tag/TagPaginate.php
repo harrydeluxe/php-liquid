@@ -34,7 +34,7 @@ use Liquid\Regexp;
 class TagPaginate extends AbstractBlock
 {
 	/**
-	 * @var string The collection to paginate
+	 * @var array The collection to paginate
 	 */
 	private $collectionName;
 
@@ -109,9 +109,12 @@ class TagPaginate extends AbstractBlock
 		$this->currentPage = ( is_numeric($context->get('page')) ) ? $context->get('page') : 1;
 		$this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
 		$this->collection = $context->get($this->collectionName);
+		if ($this->collection instanceof \Traversable) {
+			$this->collection = iterator_to_array($this->collection);
+		}
 		$this->collectionSize = count($this->collection);
 		$this->totalPages = ceil($this->collectionSize / $this->numberItems);
-		$paginatedCollection =  array_slice($this->collection, $this->currentOffset, $this->numberItems);
+		$paginatedCollection = array_slice($this->collection, $this->currentOffset, $this->numberItems);
 
 		// Sets the collection if it's a key of another collection (ie search.results, collection.products, blog.articles)
 		$segments = explode('.', $this->collectionName);

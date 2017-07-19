@@ -247,20 +247,25 @@ class Context
 
 		$object = $this->fetch(array_shift($parts));
 
-		if (is_object($object)) {
+		while (count($parts) > 0) {
+			// since we still have a part to consider
+			// and since we can't dig deeper into plain values
+			// it can be thought as if it has a property with a null value
+			if (!is_object($object) && !is_array($object)) {
+				return null;
+			}
+
+			// first try to cast an object to an array or value
 			if (method_exists($object, 'toLiquid')) {
 				$object = $object->toLiquid();
-			} else if (method_exists($object, 'toArray')) {
+			} elseif (method_exists($object, 'toArray')) {
 				$object = $object->toArray();
 			}
-			// we'll cover regular objects later
-		}
 
-		if ($object === null) {
-			return null;
-		}
+			if (is_null($object)) {
+				return null;
+			}
 
-		while (count($parts) > 0) {
 			if ($object instanceof Drop) {
 				$object->setContext($this);
 			}
@@ -273,53 +278,72 @@ class Context
 					return count($object);
 				}
 
-				if (array_key_exists($nextPartName, $object)) {
-					$object = $object[$nextPartName];
-				} else {
+				// no key - no value
+				if (!array_key_exists($nextPartName, $object)) {
 					return null;
 				}
 
-			} elseif (is_object($object)) {
-				if ($object instanceof Drop) {
-					// if the object is a drop, make sure it supports the given method
-					if (!$object->hasKey($nextPartName)) {
-						return null;
-					}
-
-					$object = $object->invokeDrop($nextPartName);
-				} elseif (method_exists($object, Liquid::get('HAS_PROPERTY_METHOD'))) {
-					if (!call_user_func(array($object, Liquid::get('HAS_PROPERTY_METHOD')), $nextPartName)) {
-						return null;
-					}
-
-					call_user_func(array($object, Liquid::get('GET_PROPERTY_METHOD')), $nextPartName);
-				} else {
-					// if it's just a regular object, attempt to access a property
-					if (property_exists($object, $nextPartName)) {
-						$object = $object->$nextPartName;
-					} elseif (method_exists($object, $nextPartName)) {
-						// then try a method
-						$object = call_user_func(array($object, $nextPartName));
-					} else {
-						return null;
-					}
-				}
+				$object = $object[$nextPartName];
+				continue;
 			}
+
+			if (!is_object($object)) {
+				// we got plain value, yet asked to resolve a part
+				// think plain values have a null part with any name
+				return null;
+			}
+
+			if ($object instanceof Drop) {
+				// if the object is a drop, make sure it supports the given method
+				if (!$object->hasKey($nextPartName)) {
+					return null;
+				}
+
+				$object = $object->invokeDrop($nextPartName);
+				continue;
+			}
+
+			// if it has `get` or `field_exists` methods
+			if (method_exists($object, Liquid::get('HAS_PROPERTY_METHOD'))) {
+				if (!call_user_func(array($object, Liquid::get('HAS_PROPERTY_METHOD')), $nextPartName)) {
+					return null;
+				}
+
+				$object = call_user_func(array($object, Liquid::get('GET_PROPERTY_METHOD')), $nextPartName);
+				continue;
+			}
+
+			// if it's just a regular object, attempt to access a public method
+			if (is_callable(array($object, $nextPartName))) {
+				$object = call_user_func(array($object, $nextPartName));
+				continue;
+			}
+
+			// then try a property (independent of accessibility)
+			if (property_exists($object, $nextPartName)) {
+				$object = $object->$nextPartName;
+				continue;
+			}
+
+			// we'll try casting this object in the next iteration
 		}
 
-		// finally, resolve objects to values
-		if (is_object($object)) {
-			if (method_exists($object, '__toString')) {
-				$object = (string) $object;
-			} elseif (method_exists($object, 'toLiquid')) {
-				$object = $object->toLiquid();
-			}
+		// Traversable objects are taken care of inside filters
+		if ($object instanceof \Traversable) {
+			return $object;
+		}
+
+		// finally, resolve an object to a string or a plain value
+		if (method_exists($object, '__toString')) {
+			$object = (string) $object;
+		} elseif (method_exists($object, 'toLiquid')) {
+			$object = $object->toLiquid();
 		}
 
 		// if everything else fails, throw up
 		if (is_object($object)) {
 			$class = get_class($object);
-			throw new LiquidException("Value of type $class has no `toLiquid` nor `__toString` method");
+			throw new LiquidException("Value of type $class has no `toLiquid` nor `__toString` methods");
 		}
 
 		return $object;

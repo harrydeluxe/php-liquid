@@ -68,7 +68,7 @@ class Liquid
 		'VARIABLE_NAME' => '[a-zA-Z_][a-zA-Z_0-9.-]*',
 
 		'QUOTED_STRING' => '"[^"]*"|\'[^\']*\'',
-		'QUOTED_STRING_FILTER_ARGUMENT' => '"[^":]*"|\'[^\':]*\'',
+		'QUOTED_STRING_FILTER_ARGUMENT' => '"[^"]*"|\'[^\']*\'',
 
 		// Automatically escape any variables unless told otherwise by a "raw" filter
 		'ESCAPE_BY_DEFAULT' => false,

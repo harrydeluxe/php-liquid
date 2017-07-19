@@ -26,6 +26,7 @@ class TagForTest extends TestCase
 
 	public function testFor() {
 		$this->assertTemplateResult(' yo  yo  yo  yo ', '{%for item in array%} yo {%endfor%}', array('array' => array(1, 2, 3, 4)));
+		$this->assertTemplateResult(' boo  boo  boo  boo ', '{%for item in array%} boo {%endfor%}', array('array' => new \ArrayIterator(array(1, 2, 3, 4))));
 		$this->assertTemplateResult('yoyo', '{%for item in array%}yo{%endfor%}', array('array' => array(1, 2)));
 		$this->assertTemplateResult(' yo ', '{%for item in array%} yo {%endfor%}', array('array' => array(1)));
 		$this->assertTemplateResult('', '{%for item in array%}{%endfor%}', array('array' => array(1, 2)));
@@ -94,6 +95,7 @@ HERE;
 	public function testLimiting() {
 		$assigns = array('array' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 0));
 		$this->assertTemplateResult('12', '{%for i in array limit:2 %}{{ i }}{%endfor%}', $assigns);
+		$this->assertTemplateResult('1234567890', '{%for i in array limit:20 %}{{ i }}{%endfor%}', $assigns);
 		$this->assertTemplateResult('1234', '{%for i in array limit:4 %}{{ i }}{%endfor%}', $assigns);
 		$this->assertTemplateResult('3456', '{%for i in array limit:4 offset:2 %}{{ i }}{%endfor%}', $assigns);
 		$this->assertTemplateResult('3456', '{%for i in array limit: 4  offset: 2 %}{{ i }}{%endfor%}', $assigns);
@@ -191,5 +193,14 @@ next
 
 XPCTD;
 		$this->assertTemplateResult($expected, $markup, $assigns);
+	}
+
+	public function testForWithRanges() {
+		$this->assertTemplateResult('123456789', '{%for i in (1..9)%}{{i}}{%endfor%}');
+		$this->assertTemplateResult(' 9 10 11', '{%for i in (9..11)%} {{i}}{%endfor%}');
+		$this->assertTemplateResult('9991000', '{%for i in (999..1000)%}{{i}}{%endfor%}');
+
+		$assigns = array('variable' => 100);
+		$this->assertTemplateResult('9596979899100', '{%for i in (95..variable)%}{{i}}{%endfor%}', $assigns);
 	}
 }

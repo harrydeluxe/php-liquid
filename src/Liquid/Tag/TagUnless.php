@@ -69,7 +69,7 @@ class TagUnless extends TagIf{
 		);
 
 		if (count($this->blocks) > 0) {
-			if (count($this->blocks[0]) > 1)  {
+			if (count($this->blocks[0]) > 1) {
 				$condition = $this->blocks[0][1];
 
 				$condition = $this->strReplaceOne($replacerOperators, $condition);

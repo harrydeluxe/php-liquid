@@ -1,3 +1,5 @@
+sudo: false
+
 language: php
 php:
   - 5.3
@@ -7,7 +9,12 @@ php:
   - 7.0
   - 7.1
 
-before_script:
-  - composer install
+cache:
+  directories:
+    - $HOME/.composer/cache
 
-script: ./vendor/bin/phpunit
+install:
+  - composer install --prefer-dist
+
+after_success:
+  - travis_retry php vendor/bin/coveralls

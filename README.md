@@ -1,4 +1,4 @@
-# Liquid template engine for PHP [![Build Status](https://travis-ci.org/kalimatas/php-liquid.svg?branch=master)](https://travis-ci.org/kalimatas/php-liquid)
+# Liquid template engine for PHP [![Build Status](https://travis-ci.org/kalimatas/php-liquid.svg?branch=master)](https://travis-ci.org/kalimatas/php-liquid) [![Coverage Status](https://coveralls.io/repos/github/kalimatas/php-liquid/badge.svg?branch=master)](https://coveralls.io/github/kalimatas/php-liquid?branch=master)
 
 Liquid is a PHP port of the [Liquid template engine for Ruby](https://github.com/Shopify/liquid), which was written by Tobias Lutke. Although there are many other templating engines for PHP, including Smarty (from which Liquid was partially inspired), Liquid had some advantages that made porting worthwhile:
 
@@ -49,7 +49,7 @@ The main class is `Liquid::Template` class. There are two separate stages of wor
 
     $template = new Template();
     $template->parse("Hello, {{ name }}!");
-    echo $template->render(array('name' => 'Alex');
+    echo $template->render(array('name' => 'Alex'));
 
 	// Will echo
 	// Hello, Alex!
