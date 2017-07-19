@@ -272,10 +272,10 @@ class StandardFilters
 	 * @param float $input
 	 * @param float $operand
 	 *
-	 * @return int
+	 * @return float
 	 */
 	public static function modulo($input, $operand) {
-		return (float)$input % (float)$operand;
+		return fmod((float)$input, (float)$operand);
 	}
 	
 	

@@ -874,12 +874,17 @@ class StandardFiltersTest extends TestCase
 			array(
 				8.9,
 				3.5,
-				2,
+				1.9,
+			),
+			array(
+				183.357,
+				12,
+				3.357,
 			),
 		);
 
 		foreach ($data as $item) {
-			$this->assertSame($item[2], StandardFilters::modulo($item[0], $item[1]));
+			$this->assertEquals($item[2], StandardFilters::modulo($item[0], $item[1]), '', 0.00001);
 		}
 	}
 
