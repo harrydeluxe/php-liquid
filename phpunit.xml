@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php" verbose="true" colors="true">
+<phpunit bootstrap="vendor/autoload.php" verbose="true" colors="true">
 	<testsuites>
-		<testsuite name="Liquid test suite">
-			<directory>tests/Liquid/</directory>
+		<testsuite>
+			<directory>tests/</directory>
 		</testsuite>
 	</testsuites>
+
 	<filter>
 		<whitelist>
-			<directory suffix=".php">src/Liquid/</directory>
+			<directory suffix=".php">src/</directory>
 		</whitelist>
 	</filter>
 </phpunit>

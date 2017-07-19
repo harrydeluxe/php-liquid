@@ -28,5 +28,10 @@
 		"psr-4": {
 			"Liquid\\": "src/Liquid"
 		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Liquid\\": "tests/Liquid"
+		}
 	}
 }
