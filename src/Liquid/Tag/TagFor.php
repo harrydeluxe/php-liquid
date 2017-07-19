@@ -78,7 +78,7 @@ class TagFor extends AbstractBlock
 			
 		} else {
 			
-			$syntaxRegexp = new Regexp('/(\w+)\s+in\s+\((\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\s*..\s*(\d|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\)/');
+			$syntaxRegexp = new Regexp('/(\w+)\s+in\s+\((\d+|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\s*..\s*(\d+|'.Liquid::get('ALLOWED_VARIABLE_CHARS').'+)\)/');
 			if ($syntaxRegexp->match($markup)) {
 				$this->type = 'digit';
 				$this->variableName = $syntaxRegexp->matches[1];
