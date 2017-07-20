@@ -215,4 +215,11 @@ class TagIfTest extends TestCase
 	public function testInvalidOperator() {
 		$this->assertTemplateResult('', '{% if foo === y %}true{% else %}false{% endif %}', array('foo' => true, 'y' => true));
 	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testIncomparable() {
+		$this->assertTemplateResult('', '{% if foo == 1 %}true{% endif %}', array('foo' => (object) array()));
+	}
 }
