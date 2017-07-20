@@ -64,7 +64,7 @@ class TagTablerow extends AbstractBlock
 
 			$this->extractAttributes($markup);
 		} else {
-			throw new LiquidException("Syntax Error in 'table_row loop' - Valid syntax: table_row [item] in [collection] cols=3");
+			throw new LiquidException("Syntax Error in 'table_row loop' - Valid syntax: table_row [item] in [collection] cols:3");
 		}
 	}
 
@@ -83,7 +83,7 @@ class TagTablerow extends AbstractBlock
 		}
 
 		if (!is_array($collection)) {
-			die('not array, ' . var_export($collection, true));
+			throw new LiquidException("Not an array");
 		}
 
 		// discard keys
