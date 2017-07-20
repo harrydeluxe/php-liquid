@@ -54,8 +54,8 @@ class TagIfchanged extends AbstractBlock
 			return '';
 		} else {
 			$this->lastValue = $output;
-			return $this->lastValue;		
+			return $this->lastValue;
 		}
-		
+
 	}
 }

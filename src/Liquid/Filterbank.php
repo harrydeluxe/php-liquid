@@ -54,7 +54,7 @@ class Filterbank
 	 * Adds a filter to the bank
 	 *
 	 * @param mixed $filter Can either be an object, the name of a class (in which case the
-	 * 						filters will be called statically) or the name of a function.
+	 *						filters will be called statically) or the name of a function.
 	 *
 	 * @throws LiquidException
 	 * @return bool

@@ -52,7 +52,7 @@ class TagUnless extends TagIf{
 	 *  a != 1 or b != 2
 	 */
 	protected function revertOperators() {
-		
+
 		// replace
 		$replacerOperators = array(
 			'==' => '!=',
@@ -62,14 +62,14 @@ class TagUnless extends TagIf{
 			'<'  => '>=',
 			'!=' => '=='
 		);
-		
+
 		$replacerLogicalOperators = array(
 			'or' => 'and',
 			'and' => 'or'
 		);
-		
+
 		if (count($this->blocks) > 0) {
-			if (count($this->blocks[0]) > 1)  {
+			if (count($this->blocks[0]) > 1) {
 				$condition = $this->blocks[0][1];
 
 				$condition = $this->strReplaceOne($replacerOperators, $condition);

@@ -100,7 +100,7 @@ class StandardFilters
 	public static function divided_by($input, $operand) {
 		return (float)$input / (float)$operand;
 	}
-		
+
 	
 	/**
 	 * Convert an input to lowercase
@@ -124,6 +124,7 @@ class StandardFilters
 	public static function raw($input) {
 		return $input;
 	}
+
 
 	/**
 	 * Escape a string
@@ -416,8 +417,8 @@ class StandardFilters
 	 */
 	public static function rstrip($input) {
 		return rtrim($input);
-	}	
-									
+	}
+
 	
 	/**
 	 * Return the size of an array or of an string
@@ -578,7 +579,7 @@ class StandardFilters
 
 		return $input;
 	}
-		
+
 
 	/**
 	 * Truncate string down to x words
@@ -615,7 +616,8 @@ class StandardFilters
 		}
 		return array_unique($input);
 	}
-	
+
+
 	/**
 	 * Convert an input to uppercase
 	 *
@@ -626,6 +628,7 @@ class StandardFilters
 	public static function upcase($input) {
 		return is_string($input) ? strtoupper($input) : $input;
 	}
+
 
 	/**
 	 * URL encodes a string
@@ -649,9 +652,9 @@ class StandardFilters
 	 *
 	 */
 	public function __call($name, $arguments) {
-        if ($name === 'default') {
-            return $this->_default($arguments[0], $arguments[1]);
-        }
-    }
+		if ($name === 'default') {
+			return $this->_default($arguments[0], $arguments[1]);
+		}
+	}
 
 }
