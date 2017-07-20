@@ -201,6 +201,13 @@ class TagIfTest extends TestCase
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
+	public function testSyntaxErrorEnd() {
+		$this->assertTemplateResult('', '{% if jerry == 1 %}{% end %}');
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
 	public function testInvalidOperator() {
 		$this->assertTemplateResult('', '{% if foo === y %}true{% else %}false{% endif %}', array('foo' => true, 'y' => true));
 	}
