@@ -65,4 +65,15 @@ class TagAssignTest extends TestCase
 		$template->parse('{% assign test = var1 | join : "." %}{{ test }}');
 		$this->assertTrue($template->render(array('var1' => array('a', 'b', 'c'))) === 'a.b.c');
 	}
+
+	/**
+	 * Tests a simple assignment with numbers
+	 */
+	public function testNumbersAssign() {
+		$this->assertTemplateResult('42', '{% assign i = 42 %}{{ i }}');
+		$this->assertTemplateResult('3.14', '{% assign i = 3.14 %}{{ i }}');
+		$this->assertTemplateResult('-100', '{% assign i = -100 %}{{ i }}');
+		$this->assertTemplateResult('-10', '{% assign i = -10.0 %}{{ i }}');
+		$this->assertTemplateResult('-10.5', '{% assign i = -10.5 %}{{ i }}');
+	}
 }
