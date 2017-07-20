@@ -26,4 +26,10 @@ class TagUnlessTest extends TestCase
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text);
 	}
+
+	public function testWithVariable() {
+		$text = " {% unless variable %} true {% else %} false {% endunless %} ";
+		$expected = "  false  ";
+		$this->assertTemplateResult($expected, $text, array('variable' => true));
+	}
 }

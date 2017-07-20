@@ -108,6 +108,10 @@ class TagIfTest extends TestCase
 		$text = " {% if array == empty %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text, array('array' => array()));
+
+		$text = " {% if empty == array %} true {% else %} false {% endif %} ";
+		$expected = "  true  ";
+		$this->assertTemplateResult($expected, $text, array('array' => array()));
 	}
 
 	public function testIsNotCollectionEmpty() {
@@ -201,7 +205,21 @@ class TagIfTest extends TestCase
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
+	public function testSyntaxErrorEnd() {
+		$this->assertTemplateResult('', '{% if jerry == 1 %}{% end %}');
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
 	public function testInvalidOperator() {
 		$this->assertTemplateResult('', '{% if foo === y %}true{% else %}false{% endif %}', array('foo' => true, 'y' => true));
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testIncomparable() {
+		$this->assertTemplateResult('', '{% if foo == 1 %}true{% endif %}', array('foo' => (object) array()));
 	}
 }
