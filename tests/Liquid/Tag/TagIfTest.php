@@ -108,6 +108,10 @@ class TagIfTest extends TestCase
 		$text = " {% if array == empty %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text, array('array' => array()));
+
+		$text = " {% if empty == array %} true {% else %} false {% endif %} ";
+		$expected = "  true  ";
+		$this->assertTemplateResult($expected, $text, array('array' => array()));
 	}
 
 	public function testIsNotCollectionEmpty() {
