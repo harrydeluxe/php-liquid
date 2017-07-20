@@ -39,4 +39,25 @@ class TagCaseTest extends TestCase
 		$assigns = array('condition' => 6);
 		$this->assertTemplateResult(' else ', '{% case condition %}{% when 5 %} hit {% else %} else {% endcase %}', $assigns);
 	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testSyntaxErrorCase() {
+		$this->assertTemplateResult('', '{% case %}{% when 5 %}{% endcase %}');
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testSyntaxErrorWhen() {
+		$this->assertTemplateResult('', '{% case condition %}{% when %}{% endcase %}');
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testSyntaxErrorEnd() {
+		$this->assertTemplateResult('', '{% case condition %}{% end %}');
+	}
 }
