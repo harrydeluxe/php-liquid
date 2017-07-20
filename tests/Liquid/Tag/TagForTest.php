@@ -25,6 +25,7 @@ class TagForTest extends TestCase
 	}
 
 	public function testFor() {
+		$this->assertTemplateResult('', '{%for item in array%} yo {%endfor%}', array('array' => array()));
 		$this->assertTemplateResult(' yo  yo  yo  yo ', '{%for item in array%} yo {%endfor%}', array('array' => array(1, 2, 3, 4)));
 		$this->assertTemplateResult(' boo  boo  boo  boo ', '{%for item in array%} boo {%endfor%}', array('array' => new \ArrayIterator(array(1, 2, 3, 4))));
 		$this->assertTemplateResult('yoyo', '{%for item in array%}yo{%endfor%}', array('array' => array(1, 2)));
