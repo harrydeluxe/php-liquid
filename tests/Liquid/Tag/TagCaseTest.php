@@ -13,6 +13,13 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
+class Stringable
+{
+	public function __toString() {
+		return "100";
+	}
+}
+
 class TagCaseTest extends TestCase
 {
 	public function testCase() {
@@ -59,5 +66,16 @@ class TagCaseTest extends TestCase
 	 */
 	public function testSyntaxErrorEnd() {
 		$this->assertTemplateResult('', '{% case condition %}{% end %}');
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testObject() {
+		$this->assertTemplateResult('', '{% case variable %}{% when 5 %}{% endcase %}', array('variable' => (object) array()));
+	}
+
+	public function testStringable() {
+		$this->assertTemplateResult('hit', '{% case variable %}{% when 100 %}hit{% endcase %}', array('variable' => new Stringable()));
 	}
 }
