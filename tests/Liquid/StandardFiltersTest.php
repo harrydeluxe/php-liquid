@@ -105,6 +105,29 @@ class StandardFiltersTest extends TestCase
 		}
 	}
 
+	public function testUrlEncode() {
+		$data = array(
+			'nothing' => 'nothing',
+			'%#&^' => '%25%23%26%5E',
+		);
+
+		foreach ($data as $element => $expected) {
+			$this->assertEquals($expected, StandardFilters::url_encode($element));
+		}
+	}
+
+
+	public function testUrlDecode() {
+		$data = array(
+			'%25%23%26%5E' => '%#&^',
+		);
+
+		foreach ($data as $element => $expected) {
+			$this->assertEquals($expected, StandardFilters::url_decode($element));
+		}
+	}
+
+
 	public function testRaw()
 	{
 		$data = array(
