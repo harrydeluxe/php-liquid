@@ -72,7 +72,7 @@ class EscapeByDefaultTest extends TestCase
 	public function testNlToBr() {
 		Liquid::set('ESCAPE_BY_DEFAULT', true);
 		$text = "{{ xss | newline_to_br }}";
-		$expected = self::XSS."<br />".self::XSS;
+		$expected = self::XSS."<br />\n".self::XSS;
 		$this->assertTemplateResult($expected, $text, array('xss' => self::XSS."\n".self::XSS));
 	}
 

@@ -287,12 +287,10 @@ class StandardFilters
 	 *
 	 * @return string
 	 */
-	public static function newline_to_br($input) {
-		return is_string($input) ? str_replace(array(
-			"\n", "\r"
-		), '<br />', $input) : $input;
-	}	
-	
+    public static function newline_to_br($input) {
+        return is_string($input) ? str_replace("\n", "<br />\n", $input) : $input;
+    }
+    	
 
 	/**
 	 * addition

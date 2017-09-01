@@ -155,7 +155,7 @@ class StandardFiltersTest extends TestCase
 
 	public function testNewLineToBr() {
 		$data = array(
-			"one Word\r\n not\r\n" => "one Word<br /><br /> not<br /><br />",
+			"one Word\n not\n" => "one Word<br />\n not<br />\n",
 			'test' => 'test',
 			3 => 3,
 		);
