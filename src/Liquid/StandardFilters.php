@@ -638,8 +638,18 @@ class StandardFilters
 	public static function url_encode($input) {
 		return urlencode($input);
 	}
-	
-	
+
+	/**
+	 * Decodes a URL-encoded string
+	 *
+	 * @param string $input
+	 *
+	 * @return string
+	 */
+	public static function url_decode($input) {
+		return urldecode($input);
+	}
+
 	/**
 	 * Use overloading to get around reserved php words - in this case 'default'
 	 *

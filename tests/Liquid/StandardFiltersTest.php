@@ -105,6 +105,29 @@ class StandardFiltersTest extends TestCase
 		}
 	}
 
+	public function testUrlEncode() {
+		$data = array(
+			'nothing' => 'nothing',
+			'%#&^' => '%25%23%26%5E',
+		);
+
+		foreach ($data as $element => $expected) {
+			$this->assertEquals($expected, StandardFilters::url_encode($element));
+		}
+	}
+
+
+	public function testUrlDecode() {
+		$data = array(
+			'%25%23%26%5E' => '%#&^',
+		);
+
+		foreach ($data as $element => $expected) {
+			$this->assertEquals($expected, StandardFilters::url_decode($element));
+		}
+	}
+
+
 	public function testRaw()
 	{
 		$data = array(
@@ -794,6 +817,11 @@ class StandardFiltersTest extends TestCase
 				2.7,
 				-1.2,
 			),
+			array(
+			    3.1,
+			    3.1,
+			    0
+			)
 		);
 
 		foreach ($data as $item) {
@@ -818,6 +846,11 @@ class StandardFiltersTest extends TestCase
 				2.7,
 				4.05,
 			),
+			array(
+			      7.5,
+			      0,
+			      0
+			)
 		);
 
 		foreach ($data as $item) {
@@ -947,6 +980,10 @@ class StandardFiltersTest extends TestCase
 				0.42,
 				0,
 			),
+			array(
+				2.5,
+				2,
+			)
 		);
 
 		foreach ($data as $item) {
@@ -984,5 +1021,9 @@ class StandardFiltersTest extends TestCase
 		$var = new Variable("var | date: '%d/%m/%Y %l:%M %p'");
 		$this->context->set('var', '2017-07-01 21:00:00');
 		$this->assertEquals('01/07/2017  9:00 PM', $var->render($this->context));
+
+		$var = new Variable('var | date, ""');
+		$this->context->set('var', '2017-07-01 21:00:00');
+		$this->assertEquals('', $var->render($this->context));
 	}
 }
