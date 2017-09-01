@@ -40,4 +40,11 @@ class VariableResolutionTest extends TestCase
 		$template->parse('{{ test.test }}');
 		$this->assertEquals('worked', $template->render(array('test' => array('test' => 'worked'))));
 	}
+
+	public function testVariableArrayIndices() {
+		$template = new Template();
+
+		$template->parse("{% assign days = 'Mon,Tue,Wed,Thu,Fri,Sat,Sun' | split: ',' %}{% for i in (0..6) %}{{ days[i] }} {% endfor %}");
+		$this->assertEquals('Mon Tue Wed Thu Fri Sat Sun ', $template->render());
+	}
 }
