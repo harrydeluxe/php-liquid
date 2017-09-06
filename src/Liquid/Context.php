@@ -238,10 +238,15 @@ class Context
 	 * @return mixed
 	 */
 	private function variable($key) {
-		// Support [0] style array indicies
+		// Support numeric and variable array indicies
 		if (preg_match("|\[[0-9]+\]|", $key)) {
-			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
-		}
+          $key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
+        } else if (preg_match("|\[[0-9a-z._]+\]|", $key, $matches)) {
+          $index = $this->get(str_replace(array("[","]"),"", $matches[0]));
+          if ( strlen($index) ) {
+            $key = preg_replace("|\[([0-9a-z._]+)\]|", ".$index", $key);
+          }
+        }
 
 		$parts = explode(Liquid::get('VARIABLE_ATTRIBUTE_SEPARATOR'), $key);
 
