@@ -16,7 +16,7 @@ class LocalFileSystemTest extends TestCase
 	protected $root;
 
 	protected function setUp() {
-		$this->root = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
+		$this->root = __DIR__ . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
 		// reset to defaults
 		Liquid::set('INCLUDE_ALLOW_EXT', false);
 	}
@@ -26,6 +26,14 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function testIllegalTemplateNameEmpty() {
 		$fileSystem = new LocalFileSystem('');
+		$fileSystem->fullPath('');
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testIllegalRootPath() {
+		$fileSystem = new LocalFileSystem('invalid/not/found');
 		$fileSystem->fullPath('');
 	}
 
@@ -65,6 +73,19 @@ class LocalFileSystemTest extends TestCase
 		$fileSystem->fullPath('no_such_file_exists');
 	}
 
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage not under
+	 */
+	public function testIllegalTemplatePathNotUnderTemplateRoot() {
+		Liquid::set('INCLUDE_ALLOW_EXT', true);
+		$fileSystem = new LocalFileSystem(dirname($this->root));
+		// find any fail under deeper under the root, so all other checks would pass
+		$filesUnderCurrentDir = array_map('basename', glob(dirname(__DIR__).'/../*'));
+		// path relative to root; we can't start it with a dot since it isn't allowed anyway
+		$fileSystem->fullPath(self::TEMPLATES_DIR."/../../../{$filesUnderCurrentDir[0]}");
+	}
+
 	public function testValidPathWithDefaultExtension() {
 		$templateName = 'mypartial';
 
@@ -80,6 +101,14 @@ class LocalFileSystemTest extends TestCase
 
 		$fileSystem = new LocalFileSystem($this->root);
 		$this->assertEquals($this->root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testReadIllegalTemplatePathNoFileExists() {
+		$fileSystem = new LocalFileSystem(dirname(__DIR__));
+		$fileSystem->readTemplateFile('no_such_file_exists');
 	}
 
 	public function testReadTemplateFile() {
