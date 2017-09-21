@@ -129,14 +129,14 @@ class TagExtends extends AbstractTag
 			$name = null;
 
 			$rest = array();
-			$aufzeichnen = false;
+			$keep = false;
 
 			for ($i = 0; $i < count($maintokens); $i++) {
 				if ($blockstartRegexp->match($maintokens[$i])) {
 					$name = $blockstartRegexp->matches[1];
 
 					if (isset($childtokens[$name])) {
-						$aufzeichnen = true;
+						$keep = true;
 						array_push($rest, $maintokens[$i]);
 						foreach ($childtokens[$name] as $item) {
 							array_push($rest, $item);
@@ -144,12 +144,12 @@ class TagExtends extends AbstractTag
 					}
 
 				}
-				if (!$aufzeichnen) {
+				if (!$keep) {
 					array_push($rest, $maintokens[$i]);
 				}
 
-				if ($blockendRegexp->match($maintokens[$i]) && $aufzeichnen === true) {
-					$aufzeichnen = false;
+				if ($blockendRegexp->match($maintokens[$i]) && $keep === true) {
+					$keep = false;
 					array_push($rest, $maintokens[$i]);
 				}
 			}
