@@ -13,6 +13,14 @@ namespace Liquid;
 
 class LocalFileSystemTest extends TestCase
 {
+	protected $root;
+
+	protected function setUp() {
+		$this->root = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
+		// reset to defaults
+		Liquid::set('INCLUDE_ALLOW_EXT', false);
+	}
+
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
@@ -58,31 +66,27 @@ class LocalFileSystemTest extends TestCase
 	}
 
 	public function testValidPathWithDefaultExtension() {
-		$root = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
 		$templateName = 'mypartial';
 
-		$fileSystem = new LocalFileSystem($root);
-		$this->assertEquals($root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
+		$fileSystem = new LocalFileSystem($this->root);
+		$this->assertEquals($this->root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
 	}
 
 	public function testValidPathWithCustomExtension() {
 		Liquid::set('INCLUDE_PREFIX', '');
 		Liquid::set('INCLUDE_SUFFIX', 'tpl');
 
-		$root = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
 		$templateName = 'mypartial';
 
-		$fileSystem = new LocalFileSystem($root);
-		$this->assertEquals($root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
+		$fileSystem = new LocalFileSystem($this->root);
+		$this->assertEquals($this->root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
 	}
 
 	public function testReadTemplateFile() {
 		Liquid::set('INCLUDE_PREFIX', '');
 		Liquid::set('INCLUDE_SUFFIX', 'tpl');
 
-		$root = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
-
-		$fileSystem = new LocalFileSystem($root);
+		$fileSystem = new LocalFileSystem($this->root);
 		$this->assertEquals('test content', trim($fileSystem->readTemplateFile('mypartial')));
 	}
 }
