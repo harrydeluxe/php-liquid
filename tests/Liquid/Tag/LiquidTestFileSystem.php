@@ -29,7 +29,11 @@ class LiquidTestFileSystem implements FileSystem
 		}
 
 		if ($templatePath == 'base') {
-			return "{% block content %}{% endblock %}";
+			return "{% block content %}{% endblock %}{% block footer %}{% endblock %}";
+		}
+
+		if ($templatePath == 'sub-base') {
+			return "{% extends 'base' %}{% block content %}{% endblock %}{% block footer %} Boo! {% endblock %}";
 		}
 
 		return '';

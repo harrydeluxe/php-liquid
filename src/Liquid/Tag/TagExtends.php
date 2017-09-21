@@ -56,7 +56,7 @@ class TagExtends extends AbstractTag
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\')?/');
 
-		if ($regex->match($markup)) {
+		if ($regex->match($markup) && isset($regex->matches[1])) {
 			$this->templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
 		} else {
 			throw new LiquidException("Error in tag 'extends' - Valid syntax: extends '[template name]'");
