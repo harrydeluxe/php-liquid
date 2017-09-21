@@ -14,6 +14,7 @@ namespace Liquid\Tag;
 use Liquid\TestCase;
 use Liquid\Template;
 use Liquid\FileSystem;
+use Liquid\Liquid;
 
 /**
  * Helper FileSytem
@@ -88,5 +89,15 @@ class TagIncludeTest extends TestCase
 		$output = $template->render(array("inner" => "orig", "var" => array(1, 2, 3)));
 
 		$this->assertEquals("Outer-Inner: orig-Outer-Inner: orig23", $output);
+	}
+
+	public function testIncludeTemplateFile() {
+		Liquid::set('INCLUDE_PREFIX', '');
+		Liquid::set('INCLUDE_SUFFIX', 'tpl');
+
+		$template = new Template(dirname(__DIR__).DIRECTORY_SEPARATOR.self::TEMPLATES_DIR);
+		$template->parse("{% include 'mypartial' %}");
+		// template include inserts a new line
+		$this->assertEquals("test content\n", $template->render());
 	}
 }
