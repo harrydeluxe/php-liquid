@@ -13,27 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 use Liquid\Template;
-use Liquid\FileSystem;
 use Liquid\Liquid;
-
-/**
- * Helper FileSytem
- */
-class LiquidTestFileSystem implements FileSystem
-{
-	/**
-	 * @param string $templatePath
-	 *
-	 * @return string
-	 */
-	public function readTemplateFile($templatePath) {
-		if ($templatePath == 'inner') {
-			return "Inner: {{ inner }}{{ other }}";
-		}
-
-		return '';
-	}
-}
 
 class TagIncludeTest extends TestCase
 {
