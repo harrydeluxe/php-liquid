@@ -11,7 +11,7 @@
 
 namespace Liquid;
 
-class LocalFileSystemTest extends Testcase
+class LocalFileSystemTest extends TestCase
 {
 	/**
 	 * @expectedException \Liquid\LiquidException
