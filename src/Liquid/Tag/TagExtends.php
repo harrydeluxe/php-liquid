@@ -56,7 +56,7 @@ class TagExtends extends AbstractTag
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\')?/');
 
-		if ($regex->match($markup)) {
+		if ($regex->match($markup) && isset($regex->matches[1])) {
 			$this->templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
 		} else {
 			throw new LiquidException("Error in tag 'extends' - Valid syntax: extends '[template name]'");
@@ -129,14 +129,14 @@ class TagExtends extends AbstractTag
 			$name = null;
 
 			$rest = array();
-			$aufzeichnen = false;
+			$keep = false;
 
 			for ($i = 0; $i < count($maintokens); $i++) {
 				if ($blockstartRegexp->match($maintokens[$i])) {
 					$name = $blockstartRegexp->matches[1];
 
 					if (isset($childtokens[$name])) {
-						$aufzeichnen = true;
+						$keep = true;
 						array_push($rest, $maintokens[$i]);
 						foreach ($childtokens[$name] as $item) {
 							array_push($rest, $item);
@@ -144,12 +144,12 @@ class TagExtends extends AbstractTag
 					}
 
 				}
-				if (!$aufzeichnen) {
+				if (!$keep) {
 					array_push($rest, $maintokens[$i]);
 				}
 
-				if ($blockendRegexp->match($maintokens[$i]) && $aufzeichnen === true) {
-					$aufzeichnen = false;
+				if ($blockendRegexp->match($maintokens[$i]) && $keep === true) {
+					$keep = false;
 					array_push($rest, $maintokens[$i]);
 				}
 			}
@@ -184,7 +184,7 @@ class TagExtends extends AbstractTag
 
 		$source = $this->fileSystem->readTemplateFile($this->templateName);
 
-		if ($cache->exists(md5($source)) && $this->hash == md5($source)) {
+		if ($cache->exists(md5($source)) && $this->hash === md5($source)) {
 			return false;
 		}
 

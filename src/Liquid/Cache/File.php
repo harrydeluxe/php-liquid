@@ -69,12 +69,10 @@ class File extends Cache
 	 * {@inheritdoc}
 	 */
 	public function write($key, $value, $serialize = true) {
-		if (file_put_contents($this->path . $this->prefix . $key, $serialize ? serialize($value) : $value) !== false) {
-			$this->gc();
-			return true;
-		}
+		$bytes = file_put_contents($this->path . $this->prefix . $key, $serialize ? serialize($value) : $value);
+		$this->gc();
 
-		throw new LiquidException('Can not write cache file');
+		return $bytes !== false;
 	}
 
 	/**

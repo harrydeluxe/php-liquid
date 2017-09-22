@@ -37,12 +37,10 @@ class Document extends AbstractBlock
 	 */
 	public function checkIncludes() {
 		foreach ($this->nodelist as $token) {
-			if (is_object($token)) {
-				if ($token instanceof TagInclude || $token instanceof TagExtends) {
-					/** @var TagInclude|TagExtends $token */
-					if ($token->checkIncludes() == true) {
-						return true;
-					}
+			if ($token instanceof TagInclude || $token instanceof TagExtends) {
+				/** @var TagInclude|TagExtends $token */
+				if ($token->checkIncludes() == true) {
+					return true;
 				}
 			}
 		}

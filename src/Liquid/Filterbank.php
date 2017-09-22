@@ -102,6 +102,11 @@ class Filterbank
 	 * @return string
 	 */
 	public function invoke($name, $value, array $args = array()) {
+		// workaround for a single standard filter being a reserved keyword - we can't use overloading for static calls
+		if ($name == 'default') {
+			$name = '_default';
+		}
+
 		array_unshift($args, $value);
 
 		// Consult the mapping

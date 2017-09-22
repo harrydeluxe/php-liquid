@@ -23,7 +23,11 @@ class FileTest extends TestCase
 		parent::setUp();
 
 		$this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cache_dir';
-		$this->cache = new File(array('cache_dir' => $this->cacheDir));
+		$this->cache = new File(array(
+			'cache_dir' => $this->cacheDir,
+			'cache_expire' => 3600,
+			'cache_prefix' => 'liquid_',
+		));
 	}
 
 	protected function tearDown() {

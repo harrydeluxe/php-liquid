@@ -39,7 +39,7 @@ class Regexp
 	 * @return Regexp
 	 */
 	public function __construct($pattern) {
-		$this->pattern = (substr($pattern, '0', 1) != '/')
+		$this->pattern = (substr($pattern, 0, 1) != '/')
 			? '/' . $this->quote($pattern) . '/'
 			: $pattern;
 	}

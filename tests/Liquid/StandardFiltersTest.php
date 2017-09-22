@@ -72,6 +72,14 @@ class StandardFiltersTest extends TestCase
 		}
 	}
 
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage cannot be estimated
+	 */
+	public function testSizeObject() {
+		StandardFilters::size((object) array());
+	}
+
 	public function testDowncase() {
 		$data = array(
 			'UpperCaseMiXed' => 'uppercasemixed',
@@ -97,6 +105,7 @@ class StandardFiltersTest extends TestCase
 	public function testCapitalize() {
 		$data = array(
 			'one Word not' => 'One Word Not',
+			'1test' => '1Test',
 			'' => '',
 		);
 
@@ -488,10 +497,12 @@ class StandardFiltersTest extends TestCase
 		$original = array(
 			array('a' => 20, 'b' => 10),
 			array('a' => 45, 'b' => 5),
+			array('a' => 40, 'b' => 5),
 			array('a' => 30, 'b' => 48),
 		);
 		$expected = array(
 			array('a' => 45, 'b' => 5),
+			array('a' => 40, 'b' => 5),
 			array('a' => 20, 'b' => 10),
 			array('a' => 30, 'b' => 48),
 		);
@@ -525,6 +536,8 @@ class StandardFiltersTest extends TestCase
 	public function testDefault() {
 		$this->assertEquals('hello', StandardFilters::_default('', 'hello'));
 		$this->assertEquals('world', StandardFilters::_default('world', 'hello'));
+		// check that our workaround for 'default' works as it should
+		$this->assertTemplateResult('something', '{{ nothing | default: "something" }}');
 	}
 	
 	public function testUnique() {
@@ -619,6 +632,10 @@ class StandardFiltersTest extends TestCase
 				)),
 				array('from function ', 'value ', null),
 			),
+			array(
+				0,
+				0
+			)
 		);
 
 		foreach ($data as $item) {
@@ -1025,5 +1042,9 @@ class StandardFiltersTest extends TestCase
 		$var = new Variable('var | date, ""');
 		$this->context->set('var', '2017-07-01 21:00:00');
 		$this->assertEquals('', $var->render($this->context));
+
+		$var = new Variable('var | date, "r"');
+		$this->context->set('var', 1000000000);
+		$this->assertEquals(date('r', 1000000000), $var->render($this->context));
 	}
 }

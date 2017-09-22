@@ -16,6 +16,8 @@ use Liquid\LiquidException;
 
 /**
  * Implements cache stored in Apc.
+ *
+ * @codeCoverageIgnore
  */
 class Apc extends Cache
 {
@@ -31,8 +33,8 @@ class Apc extends Cache
 	public function __construct(array $options = array()) {
 		parent::__construct($options);
 
-		if (!extension_loaded('apc'))
-			throw new LiquidException('LiquidCacheApc requires PHP apc extension to be loaded.');
+		if (!function_exists('apc_fetch'))
+			throw new LiquidException(get_class($this).' requires PHP apc extension or similar to be loaded.');
 	}
 
 	/**
@@ -47,7 +49,7 @@ class Apc extends Cache
 	 */
 	public function exists($key) {
 		apc_fetch($this->prefix . $key, $success);
-		return $success;
+		return (bool) $success;
 	}
 
 	/**

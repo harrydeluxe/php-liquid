@@ -9,8 +9,7 @@
  * @package Liquid
  */
 
-$loader = require __DIR__ . '/../vendor/autoload.php';
-$loader->addPsr4('Liquid\\', __DIR__ . '/../src/Liquid');
+require __DIR__ . '/../vendor/autoload.php';
 
 use Liquid\Liquid;
 use Liquid\Template;

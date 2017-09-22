@@ -32,6 +32,15 @@ class LocalFileSystem implements FileSystem
 	 * @param string $root The root path for templates
 	 */
 	public function __construct($root) {
+		// since root path can only be set from constructor, we check it once right here
+		if (!empty($root)) {
+			$realRoot = realpath($root);
+			if ($realRoot === false) {
+				throw new LiquidException("Root path could not be found: '$root'");
+			}
+			$root = $realRoot;
+		}
+
 		$this->root = $root;
 	}
 
@@ -40,15 +49,10 @@ class LocalFileSystem implements FileSystem
 	 *
 	 * @param string $templatePath
 	 *
-	 * @throws LiquidException
 	 * @return string template content
 	 */
 	public function readTemplateFile($templatePath) {
-		if (!($fullPath = $this->fullPath($templatePath))) {
-			throw new LiquidException("No such template '$templatePath'");
-		}
-
-		return file_get_contents($fullPath);
+		return file_get_contents($this->fullPath($templatePath));
 	}
 
 	/**
@@ -60,6 +64,10 @@ class LocalFileSystem implements FileSystem
 	 * @return string
 	 */
 	public function fullPath($templatePath) {
+		if (empty($templatePath)) {
+			throw new LiquidException("Empty template name");
+		}
+
 		$nameRegex = Liquid::get('INCLUDE_ALLOW_EXT')
 			? new Regexp('/^[^.\/][a-zA-Z0-9_\.\/]+$/')
 			: new Regexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
@@ -68,22 +76,24 @@ class LocalFileSystem implements FileSystem
 			throw new LiquidException("Illegal template name '$templatePath'");
 		}
 
-		if (strpos($templatePath, '/') !== false) {
-			$fullPath = Liquid::get('INCLUDE_ALLOW_EXT')
-				? $this->root . dirname($templatePath) . '/' . basename($templatePath)
-				: $this->root . dirname($templatePath) . '/' . Liquid::get('INCLUDE_PREFIX') . basename($templatePath) . '.' . Liquid::get('INCLUDE_SUFFIX');
-		} else {
-			$fullPath = Liquid::get('INCLUDE_ALLOW_EXT')
-				? $this->root . $templatePath
-				: $this->root . Liquid::get('INCLUDE_PREFIX') . $templatePath . '.' . Liquid::get('INCLUDE_SUFFIX');
+		$templateDir = dirname($templatePath);
+		$templateFile = basename($templatePath);
+
+		if (!Liquid::get('INCLUDE_ALLOW_EXT')) {
+			$templateFile = Liquid::get('INCLUDE_PREFIX') . $templateFile . '.' . Liquid::get('INCLUDE_SUFFIX');
 		}
 
-		$rootRegex = new Regexp('/' . preg_quote(realpath($this->root), '/') . '/');
+		$fullPath = join(DIRECTORY_SEPARATOR, array($this->root, $templateDir, $templateFile));
 
-		if (!$rootRegex->match(realpath($fullPath))) {
-			throw new LiquidException("Illegal template path '" . realpath($fullPath) . "'");
+		$realFullPath = realpath($fullPath);
+		if ($realFullPath === false) {
+			throw new LiquidException("File not found: $fullPath");
 		}
 
-		return $fullPath;
+		if (strpos($realFullPath, $this->root) !== 0) {
+			throw new LiquidException("Illegal template full path: {$realFullPath} not under {$this->root}");
+		}
+
+		return $realFullPath;
 	}
 }
