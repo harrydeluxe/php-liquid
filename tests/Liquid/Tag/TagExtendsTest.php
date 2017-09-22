@@ -13,6 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 use Liquid\Template;
+use Liquid\Cache\Local;
 
 /**
  * @see TagExtends
@@ -45,6 +46,20 @@ class TagExtendsTest extends TestCase
 		$template->parse('{% extends "sub-base" %}{% block content %}{{ hello }}{% endblock %}{% block footer %} I am a footer.{% endblock %}');
 		$output = $template->render(array("hello" => "Hello!"));
 		$this->assertEquals("Hello! I am a footer.", $output);
+	}
+
+	public function testWithCache() {
+		$template = new Template();
+		$template->setFileSystem(new LiquidTestFileSystem());
+		$template->setCache(new Local());
+
+		foreach (array("Before cache", "With cache") as $type) {
+			$template->parse("{% extends 'base' %}{% block content %}{{ hello }}{% endblock %}");
+			$output = $template->render(array("hello" => "$type"));
+			$this->assertEquals($type, $output);
+		}
+
+		$template->setCache(null);
 	}
 
 	/**

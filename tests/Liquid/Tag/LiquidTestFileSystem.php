@@ -28,6 +28,10 @@ class LiquidTestFileSystem implements FileSystem
 			return "Inner: {{ inner }}{{ other }}";
 		}
 
+		if ($templatePath == 'example') {
+			return "Example: {% include 'inner' %}";
+		}
+
 		if ($templatePath == 'base') {
 			return "{% block content %}{% endblock %}{% block footer %}{% endblock %}";
 		}
