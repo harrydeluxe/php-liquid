@@ -16,6 +16,8 @@ use Liquid\LiquidException;
 
 /**
  * Implements cache stored in Apc.
+ *
+ * @codeCoverageIgnore
  */
 class Apc extends Cache
 {
