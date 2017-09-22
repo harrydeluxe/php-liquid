@@ -11,7 +11,7 @@
 
 namespace Liquid;
 
-class LiquidRegexpTest extends TestCase
+class RegexpTest extends TestCase
 {
 	/** @var Regexp */
 	protected $regexp;
@@ -44,5 +44,17 @@ class LiquidRegexpTest extends TestCase
 
 	public function testQuotedWordsInTheMiddle() {
 		$this->assertEquals(array('arg1', 'arg2', '"arg 3"', 'arg4'), $this->regexp->scan('arg1 arg2 "arg 3" arg4   '));
+	}
+
+	public function testPregQuote() {
+		$this->assertEquals('', $this->regexp->quote(''));
+		$this->assertEquals('abc', $this->regexp->quote('abc'));
+		$this->assertEquals('\/\(\{\}\)\/', $this->regexp->quote('/({})/'));
+	}
+
+	public function testNoDelimiter() {
+		$regexp = new Regexp('(example)');
+		$this->assertEquals(array('(example)'), $regexp->scan('(example)'));
+		$this->assertEquals(array(), $regexp->scan('nothing'));
 	}
 }
