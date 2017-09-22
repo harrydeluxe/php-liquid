@@ -47,7 +47,7 @@ class Apc extends Cache
 	 */
 	public function exists($key) {
 		apc_fetch($this->prefix . $key, $success);
-		return $success;
+		return (bool) $success;
 	}
 
 	/**
