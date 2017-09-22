@@ -105,6 +105,7 @@ class StandardFiltersTest extends TestCase
 	public function testCapitalize() {
 		$data = array(
 			'one Word not' => 'One Word Not',
+			'1test' => '1Test',
 			'' => '',
 		);
 
