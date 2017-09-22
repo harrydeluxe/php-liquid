@@ -72,6 +72,14 @@ class StandardFiltersTest extends TestCase
 		}
 	}
 
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage cannot be estimated
+	 */
+	public function testSizeObject() {
+		StandardFilters::size((object) array());
+	}
+
 	public function testDowncase() {
 		$data = array(
 			'UpperCaseMiXed' => 'uppercasemixed',

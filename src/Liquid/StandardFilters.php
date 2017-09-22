@@ -429,17 +429,24 @@ class StandardFilters
 		if ($input instanceof \Iterator) {
 			return iterator_count($input);
 		}
-		if (is_string($input) || is_numeric($input)) {
-			return strlen($input);
-		} elseif (is_array($input)) {
+
+		if (is_array($input)) {
 			return count($input);
-		} elseif (is_object($input)) {
+		}
+
+		if (is_object($input)) {
 			if (method_exists($input, 'size')) {
 				return $input->size();
 			}
+
+			if (!method_exists($input, '__toString')) {
+				$class = get_class($input);
+				throw new LiquidException("Size of $class cannot be estimated: it has no method 'size' nor can be converted to a string");
+			}
 		}
 
-		return $input;
+		// only plain values and stringable objects left at this point
+		return strlen($input);
 	}
 	
 
