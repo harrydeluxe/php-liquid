@@ -222,4 +222,22 @@ class TagIfTest extends TestCase
 	public function testIncomparable() {
 		$this->assertTemplateResult('', '{% if foo == 1 %}true{% endif %}', array('foo' => (object) array()));
 	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage does not expect else tag
+	 */
+	public function testSyntaxErrorElse() {
+		$this->assertTemplateResult('', '{% if foo == 1 %}{% endif %}{% else %}');
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage Unknown tag
+	 */
+	public function testSyntaxErrorUnknown() {
+		$this->assertTemplateResult('', '{% unknown-tag %}');
+	}
+
+
 }
