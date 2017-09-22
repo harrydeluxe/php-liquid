@@ -656,20 +656,4 @@ class StandardFilters
 	public static function url_decode($input) {
 		return urldecode($input);
 	}
-
-	/**
-	 * Use overloading to get around reserved php words - in this case 'default'
-	 *
-	 * @param string $name
-	 * @param array $arguments
-	 *
-	 * @return string
-	 *
-	 */
-	public function __call($name, $arguments) {
-		if ($name === 'default') {
-			return $this->_default($arguments[0], $arguments[1]);
-		}
-	}
-
 }

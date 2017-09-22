@@ -535,6 +535,8 @@ class StandardFiltersTest extends TestCase
 	public function testDefault() {
 		$this->assertEquals('hello', StandardFilters::_default('', 'hello'));
 		$this->assertEquals('world', StandardFilters::_default('world', 'hello'));
+		// check that our workaround for 'default' works as it should
+		$this->assertTemplateResult('something', '{{ nothing | default: "something" }}');
 	}
 	
 	public function testUnique() {
