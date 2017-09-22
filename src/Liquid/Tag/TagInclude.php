@@ -139,7 +139,7 @@ class TagInclude extends AbstractTag
 
 		$source = $this->fileSystem->readTemplateFile($this->templateName);
 
-		if ($cache->exists(md5($source)) && $this->hash == md5($source)) {
+		if ($cache->exists(md5($source)) && $this->hash === md5($source)) {
 			return false;
 		}
 
