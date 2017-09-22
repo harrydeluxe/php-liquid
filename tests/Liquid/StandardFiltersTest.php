@@ -632,6 +632,10 @@ class StandardFiltersTest extends TestCase
 				)),
 				array('from function ', 'value ', null),
 			),
+			array(
+				0,
+				0
+			)
 		);
 
 		foreach ($data as $item) {
