@@ -496,10 +496,12 @@ class StandardFiltersTest extends TestCase
 		$original = array(
 			array('a' => 20, 'b' => 10),
 			array('a' => 45, 'b' => 5),
+			array('a' => 40, 'b' => 5),
 			array('a' => 30, 'b' => 48),
 		);
 		$expected = array(
 			array('a' => 45, 'b' => 5),
+			array('a' => 40, 'b' => 5),
 			array('a' => 20, 'b' => 10),
 			array('a' => 30, 'b' => 48),
 		);
