@@ -31,8 +31,8 @@ class Apc extends Cache
 	public function __construct(array $options = array()) {
 		parent::__construct($options);
 
-		if (!extension_loaded('apc'))
-			throw new LiquidException('LiquidCacheApc requires PHP apc extension to be loaded.');
+		if (!function_exists('apc_fetch'))
+			throw new LiquidException(get_class($this).' requires PHP apc extension or similar to be loaded.');
 	}
 
 	/**
