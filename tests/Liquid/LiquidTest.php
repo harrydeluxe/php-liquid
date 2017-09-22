@@ -24,6 +24,12 @@ class LiquidTest extends TestCase
 		$this->assertSame($value, Liquid::get($key));
 	}
 
+	public function testGetSetAllowedChars() {
+		Liquid::set('ALLOWED_VARIABLE_CHARS', 'abc');
+		$this->assertSame('abc', Liquid::get('ALLOWED_VARIABLE_CHARS'));
+		$this->assertSame('abc+', Liquid::get('VARIABLE_NAME'));
+	}
+
 	public function testArrayFlattenEmptyArray() {
 		$this->assertSame(array(), Liquid::arrayFlatten(array()));
 	}
