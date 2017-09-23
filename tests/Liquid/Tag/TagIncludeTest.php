@@ -32,6 +32,12 @@ class TagIncludeTest extends TestCase
 			}
 		});
 	}
+
+	protected function tearDown() {
+		// PHP goes nuts unless we unset it
+		unset($this->fs);
+	}
+
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
