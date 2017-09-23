@@ -60,6 +60,8 @@ To find more examples have a look at the `examples` directory or at the original
 
  * PHP 5.6+
 
+Package versions below 1.4 could be used with PHP 5.3/5.4/5.5.
+
 ## Issues
 
 Have a bug? Please create an issue here on GitHub!
