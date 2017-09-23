@@ -12,6 +12,7 @@
 namespace Liquid;
 
 use Liquid\FileSystem\Virtual;
+use Liquid\Cache\File;
 
 class VirtualFileSystemTest extends TestCase
 {
@@ -39,5 +40,20 @@ class VirtualFileSystemTest extends TestCase
 		$this->assertEquals('Contents of foo', $fs->readTemplateFile('foo'));
 		$this->assertEquals('Bar', $fs->readTemplateFile('bar'));
 		$this->assertEquals('', $fs->readTemplateFile('nothing'));
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage cannot be used with a serializing cache
+	 */
+	public function testWithFileCache() {
+		$template = new Template();
+		$template->setFileSystem(new Virtual(function ($templatePath) {
+			return '';
+		}));
+		$template->setCache(new File(array(
+			'cache_dir' => __DIR__,
+		)));
+		$template->parse("Hello");
 	}
 }
