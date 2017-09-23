@@ -56,4 +56,19 @@ class VirtualFileSystemTest extends TestCase
 		)));
 		$template->parse("Hello");
 	}
+
+	public function virtualFileSystemCallback($templatePath) {
+		return 'OK';
+	}
+
+	public function testWithRegularCallback() {
+		$template = new Template();
+		$template->setFileSystem(new Virtual(array($this, 'virtualFileSystemCallback'), true));
+		$template->setCache(new File(array(
+			'cache_dir' => __DIR__.'/cache_dir/',
+		)));
+
+		$template->parse("Test: {% include 'hello' %}");
+		$this->assertEquals('Test: OK', $template->render());
+	}
 }
