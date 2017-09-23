@@ -15,9 +15,23 @@ use Liquid\TestCase;
 use Liquid\Template;
 use Liquid\Liquid;
 use Liquid\Cache\Local;
+use Liquid\FileSystem\Virtual;
 
 class TagIncludeTest extends TestCase
 {
+	private $fs;
+
+	protected function setUp() {
+		$this->fs = new Virtual(function ($templatePath) {
+			if ($templatePath == 'inner') {
+				return "Inner: {{ inner }}{{ other }}";
+			}
+
+			if ($templatePath == 'example') {
+				return "Example: {% include 'inner' %}";
+			}
+		});
+	}
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
@@ -52,7 +66,7 @@ class TagIncludeTest extends TestCase
 
 	public function testIncludeTag() {
 		$template = new Template();
-		$template->setFileSystem(new LiquidTestFileSystem());
+		$template->setFileSystem($this->fs);
 
 		$template->parse("Outer-{% include 'inner' with 'value' other:23 %}-Outer{% include 'inner' for var other:'loop' %}");
 
@@ -63,7 +77,7 @@ class TagIncludeTest extends TestCase
 
 	public function testIncludeTagNoWith() {
 		$template = new Template();
-		$template->setFileSystem(new LiquidTestFileSystem());
+		$template->setFileSystem($this->fs);
 
 		$template->parse("Outer-{% include 'inner' %}-Outer-{% include 'inner' other:'23' %}");
 
@@ -74,7 +88,7 @@ class TagIncludeTest extends TestCase
 
 	public function testWithCache() {
 		$template = new Template();
-		$template->setFileSystem(new LiquidTestFileSystem());
+		$template->setFileSystem($this->fs);
 		$template->setCache(new Local());
 
 		foreach (array("Before cache:", "With cache:") as $type) {
