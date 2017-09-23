@@ -58,7 +58,7 @@ To find more examples have a look at the `examples` directory or at the original
 
 ## Requirements
 
- * PHP 5.4+
+ * PHP 5.6+
 
 ## Issues
 
