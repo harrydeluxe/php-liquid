@@ -105,6 +105,7 @@ class LocalFileSystemTest extends TestCase
 
 	/**
 	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage File not found
 	 */
 	public function testReadIllegalTemplatePathNoFileExists() {
 		$fileSystem = new LocalFileSystem(dirname(__DIR__));
