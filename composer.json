@@ -19,6 +19,11 @@
         },
         {
             "name": "Mateo Murphy"
+        },
+        {
+            "name": "Alexey Kopytko",
+            "email": "alexey@kopytko.com",
+            "homepage": "https://www.alexeykopytko.com/"
         }
     ],
     "require": {
