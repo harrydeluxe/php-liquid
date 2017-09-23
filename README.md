@@ -56,6 +56,39 @@ The main class is `Liquid::Template` class. There are two separate stages of wor
 
 To find more examples have a look at the `examples` directory or at the original Ruby implementation repository's [wiki page](https://github.com/Shopify/liquid/wiki).
 
+## Advanced usage
+
+You would probably want to add a caching layer (at very least a request-wide one), enable context-aware automatic escaping, and do load includes from disk with full file names.
+
+    use Liquid\Liquid;
+    use Liquid\Template;
+    use Liquid\Cache\Local;
+
+    Liquid::set('INCLUDE_SUFFIX', '');
+    Liquid::set('INCLUDE_PREFIX', '');
+    Liquid::set('INCLUDE_ALLOW_EXT', true);
+    Liquid::set('ESCAPE_BY_DEFAULT', true);
+
+    $template = new Template(__DIR__.'/protected/templates/');
+
+    $template->parse("Hello, {% include 'honorific.html' %}{{ plain-html | raw }} {{ comment-with-xss }}");
+    $template->setCache(new Local());
+
+	echo $template->render([
+	    'name' => 'Alex',
+	    'plain-html' => '<b>Your comment was:</b>',
+	    'comment-with-xss' => '<script>alert();</script>',
+	]);
+
+Will output:
+
+	Hello, Mx. Alex
+	<b>Your comment was:</b> &lt;script&gt;alert();&lt;/script&gt;
+
+Note that automatic escaping is not a standard Liquid feature: use with care.
+
+You should probably extend `Liquid\Template` to initialize everything in one place.
+
 ## Requirements
 
  * PHP 5.6+
