@@ -129,4 +129,13 @@ class OutputTest extends TestCase
 
 		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage was not properly terminated
+	 */
+	public function testVariableWithANewLine() {
+		$text = "{{ aaa\n }}";
+		$this->assertTemplateResult('', $text, $this->assigns);
+	}
 }
