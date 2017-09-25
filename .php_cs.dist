@@ -13,6 +13,11 @@ return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2' => true,
+        'no_unreachable_default_argument_value' => true,
+        'no_useless_else' => true,
+        'no_useless_return' => true,
+        'phpdoc_add_missing_param_annotation' => true,
+        'semicolon_after_instruction' => true,
     ])
     ->setIndent("\t")
     ->setFinder(
