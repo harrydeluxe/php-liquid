@@ -39,7 +39,7 @@ class CatchallDrop extends Drop
 class ProductDrop extends Drop
 {
 	public function top_sales() {
-		trigger_error('worked', E_USER_ERROR);
+		throw new \Exception("worked");
 	}
 
 	public function texts() {
@@ -62,7 +62,7 @@ class ProductDrop extends Drop
 class DropTest extends TestCase
 {
 	/**
-	 * @expectedException \PHPUnit_Framework_Error
+	 * @expectedException \Exception
 	 * @expectedExceptionMessage worked
 	 */
 	public function testProductDrop() {

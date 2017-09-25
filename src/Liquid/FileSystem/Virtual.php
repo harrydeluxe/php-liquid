@@ -49,4 +49,13 @@ class Virtual implements FileSystem
 	public function readTemplateFile($templatePath) {
 		return call_user_func($this->callback, $templatePath);
 	}
+
+	public function __sleep() {
+		// we cannot serialize a closure
+		if ($this->callback instanceof \Closure) {
+			throw new LiquidException("Virtual file system with a Closure as a callback cannot be used with a serializing cache");
+		}
+
+		return array_keys(get_object_vars($this));
+	}
 }

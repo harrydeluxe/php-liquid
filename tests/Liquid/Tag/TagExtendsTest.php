@@ -35,6 +35,11 @@ class TagExtendsTest extends TestCase
 		});
 	}
 
+	protected function tearDown() {
+		// PHP goes nuts unless we unset it
+		unset($this->fs);
+	}
+
 	public function testBasicExtends()
 	{
 		$template = new Template();
