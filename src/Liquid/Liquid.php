@@ -89,9 +89,9 @@ class Liquid
 		}
 		if (array_key_exists($key, self::$config)) {
 			return self::$config[$key];
-		} else {
-			// This case is needed for compound settings
-			switch ($key) {
+		}
+		// This case is needed for compound settings
+		switch ($key) {
 				case 'QUOTED_FRAGMENT':
 					return self::$config['QUOTED_STRING'] . '|(?:[^\s,\|\'"]|' . self::$config['QUOTED_STRING'] . ')+';
 				case 'QUOTED_FRAGMENT_FILTER_ARGUMENT':
@@ -103,7 +103,6 @@ class Liquid
 				default:
 					return null;
 			}
-		}
 	}
 
 	/**

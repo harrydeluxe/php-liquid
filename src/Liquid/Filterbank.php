@@ -124,9 +124,8 @@ class Filterbank
 			// If we're calling a function
 			if ($class === false) {
 				return call_user_func_array($name, $args);
-			} else {
-				return call_user_func_array(array($class, $name), $args);
 			}
+			return call_user_func_array(array($class, $name), $args);
 		}
 
 		return $value;
