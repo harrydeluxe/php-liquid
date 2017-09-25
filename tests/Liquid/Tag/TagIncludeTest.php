@@ -125,6 +125,22 @@ class TagIncludeTest extends TestCase
 		$this->assertEquals("([test])", $output);
 	}
 
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage Use index operator
+	 */
+	public function testIncludePassArrayWithoutIndex() {
+
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'inner' => "[{{ other }}]",
+			'example' => "({% include 'inner' other:var %})",
+		)));
+
+		$template->parse("{% include 'example' %}");
+		$template->render(array("var" => array("a", "b", "c")));
+	}
+
 	public function testIncludePassArrayWithIndex() {
 
 		$template = new Template();

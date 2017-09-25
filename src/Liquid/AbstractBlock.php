@@ -120,6 +120,10 @@ class AbstractBlock extends AbstractTag
 				$value = $token;
 			}
 
+			if (is_array($value)) {
+				throw new LiquidException("Implicit rendering of arrays not supported. Use index operator.");
+			}
+
 			$result .= $value;
 
 			if (isset($context->registers['break'])) {
