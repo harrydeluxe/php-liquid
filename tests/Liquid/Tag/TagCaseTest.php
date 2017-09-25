@@ -20,6 +20,13 @@ class Stringable
 	}
 }
 
+class HasToLiquid
+{
+	public function toLiquid() {
+		return "100";
+	}
+}
+
 class TagCaseTest extends TestCase
 {
 	public function testCase() {
@@ -77,5 +84,9 @@ class TagCaseTest extends TestCase
 
 	public function testStringable() {
 		$this->assertTemplateResult('hit', '{% case variable %}{% when 100 %}hit{% endcase %}', array('variable' => new Stringable()));
+	}
+
+	public function testToLiquid() {
+		$this->assertTemplateResult('hit', '{% case variable %}{% when 100 %}hit{% endcase %}', array('variable' => new HasToLiquid()));
 	}
 }

@@ -16,21 +16,17 @@ use Liquid\Template;
 use Liquid\Liquid;
 use Liquid\Cache\Local;
 use Liquid\FileSystem\Virtual;
+use Liquid\TestFileSystem;
 
 class TagIncludeTest extends TestCase
 {
 	private $fs;
 
 	protected function setUp() {
-		$this->fs = new Virtual(function ($templatePath) {
-			if ($templatePath == 'inner') {
-				return "Inner: {{ inner }}{{ other }}";
-			}
-
-			if ($templatePath == 'example') {
-				return "Example: {% include 'inner' %}";
-			}
-		});
+		$this->fs = TestFileSystem::fromArray(array(
+			'inner' => "Inner: {{ inner }}{{ other }}",
+			'example' => "Example: {% include 'inner' %}",
+		));
 	}
 
 	protected function tearDown() {
@@ -114,5 +110,61 @@ class TagIncludeTest extends TestCase
 		$template->parse("{% include 'mypartial' %}");
 		// template include inserts a new line
 		$this->assertEquals("test content\n", $template->render());
+	}
+
+	public function testIncludePassPlainValue() {
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'inner' => "[{{ other }}]",
+			'example' => "({% include 'inner' other:var %})",
+		)));
+
+		$template->parse("{% include 'example' %}");
+
+		$output = $template->render(array("var" => "test"));
+		$this->assertEquals("([test])", $output);
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage Use index operator
+	 */
+	public function testIncludePassArrayWithoutIndex() {
+
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'inner' => "[{{ other }}]",
+			'example' => "({% include 'inner' other:var %})",
+		)));
+
+		$template->parse("{% include 'example' %}");
+		$template->render(array("var" => array("a", "b", "c")));
+	}
+
+	public function testIncludePassArrayWithIndex() {
+
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'inner' => "[{{ other[0] }}]",
+			'example' => "({% include 'inner' other:var %})",
+		)));
+
+		$template->parse("{% include 'example' %}");
+
+		$output = $template->render(array("var" => array("a", "b", "c")));
+		$this->assertEquals("([a])", $output);
+	}
+
+	public function testIncludePassObjectValue() {
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'inner' => "[{{ other.a }}]",
+			'example' => "({% include 'inner' other:var %})",
+		)));
+
+		$template->parse("{% include 'example' %}");
+
+		$output = $template->render(array("var" => (object) array('a' => 'b')));
+		$this->assertEquals("([b])", $output);
 	}
 }

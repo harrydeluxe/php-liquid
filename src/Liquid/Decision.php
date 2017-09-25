@@ -44,7 +44,9 @@ class Decision extends AbstractBlock
 			if (method_exists($value, '__toString')) {
 				$value = (string) $value;
 			} else {
-				throw new LiquidException("Cannot convert $value to string"); // harry
+				// toLiquid is handled in Context::variable
+				$class = get_class($value);
+				throw new LiquidException("Value of type $class has no `toLiquid` nor `__toString` methods");
 			}
 		}
 

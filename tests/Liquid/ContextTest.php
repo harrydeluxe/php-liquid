@@ -166,12 +166,9 @@ class ContextTest extends TestCase
 		$this->assertNull($this->context->get('object.invalid'));
 	}
 
-	/**
-	 * @expectedException \Liquid\LiquidException
-	 */
-	public function testFinalVariableIsObject() {
+	public function testFinalVariableCanBeObject() {
 		$this->context->set('test', (object) array('value' => (object) array()));
-		$this->context->get('test.value');
+		$this->assertInstanceOf(\stdClass::class, $this->context->get('test.value'));
 	}
 
 	public function testVariables() {

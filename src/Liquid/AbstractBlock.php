@@ -114,7 +114,17 @@ class AbstractBlock extends AbstractTag
 		$result = '';
 
 		foreach ($list as $token) {
-			$result .= (is_object($token) && method_exists($token, 'render')) ? $token->render($context) : $token;
+			if (method_exists($token, 'render')) {
+				$value = $token->render($context);
+			} else {
+				$value = $token;
+			}
+
+			if (is_array($value)) {
+				throw new LiquidException("Implicit rendering of arrays not supported. Use index operator.");
+			}
+
+			$result .= $value;
 
 			if (isset($context->registers['break'])) {
 				break;

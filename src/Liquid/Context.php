@@ -234,6 +234,9 @@ class Context
 	 *
 	 * @param string $key
 	 *
+	 * @see Decision::stringValue
+	 * @see AbstractBlock::renderAll
+	 *
 	 * @throws LiquidException
 	 * @return mixed
 	 */
@@ -333,23 +336,22 @@ class Context
 			// we'll try casting this object in the next iteration
 		}
 
-		// Traversable objects are taken care of inside filters
-		if ($object instanceof \Traversable) {
-			return $object;
-		}
-
-		// finally, resolve an object to a string or a plain value
-		if (method_exists($object, '__toString')) {
-			$object = (string) $object;
-		} elseif (method_exists($object, 'toLiquid')) {
+		// lastly, try to get an embedded value of an object
+		// value could be of any type, not just string, so we have to do this
+		// conversion here, not laster in AbstractBlock::renderAll
+		if (method_exists($object, 'toLiquid')) {
 			$object = $object->toLiquid();
 		}
 
-		// if everything else fails, throw up
-		if (is_object($object)) {
-			$class = get_class($object);
-			throw new LiquidException("Value of type $class has no `toLiquid` nor `__toString` methods");
-		}
+		/*
+		 * Before here were checks for object types and object to string conversion.
+		 *
+		 * Now we just return what we have:
+		 * - Traversable objects are taken care of inside filters
+		 * - Object-to-string conversion is handled at the last moment in Decision::stringValue, and in AbstractBlock::renderAll
+		 *
+		 * This way complex objects could be passed between templates and to filters
+		 */
 
 		return $object;
 	}
