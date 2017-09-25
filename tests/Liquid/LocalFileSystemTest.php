@@ -11,6 +11,8 @@
 
 namespace Liquid;
 
+use Liquid\FileSystem\Local;
+
 class LocalFileSystemTest extends TestCase
 {
 	protected $root;
@@ -27,7 +29,7 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function testIllegalTemplateNameEmpty()
 	{
-		$fileSystem = new LocalFileSystem('');
+		$fileSystem = new Local('');
 		$fileSystem->fullPath('');
 	}
 
@@ -36,7 +38,7 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function testIllegalRootPath()
 	{
-		$fileSystem = new LocalFileSystem('invalid/not/found');
+		$fileSystem = new Local('invalid/not/found');
 		$fileSystem->fullPath('');
 	}
 
@@ -47,7 +49,7 @@ class LocalFileSystemTest extends TestCase
 	{
 		Liquid::set('INCLUDE_ALLOW_EXT', false);
 
-		$fileSystem = new LocalFileSystem('');
+		$fileSystem = new Local('');
 		$fileSystem->fullPath('has_extension.ext');
 	}
 
@@ -58,7 +60,7 @@ class LocalFileSystemTest extends TestCase
 	{
 		Liquid::set('INCLUDE_ALLOW_EXT', true);
 
-		$fileSystem = new LocalFileSystem('');
+		$fileSystem = new Local('');
 		$fileSystem->fullPath('has_extension');
 	}
 
@@ -67,7 +69,7 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function testIllegalTemplatePathNoRoot()
 	{
-		$fileSystem = new LocalFileSystem('');
+		$fileSystem = new Local('');
 		$fileSystem->fullPath('mypartial');
 	}
 
@@ -76,7 +78,7 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function testIllegalTemplatePathNoFileExists()
 	{
-		$fileSystem = new LocalFileSystem(dirname(__DIR__));
+		$fileSystem = new Local(dirname(__DIR__));
 		$fileSystem->fullPath('no_such_file_exists');
 	}
 
@@ -87,7 +89,7 @@ class LocalFileSystemTest extends TestCase
 	public function testIllegalTemplatePathNotUnderTemplateRoot()
 	{
 		Liquid::set('INCLUDE_ALLOW_EXT', true);
-		$fileSystem = new LocalFileSystem(dirname($this->root));
+		$fileSystem = new Local(dirname($this->root));
 		// find any fail under deeper under the root, so all other checks would pass
 		$filesUnderCurrentDir = array_map('basename', glob(dirname(__DIR__).'/../*'));
 		// path relative to root; we can't start it with a dot since it isn't allowed anyway
@@ -98,7 +100,7 @@ class LocalFileSystemTest extends TestCase
 	{
 		$templateName = 'mypartial';
 
-		$fileSystem = new LocalFileSystem($this->root);
+		$fileSystem = new Local($this->root);
 		$this->assertEquals($this->root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
 	}
 
@@ -109,7 +111,7 @@ class LocalFileSystemTest extends TestCase
 
 		$templateName = 'mypartial';
 
-		$fileSystem = new LocalFileSystem($this->root);
+		$fileSystem = new Local($this->root);
 		$this->assertEquals($this->root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
 	}
 
@@ -119,7 +121,7 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function testReadIllegalTemplatePathNoFileExists()
 	{
-		$fileSystem = new LocalFileSystem(dirname(__DIR__));
+		$fileSystem = new Local(dirname(__DIR__));
 		$fileSystem->readTemplateFile('no_such_file_exists');
 	}
 
@@ -128,8 +130,13 @@ class LocalFileSystemTest extends TestCase
 		Liquid::set('INCLUDE_PREFIX', '');
 		Liquid::set('INCLUDE_SUFFIX', 'tpl');
 
-		$fileSystem = new LocalFileSystem($this->root);
+		$fileSystem = new Local($this->root);
 		$this->assertEquals('test content', trim($fileSystem->readTemplateFile('mypartial')));
+	}
+
+	public function testDeprecatedLocalFileSystemExists()
+	{
+		$this->assertInstanceOf(Local::class, new LocalFileSystem($this->root));
 	}
 
 	public function testParseTemplateFile()
