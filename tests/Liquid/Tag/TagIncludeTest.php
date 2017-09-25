@@ -111,4 +111,44 @@ class TagIncludeTest extends TestCase
 		// template include inserts a new line
 		$this->assertEquals("test content\n", $template->render());
 	}
+
+	public function testIncludePassPlainValue() {
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'inner' => "[{{ other }}]",
+			'example' => "({% include 'inner' other:var %})",
+		)));
+
+		$template->parse("{% include 'example' %}");
+
+		$output = $template->render(array("var" => "test"));
+		$this->assertEquals("([test])", $output);
+	}
+
+	public function testIncludePassArrayWithIndex() {
+
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'inner' => "[{{ other[0] }}]",
+			'example' => "({% include 'inner' other:var %})",
+		)));
+
+		$template->parse("{% include 'example' %}");
+
+		$output = $template->render(array("var" => array("a", "b", "c")));
+		$this->assertEquals("([a])", $output);
+	}
+
+	public function testIncludePassObjectValue() {
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'inner' => "[{{ other.a }}]",
+			'example' => "({% include 'inner' other:var %})",
+		)));
+
+		$template->parse("{% include 'example' %}");
+
+		$output = $template->render(array("var" => (object) array('a' => 'b')));
+		$this->assertEquals("([b])", $output);
+	}
 }
