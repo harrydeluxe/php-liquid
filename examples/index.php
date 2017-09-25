@@ -33,7 +33,7 @@ $assigns = array(
 	'document' => array(
 		'title' => 'This is php-liquid',
 		'content' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-		'copyright' => 'Guz Alexander - All rights reserved.'
+		'copyright' => 'Guz Alexander - All rights reserved.',
 	),
 	'blog' => array(
 		array(
@@ -43,9 +43,9 @@ $assigns = array(
 			'comments' => array(
 				array(
 					'title' => 'First Comment',
-					'message' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
-				)
-			)
+					'message' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				),
+			),
 		),
 		array(
 			'title' => 'Blog Title 2',
@@ -54,17 +54,17 @@ $assigns = array(
 			'comments' => array(
 				array(
 					'title' => 'First Comment',
-					'message' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+					'message' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 				),
 				array(
 					'title' => 'Second Comment',
-					'message' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
-				)
-			)
-		)
+					'message' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				),
+			),
+		),
 
 	),
-	'array' => array('one', 'two', 'three', 'four')
+	'array' => array('one', 'two', 'three', 'four'),
 );
 
 echo $liquid->render($assigns);

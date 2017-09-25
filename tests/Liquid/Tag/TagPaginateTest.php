@@ -33,7 +33,7 @@ class TagPaginateTest extends TestCase
 	{
 		$text = '{% paginate products by 1 %}{% for product in products %} {{ product.id }} {% endfor %}<a href="{{ paginate.next.url }}">{{ paginate.next.title }}</a>{% endpaginate %}';
 		$expected = ' 2 <a href="https://example.com/products?page=3">Next</a>';
-		$this->assertTemplateResult($expected, $text, array('HTTP_HOST' => 'example.com', 'REQUEST_URI' => '/products', 'HTTPS' => 'on', 'page' => 2,'products' => array(array('id' => 1), array('id' => 2), array('id' => 3), array('id' => 4), array('id' => 5))));
+		$this->assertTemplateResult($expected, $text, array('HTTP_HOST' => 'example.com', 'REQUEST_URI' => '/products', 'HTTPS' => 'on', 'page' => 2, 'products' => array(array('id' => 1), array('id' => 2), array('id' => 3), array('id' => 4), array('id' => 5))));
 	}
 
 	/**

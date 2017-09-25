@@ -258,7 +258,7 @@ class Context
 		if (preg_match("|\[[0-9]+\]|", $key)) {
 			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
 		} elseif (preg_match("|\[[0-9a-z._]+\]|", $key, $matches)) {
-			$index = $this->get(str_replace(array("[","]"), "", $matches[0]));
+			$index = $this->get(str_replace(array("[", "]"), "", $matches[0]));
 			if (strlen($index)) {
 				$key = preg_replace("|\[([0-9a-z._]+)\]|", ".$index", $key);
 			}

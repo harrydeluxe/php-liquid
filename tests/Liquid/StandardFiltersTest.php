@@ -333,12 +333,12 @@ class StandardFiltersTest extends TestCase
 				'',
 			),
 			array(
-				array(1,2,3,4,5),
-				array(3,4,5),
+				array(1, 2, 3, 4, 5),
+				array(3, 4, 5),
 			),
 			array(
-				new \ArrayIterator(array(1,2,3,4,5)),
-				array(3,4,5),
+				new \ArrayIterator(array(1, 2, 3, 4, 5)),
+				array(3, 4, 5),
 			),
 			array(
 				'12345',
@@ -377,12 +377,12 @@ class StandardFiltersTest extends TestCase
 				'',
 			),
 			array(
-				array(1,2,3,4,5),
-				array(3,4),
+				array(1, 2, 3, 4, 5),
+				array(3, 4),
 			),
 			array(
-				new \ArrayIterator(array(1,2,3,4,5)),
-				array(3,4),
+				new \ArrayIterator(array(1, 2, 3, 4, 5)),
+				array(3, 4),
 			),
 			array(
 				'12345',
@@ -475,11 +475,11 @@ class StandardFiltersTest extends TestCase
 				'',
 			),
 			array(
-				array(1,2,3,4,5),
+				array(1, 2, 3, 4, 5),
 				'1 2 3 4 5'
 			),
 			array(
-				new \ArrayIterator(array(1,2,3,4,5)),
+				new \ArrayIterator(array(1, 2, 3, 4, 5)),
 				'1 2 3 4 5'
 			),
 			array(
