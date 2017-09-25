@@ -43,12 +43,35 @@ class NoToLiquid {
 	}
 }
 
+class ToLiquidWrapper {
+	public $value = null;
+
+	public function toLiquid() {
+		return $this->value;
+	}
+}
+
 class NestedObject
 {
 	public $property;
 	public $value = -1;
 
 	public function toLiquid() {
+		// we intentionally made the value different so
+		// that we could see where it is coming from
+		return array(
+			'property' => $this->property,
+			'value' => 42,
+		);
+	}
+}
+
+class ToArrayObject
+{
+	public $property;
+	public $value = -1;
+
+	public function toArray() {
 		// we intentionally made the value different so
 		// that we could see where it is coming from
 		return array(
@@ -151,9 +174,32 @@ class ContextTest extends TestCase
 		$this->assertEquals("example", $this->context->get('test.name'));
 	}
 
+	public function testToLiquidNull() {
+		$object = new ToLiquidWrapper();
+		$this->context->set('object', $object);
+		$this->assertNull($this->context->get('object.key'));
+	}
+
+	public function testToLiquidStringKeyMustBeNull() {
+		$object = new ToLiquidWrapper();
+		$object->value = 'foo';
+		$this->context->set('object', $object);
+		$this->assertNull($this->context->get('object.foo'));
+		$this->assertNull($this->context->get('object.foo.bar'));
+	}
+
 	public function testNestedObject() {
 		$object = new NestedObject();
 		$object->property = new NestedObject();
+		$this->context->set('object', $object);
+		$this->assertEquals(42, $this->context->get('object.value'));
+		$this->assertEquals(42, $this->context->get('object.property.value'));
+		$this->assertNull($this->context->get('object.property.value.invalid'));
+	}
+
+	public function testToArrayObject() {
+		$object = new ToArrayObject();
+		$object->property = new ToArrayObject();
 		$this->context->set('object', $object);
 		$this->assertEquals(42, $this->context->get('object.value'));
 		$this->assertEquals(42, $this->context->get('object.property.value'));
@@ -173,6 +219,8 @@ class ContextTest extends TestCase
 
 	public function testVariables() {
 		$this->context->set('test', 'test');
+		$this->assertTrue($this->context->hasKey('test'));
+		$this->assertFalse($this->context->hasKey('test.foo'));
 		$this->assertEquals('test', $this->context->get('test'));
 
 		// We add this text to make sure we can return values that evaluate to false properly

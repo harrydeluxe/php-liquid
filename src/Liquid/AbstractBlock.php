@@ -43,10 +43,6 @@ class AbstractBlock extends AbstractTag
 
 		$this->nodelist = array();
 
-		if (!is_array($tokens)) {
-			return;
-		}
-
 		$tags = Template::getTags();
 
 		while (count($tokens)) {

@@ -57,6 +57,10 @@ class ProductDrop extends Drop
 	public function callmenot() {
 		return "protected";
 	}
+
+	public function hasKey($name) {
+		return $name != 'unknown' && $name != 'false';
+	}
 }
 
 class DropTest extends TestCase
@@ -69,6 +73,13 @@ class DropTest extends TestCase
 		$template = new Template();
 		$template->parse(' {{ product.top_sales }} ');
 		$template->render(array('product' => new ProductDrop));
+	}
+
+	public function testNoKeyDrop() {
+		$template = new Template();
+		$template->parse(' {{ product.invalid.unknown }}{{ product.false }} ');
+		$output = $template->render(array('product' => new ProductDrop));
+		$this->assertEquals('  ', $output);
 	}
 
 	public function testTextDrop() {
@@ -103,5 +114,10 @@ class DropTest extends TestCase
 		$template->parse(' {{ product.context.foo }} ');
 		$output = $template->render(array('product' => new ProductDrop(), 'foo' => 'monkey'));
 		$this->assertEquals(' monkey ', $output);
+	}
+
+	public function testToString()
+	{
+		$this->assertEquals(ProductDrop::class, strval(new ProductDrop()));
 	}
 }
