@@ -87,7 +87,17 @@ Will output:
 
 Note that automatic escaping is not a standard Liquid feature: use with care.
 
-You should probably extend `Liquid\Template` to initialize everything in one place.
+Similarly, the following snippet will parse and render `templates/home.liquid` while storing parsing results in a class-local cache:
+
+    \Liquid\Liquid::set('INCLUDE_PREFIX', '');
+
+    $template = new \Liquid\Template(__DIR__ . '/protected/templates');
+    $template->setCache(new \Liquid\Cache\Local());
+    echo $template->parseFile('home')->render();
+
+If you render the same template over and over for at least a dozen of times, the class-local cache will give you a slight speed up in range of some milliseconds per render depending on a complexity of your template.
+
+You should probably extend `Liquid\Template` to initialize everything you do with `Liquid::set` in one place.
 
 ## Requirements
 
