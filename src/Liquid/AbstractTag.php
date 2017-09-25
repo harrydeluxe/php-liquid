@@ -66,9 +66,7 @@ abstract class AbstractTag
 	 *
 	 * @return string
 	 */
-	public function render(Context $context) {
-		return '';
-	}
+	abstract public function render(Context $context);
 
 	/**
 	 * Extracts tag attributes from a markup string.
