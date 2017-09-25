@@ -16,21 +16,17 @@ use Liquid\Template;
 use Liquid\Liquid;
 use Liquid\Cache\Local;
 use Liquid\FileSystem\Virtual;
+use Liquid\TestFileSystem;
 
 class TagIncludeTest extends TestCase
 {
 	private $fs;
 
 	protected function setUp() {
-		$this->fs = new Virtual(function ($templatePath) {
-			if ($templatePath == 'inner') {
-				return "Inner: {{ inner }}{{ other }}";
-			}
-
-			if ($templatePath == 'example') {
-				return "Example: {% include 'inner' %}";
-			}
-		});
+		$this->fs = TestFileSystem::fromArray(array(
+			'inner' => "Inner: {{ inner }}{{ other }}",
+			'example' => "Example: {% include 'inner' %}",
+		));
 	}
 
 	protected function tearDown() {
