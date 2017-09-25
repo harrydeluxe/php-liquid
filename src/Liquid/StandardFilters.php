@@ -14,7 +14,8 @@ namespace Liquid;
 /**
  * A selection of standard filters.
  */
-class StandardFilters {
+class StandardFilters
+{
 	
 	/**
 	 * Add one string to another
@@ -24,7 +25,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function append($input, $string) {
+	public static function append($input, $string)
+	{
 		return $input . $string;
 	}
 	
@@ -36,7 +38,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function capitalize($input) {
+	public static function capitalize($input)
+	{
 		return preg_replace_callback("/(^|[^\p{L}'])([\p{Ll}])/u", function ($matches) {
 			return $matches[1] . ucfirst($matches[2]);
 		}, ucwords($input));
@@ -48,7 +51,8 @@ class StandardFilters {
 	 *
 	 * @return int
 	 */
-	public static function ceil($input) {
+	public static function ceil($input)
+	{
 		return (int) ceil((float)$input);
 	}
 	
@@ -61,7 +65,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function date($input, $format) {
+	public static function date($input, $format)
+	{
 		if (!is_numeric($input)) {
 			$input = strtotime($input);
 		}
@@ -82,7 +87,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function _default($input, $default_value) {
+	public static function _default($input, $default_value)
+	{
 		$isBlank = $input == '' || $input === false || $input === null;
 		return $isBlank ? $default_value : $input;
 	}
@@ -96,7 +102,8 @@ class StandardFilters {
 	 *
 	 * @return float
 	 */
-	public static function divided_by($input, $operand) {
+	public static function divided_by($input, $operand)
+	{
 		return (float)$input / (float)$operand;
 	}
 
@@ -108,7 +115,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function downcase($input) {
+	public static function downcase($input)
+	{
 		return is_string($input) ? strtolower($input) : $input;
 	}
 	
@@ -120,7 +128,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function raw($input) {
+	public static function raw($input)
+	{
 		return $input;
 	}
 
@@ -132,7 +141,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function escape($input) {
+	public static function escape($input)
+	{
 		return is_string($input) ? htmlentities($input, ENT_QUOTES) : $input;
 	}
 
@@ -144,7 +154,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function escape_once($input) {
+	public static function escape_once($input)
+	{
 		return is_string($input) ? htmlentities($input, ENT_QUOTES, null, false) : $input;
 	}
 
@@ -156,7 +167,8 @@ class StandardFilters {
 	 *
 	 * @return mixed
 	 */
-	public static function first($input) {
+	public static function first($input)
+	{
 		if ($input instanceof \Iterator) {
 			$input->rewind();
 			return $input->current();
@@ -170,7 +182,8 @@ class StandardFilters {
 	 *
 	 * @return int
 	 */
-	public static function floor($input) {
+	public static function floor($input)
+	{
 		return (int) floor((float)$input);
 	}
 	
@@ -183,7 +196,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function join($input, $glue = ' ') {
+	public static function join($input, $glue = ' ')
+	{
 		if ($input instanceof \Traversable) {
 			$str = '';
 			foreach ($input as $elem) {
@@ -205,7 +219,8 @@ class StandardFilters {
 	 *
 	 * @return mixed
 	 */
-	public static function last($input) {
+	public static function last($input)
+	{
 		if ($input instanceof \Traversable) {
 			$last = null;
 			foreach ($input as $elem) {
@@ -222,7 +237,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function lstrip($input) {
+	public static function lstrip($input)
+	{
 		return ltrim($input);
 	}
 	
@@ -235,7 +251,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function map($input, $property) {
+	public static function map($input, $property)
+	{
 		if ($input instanceof \Traversable) {
 			$input = iterator_to_array($input);
 		}
@@ -261,7 +278,8 @@ class StandardFilters {
 	 *
 	 * @return float
 	 */
-	public static function minus($input, $operand) {
+	public static function minus($input, $operand)
+	{
 		return (float)$input - (float)$operand;
 	}
 	
@@ -274,7 +292,8 @@ class StandardFilters {
 	 *
 	 * @return float
 	 */
-	public static function modulo($input, $operand) {
+	public static function modulo($input, $operand)
+	{
 		return fmod((float)$input, (float)$operand);
 	}
 	
@@ -286,7 +305,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function newline_to_br($input) {
+	public static function newline_to_br($input)
+	{
 		return is_string($input) ? str_replace("\n", "<br />\n", $input) : $input;
 	}
 		
@@ -299,7 +319,8 @@ class StandardFilters {
 	 *
 	 * @return float
 	 */
-	public static function plus($input, $operand) {
+	public static function plus($input, $operand)
+	{
 		return (float)$input + (float)$operand;
 	}
 	
@@ -312,7 +333,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function prepend($input, $string) {
+	public static function prepend($input, $string)
+	{
 		return $string . $input;
 	}
 	
@@ -325,7 +347,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function remove($input, $string) {
+	public static function remove($input, $string)
+	{
 		return str_replace($string, '', $input);
 	}
 
@@ -338,7 +361,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function remove_first($input, $string) {
+	public static function remove_first($input, $string)
+	{
 		if (($pos = strpos($input, $string)) !== false) {
 			$input = substr_replace($input, '', $pos, strlen($string));
 		}
@@ -356,7 +380,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function replace($input, $string, $replacement = '') {
+	public static function replace($input, $string, $replacement = '')
+	{
 		return str_replace($string, $replacement, $input);
 	}
 
@@ -370,7 +395,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function replace_first($input, $string, $replacement = '') {
+	public static function replace_first($input, $string, $replacement = '')
+	{
 		if (($pos = strpos($input, $string)) !== false) {
 			$input = substr_replace($input, $replacement, $pos, strlen($string));
 		}
@@ -386,7 +412,8 @@ class StandardFilters {
 	 *
 	 * @return array
 	 */
-	public static function reverse($input) {
+	public static function reverse($input)
+	{
 		if ($input instanceof \Traversable) {
 			$input = iterator_to_array($input);
 		}
@@ -402,7 +429,8 @@ class StandardFilters {
 	 *
 	 * @return float
 	 */
-	public static function round($input, $n = 0) {
+	public static function round($input, $n = 0)
+	{
 		return round((float)$input, (int)$n);
 	}
 	
@@ -412,7 +440,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function rstrip($input) {
+	public static function rstrip($input)
+	{
 		return rtrim($input);
 	}
 
@@ -424,7 +453,8 @@ class StandardFilters {
 	 *
 	 * @return int
 	 */
-	public static function size($input) {
+	public static function size($input)
+	{
 		if ($input instanceof \Iterator) {
 			return iterator_count($input);
 		}
@@ -456,7 +486,8 @@ class StandardFilters {
 	 *
 	 * @return array|\Iterator|string
 	 */
-	public static function slice($input, $offset, $length = null) {
+	public static function slice($input, $offset, $length = null)
+	{
 		if ($input instanceof \Iterator) {
 			$input = iterator_to_array($input);
 		}
@@ -480,7 +511,8 @@ class StandardFilters {
 	 *
 	 * @return array
 	 */
-	public static function sort($input, $property = null) {
+	public static function sort($input, $property = null)
+	{
 		if ($input instanceof \Traversable) {
 			$input = iterator_to_array($input);
 		}
@@ -511,7 +543,8 @@ class StandardFilters {
 	 *
 	 * @return array
 	 */
-	public static function split($input, $pattern) {
+	public static function split($input, $pattern)
+	{
 		return explode($pattern, $input);
 	}
 
@@ -521,7 +554,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function strip($input) {
+	public static function strip($input)
+	{
 		return trim($input);
 	}
 	
@@ -533,7 +567,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function strip_html($input) {
+	public static function strip_html($input)
+	{
 		return is_string($input) ? strip_tags($input) : $input;
 	}
 	
@@ -545,7 +580,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function strip_newlines($input) {
+	public static function strip_newlines($input)
+	{
 		return is_string($input) ? str_replace(array(
 			"\n", "\r"
 		), '', $input) : $input;
@@ -560,7 +596,8 @@ class StandardFilters {
 	 *
 	 * @return float
 	 */
-	public static function times($input, $operand) {
+	public static function times($input, $operand)
+	{
 		return (float)$input * (float)$operand;
 	}
 	
@@ -574,7 +611,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function truncate($input, $characters = 100, $ending = '...') {
+	public static function truncate($input, $characters = 100, $ending = '...')
+	{
 		if (is_string($input) || is_numeric($input)) {
 			if (strlen($input) > $characters) {
 				return substr($input, 0, $characters) . $ending;
@@ -594,7 +632,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function truncatewords($input, $words = 3, $ending = '...') {
+	public static function truncatewords($input, $words = 3, $ending = '...')
+	{
 		if (is_string($input)) {
 			$wordlist = explode(" ", $input);
 
@@ -614,7 +653,8 @@ class StandardFilters {
 	 *
 	 * @return array
 	 */
-	public static function uniq($input) {
+	public static function uniq($input)
+	{
 		if ($input instanceof \Traversable) {
 			$input = iterator_to_array($input);
 		}
@@ -629,7 +669,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function upcase($input) {
+	public static function upcase($input)
+	{
 		return is_string($input) ? strtoupper($input) : $input;
 	}
 
@@ -641,7 +682,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function url_encode($input) {
+	public static function url_encode($input)
+	{
 		return urlencode($input);
 	}
 
@@ -652,7 +694,8 @@ class StandardFilters {
 	 *
 	 * @return string
 	 */
-	public static function url_decode($input) {
+	public static function url_decode($input)
+	{
 		return urldecode($input);
 	}
 }

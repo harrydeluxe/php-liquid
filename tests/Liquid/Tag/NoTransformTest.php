@@ -13,8 +13,10 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class NoTransformTest extends TestCase {
-	public function testNoTransform() {
+class NoTransformTest extends TestCase
+{
+	public function testNoTransform()
+	{
 		$this->assertTemplateResult(
 			'this text should come out of the template without change...',
 			'this text should come out of the template without change...'

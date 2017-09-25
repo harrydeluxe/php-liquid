@@ -14,16 +14,19 @@ namespace Liquid\Tag;
 use Liquid\TestCase;
 use Liquid\Template;
 
-class TagForTest extends TestCase {
+class TagForTest extends TestCase
+{
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testForInvalidSyntax() {
+	public function testForInvalidSyntax()
+	{
 		$template = new Template();
 		$template->parse("{% for elem %}{% endfor %}");
 	}
 
-	public function testFor() {
+	public function testFor()
+	{
 		$this->assertTemplateResult('', '{%for item in array%} yo {%endfor%}', array('array' => array()));
 		$this->assertTemplateResult(' yo  yo  yo  yo ', '{%for item in array%} yo {%endfor%}', array('array' => array(1, 2, 3, 4)));
 		$this->assertTemplateResult(' boo  boo  boo  boo ', '{%for item in array%} boo {%endfor%}', array('array' => new \ArrayIterator(array(1, 2, 3, 4))));
@@ -48,7 +51,8 @@ HERE;
 		$this->assertTemplateResult($expected, $template, array('array' => array(1, 2, 3)));
 	}
 
-	public function testForWithVariable() {
+	public function testForWithVariable()
+	{
 		$this->assertTemplateResult(' 1  2  3 ', '{%for item in array%} {{item}} {%endfor%}', array('array' => array(1, 2, 3)));
 		$this->assertTemplateResult('123', '{%for item in array%}{{item}}{%endfor%}', array('array' => array(1, 2, 3)));
 		$this->assertTemplateResult('123', '{% for item in array %}{{item}}{% endfor %}', array('array' => array(1, 2, 3)));
@@ -57,11 +61,13 @@ HERE;
 		$this->assertTemplateResult('abc', '{%for item in array%}{{item}}{%endfor%}', array('array' => array('a', '', 'b', '', 'c')));
 	}
 	
-	public function testForWithHash() {
+	public function testForWithHash()
+	{
 		$this->assertTemplateResult('a=b c=d e=f ', '{%for item in array%}{{item[0]}}={{item[1]}} {%endfor%}', array('array' => array('a' => 'b', 'c' => 'd', 'e' => 'f')));
 	}
 
-	public function testForHelpers() {
+	public function testForHelpers()
+	{
 		$assigns = array('array' => array(1, 2, 3));
 
 		$this->assertTemplateResult(' 1/3  2/3  3/3 ', '{%for item in array%} {{forloop.index}}/{{forloop.length}} {%endfor%}', $assigns);
@@ -73,7 +79,8 @@ HERE;
 		$this->assertTemplateResult(' 0  0  1 ', '{%for item in array%} {{forloop.last}} {%endfor%}', $assigns);
 	}
 
-	public function testForHelpersWithOffsetAndLimit() {
+	public function testForHelpersWithOffsetAndLimit()
+	{
 		$assigns = array('array' => array(0, 1, 2, 3, 4));
 
 		$this->assertTemplateResult(' 1/3  2/3  3/3 ', '{%for item in array offset:1 limit:3%} {{forloop.index}}/{{forloop.length}} {%endfor%}', $assigns);
@@ -85,14 +92,16 @@ HERE;
 		$this->assertTemplateResult(' 0  0  1 ', '{%for item in array offset:1 limit:3%} {{forloop.last}} {%endfor%}', $assigns);
 	}
 
-	public function testForAndIf() {
+	public function testForAndIf()
+	{
 		$assigns = array('array' => array(1, 2, 3));
 		$this->assertTemplateResult(' yay     ', '{%for item in array%} {% if forloop.first %}yay{% endif %} {%endfor%}', $assigns);
 		$this->assertTemplateResult(' yay  boo  boo ', '{%for item in array%} {% if forloop.first %}yay{% else %}boo{% endif %} {%endfor%}', $assigns);
 		$this->assertTemplateResult('   boo  boo ', '{%for item in array%} {% if forloop.first %}{% else %}boo{% endif %} {%endfor%}', $assigns);
 	}
 
-	public function testLimiting() {
+	public function testLimiting()
+	{
 		$assigns = array('array' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 0));
 		$this->assertTemplateResult('12', '{%for i in array limit:2 %}{{ i }}{%endfor%}', $assigns);
 		$this->assertTemplateResult('1234567890', '{%for i in array limit:20 %}{{ i }}{%endfor%}', $assigns);
@@ -105,17 +114,20 @@ HERE;
 		$this->assertTemplateResult('34', '{%for i in array limit: limit offset: offset %}{{ i }}{%endfor%}', $assigns);
 	}
 
-	public function testNestedFor() {
+	public function testNestedFor()
+	{
 		$assigns = array('array' => array(array(1, 2), array(3, 4), array(5, 6)));
 		$this->assertTemplateResult('123456', '{%for item in array%}{%for i in item%}{{ i }}{%endfor%}{%endfor%}', $assigns);
 	}
 
-	public function testOffsetOnly() {
+	public function testOffsetOnly()
+	{
 		$assigns = array('array' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 0));
 		$this->assertTemplateResult('890', '{%for i in array offset:7 %}{{ i }}{%endfor%}', $assigns);
 	}
 
-	public function testPauseResume() {
+	public function testPauseResume()
+	{
 		$assigns = array('array' => array('items' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 0)));
 
 		$markup = <<<MKUP
@@ -135,7 +147,8 @@ XPCTD;
 		$this->assertTemplateResult($expected, $markup, $assigns);
 	}
 
-	public function testPauseResumeLimit() {
+	public function testPauseResumeLimit()
+	{
 		$assigns = array('array' => array('items' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 0)));
 
 		$markup = <<<MKUP
@@ -155,7 +168,8 @@ XPCTD;
 		$this->assertTemplateResult($expected, $markup, $assigns);
 	}
 
-	public function testPauseResumeBIGLimit() {
+	public function testPauseResumeBIGLimit()
+	{
 		$assigns = array('array' => array('items' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 0)));
 
 		$markup = <<<MKUP
@@ -175,7 +189,8 @@ XPCTD;
 		$this->assertTemplateResult($expected, $markup, $assigns);
 	}
 
-	public function testPauseResumeBIGOffset() {
+	public function testPauseResumeBIGOffset()
+	{
 		$assigns = array('array' => array('items' => array(1, 2, 3, 4, 5, 6, 7, 8, 9, 0)));
 
 		$markup = <<<MKUP
@@ -195,7 +210,8 @@ XPCTD;
 		$this->assertTemplateResult($expected, $markup, $assigns);
 	}
 
-	public function testForWithRanges() {
+	public function testForWithRanges()
+	{
 		$this->assertTemplateResult('123456789', '{%for i in (1..9)%}{{i}}{%endfor%}');
 		$this->assertTemplateResult(' 9 10 11', '{%for i in (9..11)%} {{i}}{%endfor%}');
 		$this->assertTemplateResult('9991000', '{%for i in (999..1000)%}{{i}}{%endfor%}');

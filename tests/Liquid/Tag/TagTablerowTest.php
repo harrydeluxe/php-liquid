@@ -13,8 +13,10 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagTablerowTest extends TestCase {
-	public function testTablerow() {
+class TagTablerowTest extends TestCase
+{
+	public function testTablerow()
+	{
 		$this->assertTemplateResult(
 			'<tr class="row1">'."\n".'<td class="col1"> yo </td><td class="col2"> yo </td><td class="col3"> yo </td><td class="col4"> yo </td></tr>'."\n",
 			'{% tablerow item in array %} yo {% endtablerow %}',
@@ -47,14 +49,16 @@ class TagTablerowTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntax() {
+	public function testInvalidSyntax()
+	{
 		$this->assertTemplateResult('', '{%tablerow item array%} yo {%endtablerow%}', array());
 	}
 
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testNotArray() {
+	public function testNotArray()
+	{
 		$this->assertTemplateResult('', '{%tablerow item in array%} yo {%endtablerow%}', array('array' => true));
 	}
 }

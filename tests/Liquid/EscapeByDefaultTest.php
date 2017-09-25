@@ -11,13 +11,15 @@
 
 namespace Liquid;
 
-class EscapeByDefaultTest extends TestCase {
+class EscapeByDefaultTest extends TestCase
+{
 	const XSS = "<script>alert()</script>";
 	const XSS_FAILED = "&lt;script&gt;alert()&lt;/script&gt;";
 
 	protected $assigns = array();
 
-	protected function setup() {
+	protected function setup()
+	{
 		parent::setUp();
 
 		$this->assigns = array(
@@ -25,25 +27,29 @@ class EscapeByDefaultTest extends TestCase {
 		);
 	}
 
-	public function testUnescaped() {
+	public function testUnescaped()
+	{
 		$text = "{{ xss }}";
 		$expected = self::XSS;
 		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 
-	public function testEscapedManually() {
+	public function testEscapedManually()
+	{
 		$text = "{{ xss | escape }}";
 		$expected = self::XSS_FAILED;
 		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 
-	public function testRawWithoutAutoEscape() {
+	public function testRawWithoutAutoEscape()
+	{
 		$text = "{{ xss | raw }}";
 		$expected = self::XSS;
 		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 
-	public function testEscapedAutomatically() {
+	public function testEscapedAutomatically()
+	{
 		Liquid::set('ESCAPE_BY_DEFAULT', true);
 
 		$text = "{{ xss }}";
@@ -51,7 +57,8 @@ class EscapeByDefaultTest extends TestCase {
 		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 
-	public function testEscapedManuallyInAutoMode() {
+	public function testEscapedManuallyInAutoMode()
+	{
 		Liquid::set('ESCAPE_BY_DEFAULT', true);
 
 		// text should only be escaped once
@@ -60,7 +67,8 @@ class EscapeByDefaultTest extends TestCase {
 		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 
-	public function testRawInAutoMode() {
+	public function testRawInAutoMode()
+	{
 		Liquid::set('ESCAPE_BY_DEFAULT', true);
 
 		$text = "{{ xss | raw }}";
@@ -68,7 +76,8 @@ class EscapeByDefaultTest extends TestCase {
 		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
 
-	public function testNlToBr() {
+	public function testNlToBr()
+	{
 		Liquid::set('ESCAPE_BY_DEFAULT', true);
 		$text = "{{ xss | newline_to_br }}";
 		$expected = self::XSS."<br />\n".self::XSS;
@@ -78,12 +87,14 @@ class EscapeByDefaultTest extends TestCase {
 	/** System default value for the escape flag */
 	private static $escapeDefault;
 
-	public static function setUpBeforeClass() {
+	public static function setUpBeforeClass()
+	{
 		// save system default value for the escape flag before all tests
 		self::$escapeDefault = Liquid::get('ESCAPE_BY_DEFAULT');
 	}
 
-	public function tearDown() {
+	public function tearDown()
+	{
 		// reset to the default after each test
 		Liquid::set('ESCAPE_BY_DEFAULT', self::$escapeDefault);
 	}

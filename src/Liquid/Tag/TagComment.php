@@ -21,7 +21,8 @@ use Liquid\Context;
  *
  *     {% comment %} This will be ignored {% endcomment %}
  */
-class TagComment extends AbstractBlock {
+class TagComment extends AbstractBlock
+{
 	/**
 	 * Renders the block
 	 *
@@ -29,7 +30,8 @@ class TagComment extends AbstractBlock {
 	 *
 	 * @return string empty string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		return '';
 	}
 }

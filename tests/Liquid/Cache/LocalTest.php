@@ -14,25 +14,30 @@ namespace Liquid\Cache;
 use Liquid\TestCase;
 use \Liquid\Cache\Local;
 
-class LocalTest extends TestCase {
+class LocalTest extends TestCase
+{
 	/** @var \Liquid\Cache\Local */
 	protected $cache;
 
-	protected function setUp() {
+	protected function setUp()
+	{
 		parent::setUp();
 
 		$this->cache = new Local();
 	}
 
-	public function testNotExists() {
+	public function testNotExists()
+	{
 		$this->assertFalse($this->cache->exists('no_such_key'));
 	}
 
-	public function testReadNotExisting() {
+	public function testReadNotExisting()
+	{
 		$this->assertFalse($this->cache->read('no_such_key'));
 	}
 
-	public function testSetGetFlush() {
+	public function testSetGetFlush()
+	{
 		$this->assertTrue($this->cache->write('test', 'example'));
 		$this->assertSame('example', $this->cache->read('test'));
 		$this->assertTrue($this->cache->flush());

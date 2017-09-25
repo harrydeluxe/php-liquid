@@ -14,7 +14,8 @@ namespace Liquid;
 /**
  * Implements a template variable.
  */
-class Variable {
+class Variable
+{
 	/**
 	 * @var array The filters to execute on the variable
 	 */
@@ -35,7 +36,8 @@ class Variable {
 	 *
 	 * @param string $markup
 	 */
-	public function __construct($markup) {
+	public function __construct($markup)
+	{
 		$this->markup = $markup;
 
 		$quotedFragmentRegexp = new Regexp('/\s*(' . Liquid::get('QUOTED_FRAGMENT') . ')/');
@@ -94,7 +96,8 @@ class Variable {
 	 *
 	 * @return string The name of the variable
 	 */
-	public function getName() {
+	public function getName()
+	{
 		return $this->name;
 	}
 
@@ -103,7 +106,8 @@ class Variable {
 	 *
 	 * @return array
 	 */
-	public function getFilters() {
+	public function getFilters()
+	{
 		return $this->filters;
 	}
 
@@ -114,7 +118,8 @@ class Variable {
 	 *
 	 * @return mixed|string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$output = $context->get($this->name);
 
 		foreach ($this->filters as $filter) {

@@ -13,20 +13,24 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagUnlessTest extends TestCase {
-	public function testTrueEqlTrue() {
+class TagUnlessTest extends TestCase
+{
+	public function testTrueEqlTrue()
+	{
 		$text = " {% unless true == true %} true {% else %} false {% endunless %} ";
 		$expected = "  false  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testTrueNotEqlTrue() {
+	public function testTrueNotEqlTrue()
+	{
 		$text = " {% unless true != true %} true {% else %} false {% endunless %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testWithVariable() {
+	public function testWithVariable()
+	{
 		$text = " {% unless variable %} true {% else %} false {% endunless %} ";
 		$expected = "  false  ";
 		$this->assertTemplateResult($expected, $text, array('variable' => true));

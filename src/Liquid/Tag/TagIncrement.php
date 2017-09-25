@@ -27,7 +27,8 @@ use Liquid\Regexp;
  *
  * @author Viorel Dram
  */
-class TagIncrement extends AbstractTag {
+class TagIncrement extends AbstractTag
+{
 	/**
 	 * Name of the variable to increment
 	 *
@@ -44,7 +45,8 @@ class TagIncrement extends AbstractTag {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$syntax = new Regexp('/(' . Liquid::get('VARIABLE_NAME') . ')/');
 
 		if ($syntax->match($markup)) {
@@ -61,7 +63,8 @@ class TagIncrement extends AbstractTag {
 	 *
 	 * @return string|void
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		// If the value is not set in the environment check to see if it
 		// exists in the context, and if not set it to -1
 		if (!isset($context->environments[0][$this->toIncrement])) {

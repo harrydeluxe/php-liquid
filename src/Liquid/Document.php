@@ -17,14 +17,16 @@ use Liquid\Tag\TagExtends;
 /**
  * This class represents the entire template document.
  */
-class Document extends AbstractBlock {
+class Document extends AbstractBlock
+{
 	/**
 	 * Constructor.
 	 *
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 */
-	public function __construct(array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct(array &$tokens, FileSystem $fileSystem = null)
+	{
 		$this->fileSystem = $fileSystem;
 		$this->parse($tokens);
 	}
@@ -34,7 +36,8 @@ class Document extends AbstractBlock {
 	 *
 	 * @return string
 	 */
-	public function checkIncludes() {
+	public function checkIncludes()
+	{
 		foreach ($this->nodelist as $token) {
 			if ($token instanceof TagInclude || $token instanceof TagExtends) {
 				/** @var TagInclude|TagExtends $token */
@@ -52,13 +55,15 @@ class Document extends AbstractBlock {
 	 *
 	 * @return string
 	 */
-	protected function blockDelimiter() {
+	protected function blockDelimiter()
+	{
 		return '';
 	}
 
 	/**
 	 * Document blocks don't need to be terminated since they are not actually opened
 	 */
-	protected function assertMissingDelimitation() {
+	protected function assertMissingDelimitation()
+	{
 	}
 }

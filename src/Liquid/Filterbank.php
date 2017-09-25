@@ -15,7 +15,8 @@ namespace Liquid;
  * The filter bank is where all registered filters are stored, and where filter invocation is handled
  * it supports a variety of different filter types; objects, class, and simple methods.
  */
-class Filterbank {
+class Filterbank
+{
 	/**
 	 * The registered filter objects
 	 *
@@ -42,7 +43,8 @@ class Filterbank {
 	 *
 	 * @param $context
 	 */
-	public function __construct(Context $context) {
+	public function __construct(Context $context)
+	{
 		$this->context = $context;
 
 		$this->addFilter('\Liquid\StandardFilters');
@@ -58,7 +60,8 @@ class Filterbank {
 	 * @throws LiquidException
 	 * @return bool
 	 */
-	public function addFilter($filter) {
+	public function addFilter($filter)
+	{
 		// If the passed filter was an object, store the object for future reference.
 		if (is_object($filter)) {
 			$filter->context = $this->context;
@@ -100,7 +103,8 @@ class Filterbank {
 	 *
 	 * @return string
 	 */
-	public function invoke($name, $value, array $args = array()) {
+	public function invoke($name, $value, array $args = array())
+	{
 		// workaround for a single standard filter being a reserved keyword - we can't use overloading for static calls
 		if ($name == 'default') {
 			$name = '_default';

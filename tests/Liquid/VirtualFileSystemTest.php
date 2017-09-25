@@ -14,16 +14,19 @@ namespace Liquid;
 use Liquid\FileSystem\Virtual;
 use Liquid\Cache\File;
 
-class VirtualFileSystemTest extends TestCase {
+class VirtualFileSystemTest extends TestCase
+{
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage Not a callback
 	 */
-	public function testInvalidCallback() {
+	public function testInvalidCallback()
+	{
 		new Virtual('');
 	}
 
-	public function testReadTemplateFile() {
+	public function testReadTemplateFile()
+	{
 		$fs = new Virtual(function ($templatePath) {
 			if ($templatePath == 'foo') {
 				return "Contents of foo";
@@ -45,7 +48,8 @@ class VirtualFileSystemTest extends TestCase {
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage cannot be used with a serializing cache
 	 */
-	public function testWithFileCache() {
+	public function testWithFileCache()
+	{
 		$template = new Template();
 		$template->setFileSystem(new Virtual(function ($templatePath) {
 			return '';
@@ -56,11 +60,13 @@ class VirtualFileSystemTest extends TestCase {
 		$template->parse("Hello");
 	}
 
-	public function virtualFileSystemCallback($templatePath) {
+	public function virtualFileSystemCallback($templatePath)
+	{
 		return 'OK';
 	}
 
-	public function testWithRegularCallback() {
+	public function testWithRegularCallback()
+	{
 		$template = new Template();
 		$template->setFileSystem(new Virtual(array($this, 'virtualFileSystemCallback'), true));
 		$template->setCache(new File(array(

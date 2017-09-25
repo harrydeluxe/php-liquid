@@ -13,15 +13,18 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagBlockTest extends TestCase {
+class TagBlockTest extends TestCase
+{
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testSyntaxError() {
+	public function testSyntaxError()
+	{
 		$this->assertTemplateResult('', '{% block %}');
 	}
 
-	public function testCreateBlock() {
+	public function testCreateBlock()
+	{
 		$this->assertTemplateResult('block content', '{% block foo %}block content{% endblock %}');
 	}
 }

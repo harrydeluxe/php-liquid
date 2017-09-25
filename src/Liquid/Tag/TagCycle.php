@@ -34,7 +34,8 @@ use Liquid\FileSystem;
  *     will return
  *     one one two two
  */
-class TagCycle extends AbstractTag {
+class TagCycle extends AbstractTag
+{
 	/**
 	 * @var string The name of the cycle; if none is given one is created using the value list
 	 */
@@ -54,7 +55,8 @@ class TagCycle extends AbstractTag {
 	 *
 	 * @throws LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$simpleSyntax = new Regexp("/" . Liquid::get('QUOTED_FRAGMENT') . "/");
 		$namedSyntax = new Regexp("/(" . Liquid::get('QUOTED_FRAGMENT') . ")\s*\:\s*(.*)/");
 
@@ -75,7 +77,8 @@ class TagCycle extends AbstractTag {
 	 * @var Context $context
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$context->push();
 
 		$key = $context->get($this->name);
@@ -108,7 +111,8 @@ class TagCycle extends AbstractTag {
 	 *
 	 * @return array;
 	 */
-	private function variablesFromString($markup) {
+	private function variablesFromString($markup)
+	{
 		$regexp = new Regexp('/\s*(' . Liquid::get('QUOTED_FRAGMENT') . ')\s*/');
 		$parts = explode(',', $markup);
 		$result = array();

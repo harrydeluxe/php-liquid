@@ -13,26 +13,31 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagIncrementTest extends TestCase {
+class TagIncrementTest extends TestCase
+{
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testSyntaxError() {
+	public function testSyntaxError()
+	{
 		$this->assertTemplateResult('', '{% increment %}');
 	}
 
 	/**
 	 * Undefined variable will become 0
 	 */
-	public function testIncrementNonExistingVariable() {
+	public function testIncrementNonExistingVariable()
+	{
 		$this->assertTemplateResult(0, '{% increment no_such_var %}{{ no_such_var }}');
 	}
 
-	public function testIncrementVariable() {
+	public function testIncrementVariable()
+	{
 		$this->assertTemplateResult(42, '{% increment var %}{{ var }}', array('var' => 41));
 	}
 
-	public function testIncrementNestedVariable() {
+	public function testIncrementNestedVariable()
+	{
 		$this->assertTemplateResult(42, '{% for var in vars %}{% increment var %}{{ var }}{% endfor %}', array('vars' => array(41)));
 	}
 }

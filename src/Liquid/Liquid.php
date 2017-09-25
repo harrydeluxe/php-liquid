@@ -14,7 +14,8 @@ namespace Liquid;
 /**
  * Liquid for PHP.
  */
-class Liquid {
+class Liquid
+{
 	/**
 	 * We cannot make settings constants, because we cannot create compound
 	 * constants in PHP (before 5.6).
@@ -80,7 +81,8 @@ class Liquid {
 	 *
 	 * @return string
 	 */
-	public static function get($key) {
+	public static function get($key)
+	{
 		// backward compatibility
 		if ($key === 'ALLOWED_VARIABLE_CHARS') {
 			return substr(self::$config['VARIABLE_NAME'], 0, -1);
@@ -110,7 +112,8 @@ class Liquid {
 	 * @param string $key
 	 * @param string $value
 	 */
-	public static function set($key, $value) {
+	public static function set($key, $value)
+	{
 		// backward compatibility
 		if ($key === 'ALLOWED_VARIABLE_CHARS') {
 			$key = 'VARIABLE_NAME';
@@ -126,7 +129,8 @@ class Liquid {
 	 *
 	 * @return array
 	 */
-	public static function arrayFlatten($array) {
+	public static function arrayFlatten($array)
+	{
 		$return = array();
 
 		foreach ($array as $element) {

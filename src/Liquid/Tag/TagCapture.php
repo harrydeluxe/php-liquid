@@ -24,7 +24,8 @@ use Liquid\Regexp;
  *
  *     {% capture foo %} bar {% endcapture %}
  */
-class TagCapture extends AbstractBlock {
+class TagCapture extends AbstractBlock
+{
 	/**
 	 * The variable to assign to
 	 *
@@ -41,7 +42,8 @@ class TagCapture extends AbstractBlock {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$syntaxRegexp = new Regexp('/(\w+)/');
 
 		if ($syntaxRegexp->match($markup)) {
@@ -59,7 +61,8 @@ class TagCapture extends AbstractBlock {
 	 *
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$output = parent::render($context);
 
 		$context->set($this->to, $output);

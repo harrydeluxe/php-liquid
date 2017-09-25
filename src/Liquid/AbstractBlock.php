@@ -14,7 +14,8 @@ namespace Liquid;
 /**
  * Base class for blocks.
  */
-class AbstractBlock extends AbstractTag {
+class AbstractBlock extends AbstractTag
+{
 	/**
 	 * @var AbstractTag[]
 	 */
@@ -23,7 +24,8 @@ class AbstractBlock extends AbstractTag {
 	/**
 	 * @return array
 	 */
-	public function getNodelist() {
+	public function getNodelist()
+	{
 		return $this->nodelist;
 	}
 
@@ -35,7 +37,8 @@ class AbstractBlock extends AbstractTag {
 	 * @throws \Liquid\LiquidException
 	 * @return void
 	 */
-	public function parse(array &$tokens) {
+	public function parse(array &$tokens)
+	{
 		$startRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '/');
 		$tagRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '\s*(\w+)\s*(.*)?' . Liquid::get('TAG_END') . '$/');
 		$variableStartRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . '/');
@@ -91,7 +94,8 @@ class AbstractBlock extends AbstractTag {
 	 *
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		return $this->renderAll($this->nodelist, $context);
 	}
 
@@ -103,7 +107,8 @@ class AbstractBlock extends AbstractTag {
 	 *
 	 * @return string
 	 */
-	protected function renderAll(array $list, Context $context) {
+	protected function renderAll(array $list, Context $context)
+	{
 		$result = '';
 
 		foreach ($list as $token) {
@@ -133,7 +138,8 @@ class AbstractBlock extends AbstractTag {
 	/**
 	 * An action to execute when the end tag is reached
 	 */
-	protected function endTag() {
+	protected function endTag()
+	{
 		// Do nothing by default
 	}
 
@@ -146,7 +152,8 @@ class AbstractBlock extends AbstractTag {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	protected function unknownTag($tag, $params, array $tokens) {
+	protected function unknownTag($tag, $params, array $tokens)
+	{
 		switch ($tag) {
 			case 'else':
 				throw new LiquidException($this->blockName() . " does not expect else tag");
@@ -164,7 +171,8 @@ class AbstractBlock extends AbstractTag {
 	 * @throws \Liquid\LiquidException
 	 * @return bool
 	 */
-	protected function assertMissingDelimitation() {
+	protected function assertMissingDelimitation()
+	{
 		throw new LiquidException($this->blockName() . " tag was never closed");
 	}
 
@@ -173,7 +181,8 @@ class AbstractBlock extends AbstractTag {
 	 *
 	 * @return string
 	 */
-	protected function blockDelimiter() {
+	protected function blockDelimiter()
+	{
 		return "end" . $this->blockName();
 	}
 
@@ -182,7 +191,8 @@ class AbstractBlock extends AbstractTag {
 	 *
 	 * @return string
 	 */
-	private function blockName() {
+	private function blockName()
+	{
 		$reflection = new \ReflectionClass($this);
 		return str_replace('tag', '', strtolower($reflection->getShortName()));
 	}
@@ -195,7 +205,8 @@ class AbstractBlock extends AbstractTag {
 	 * @throws \Liquid\LiquidException
 	 * @return Variable
 	 */
-	private function createVariable($token) {
+	private function createVariable($token)
+	{
 		$variableRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . '(.*)' . Liquid::get('VARIABLE_END') . '$/');
 		if ($variableRegexp->match($token)) {
 			return new Variable($variableRegexp->matches[1]);

@@ -14,7 +14,8 @@ namespace Liquid;
 /**
  * Base class for blocks that make logical decisions.
  */
-class Decision extends AbstractBlock {
+class Decision extends AbstractBlock
+{
 	/**
 	 * The current left variable to compare
 	 *
@@ -37,7 +38,8 @@ class Decision extends AbstractBlock {
 	 * @throws \Liquid\LiquidException
 	 * @return string
 	 */
-	private function stringValue($value) {
+	private function stringValue($value)
+	{
 		// Objects should have a __toString method to get a value to compare to
 		if (is_object($value)) {
 			if (method_exists($value, '__toString')) {
@@ -66,7 +68,8 @@ class Decision extends AbstractBlock {
 	 *
 	 * @return bool
 	 */
-	protected function equalVariables($left, $right, Context $context) {
+	protected function equalVariables($left, $right, Context $context)
+	{
 		$left = $this->stringValue($context->get($left));
 		$right = $this->stringValue($context->get($right));
 
@@ -84,7 +87,8 @@ class Decision extends AbstractBlock {
 	 * @throws \Liquid\LiquidException
 	 * @return bool
 	 */
-	protected function interpretCondition($left, $right, $op = null, Context $context) {
+	protected function interpretCondition($left, $right, $op = null, Context $context)
+	{
 		if (is_null($op)) {
 			$value = $this->stringValue($context->get($left));
 			return $value;

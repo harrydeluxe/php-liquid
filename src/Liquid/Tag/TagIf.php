@@ -28,7 +28,8 @@ use Liquid\Regexp;
  *     will return:
  *     YES
  */
-class TagIf extends Decision {
+class TagIf extends Decision
+{
 	/**
 	 * Array holding the nodes to render for each logical block
 	 *
@@ -50,7 +51,8 @@ class TagIf extends Decision {
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$this->nodelist = & $this->nodelistHolders[count($this->blocks)];
 
 		array_push($this->blocks, array('if', $markup, &$this->nodelist));
@@ -65,7 +67,8 @@ class TagIf extends Decision {
 	 * @param array $params
 	 * @param array $tokens
 	 */
-	public function unknownTag($tag, $params, array $tokens) {
+	public function unknownTag($tag, $params, array $tokens)
+	{
 		if ($tag == 'else' || $tag == 'elsif') {
 			// Update reference to nodelistHolder for this block
 			$this->nodelist = & $this->nodelistHolders[count($this->blocks) + 1];
@@ -85,7 +88,8 @@ class TagIf extends Decision {
 	 * @throws \Liquid\LiquidException
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$context->push();
 
 		$logicalRegex = new Regexp('/\s+(and|or)\s+/');

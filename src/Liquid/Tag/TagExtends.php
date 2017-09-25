@@ -27,7 +27,8 @@ use Liquid\Template;
  *
  *     {% extends "base" %}
  */
-class TagExtends extends AbstractTag {
+class TagExtends extends AbstractTag
+{
 	/**
 	 * @var string The name of the template
 	 */
@@ -52,7 +53,8 @@ class TagExtends extends AbstractTag {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\')?/');
 
 		if ($regex->match($markup) && isset($regex->matches[1])) {
@@ -69,7 +71,8 @@ class TagExtends extends AbstractTag {
 	 *
 	 * @return array
 	 */
-	private function findBlocks(array $tokens) {
+	private function findBlocks(array $tokens)
+	{
 		$blockstartRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '\s*block (\w+)\s*(.*)?' . Liquid::get('TAG_END') . '$/');
 		$blockendRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '\s*endblock\s*?' . Liquid::get('TAG_END') . '$/');
 
@@ -99,7 +102,8 @@ class TagExtends extends AbstractTag {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function parse(array &$tokens) {
+	public function parse(array &$tokens)
+	{
 		if ($this->fileSystem === null) {
 			throw new LiquidException("No file system");
 		}
@@ -174,7 +178,8 @@ class TagExtends extends AbstractTag {
 	 *
 	 * @return boolean
 	 */
-	public function checkIncludes() {
+	public function checkIncludes()
+	{
 		$cache = Template::getCache();
 
 		if ($this->document->checkIncludes() == true) {
@@ -197,7 +202,8 @@ class TagExtends extends AbstractTag {
 	 *
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$context->push();
 		$result = $this->document->render($context);
 		$context->pop();

@@ -18,7 +18,8 @@ use Liquid\FileSystem;
 /**
  * Quickly create a table from a collection
  */
-class TagIfchanged extends AbstractBlock {
+class TagIfchanged extends AbstractBlock
+{
 	/**
 	 * The last value
 	 *
@@ -35,7 +36,8 @@ class TagIfchanged extends AbstractBlock {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		parent::__construct($markup, $tokens, $fileSystem);
 	}
 
@@ -46,7 +48,8 @@ class TagIfchanged extends AbstractBlock {
 	 *
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$output = parent::render($context);
 
 		if ($this->lastValue == $output) {

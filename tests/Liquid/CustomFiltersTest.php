@@ -11,7 +11,8 @@
 
 namespace Liquid;
 
-class CustomFiltersTest extends TestCase {
+class CustomFiltersTest extends TestCase
+{
 	/**
 	 * The current context
 	 *
@@ -19,13 +20,15 @@ class CustomFiltersTest extends TestCase {
 	 */
 	public $context;
 
-	protected function setup() {
+	protected function setup()
+	{
 		parent::setUp();
 
 		$this->context = new Context();
 	}
 
-	public function testSortKey() {
+	public function testSortKey()
+	{
 		$data = array(
 			array(
 				array(),

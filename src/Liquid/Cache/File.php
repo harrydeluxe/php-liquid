@@ -17,7 +17,8 @@ use Liquid\LiquidException;
 /**
  * Implements cache stored in files.
  */
-class File extends Cache {
+class File extends Cache
+{
 	/**
 	 * Constructor.
 	 *
@@ -27,7 +28,8 @@ class File extends Cache {
 	 *
 	 * @throws LiquidException if Cachedir not exists.
 	 */
-	public function __construct(array $options = array()) {
+	public function __construct(array $options = array())
+	{
 		parent::__construct($options);
 
 		if (isset($options['cache_dir']) && is_writable($options['cache_dir'])) {
@@ -40,7 +42,8 @@ class File extends Cache {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function read($key, $unserialize = true) {
+	public function read($key, $unserialize = true)
+	{
 		if (!$this->exists($key)) {
 			return false;
 		}
@@ -55,7 +58,8 @@ class File extends Cache {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function exists($key) {
+	public function exists($key)
+	{
 		$cacheFile = $this->path . $this->prefix . $key;
 
 		if (!file_exists($cacheFile) || filemtime($cacheFile) + $this->expire < time()) {
@@ -68,7 +72,8 @@ class File extends Cache {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function write($key, $value, $serialize = true) {
+	public function write($key, $value, $serialize = true)
+	{
 		$bytes = file_put_contents($this->path . $this->prefix . $key, $serialize ? serialize($value) : $value);
 		$this->gc();
 
@@ -78,7 +83,8 @@ class File extends Cache {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function flush($expiredOnly = false) {
+	public function flush($expiredOnly = false)
+	{
 		foreach (glob($this->path . $this->prefix . '*') as $file) {
 			if ($expiredOnly) {
 				if (filemtime($file) + $this->expire < time()) {
@@ -93,7 +99,8 @@ class File extends Cache {
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function gc() {
+	protected function gc()
+	{
 		$this->flush(true);
 	}
 }

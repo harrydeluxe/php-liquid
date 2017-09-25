@@ -19,10 +19,12 @@ use Liquid\FileSystem\Virtual;
 /**
  * @see TagExtends
  */
-class TagExtendsTest extends TestCase {
+class TagExtendsTest extends TestCase
+{
 	private $fs;
 
-	protected function setUp() {
+	protected function setUp()
+	{
 		$this->fs = new Virtual(function ($templatePath) {
 			if ($templatePath == 'base') {
 				return "{% block content %}{% endblock %}{% block footer %}{% endblock %}";
@@ -34,12 +36,14 @@ class TagExtendsTest extends TestCase {
 		});
 	}
 
-	protected function tearDown() {
+	protected function tearDown()
+	{
 		// PHP goes nuts unless we unset it
 		unset($this->fs);
 	}
 
-	public function testBasicExtends() {
+	public function testBasicExtends()
+	{
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 		$template->parse("{% extends 'base' %}{% block content %}{{ hello }}{% endblock %}");
@@ -47,7 +51,8 @@ class TagExtendsTest extends TestCase {
 		$this->assertEquals("Hello!", $output);
 	}
 
-	public function testDefaultContentExtends() {
+	public function testDefaultContentExtends()
+	{
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 		$template->parse("{% block content %}{{ hello }}{% endblock %}\n{% extends 'sub-base' %}");
@@ -55,7 +60,8 @@ class TagExtendsTest extends TestCase {
 		$this->assertEquals("Hello!\n Boo! ", $output);
 	}
 
-	public function testDeepExtends() {
+	public function testDeepExtends()
+	{
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 		$template->parse('{% extends "sub-base" %}{% block content %}{{ hello }}{% endblock %}{% block footer %} I am a footer.{% endblock %}');
@@ -64,7 +70,8 @@ class TagExtendsTest extends TestCase {
 		$this->assertEquals("Hello! I am a footer.", $output);
 	}
 
-	public function testWithCache() {
+	public function testWithCache()
+	{
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 		$template->setCache(new Local());
@@ -81,7 +88,8 @@ class TagExtendsTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntaxNoTemplateName() {
+	public function testInvalidSyntaxNoTemplateName()
+	{
 		$template = new Template();
 		$template->parse("{% extends %}");
 	}
@@ -89,7 +97,8 @@ class TagExtendsTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntaxNotQuotedTemplateName() {
+	public function testInvalidSyntaxNotQuotedTemplateName()
+	{
 		$template = new Template();
 		$template->parse("{% extends base %}");
 	}
@@ -97,7 +106,8 @@ class TagExtendsTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntaxEmptyTemplateName() {
+	public function testInvalidSyntaxEmptyTemplateName()
+	{
 		$template = new Template();
 		$template->parse("{% extends '' %}");
 	}
@@ -105,7 +115,8 @@ class TagExtendsTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntaxInvalidKeyword() {
+	public function testInvalidSyntaxInvalidKeyword()
+	{
 		$template = new Template();
 		$template->parse("{% extends 'base' nothing-should-be-here %}");
 	}

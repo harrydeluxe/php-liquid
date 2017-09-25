@@ -13,8 +13,10 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagRawTest extends TestCase {
-	public function testRaw() {
+class TagRawTest extends TestCase
+{
+	public function testRaw()
+	{
 		$this->assertTemplateResult(
 			'{{ y | plus: x }}{{{hello}}} is equal to 11.',
 			'{% raw %}{{ y | plus: x }}{{{hello}}}{% endraw %} is equal to 11.',

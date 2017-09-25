@@ -25,7 +25,8 @@ use Liquid\Regexp;
  *
  *     {% case condition %}{% when foo %} foo {% else %} bar {% endcase %}
  */
-class TagCase extends Decision {
+class TagCase extends Decision
+{
 	/**
 	 * Stack of nodelists
 	 *
@@ -63,7 +64,8 @@ class TagCase extends Decision {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$this->nodelists = array();
 		$this->elseNodelist = array();
 
@@ -81,7 +83,8 @@ class TagCase extends Decision {
 	/**
 	 * Pushes the last nodelist onto the stack
 	 */
-	public function endTag() {
+	public function endTag()
+	{
 		$this->pushNodelist();
 	}
 
@@ -94,7 +97,8 @@ class TagCase extends Decision {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function unknownTag($tag, $params, array $tokens) {
+	public function unknownTag($tag, $params, array $tokens)
+	{
 		$whenSyntaxRegexp = new Regexp('/' . Liquid::get('QUOTED_FRAGMENT') . '/');
 
 		switch ($tag) {
@@ -125,7 +129,8 @@ class TagCase extends Decision {
 	/**
 	 * Pushes the current right value and nodelist into the nodelist stack
 	 */
-	public function pushNodelist() {
+	public function pushNodelist()
+	{
 		if (!is_null($this->right)) {
 			$this->nodelists[] = array($this->right, $this->nodelist);
 		}
@@ -138,7 +143,8 @@ class TagCase extends Decision {
 	 *
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$output = ''; // array();
 		$runElseBlock = true;
 

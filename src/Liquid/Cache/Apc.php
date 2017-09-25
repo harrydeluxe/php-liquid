@@ -19,7 +19,8 @@ use Liquid\LiquidException;
  *
  * @codeCoverageIgnore
  */
-class Apc extends Cache {
+class Apc extends Cache
+{
 	/**
 	 * Constructor.
 	 *
@@ -29,7 +30,8 @@ class Apc extends Cache {
 	 *
 	 * @throws LiquidException if APC cache extension is not loaded or is disabled.
 	 */
-	public function __construct(array $options = array()) {
+	public function __construct(array $options = array())
+	{
 		parent::__construct($options);
 
 		if (!function_exists('apc_fetch')) {
@@ -40,14 +42,16 @@ class Apc extends Cache {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function read($key, $unserialize = true) {
+	public function read($key, $unserialize = true)
+	{
 		return apc_fetch($this->prefix . $key);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function exists($key) {
+	public function exists($key)
+	{
 		apc_fetch($this->prefix . $key, $success);
 		return (bool) $success;
 	}
@@ -55,14 +59,16 @@ class Apc extends Cache {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function write($key, $value, $serialize = true) {
+	public function write($key, $value, $serialize = true)
+	{
 		return apc_store($this->prefix . $key, $value, $this->expire);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function flush($expiredOnly = false) {
+	public function flush($expiredOnly = false)
+	{
 		return apc_clear_cache('user');
 	}
 }
