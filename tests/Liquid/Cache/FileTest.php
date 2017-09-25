@@ -13,8 +13,7 @@ namespace Liquid\Cache;
 
 use Liquid\TestCase;
 
-class FileTest extends TestCase
-{
+class FileTest extends TestCase {
 	/** @var \Liquid\Cache\File */
 	protected $cache;
 	protected $cacheDir;

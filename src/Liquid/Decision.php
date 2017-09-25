@@ -14,8 +14,7 @@ namespace Liquid;
 /**
  * Base class for blocks that make logical decisions.
  */
-class Decision extends AbstractBlock
-{
+class Decision extends AbstractBlock {
 	/**
 	 * The current left variable to compare
 	 *
@@ -95,11 +94,9 @@ class Decision extends AbstractBlock
 		if ($right == 'empty' && is_array($context->get($left))) {
 			$left = count($context->get($left));
 			$right = 0;
-
 		} elseif ($left == 'empty' && is_array($context->get($right))) {
 			$right = count($context->get($right));
 			$left = 0;
-
 		} else {
 			$left = $context->get($left);
 			$right = $context->get($right);

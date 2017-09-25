@@ -20,8 +20,7 @@ namespace Liquid;
  *     $tpl->parse(template_source);
  *     $tpl->render(array('foo'=>1, 'bar'=>2);
  */
-class Template
-{
+class Template {
 	/**
 	 * @var Document The root of the node tree
 	 */

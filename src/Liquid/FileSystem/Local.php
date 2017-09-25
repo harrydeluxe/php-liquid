@@ -22,8 +22,7 @@ use Liquid\Liquid;
  *
  * For security reasons, template paths are only allowed to contain letters, numbers, and underscore.
  */
-class Local implements FileSystem
-{
+class Local implements FileSystem {
 	/**
 	 * The root path
 	 *

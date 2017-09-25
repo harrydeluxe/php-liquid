@@ -33,8 +33,7 @@ use Liquid\Regexp;
  *     {%for i in (1..variable)%} {{i}} {%endfor%}
  *
  */
-class TagFor extends AbstractBlock
-{
+class TagFor extends AbstractBlock {
 	/**
 	 * @var array The collection to loop over
 	 */
@@ -70,14 +69,11 @@ class TagFor extends AbstractBlock
 		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::get('VARIABLE_NAME') . ')/');
 
 		if ($syntaxRegexp->match($markup)) {
-
 			$this->variableName = $syntaxRegexp->matches[1];
 			$this->collectionName = $syntaxRegexp->matches[2];
 			$this->name = $syntaxRegexp->matches[1] . '-' . $syntaxRegexp->matches[2];
 			$this->extractAttributes($markup);
-
 		} else {
-
 			$syntaxRegexp = new Regexp('/(\w+)\s+in\s+\((\d+|' . Liquid::get('VARIABLE_NAME') . ')\s*\.\.\s*(\d+|' . Liquid::get('VARIABLE_NAME') . ')\)/');
 			if ($syntaxRegexp->match($markup)) {
 				$this->type = 'digit';
@@ -100,12 +96,11 @@ class TagFor extends AbstractBlock
 	 * @return null|string
 	 */
 	public function render(Context $context) {
-
 		if (!isset($context->registers['for'])) {
 			$context->registers['for'] = array();
 		}
 
-		switch ($this->type){
+		switch ($this->type) {
 
 			case 'collection':
 
@@ -193,7 +188,6 @@ class TagFor extends AbstractBlock
 				$index = 0;
 				$length = $range[1] - $range[0];
 				for ($i=$range[0]; $i<=$range[1]; $i++) {
-
 					$context->set($this->variableName, $i);
 					$context->set('forloop', array(
 						'name'		=> $this->name,

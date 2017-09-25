@@ -31,8 +31,7 @@ use Liquid\Regexp;
  *
  */
 
-class TagPaginate extends AbstractBlock
-{
+class TagPaginate extends AbstractBlock {
 	/**
 	 * @var array The collection to paginate
 	 */
@@ -81,7 +80,6 @@ class TagPaginate extends AbstractBlock
 	 *
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
-
 		parent::__construct($markup, $tokens, $fileSystem);
 
 		$syntax = new Regexp('/(' . Liquid::get('VARIABLE_NAME') . ')\s+by\s+(\w+)/');
@@ -93,7 +91,6 @@ class TagPaginate extends AbstractBlock
 		} else {
 			throw new LiquidException("Syntax Error - Valid syntax: paginate [collection] by [items]");
 		}
-
 	}
 
 	/**
@@ -105,8 +102,7 @@ class TagPaginate extends AbstractBlock
 	 *
 	 */
 	public function render(Context $context) {
-
-		$this->currentPage = ( is_numeric($context->get('page')) ) ? $context->get('page') : 1;
+		$this->currentPage = (is_numeric($context->get('page'))) ? $context->get('page') : 1;
 		$this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
 		$this->collection = $context->get($this->collectionName);
 		if ($this->collection instanceof \Traversable) {
@@ -132,13 +128,12 @@ class TagPaginate extends AbstractBlock
 			'items' => $this->collectionSize
 		);
 
-		if ( $this->currentPage != 1 ) {
+		if ($this->currentPage != 1) {
 			$paginate['previous']['title'] = 'Previous';
 			$paginate['previous']['url'] = $this->currentUrl($context) . '?page=' . ($this->currentPage - 1);
-
 		}
 
-		if ( $this->currentPage != $this->totalPages ) {
+		if ($this->currentPage != $this->totalPages) {
 			$paginate['next']['title'] = 'Next';
 			$paginate['next']['url'] = $this->currentUrl($context) . '?page=' . ($this->currentPage + 1);
 		}
@@ -146,7 +141,6 @@ class TagPaginate extends AbstractBlock
 		$context->set('paginate', $paginate);
 
 		return parent::render($context);
-
 	}
 
 	/**
@@ -158,15 +152,14 @@ class TagPaginate extends AbstractBlock
 	 *
 	 */
 	public function currentUrl($context) {
-
 		$uri = explode('?', $context->get('REQUEST_URI'));
 
 		$url = 'http';
-		if ($context->get('HTTPS') == 'on') $url .= 's';
+		if ($context->get('HTTPS') == 'on') {
+			$url .= 's';
+		}
 		$url .= '://' . $context->get('HTTP_HOST') . reset($uri);
 
 		return $url;
-
 	}
-
 }

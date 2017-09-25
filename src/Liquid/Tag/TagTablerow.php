@@ -21,8 +21,7 @@ use Liquid\Regexp;
 /**
  * Quickly create a table from a collection
  */
-class TagTablerow extends AbstractBlock
-{
+class TagTablerow extends AbstractBlock {
 	/**
 	 * The variable name of the table tag
 	 *

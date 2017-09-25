@@ -18,8 +18,7 @@ use Liquid\Cache\Local;
 use Liquid\FileSystem\Virtual;
 use Liquid\TestFileSystem;
 
-class TagIncludeTest extends TestCase
-{
+class TagIncludeTest extends TestCase {
 	private $fs;
 
 	protected function setUp() {
@@ -130,7 +129,6 @@ class TagIncludeTest extends TestCase
 	 * @expectedExceptionMessage Use index operator
 	 */
 	public function testIncludePassArrayWithoutIndex() {
-
 		$template = new Template();
 		$template->setFileSystem(TestFileSystem::fromArray(array(
 			'inner' => "[{{ other }}]",
@@ -142,7 +140,6 @@ class TagIncludeTest extends TestCase
 	}
 
 	public function testIncludePassArrayWithIndex() {
-
 		$template = new Template();
 		$template->setFileSystem(TestFileSystem::fromArray(array(
 			'inner' => "[{{ other[0] }}]",

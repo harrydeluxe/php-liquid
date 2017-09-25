@@ -14,8 +14,7 @@ namespace Liquid;
 /**
  * Base class for tags.
  */
-abstract class AbstractTag
-{
+abstract class AbstractTag {
 	/**
 	 * The markup for the tag
 	 *

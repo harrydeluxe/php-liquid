@@ -27,8 +27,7 @@ use Liquid\Template;
  *
  *     {% extends "base" %}
  */
-class TagExtends extends AbstractTag
-{
+class TagExtends extends AbstractTag {
 	/**
 	 * @var string The name of the template
 	 */
@@ -81,7 +80,7 @@ class TagExtends extends AbstractTag
 			if ($blockstartRegexp->match($token)) {
 				$name = $blockstartRegexp->matches[1];
 				$b[$name] = array();
-			} else if ($blockendRegexp->match($token)) {
+			} elseif ($blockendRegexp->match($token)) {
 				$name = null;
 			} else {
 				if ($name !== null) {
@@ -112,11 +111,12 @@ class TagExtends extends AbstractTag
 		$maintokens = Template::tokenize($source);
 
 		$eRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '\s*extends (.*)?' . Liquid::get('TAG_END') . '$/');
-		foreach ($maintokens as $maintoken)
+		foreach ($maintokens as $maintoken) {
 			if ($eRegexp->match($maintoken)) {
 				$m = $eRegexp->matches[1];
 				break;
 			}
+		}
 
 		if (isset($m)) {
 			$rest = array_merge($maintokens, $tokens);
@@ -142,7 +142,6 @@ class TagExtends extends AbstractTag
 							array_push($rest, $item);
 						}
 					}
-
 				}
 				if (!$keep) {
 					array_push($rest, $maintokens[$i]);

@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class LocalFileSystemTest extends TestCase
-{
+class LocalFileSystemTest extends TestCase {
 	protected $root;
 
 	protected function setUp() {

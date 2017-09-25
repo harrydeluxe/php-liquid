@@ -17,8 +17,7 @@ use Liquid\LiquidException;
 /**
  * This implements a virtual file system with actual code used to find files injected from outside thus achieving inversion of control.
  */
-class Virtual implements FileSystem
-{
+class Virtual implements FileSystem {
 	/**
 	 * @var callable
 	 */

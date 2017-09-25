@@ -32,8 +32,7 @@ namespace Liquid;
  * Your drop can either implement the methods sans any parameters or implement the beforeMethod(name) method which is a
  * catch all.
  */
-abstract class Drop
-{
+abstract class Drop {
 	/**
 	 * @var Context
 	 */

@@ -14,8 +14,7 @@ namespace Liquid\Tag;
 use Liquid\TestCase;
 use Liquid\Template;
 
-class TagCycleTest extends TestCase
-{
+class TagCycleTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */

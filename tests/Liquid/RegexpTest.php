@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class RegexpTest extends TestCase
-{
+class RegexpTest extends TestCase {
 	/** @var Regexp */
 	protected $regexp;
 

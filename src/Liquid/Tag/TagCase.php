@@ -25,8 +25,7 @@ use Liquid\Regexp;
  *
  *     {% case condition %}{% when foo %} foo {% else %} bar {% endcase %}
  */
-class TagCase extends Decision
-{
+class TagCase extends Decision {
 	/**
 	 * Stack of nodelists
 	 *
@@ -105,7 +104,6 @@ class TagCase extends Decision
 					$this->pushNodelist();
 					$this->right = $whenSyntaxRegexp->matches[0];
 					$this->nodelist = array();
-
 				} else {
 					throw new LiquidException("Syntax Error in tag 'case' - Valid when condition: when [condition]"); // harry
 				}

@@ -34,8 +34,7 @@ use Liquid\FileSystem;
  *     will return
  *     one one two two
  */
-class TagCycle extends AbstractTag
-{
+class TagCycle extends AbstractTag {
 	/**
 	 * @var string The name of the cycle; if none is given one is created using the value list
 	 */

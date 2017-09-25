@@ -11,14 +11,13 @@
 
 namespace Liquid;
 
-class CustomFiltersTest extends TestCase
-{
+class CustomFiltersTest extends TestCase {
 	/**
 	 * The current context
 	 *
 	 * @var Context
 	 */
-	var $context;
+	public $context;
 
 	protected function setup() {
 		parent::setUp();
@@ -42,5 +41,4 @@ class CustomFiltersTest extends TestCase
 			$this->assertEquals($item[1], CustomFilters::sort_key($item[0]));
 		}
 	}
-
 }

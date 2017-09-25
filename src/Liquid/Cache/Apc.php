@@ -19,8 +19,7 @@ use Liquid\LiquidException;
  *
  * @codeCoverageIgnore
  */
-class Apc extends Cache
-{
+class Apc extends Cache {
 	/**
 	 * Constructor.
 	 *
@@ -33,8 +32,9 @@ class Apc extends Cache
 	public function __construct(array $options = array()) {
 		parent::__construct($options);
 
-		if (!function_exists('apc_fetch'))
+		if (!function_exists('apc_fetch')) {
 			throw new LiquidException(get_class($this).' requires PHP apc extension or similar to be loaded.');
+		}
 	}
 
 	/**

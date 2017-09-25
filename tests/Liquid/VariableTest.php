@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class VariableTest extends TestCase
-{
+class VariableTest extends TestCase {
 	public function testVariable() {
 		$var = new Variable('hello');
 		$this->assertEquals('hello', $var->getName());
@@ -106,4 +105,3 @@ class VariableTest extends TestCase
 		$this->assertEquals('test.test', $var->getName());
 	}
 }
-

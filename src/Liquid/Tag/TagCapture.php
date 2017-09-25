@@ -24,8 +24,7 @@ use Liquid\Regexp;
  *
  *     {% capture foo %} bar {% endcapture %}
  */
-class TagCapture extends AbstractBlock
-{
+class TagCapture extends AbstractBlock {
 	/**
 	 * The variable to assign to
 	 *

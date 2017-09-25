@@ -26,8 +26,7 @@ use Liquid\Context;
  *     {% assign var = var %}
  *     {% assign var = "hello" | upcase %}
  */
-class TagAssign extends AbstractTag
-{
+class TagAssign extends AbstractTag {
 	/**
 	 * @var string The variable to assign from
 	 */

@@ -13,8 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagIfTest extends TestCase
-{
+class TagIfTest extends TestCase {
 	public function testTrueEqlTrue() {
 		$text = " {% if true == true %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
@@ -238,6 +237,4 @@ class TagIfTest extends TestCase
 	public function testSyntaxErrorUnknown() {
 		$this->assertTemplateResult('', '{% unknown-tag %}');
 	}
-
-
 }

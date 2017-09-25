@@ -28,8 +28,7 @@ use Liquid\Regexp;
  *     will return:
  *     YES
  */
-class TagIf extends Decision
-{
+class TagIf extends Decision {
 	/**
 	 * Array holding the nodes to render for each logical block
 	 *
@@ -73,7 +72,6 @@ class TagIf extends Decision
 			$this->nodelistHolders[count($this->blocks) + 1] = array();
 
 			array_push($this->blocks, array($tag, $params, &$this->nodelist));
-
 		} else {
 			parent::unknownTag($tag, $params, $tokens);
 		}
@@ -137,7 +135,6 @@ class TagIf extends Decision
 							$display = ($display || $this->interpretCondition($conditions[$k + 1]['left'], $conditions[$k + 1]['right'], $conditions[$k + 1]['operator'], $context));
 						}
 					}
-
 				} else {
 					// If statement is a single condition
 					$display = $this->interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);

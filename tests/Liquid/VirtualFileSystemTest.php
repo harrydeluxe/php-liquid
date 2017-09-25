@@ -14,8 +14,7 @@ namespace Liquid;
 use Liquid\FileSystem\Virtual;
 use Liquid\Cache\File;
 
-class VirtualFileSystemTest extends TestCase
-{
+class VirtualFileSystemTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage Not a callback

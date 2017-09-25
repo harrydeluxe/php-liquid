@@ -14,8 +14,7 @@ namespace Liquid\Cache;
 use Liquid\TestCase;
 use \Liquid\Cache\Local;
 
-class LocalTest extends TestCase
-{
+class LocalTest extends TestCase {
 	/** @var \Liquid\Cache\Local */
 	protected $cache;
 

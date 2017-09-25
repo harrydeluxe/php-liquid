@@ -14,8 +14,7 @@ namespace Liquid;
 /**
  * Implements a template variable.
  */
-class Variable
-{
+class Variable {
 	/**
 	 * @var array The filters to execute on the variable
 	 */
@@ -61,7 +60,6 @@ class Variable
 
 				$this->filters[] = array($filtername, $matches);
 			}
-
 		} else {
 			$this->filters = array();
 		}

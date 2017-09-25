@@ -17,8 +17,7 @@ use Liquid\LiquidException;
 /**
  * Implements cache stored in files.
  */
-class File extends Cache
-{
+class File extends Cache {
 	/**
 	 * Constructor.
 	 *
@@ -42,8 +41,9 @@ class File extends Cache
 	 * {@inheritdoc}
 	 */
 	public function read($key, $unserialize = true) {
-		if (!$this->exists($key))
+		if (!$this->exists($key)) {
 			return false;
+		}
 
 		if ($unserialize) {
 			return unserialize(file_get_contents($this->path . $this->prefix . $key));

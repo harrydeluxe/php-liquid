@@ -19,8 +19,7 @@ use Liquid\FileSystem\Virtual;
 /**
  * @see TagExtends
  */
-class TagExtendsTest extends TestCase
-{
+class TagExtendsTest extends TestCase {
 	private $fs;
 
 	protected function setUp() {
@@ -40,8 +39,7 @@ class TagExtendsTest extends TestCase
 		unset($this->fs);
 	}
 
-	public function testBasicExtends()
-	{
+	public function testBasicExtends() {
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 		$template->parse("{% extends 'base' %}{% block content %}{{ hello }}{% endblock %}");
@@ -49,8 +47,7 @@ class TagExtendsTest extends TestCase
 		$this->assertEquals("Hello!", $output);
 	}
 
-	public function testDefaultContentExtends()
-	{
+	public function testDefaultContentExtends() {
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 		$template->parse("{% block content %}{{ hello }}{% endblock %}\n{% extends 'sub-base' %}");
@@ -58,8 +55,7 @@ class TagExtendsTest extends TestCase
 		$this->assertEquals("Hello!\n Boo! ", $output);
 	}
 
-	public function testDeepExtends()
-	{
+	public function testDeepExtends() {
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 		$template->parse('{% extends "sub-base" %}{% block content %}{{ hello }}{% endblock %}{% block footer %} I am a footer.{% endblock %}');

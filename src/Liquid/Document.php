@@ -17,8 +17,7 @@ use Liquid\Tag\TagExtends;
 /**
  * This class represents the entire template document.
  */
-class Document extends AbstractBlock
-{
+class Document extends AbstractBlock {
 	/**
 	 * Constructor.
 	 *

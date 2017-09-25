@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class ParsingQuirksTest extends TestCase
-{
+class ParsingQuirksTest extends TestCase {
 	public function testErrorWithCss() {
 		$text = " div { font-weight: bold; } ";
 		$template = new Template();

@@ -21,8 +21,7 @@ use Liquid\Context;
  *
  *     {% comment %} This will be ignored {% endcomment %}
  */
-class TagComment extends AbstractBlock
-{
+class TagComment extends AbstractBlock {
 	/**
 	 * Renders the block
 	 *

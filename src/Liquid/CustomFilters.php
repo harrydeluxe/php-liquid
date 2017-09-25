@@ -14,8 +14,7 @@ namespace Liquid;
 /**
  * A selection of custom filters.
  */
-class CustomFilters
-{
+class CustomFilters {
 	
 	/**
 	 * Sort an array by key.
@@ -28,5 +27,4 @@ class CustomFilters
 		ksort($input);
 		return $input;
 	}
-
 }
