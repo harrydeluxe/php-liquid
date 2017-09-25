@@ -14,8 +14,7 @@ namespace Liquid;
 /**
  * Base class for Cache.
  */
-abstract class Cache
-{
+abstract class Cache {
 	/** @var int */
 	protected $expire = 3600;
 	/** @var string */

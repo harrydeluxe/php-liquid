@@ -16,8 +16,7 @@ use Liquid\Cache;
 /**
  * Implements cache with data stored in an embedded variable with no handling of expiration dates for simplicity
  */
-class Local extends Cache
-{
+class Local extends Cache {
 	private $cache = array();
 
 	/**

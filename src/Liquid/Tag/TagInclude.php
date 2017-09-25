@@ -38,8 +38,7 @@ use Liquid\Template;
  *     Will loop over all the values of bar, including the template foo, passing a variable called foo
  *     with each value of bar
  */
-class TagInclude extends AbstractTag
-{
+class TagInclude extends AbstractTag {
 	/**
 	 * @var string The name of the template
 	 */

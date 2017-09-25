@@ -19,8 +19,7 @@ namespace Liquid;
  *
  * You can add additional instance variables, arguments, or methods as needed.
  */
-interface FileSystem
-{
+interface FileSystem {
 	/**
 	 * Retrieve a template file.
 	 *

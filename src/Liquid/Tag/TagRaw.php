@@ -25,8 +25,7 @@ use Liquid\Regexp;
  *     will return:
  *     {{ 5 | plus: 6 }} is equal to 11.
  */
-class TagRaw extends AbstractBlock
-{
+class TagRaw extends AbstractBlock {
 	/**
 	 * @param array $tokens
 	 */

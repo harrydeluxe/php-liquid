@@ -18,8 +18,7 @@ use Liquid\FileSystem;
 /**
  * Quickly create a table from a collection
  */
-class TagIfchanged extends AbstractBlock
-{
+class TagIfchanged extends AbstractBlock {
 	/**
 	 * The last value
 	 *
@@ -56,6 +55,5 @@ class TagIfchanged extends AbstractBlock
 			$this->lastValue = $output;
 			return $this->lastValue;
 		}
-
 	}
 }

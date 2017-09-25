@@ -27,8 +27,7 @@ use Liquid\Regexp;
  *
  * @author Viorel Dram
  */
-class TagDecrement extends AbstractTag
-{
+class TagDecrement extends AbstractTag {
 	/**
 	 * Name of the variable to decrement
 	 *

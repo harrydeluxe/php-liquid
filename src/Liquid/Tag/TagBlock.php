@@ -23,8 +23,7 @@ use Liquid\Regexp;
  *
  *     {% block foo %} bar {% endblock %}
  */
-class TagBlock extends AbstractBlock
-{
+class TagBlock extends AbstractBlock {
 	/**
 	 * The variable to assign to
 	 *

@@ -14,8 +14,7 @@ namespace Liquid;
 /**
  * Liquid for PHP.
  */
-class Liquid
-{
+class Liquid {
 	/**
 	 * We cannot make settings constants, because we cannot create compound
 	 * constants in PHP (before 5.6).

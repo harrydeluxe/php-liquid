@@ -27,8 +27,7 @@ use Liquid\Regexp;
  *
  * @author Viorel Dram
  */
-class TagIncrement extends AbstractTag
-{
+class TagIncrement extends AbstractTag {
 	/**
 	 * Name of the variable to increment
 	 *

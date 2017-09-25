@@ -24,7 +24,7 @@ use Liquid\Context;
  *     NO
  */
 
-class TagUnless extends TagIf{
+class TagUnless extends TagIf {
 
 	/**
 	 * Replace first found key in $subject to value
@@ -35,7 +35,7 @@ class TagUnless extends TagIf{
 	 */
 	protected function strReplaceOne($replacer, $subject) {
 		$res = $subject;
-		foreach($replacer as $from => $to) {
+		foreach ($replacer as $from => $to) {
 			$res = str_ireplace($from, $to, $subject, $count);
 			if ($count > 0) {
 				break;
@@ -98,5 +98,4 @@ class TagUnless extends TagIf{
 		$res = parent::render($context);
 		return $res;
 	}
-
 }

@@ -14,8 +14,7 @@ namespace Liquid;
 /**
  * Base class for blocks.
  */
-class AbstractBlock extends AbstractTag
-{
+class AbstractBlock extends AbstractTag {
 	/**
 	 * @var AbstractTag[]
 	 */
@@ -75,10 +74,8 @@ class AbstractBlock extends AbstractTag
 				} else {
 					throw new LiquidException("Tag $token was not properly terminated"); // harry
 				}
-
 			} elseif ($variableStartRegexp->match($token)) {
 				$this->nodelist[] = $this->createVariable($token);
-
 			} elseif ($token != '') {
 				$this->nodelist[] = $token;
 			}

@@ -14,8 +14,7 @@ namespace Liquid;
 /**
  * A selection of standard filters.
  */
-class StandardFilters
-{
+class StandardFilters {
 	
 	/**
 	 * Add one string to another
@@ -38,10 +37,10 @@ class StandardFilters
 	 * @return string
 	 */
 	public static function capitalize($input) {
-		return preg_replace_callback("/(^|[^\p{L}'])([\p{Ll}])/u", function($matches) {
+		return preg_replace_callback("/(^|[^\p{L}'])([\p{Ll}])/u", function ($matches) {
 			return $matches[1] . ucfirst($matches[2]);
 		}, ucwords($input));
-	}	
+	}
 	
 
 	/**
@@ -67,12 +66,12 @@ class StandardFilters
 			$input = strtotime($input);
 		}
 
-		if ($format == 'r')
+		if ($format == 'r') {
 			return date($format, $input);
+		}
 
 		return strftime($format, $input);
-
-	}	
+	}
 	
 	
 	/**
@@ -163,7 +162,7 @@ class StandardFilters
 			return $input->current();
 		}
 		return is_array($input) ? reset($input) : $input;
-	}	
+	}
 	
 	
 	/**
@@ -173,7 +172,7 @@ class StandardFilters
 	 */
 	public static function floor($input) {
 		return (int) floor((float)$input);
-	}	
+	}
 	
 	
 	/**
@@ -209,13 +208,13 @@ class StandardFilters
 	public static function last($input) {
 		if ($input instanceof \Traversable) {
 			$last = null;
-			foreach ($input as $elem){
+			foreach ($input as $elem) {
 				$last = $elem;
 			}
 			return $last;
 		}
 		return is_array($input) ? end($input) : $input;
-	}	
+	}
 	
 
 	/**
@@ -225,7 +224,7 @@ class StandardFilters
 	 */
 	public static function lstrip($input) {
 		return ltrim($input);
-	}	
+	}
 	
 	
 	/**
@@ -287,10 +286,10 @@ class StandardFilters
 	 *
 	 * @return string
 	 */
-    public static function newline_to_br($input) {
-        return is_string($input) ? str_replace("\n", "<br />\n", $input) : $input;
-    }
-    	
+	public static function newline_to_br($input) {
+		return is_string($input) ? str_replace("\n", "<br />\n", $input) : $input;
+	}
+		
 
 	/**
 	 * addition
@@ -345,7 +344,7 @@ class StandardFilters
 		}
 
 		return $input;
-	}	
+	}
 	
 
 	/**
@@ -405,7 +404,7 @@ class StandardFilters
 	 */
 	public static function round($input, $n = 0) {
 		return round((float)$input, (int)$n);
-	}	
+	}
 	
 	
 	/**
@@ -490,7 +489,7 @@ class StandardFilters
 		} else {
 			$first = reset($input);
 			if ($first !== false && is_array($first) && array_key_exists($property, $first)) {
-				uasort($input, function($a, $b) use ($property) {
+				uasort($input, function ($a, $b) use ($property) {
 					if ($a[$property] == $b[$property]) {
 						return 0;
 					}
@@ -501,7 +500,7 @@ class StandardFilters
 		}
 
 		return $input;
-	}	
+	}
 	
 
 	/**
@@ -550,7 +549,7 @@ class StandardFilters
 		return is_string($input) ? str_replace(array(
 			"\n", "\r"
 		), '', $input) : $input;
-	}	
+	}
 	
 
 	/**
@@ -605,7 +604,7 @@ class StandardFilters
 		}
 
 		return $input;
-	}	
+	}
 	
 
 	/**

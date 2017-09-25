@@ -26,8 +26,7 @@ use Liquid\Context;
  *       {{ i }}
  *     {% endfor %}
  */
-class TagContinue extends AbstractTag
-{
+class TagContinue extends AbstractTag {
 	/**
 	 * Renders the tag
 	 *

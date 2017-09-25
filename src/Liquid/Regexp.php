@@ -15,8 +15,7 @@ namespace Liquid;
  * A support class for regular expressions and
  * non liquid specific support classes and functions.
  */
-class Regexp
-{
+class Regexp {
 	/**
 	 * The regexp pattern
 	 *
