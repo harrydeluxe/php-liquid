@@ -115,4 +115,9 @@ class DropTest extends TestCase
 		$output = $template->render(array('product' => new ProductDrop(), 'foo' => 'monkey'));
 		$this->assertEquals(' monkey ', $output);
 	}
+
+	public function testToString()
+	{
+		$this->assertEquals(ProductDrop::class, strval(new ProductDrop()));
+	}
 }
