@@ -30,4 +30,3 @@ echo $template->render([
 	'plain-html' => '<b>Your comment was:</b>',
 	'comment-with-xss' => '<script>alert();</script>',
 ]);
-
