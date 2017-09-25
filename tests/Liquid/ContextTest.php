@@ -11,15 +11,13 @@
 
 namespace Liquid;
 
-class HundredCentes
-{
+class HundredCentes {
 	public function toLiquid() {
 		return 100;
 	}
 }
 
-class CentsDrop extends Drop
-{
+class CentsDrop extends Drop {
 	public function amount() {
 		return new HundredCentes();
 	}
@@ -51,8 +49,7 @@ class ToLiquidWrapper {
 	}
 }
 
-class NestedObject
-{
+class NestedObject {
 	public $property;
 	public $value = -1;
 
@@ -66,8 +63,7 @@ class NestedObject
 	}
 }
 
-class ToArrayObject
-{
+class ToArrayObject {
 	public $property;
 	public $value = -1;
 
@@ -81,8 +77,7 @@ class ToArrayObject
 	}
 }
 
-class GetSetObject
-{
+class GetSetObject {
 	public function field_exists($name) {
 		return $name == 'answer';
 	}
@@ -94,31 +89,27 @@ class GetSetObject
 	}
 }
 
-class HiFilter
-{
+class HiFilter {
 	public function hi($value) {
 		return $value . ' hi!';
 	}
 }
 
-class GlobalFilter
-{
+class GlobalFilter {
 	public function notice($value) {
 		return "Global $value";
 	}
 }
 
-class LocalFilter
-{
+class LocalFilter {
 	public function notice($value) {
 		return "Local $value";
 	}
 }
 
-class ContextTest extends TestCase
-{
+class ContextTest extends TestCase {
 	/** @var Context */
-	var $context;
+	public $context;
 
 	public function setup() {
 		parent::setUp();

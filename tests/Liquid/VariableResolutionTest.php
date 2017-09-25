@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class VariableResolutionTest extends TestCase
-{
+class VariableResolutionTest extends TestCase {
 	public function testSimpleVariable() {
 		$template = new Template();
 		$template->parse("{{test}}");

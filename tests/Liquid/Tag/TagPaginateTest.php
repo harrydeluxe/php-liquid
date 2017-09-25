@@ -13,8 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagPaginateTest extends TestCase
-{
+class TagPaginateTest extends TestCase {
 	public function testWorks() {
 		$text = "{% paginate products by 3 %}{% for product in products %} {{ product.id }} {% endfor %}{% endpaginate %}";
 		$expected = " 1  2  3 ";
@@ -27,8 +26,7 @@ class TagPaginateTest extends TestCase
 		$this->assertTemplateResult($expected, $text, array('search' => array('products' => new \ArrayIterator(array(array('id' => 1), array('id' => 2), array('id' => 3), array('id' => 4), array('id' => 5))))));
 	}
 
-	public function testNextPage()
-	{
+	public function testNextPage() {
 		$text = "{% paginate products by 1 %}{% for product in products %} {{ product.id }} {% endfor %}{% endpaginate %}";
 		$expected = " 2 ";
 		$this->assertTemplateResult($expected, $text, array('page' => 2,'products' => array(array('id' => 1), array('id' => 2), array('id' => 3), array('id' => 4), array('id' => 5))));

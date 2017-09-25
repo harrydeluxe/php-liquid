@@ -13,8 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagContinueTest extends TestCase
-{
+class TagContinueTest extends TestCase {
 	public function testFor() {
 		$this->assertTemplateResult('    ', '{%for item in array%} {%continue%} yo {%endfor%}', array('array' => array(1, 2, 3, 4)));
 		$this->assertTemplateResult(' yo  yo  yo  yo ', '{%for item in array%} yo {%continue%} {%endfor%}', array('array' => array(1, 2, 3, 4)));
@@ -31,14 +30,17 @@ class TagContinueTest extends TestCase
 		$this->assertTemplateResult(
 			"<tr class=\"row1\">\n</tr>\n",
 			'{%tablerow item in array%} {%continue%} yo {%endtablerow%}',
-			array('array' => array(1, 2, 3, 4)));
+			array('array' => array(1, 2, 3, 4))
+		);
 		$this->assertTemplateResult(
 			"<tr class=\"row1\">\n<td class=\"col1\"> yo </td><td class=\"col2\"> yo </td><td class=\"col3\"> yo </td><td class=\"col4\"> yo </td></tr>\n",
 			'{%tablerow item in array%} yo {%continue%} {%endtablerow%}',
-			array('array' => array(1, 2, 3, 4)));
+			array('array' => array(1, 2, 3, 4))
+		);
 		$this->assertTemplateResult(
 			"<tr class=\"row1\">\n<td class=\"col1\">  1 </td><td class=\"col2\">  2 </td><td class=\"col3\">  4 </td></tr>\n",
 			'{%tablerow item in array%} {%if item == 3%} {%continue%} {%endif%} {{ item }} {%endtablerow%}',
-			array('array' => array(1, 2, 3, 4)));
+			array('array' => array(1, 2, 3, 4))
+		);
 	}
 }

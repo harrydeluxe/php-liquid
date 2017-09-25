@@ -13,22 +13,19 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class Stringable
-{
+class Stringable {
 	public function __toString() {
 		return "100";
 	}
 }
 
-class HasToLiquid
-{
+class HasToLiquid {
 	public function toLiquid() {
 		return "100";
 	}
 }
 
-class TagCaseTest extends TestCase
-{
+class TagCaseTest extends TestCase {
 	public function testCase() {
 		$assigns = array('condition' => 2);
 		$this->assertTemplateResult(' its 2 ', '{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}', $assigns);

@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class FunnyFilter
-{
+class FunnyFilter {
 	public function make_funny($input) {
 		return 'LOL';
 	}
@@ -38,8 +37,7 @@ class FunnyFilter
 	}
 }
 
-class OutputTest extends TestCase
-{
+class OutputTest extends TestCase {
 	protected $assigns = array();
 
 	protected function setup() {

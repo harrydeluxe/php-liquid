@@ -18,8 +18,7 @@ use Liquid\Template;
  * Basic tests for the assignment of one variable to another. This also tests the
  * assignment of filtered values to another variable.
  */
-class TagAssignTest extends TestCase
-{
+class TagAssignTest extends TestCase {
 	/**
 	 * Tests the normal behavior of throwing an exception when the assignment is incorrect
 	 *

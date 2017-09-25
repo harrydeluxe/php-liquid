@@ -11,15 +11,13 @@
 
 namespace Liquid;
 
-class ContextDrop extends Drop
-{
+class ContextDrop extends Drop {
 	public function beforeMethod($method) {
 		return $this->context->get($method);
 	}
 }
 
-class TextDrop extends Drop
-{
+class TextDrop extends Drop {
 	public function get_array() {
 		return array('text1', 'text2');
 	}
@@ -29,15 +27,13 @@ class TextDrop extends Drop
 	}
 }
 
-class CatchallDrop extends Drop
-{
+class CatchallDrop extends Drop {
 	public function beforeMethod($method) {
 		return 'method: ' . $method;
 	}
 }
 
-class ProductDrop extends Drop
-{
+class ProductDrop extends Drop {
 	public function top_sales() {
 		throw new \Exception("worked");
 	}
@@ -63,8 +59,7 @@ class ProductDrop extends Drop
 	}
 }
 
-class DropTest extends TestCase
-{
+class DropTest extends TestCase {
 	/**
 	 * @expectedException \Exception
 	 * @expectedExceptionMessage worked
@@ -116,8 +111,7 @@ class DropTest extends TestCase
 		$this->assertEquals(' monkey ', $output);
 	}
 
-	public function testToString()
-	{
+	public function testToString() {
 		$this->assertEquals(ProductDrop::class, strval(new ProductDrop()));
 	}
 }

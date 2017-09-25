@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class EscapeByDefaultTest extends TestCase
-{
+class EscapeByDefaultTest extends TestCase {
 	const XSS = "<script>alert()</script>";
 	const XSS_FAILED = "&lt;script&gt;alert()&lt;/script&gt;";
 

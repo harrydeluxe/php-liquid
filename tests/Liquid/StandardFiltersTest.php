@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class MoneyFilter
-{
+class MoneyFilter {
 	public function money($value) {
 		return sprintf(' %d$ ', $value);
 	}
@@ -22,15 +21,13 @@ class MoneyFilter
 	}
 }
 
-class CanadianMoneyFilter
-{
+class CanadianMoneyFilter {
 	public function money($value) {
 		return sprintf(' %d$ CAD ', $value);
 	}
 }
 
-class SizeClass
-{
+class SizeClass {
 	const SIZE = 42;
 
 	public function toLiquid() {
@@ -43,14 +40,13 @@ class SizeClass
 }
 
 
-class StandardFiltersTest extends TestCase
-{
+class StandardFiltersTest extends TestCase {
 	/**
 	 * The current context
 	 *
 	 * @var Context
 	 */
-	var $context;
+	public $context;
 
 	protected function setup() {
 		parent::setUp();
@@ -137,8 +133,7 @@ class StandardFiltersTest extends TestCase
 	}
 
 
-	public function testRaw()
-	{
+	public function testRaw() {
 		$data = array(
 			"Anything" => "Anything",
 			3 => 3,
@@ -511,27 +506,27 @@ class StandardFiltersTest extends TestCase
 		$this->assertEquals($expected, StandardFilters::sort(new \ArrayIterator($original), 'b'), '', 0, 10, true);
 	}
 
-/*
-	
-	I've commented this out as its not one of the Ruby Standard Filters
-	
-	public function testSortKey() {
-		$data = array(
-			array(
-				array(),
-				array(),
-			),
-			array(
-				array('b' => 1, 'c' => 5, 'a' => 3, 'z' => 4, 'h' => 2),
-				array('a' => 3, 'b' => 1, 'c' => 5, 'h' => 2, 'z' => 4),
-			),
-		);
+	/*
 
-		foreach ($data as $item) {
-			$this->assertEquals($item[1], StandardFilters::sort_key($item[0]));
+		I've commented this out as its not one of the Ruby Standard Filters
+
+		public function testSortKey() {
+			$data = array(
+				array(
+					array(),
+					array(),
+				),
+				array(
+					array('b' => 1, 'c' => 5, 'a' => 3, 'z' => 4, 'h' => 2),
+					array('a' => 3, 'b' => 1, 'c' => 5, 'h' => 2, 'z' => 4),
+				),
+			);
+
+			foreach ($data as $item) {
+				$this->assertEquals($item[1], StandardFilters::sort_key($item[0]));
+			}
 		}
-	}
-*/
+	*/
 
 	public function testDefault() {
 		$this->assertEquals('hello', StandardFilters::_default('', 'hello'));
@@ -602,7 +597,7 @@ class StandardFiltersTest extends TestCase
 			),
 			array(
 				array(
-					function() {
+					function () {
 						return 'from function ';
 					},
 					array(
@@ -618,7 +613,7 @@ class StandardFiltersTest extends TestCase
 			),
 			array(
 				new \ArrayIterator(array(
-					function() {
+					function () {
 						return 'from function ';
 					},
 					array(
@@ -835,9 +830,9 @@ class StandardFiltersTest extends TestCase
 				-1.2,
 			),
 			array(
-			    3.1,
-			    3.1,
-			    0
+				3.1,
+				3.1,
+				0
 			)
 		);
 
@@ -864,9 +859,9 @@ class StandardFiltersTest extends TestCase
 				4.05,
 			),
 			array(
-			      7.5,
-			      0,
-			      0
+				  7.5,
+				  0,
+				  0
 			)
 		);
 

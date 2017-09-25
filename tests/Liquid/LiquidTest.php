@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class LiquidTest extends TestCase
-{
+class LiquidTest extends TestCase {
 	public function testGetNonExistingPropery() {
 		$this->assertNull(Liquid::get('no_such_value'));
 	}

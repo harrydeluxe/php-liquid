@@ -25,8 +25,7 @@ function functionFilter($value) {
 /**
  * Global filter class
  */
-class ClassFilter
-{
+class ClassFilter {
 	private $variable = 'not set';
 
 	public static function static_test() {
@@ -47,8 +46,7 @@ class ClassFilter
 
 namespace Liquid {
 
-class FilterbankTest extends TestCase
-{
+class FilterbankTest extends TestCase {
 	/** @var FilterBank */
 	private $filterBank;
 

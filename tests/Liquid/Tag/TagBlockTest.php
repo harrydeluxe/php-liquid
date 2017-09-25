@@ -13,8 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagBlockTest extends TestCase
-{
+class TagBlockTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */

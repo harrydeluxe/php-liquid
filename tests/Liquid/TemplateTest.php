@@ -11,8 +11,7 @@
 
 namespace Liquid;
 
-class TemplateTest extends TestCase
-{
+class TemplateTest extends TestCase {
 	const CACHE_DIR = 'cache_dir';
 
 	/** @var string full path to cache dir  */

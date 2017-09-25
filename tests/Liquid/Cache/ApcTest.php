@@ -14,8 +14,7 @@ namespace Liquid\Cache;
 use Liquid\TestCase;
 use \Liquid\Cache\Apc;
 
-class ApcTest extends TestCase
-{
+class ApcTest extends TestCase {
 	/** @var \Liquid\Cache\Apc */
 	protected $cache;
 
@@ -48,4 +47,3 @@ class ApcTest extends TestCase
 		$this->assertFalse($this->cache->read('test'));
 	}
 }
-
