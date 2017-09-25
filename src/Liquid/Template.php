@@ -181,6 +181,22 @@ class Template
 	}
 
 	/**
+	 * Parses the given template file
+	 *
+	 * @param string $templatePath
+	 *
+	 * @return Template
+	 */
+	public function parseFile($templatePath)
+	{
+		if (!$this->fileSystem) {
+			throw new LiquidException("Could not load a template without an initialized file system");
+		}
+
+		return $this->parse($this->fileSystem->readTemplateFile($templatePath));
+	}
+
+	/**
 	 * Renders the current template
 	 *
 	 * @param array $assigns an array of values for the template

@@ -131,4 +131,23 @@ class LocalFileSystemTest extends TestCase
 		$fileSystem = new LocalFileSystem($this->root);
 		$this->assertEquals('test content', trim($fileSystem->readTemplateFile('mypartial')));
 	}
+
+	public function testParseTemplateFile()
+	{
+		Liquid::set('INCLUDE_PREFIX', '');
+		Liquid::set('INCLUDE_SUFFIX', 'tpl');
+
+		$template = new Template($this->root);
+		$this->assertEquals("test content\n", $template->parseFile('mypartial')->render());
+	}
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 * @expectedExceptionMessage Could not load a template
+	 */
+	public function testParseTemplateFileError()
+	{
+		$template = new Template();
+		$template->parseFile('mypartial');
+	}
 }
