@@ -123,6 +123,7 @@ class Context
 	 * Replaces []
 	 *
 	 * @param string
+	 * @param mixed $key
 	 *
 	 * @return mixed
 	 */
