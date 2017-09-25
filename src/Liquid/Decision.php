@@ -87,7 +87,7 @@ class Decision extends AbstractBlock
 	 * @throws \Liquid\LiquidException
 	 * @return bool
 	 */
-	protected function interpretCondition($left, $right, $op = null, Context $context)
+	protected function interpretCondition($left, $right, $op, Context $context)
 	{
 		if (is_null($op)) {
 			$value = $this->stringValue($context->get($left));
