@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -31,7 +31,8 @@ use Liquid\Regexp;
  *
  */
 
-class TagPaginate extends AbstractBlock {
+class TagPaginate extends AbstractBlock
+{
 	/**
 	 * @var array The collection to paginate
 	 */
@@ -79,7 +80,8 @@ class TagPaginate extends AbstractBlock {
 	 * @throws \Liquid\LiquidException
 	 *
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		parent::__construct($markup, $tokens, $fileSystem);
 
 		$syntax = new Regexp('/(' . Liquid::get('VARIABLE_NAME') . ')\s+by\s+(\w+)/');
@@ -101,7 +103,8 @@ class TagPaginate extends AbstractBlock {
 	 * @return string
 	 *
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$this->currentPage = (is_numeric($context->get('page'))) ? $context->get('page') : 1;
 		$this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
 		$this->collection = $context->get($this->collectionName);
@@ -151,7 +154,8 @@ class TagPaginate extends AbstractBlock {
 	 * @return string
 	 *
 	 */
-	public function currentUrl($context) {
+	public function currentUrl($context)
+	{
 		$uri = explode('?', $context->get('REQUEST_URI'));
 
 		$url = 'http';

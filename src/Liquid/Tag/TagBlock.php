@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,7 +23,8 @@ use Liquid\Regexp;
  *
  *     {% block foo %} bar {% endblock %}
  */
-class TagBlock extends AbstractBlock {
+class TagBlock extends AbstractBlock
+{
 	/**
 	 * The variable to assign to
 	 *
@@ -41,7 +42,8 @@ class TagBlock extends AbstractBlock {
 	 * @throws \Liquid\LiquidException
 	 * @return \Liquid\Tag\TagBlock
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$syntaxRegexp = new Regexp('/(\w+)/');
 
 		if ($syntaxRegexp->match($markup)) {

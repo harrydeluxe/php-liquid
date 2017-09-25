@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,7 +14,8 @@ namespace Liquid;
 /**
  * Liquid for PHP.
  */
-class Liquid {
+class Liquid
+{
 	/**
 	 * We cannot make settings constants, because we cannot create compound
 	 * constants in PHP (before 5.6).
@@ -80,16 +81,17 @@ class Liquid {
 	 *
 	 * @return string
 	 */
-	public static function get($key) {
+	public static function get($key)
+	{
 		// backward compatibility
 		if ($key === 'ALLOWED_VARIABLE_CHARS') {
 			return substr(self::$config['VARIABLE_NAME'], 0, -1);
 		}
 		if (array_key_exists($key, self::$config)) {
 			return self::$config[$key];
-		} else {
-			// This case is needed for compound settings
-			switch ($key) {
+		}
+		// This case is needed for compound settings
+		switch ($key) {
 				case 'QUOTED_FRAGMENT':
 					return self::$config['QUOTED_STRING'] . '|(?:[^\s,\|\'"]|' . self::$config['QUOTED_STRING'] . ')+';
 				case 'QUOTED_FRAGMENT_FILTER_ARGUMENT':
@@ -101,7 +103,6 @@ class Liquid {
 				default:
 					return null;
 			}
-		}
 	}
 
 	/**
@@ -110,7 +111,8 @@ class Liquid {
 	 * @param string $key
 	 * @param string $value
 	 */
-	public static function set($key, $value) {
+	public static function set($key, $value)
+	{
 		// backward compatibility
 		if ($key === 'ALLOWED_VARIABLE_CHARS') {
 			$key = 'VARIABLE_NAME';
@@ -126,7 +128,8 @@ class Liquid {
 	 *
 	 * @return array
 	 */
-	public static function arrayFlatten($array) {
+	public static function arrayFlatten($array)
+	{
 		$return = array();
 
 		foreach ($array as $element) {

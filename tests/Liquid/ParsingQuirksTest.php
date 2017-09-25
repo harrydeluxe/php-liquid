@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,8 +11,10 @@
 
 namespace Liquid;
 
-class ParsingQuirksTest extends TestCase {
-	public function testErrorWithCss() {
+class ParsingQuirksTest extends TestCase
+{
+	public function testErrorWithCss()
+	{
 		$text = " div { font-weight: bold; } ";
 		$template = new Template();
 		$template->parse($text);

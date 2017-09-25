@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,7 +26,8 @@ use Liquid\Context;
  *     {% assign var = var %}
  *     {% assign var = "hello" | upcase %}
  */
-class TagAssign extends AbstractTag {
+class TagAssign extends AbstractTag
+{
 	/**
 	 * @var string The variable to assign from
 	 */
@@ -46,7 +47,8 @@ class TagAssign extends AbstractTag {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$syntaxRegexp = new Regexp('/(\w+)\s*=\s*(' . Liquid::get('QUOTED_FRAGMENT') . '+)/');
 
 		$filterSeperatorRegexp = new Regexp('/' . Liquid::get('FILTER_SEPARATOR') . '\s*(.*)/');
@@ -85,7 +87,8 @@ class TagAssign extends AbstractTag {
 	 *
 	 * @return string|void
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$output = $context->get($this->from);
 
 		foreach ($this->filters as $filter) {

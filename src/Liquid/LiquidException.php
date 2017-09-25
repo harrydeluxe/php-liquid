@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,5 +14,6 @@ namespace Liquid;
 /**
  * LiquidException class.
  */
-class LiquidException extends \Exception {
+class LiquidException extends \Exception
+{
 }

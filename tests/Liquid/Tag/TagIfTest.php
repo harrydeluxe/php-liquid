@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -13,44 +13,52 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagIfTest extends TestCase {
-	public function testTrueEqlTrue() {
+class TagIfTest extends TestCase
+{
+	public function testTrueEqlTrue()
+	{
 		$text = " {% if true == true %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testTrueNotEqlTrue() {
+	public function testTrueNotEqlTrue()
+	{
 		$text = " {% if true != true %} true {% else %} false {% endif %} ";
 		$expected = "  false  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testTrueLqTrue() {
+	public function testTrueLqTrue()
+	{
 		$text = " {% if 0 > 0 %} true {% else %} false {% endif %} ";
 		$expected = "  false  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testOneLqZero() {
+	public function testOneLqZero()
+	{
 		$text = " {% if 1 > 0 %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testZeroLqOne() {
+	public function testZeroLqOne()
+	{
 		$text = " {% if 0 < 1 %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testZeroLqOrEqualOne() {
+	public function testZeroLqOrEqualOne()
+	{
 		$text = " {% if 0 <= 0 %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testZeroLqOrEqualOneInvolvingNil() {
+	public function testZeroLqOrEqualOneInvolvingNil()
+	{
 		$text = " {% if null <= 0 %} true {% else %} false {% endif %} ";
 		$expected = "  false  ";
 		$this->assertTemplateResult($expected, $text);
@@ -61,49 +69,57 @@ class TagIfTest extends TestCase {
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testZeroLqqOrEqualOne() {
+	public function testZeroLqqOrEqualOne()
+	{
 		$text = " {% if 0 >= 0 %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testStrings() {
+	public function testStrings()
+	{
 		$text = " {% if 'test' == 'test' %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testStringsNotEqual() {
+	public function testStringsNotEqual()
+	{
 		$text = " {% if 'test' != 'test' %} true {% else %} false {% endif %} ";
 		$expected = "  false  ";
 		$this->assertTemplateResult($expected, $text);
 	}
 
-	public function testVarStringsEqual() {
+	public function testVarStringsEqual()
+	{
 		$text = " {% if var == \"hello there!\" %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text, array('var' => 'hello there!'));
 	}
 
-	public function testVarStringsAreNotEqual() {
+	public function testVarStringsAreNotEqual()
+	{
 		$text = " {% if \"hello there!\" == var %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text, array('var' => 'hello there!'));
 	}
 
-	public function testVarAndLongStringAreEqual() {
+	public function testVarAndLongStringAreEqual()
+	{
 		$text = " {% if var == 'hello there!' %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text, array('var' => 'hello there!'));
 	}
 
-	public function testVarAndLongStringAreEqualBackwards() {
+	public function testVarAndLongStringAreEqualBackwards()
+	{
 		$text = " {% if 'hello there!' == var %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text, array('var' => 'hello there!'));
 	}
 
-	public function testIsCollectionEmpty() {
+	public function testIsCollectionEmpty()
+	{
 		$text = " {% if array == empty %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text, array('array' => array()));
@@ -113,13 +129,15 @@ class TagIfTest extends TestCase {
 		$this->assertTemplateResult($expected, $text, array('array' => array()));
 	}
 
-	public function testIsNotCollectionEmpty() {
+	public function testIsNotCollectionEmpty()
+	{
 		$text = " {% if array == empty %} true {% else %} false {% endif %} ";
 		$expected = "  false  ";
 		$this->assertTemplateResult($expected, $text, array('array' => array(1, 2, 3)));
 	}
 
-	public function testNil() {
+	public function testNil()
+	{
 		$text = " {% if var == null %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text, array('var' => null));
@@ -129,7 +147,8 @@ class TagIfTest extends TestCase {
 		$this->assertTemplateResult($expected, $text, array('var' => null));
 	}
 
-	public function testNotNil() {
+	public function testNotNil()
+	{
 		$text = " {% if var != null %} true {% else %} false {% endif %} ";
 		$expected = "  true  ";
 		$this->assertTemplateResult($expected, $text, array('var' => 1));
@@ -139,7 +158,8 @@ class TagIfTest extends TestCase {
 		$this->assertTemplateResult($expected, $text, array('var' => 1));
 	}
 
-	public function testIfFromVariable() {
+	public function testIfFromVariable()
+	{
 		$this->assertTemplateResult('', '{% if var %} NO {% endif %}', array('var' => false));
 		$this->assertTemplateResult('', '{% if var %} NO {% endif %}', array('var' => null));
 		$this->assertTemplateResult('', '{% if foo.bar %} NO {% endif %}', array('foo' => array('bar' => false)));
@@ -167,7 +187,8 @@ class TagIfTest extends TestCase {
 		$this->assertTemplateResult(' YES ', '{% if foo.bar %} NO {% else %} YES {% endif %}', array('notfoo' => array('bar' => true)));
 	}
 
-	public function testNestedIf() {
+	public function testNestedIf()
+	{
 		$this->assertTemplateResult('', '{% if false %}{% if false %} NO {% endif %}{% endif %}');
 		$this->assertTemplateResult('', '{% if false %}{% if true %} NO {% endif %}{% endif %}');
 		$this->assertTemplateResult('', '{% if true %}{% if false %} NO {% endif %}{% endif %}');
@@ -178,14 +199,16 @@ class TagIfTest extends TestCase {
 		$this->assertTemplateResult(' YES ', '{% if false %}{% if true %} NO {% else %} NONO {% endif %}{% else %} YES {% endif %}');
 	}
 
-	public function testComplexConditions() {
+	public function testComplexConditions()
+	{
 		$this->assertTemplateResult('true', '{% if 10 == 10 and "h" == "h" %}true{% else %}false{% endif %}');
 		$this->assertTemplateResult('true', '{% if 8 == 10 or "h" == "h" %}true{% else %}false{% endif %}');
 		$this->assertTemplateResult('false', '{% if 8 == 10 and "h" == "h" %}true{% else %}false{% endif %}');
 		$this->assertTemplateResult('true', '{% if 10 == 10 or "h" == "k" or "k" == "k" %}true{% else %}false{% endif %}');
 	}
 
-	public function testContains() {
+	public function testContains()
+	{
 		$this->assertTemplateResult('true', '{% if foo contains "h" %}true{% else %}false{% endif %}', array('foo' => array('k', 'h', 'z')));
 		$this->assertTemplateResult('false', '{% if foo contains "y" %}true{% else %}false{% endif %}', array('foo' => array('k', 'h', 'z')));
 		$this->assertTemplateResult('true', '{% if foo contains "e" %}true{% else %}false{% endif %}', array('foo' => 'abcedf'));
@@ -197,28 +220,32 @@ class TagIfTest extends TestCase {
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage if tag was never closed
 	 */
-	public function testSyntaxErrorNotClosed() {
+	public function testSyntaxErrorNotClosed()
+	{
 		$this->assertTemplateResult('', '{% if jerry == 1 %}');
 	}
 
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testSyntaxErrorEnd() {
+	public function testSyntaxErrorEnd()
+	{
 		$this->assertTemplateResult('', '{% if jerry == 1 %}{% end %}');
 	}
 
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidOperator() {
+	public function testInvalidOperator()
+	{
 		$this->assertTemplateResult('', '{% if foo === y %}true{% else %}false{% endif %}', array('foo' => true, 'y' => true));
 	}
 
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testIncomparable() {
+	public function testIncomparable()
+	{
 		$this->assertTemplateResult('', '{% if foo == 1 %}true{% endif %}', array('foo' => (object) array()));
 	}
 
@@ -226,7 +253,8 @@ class TagIfTest extends TestCase {
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage does not expect else tag
 	 */
-	public function testSyntaxErrorElse() {
+	public function testSyntaxErrorElse()
+	{
 		$this->assertTemplateResult('', '{% if foo == 1 %}{% endif %}{% else %}');
 	}
 
@@ -234,7 +262,8 @@ class TagIfTest extends TestCase {
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage Unknown tag
 	 */
-	public function testSyntaxErrorUnknown() {
+	public function testSyntaxErrorUnknown()
+	{
 		$this->assertTemplateResult('', '{% unknown-tag %}');
 	}
 }

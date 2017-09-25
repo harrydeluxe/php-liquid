@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,7 +19,8 @@ namespace Liquid;
  *
  * You can add additional instance variables, arguments, or methods as needed.
  */
-interface FileSystem {
+interface FileSystem
+{
 	/**
 	 * Retrieve a template file.
 	 *

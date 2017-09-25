@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -24,7 +24,8 @@ use Liquid\Context;
  *     NO
  */
 
-class TagUnless extends TagIf {
+class TagUnless extends TagIf
+{
 
 	/**
 	 * Replace first found key in $subject to value
@@ -33,7 +34,8 @@ class TagUnless extends TagIf {
 	 * @param string $subject
 	 * @return string
 	 */
-	protected function strReplaceOne($replacer, $subject) {
+	protected function strReplaceOne($replacer, $subject)
+	{
 		$res = $subject;
 		foreach ($replacer as $from => $to) {
 			$res = str_ireplace($from, $to, $subject, $count);
@@ -51,7 +53,8 @@ class TagUnless extends TagIf {
 	 * after
 	 *  a != 1 or b != 2
 	 */
-	protected function revertOperators() {
+	protected function revertOperators()
+	{
 
 		// replace
 		$replacerOperators = array(
@@ -93,7 +96,8 @@ class TagUnless extends TagIf {
 	 * @throws \Liquid\LiquidException
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$this->revertOperators();
 		$res = parent::render($context);
 		return $res;

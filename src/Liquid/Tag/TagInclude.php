@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -38,7 +38,8 @@ use Liquid\Template;
  *     Will loop over all the values of bar, including the template foo, passing a variable called foo
  *     with each value of bar
  */
-class TagInclude extends AbstractTag {
+class TagInclude extends AbstractTag
+{
 	/**
 	 * @var string The name of the template
 	 */
@@ -73,7 +74,8 @@ class TagInclude extends AbstractTag {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . Liquid::get('QUOTED_FRAGMENT') . '+))?/');
 
 		if ($regex->match($markup)) {
@@ -99,7 +101,8 @@ class TagInclude extends AbstractTag {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function parse(array &$tokens) {
+	public function parse(array &$tokens)
+	{
 		if ($this->fileSystem === null) {
 			throw new LiquidException("No file system");
 		}
@@ -129,7 +132,8 @@ class TagInclude extends AbstractTag {
 	 *
 	 * @return boolean
 	 */
-	public function checkIncludes() {
+	public function checkIncludes()
+	{
 		$cache = Template::getCache();
 
 		if ($this->document->checkIncludes() == true) {
@@ -152,7 +156,8 @@ class TagInclude extends AbstractTag {
 	 *
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$result = '';
 		$variable = $context->get($this->variable);
 

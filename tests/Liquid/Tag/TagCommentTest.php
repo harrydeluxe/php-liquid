@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -13,8 +13,10 @@ namespace Liquid\Tag;
 
 use Liquid\TestCase;
 
-class TagCommentTest extends TestCase {
-	public function testHasABlockWhichDoesNothing() {
+class TagCommentTest extends TestCase
+{
+	public function testHasABlockWhichDoesNothing()
+	{
 		$this->assertTemplateResult(
 			"the comment block should be removed  .. right?",
 			"the comment block should be removed {%comment%} be gone.. {%endcomment%} .. right?"

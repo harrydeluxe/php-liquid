@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,13 +18,15 @@ use Liquid\Template;
  * Basic tests for the assignment of one variable to another. This also tests the
  * assignment of filtered values to another variable.
  */
-class TagAssignTest extends TestCase {
+class TagAssignTest extends TestCase
+{
 	/**
 	 * Tests the normal behavior of throwing an exception when the assignment is incorrect
 	 *
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidAssign() {
+	public function testInvalidAssign()
+	{
 		$template = new Template();
 
 		$template->parse('{% assign test %}');
@@ -33,7 +35,8 @@ class TagAssignTest extends TestCase {
 	/**
 	 * Tests a simple assignment with no filters
 	 */
-	public function testSimpleAssign() {
+	public function testSimpleAssign()
+	{
 		$template = new Template();
 
 		$template->parse('{% assign test = "hello" %}{{ test }}');
@@ -43,7 +46,8 @@ class TagAssignTest extends TestCase {
 	/**
 	 * Tests filtered value assignment
 	 */
-	public function testAssignWithFilters() {
+	public function testAssignWithFilters()
+	{
 		$template = new Template();
 
 		$template->parse('{% assign test = "hello" | upcase %}{{ test }}');
@@ -68,7 +72,8 @@ class TagAssignTest extends TestCase {
 	/**
 	 * Tests a simple assignment with numbers
 	 */
-	public function testNumbersAssign() {
+	public function testNumbersAssign()
+	{
 		$this->assertTemplateResult('42', '{% assign i = 42 %}{{ i }}');
 		$this->assertTemplateResult('3.14', '{% assign i = 3.14 %}{{ i }}');
 		$this->assertTemplateResult('-100', '{% assign i = -100 %}{{ i }}');

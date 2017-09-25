@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,7 +14,8 @@ namespace Liquid;
 /**
  * Context keeps the variable stack and resolves variables, as well as keywords.
  */
-class Context {
+class Context
+{
 	/**
 	 * Local scopes
 	 *
@@ -49,7 +50,8 @@ class Context {
 	 * @param array $assigns
 	 * @param array $registers
 	 */
-	public function __construct(array $assigns = array(), array $registers = array()) {
+	public function __construct(array $assigns = array(), array $registers = array())
+	{
 		$this->assigns = array($assigns);
 		$this->registers = $registers;
 		$this->filterbank = new Filterbank($this);
@@ -62,7 +64,8 @@ class Context {
 	 *
 	 * @param mixed $filter
 	 */
-	public function addFilters($filter) {
+	public function addFilters($filter)
+	{
 		$this->filterbank->addFilter($filter);
 	}
 
@@ -75,7 +78,8 @@ class Context {
 	 *
 	 * @return string
 	 */
-	public function invoke($name, $value, array $args = array()) {
+	public function invoke($name, $value, array $args = array())
+	{
 		return $this->filterbank->invoke($name, $value, $args);
 	}
 
@@ -84,7 +88,8 @@ class Context {
 	 *
 	 * @param array $newAssigns
 	 */
-	public function merge($newAssigns) {
+	public function merge($newAssigns)
+	{
 		$this->assigns[0] = array_merge($this->assigns[0], $newAssigns);
 	}
 
@@ -93,7 +98,8 @@ class Context {
 	 *
 	 * @return bool
 	 */
-	public function push() {
+	public function push()
+	{
 		array_unshift($this->assigns, array());
 		return true;
 	}
@@ -104,7 +110,8 @@ class Context {
 	 * @throws LiquidException
 	 * @return bool
 	 */
-	public function pop() {
+	public function pop()
+	{
 		if (count($this->assigns) == 1) {
 			throw new LiquidException('No elements to pop');
 		}
@@ -116,10 +123,12 @@ class Context {
 	 * Replaces []
 	 *
 	 * @param string
+	 * @param mixed $key
 	 *
 	 * @return mixed
 	 */
-	public function get($key) {
+	public function get($key)
+	{
 		return $this->resolve($key);
 	}
 
@@ -130,7 +139,8 @@ class Context {
 	 * @param mixed $value
 	 * @param bool $global
 	 */
-	public function set($key, $value, $global = false) {
+	public function set($key, $value, $global = false)
+	{
 		if ($global) {
 			for ($i = 0; $i < count($this->assigns); $i++) {
 				$this->assigns[$i][$key] = $value;
@@ -147,7 +157,8 @@ class Context {
 	 *
 	 * @return bool
 	 */
-	public function hasKey($key) {
+	public function hasKey($key)
+	{
 		return (!is_null($this->resolve($key)));
 	}
 
@@ -161,7 +172,8 @@ class Context {
 	 * @throws LiquidException
 	 * @return mixed
 	 */
-	private function resolve($key) {
+	private function resolve($key)
+	{
 		// This shouldn't happen
 		if (is_array($key)) {
 			throw new LiquidException("Cannot resolve arrays as key");
@@ -205,7 +217,8 @@ class Context {
 	 *
 	 * @return mixed
 	 */
-	private function fetch($key) {
+	private function fetch($key)
+	{
 		// TagDecrement depends on environments being checked before assigns
 		foreach ($this->environments as $environment) {
 			if (array_key_exists($key, $environment)) {
@@ -239,12 +252,13 @@ class Context {
 	 * @throws LiquidException
 	 * @return mixed
 	 */
-	private function variable($key) {
+	private function variable($key)
+	{
 		// Support numeric and variable array indicies
 		if (preg_match("|\[[0-9]+\]|", $key)) {
 			$key = preg_replace("|\[([0-9]+)\]|", ".$1", $key);
 		} elseif (preg_match("|\[[0-9a-z._]+\]|", $key, $matches)) {
-			$index = $this->get(str_replace(array("[","]"), "", $matches[0]));
+			$index = $this->get(str_replace(array("[", "]"), "", $matches[0]));
 			if (strlen($index)) {
 				$key = preg_replace("|\[([0-9a-z._]+)\]|", ".$index", $key);
 			}

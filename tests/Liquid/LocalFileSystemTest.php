@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,10 +11,12 @@
 
 namespace Liquid;
 
-class LocalFileSystemTest extends TestCase {
+class LocalFileSystemTest extends TestCase
+{
 	protected $root;
 
-	protected function setUp() {
+	protected function setUp()
+	{
 		$this->root = __DIR__ . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
 		// reset to defaults
 		Liquid::set('INCLUDE_ALLOW_EXT', false);
@@ -23,7 +25,8 @@ class LocalFileSystemTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testIllegalTemplateNameEmpty() {
+	public function testIllegalTemplateNameEmpty()
+	{
 		$fileSystem = new LocalFileSystem('');
 		$fileSystem->fullPath('');
 	}
@@ -31,7 +34,8 @@ class LocalFileSystemTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testIllegalRootPath() {
+	public function testIllegalRootPath()
+	{
 		$fileSystem = new LocalFileSystem('invalid/not/found');
 		$fileSystem->fullPath('');
 	}
@@ -39,7 +43,8 @@ class LocalFileSystemTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testIllegalTemplateNameIncludeExtension() {
+	public function testIllegalTemplateNameIncludeExtension()
+	{
 		Liquid::set('INCLUDE_ALLOW_EXT', false);
 
 		$fileSystem = new LocalFileSystem('');
@@ -49,7 +54,8 @@ class LocalFileSystemTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testIllegalTemplateNameNotIncludeExtension() {
+	public function testIllegalTemplateNameNotIncludeExtension()
+	{
 		Liquid::set('INCLUDE_ALLOW_EXT', true);
 
 		$fileSystem = new LocalFileSystem('');
@@ -59,7 +65,8 @@ class LocalFileSystemTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testIllegalTemplatePathNoRoot() {
+	public function testIllegalTemplatePathNoRoot()
+	{
 		$fileSystem = new LocalFileSystem('');
 		$fileSystem->fullPath('mypartial');
 	}
@@ -67,7 +74,8 @@ class LocalFileSystemTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testIllegalTemplatePathNoFileExists() {
+	public function testIllegalTemplatePathNoFileExists()
+	{
 		$fileSystem = new LocalFileSystem(dirname(__DIR__));
 		$fileSystem->fullPath('no_such_file_exists');
 	}
@@ -76,7 +84,8 @@ class LocalFileSystemTest extends TestCase {
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage not under
 	 */
-	public function testIllegalTemplatePathNotUnderTemplateRoot() {
+	public function testIllegalTemplatePathNotUnderTemplateRoot()
+	{
 		Liquid::set('INCLUDE_ALLOW_EXT', true);
 		$fileSystem = new LocalFileSystem(dirname($this->root));
 		// find any fail under deeper under the root, so all other checks would pass
@@ -85,14 +94,16 @@ class LocalFileSystemTest extends TestCase {
 		$fileSystem->fullPath(self::TEMPLATES_DIR."/../../../{$filesUnderCurrentDir[0]}");
 	}
 
-	public function testValidPathWithDefaultExtension() {
+	public function testValidPathWithDefaultExtension()
+	{
 		$templateName = 'mypartial';
 
 		$fileSystem = new LocalFileSystem($this->root);
 		$this->assertEquals($this->root . Liquid::get('INCLUDE_PREFIX') . $templateName . '.' . Liquid::get('INCLUDE_SUFFIX'), $fileSystem->fullPath($templateName));
 	}
 
-	public function testValidPathWithCustomExtension() {
+	public function testValidPathWithCustomExtension()
+	{
 		Liquid::set('INCLUDE_PREFIX', '');
 		Liquid::set('INCLUDE_SUFFIX', 'tpl');
 
@@ -106,12 +117,14 @@ class LocalFileSystemTest extends TestCase {
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage File not found
 	 */
-	public function testReadIllegalTemplatePathNoFileExists() {
+	public function testReadIllegalTemplatePathNoFileExists()
+	{
 		$fileSystem = new LocalFileSystem(dirname(__DIR__));
 		$fileSystem->readTemplateFile('no_such_file_exists');
 	}
 
-	public function testReadTemplateFile() {
+	public function testReadTemplateFile()
+	{
 		Liquid::set('INCLUDE_PREFIX', '');
 		Liquid::set('INCLUDE_SUFFIX', 'tpl');
 

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -33,7 +33,8 @@ use Liquid\Regexp;
  *     {%for i in (1..variable)%} {{i}} {%endfor%}
  *
  */
-class TagFor extends AbstractBlock {
+class TagFor extends AbstractBlock
+{
 	/**
 	 * @var array The collection to loop over
 	 */
@@ -63,7 +64,8 @@ class TagFor extends AbstractBlock {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		parent::__construct($markup, $tokens, $fileSystem);
 
 		$syntaxRegexp = new Regexp('/(\w+)\s+in\s+(' . Liquid::get('VARIABLE_NAME') . ')/');
@@ -95,7 +97,8 @@ class TagFor extends AbstractBlock {
 	 *
 	 * @return null|string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		if (!isset($context->registers['for'])) {
 			$context->registers['for'] = array();
 		}

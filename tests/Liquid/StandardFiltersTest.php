@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,36 +11,45 @@
 
 namespace Liquid;
 
-class MoneyFilter {
-	public function money($value) {
+class MoneyFilter
+{
+	public function money($value)
+	{
 		return sprintf(' %d$ ', $value);
 	}
 
-	public function money_with_underscore($value) {
+	public function money_with_underscore($value)
+	{
 		return sprintf(' %d$ ', $value);
 	}
 }
 
-class CanadianMoneyFilter {
-	public function money($value) {
+class CanadianMoneyFilter
+{
+	public function money($value)
+	{
 		return sprintf(' %d$ CAD ', $value);
 	}
 }
 
-class SizeClass {
+class SizeClass
+{
 	const SIZE = 42;
 
-	public function toLiquid() {
+	public function toLiquid()
+	{
 		return $this;
 	}
 
-	public function size() {
+	public function size()
+	{
 		return self::SIZE;
 	}
 }
 
 
-class StandardFiltersTest extends TestCase {
+class StandardFiltersTest extends TestCase
+{
 	/**
 	 * The current context
 	 *
@@ -48,13 +57,15 @@ class StandardFiltersTest extends TestCase {
 	 */
 	public $context;
 
-	protected function setup() {
+	protected function setup()
+	{
 		parent::setUp();
 
 		$this->context = new Context();
 	}
 
-	public function testSize() {
+	public function testSize()
+	{
 		$data = array(
 			4 => 1000,
 			3 => 100,
@@ -72,11 +83,13 @@ class StandardFiltersTest extends TestCase {
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage cannot be estimated
 	 */
-	public function testSizeObject() {
+	public function testSizeObject()
+	{
 		StandardFilters::size((object) array());
 	}
 
-	public function testDowncase() {
+	public function testDowncase()
+	{
 		$data = array(
 			'UpperCaseMiXed' => 'uppercasemixed',
 			3 => 3,
@@ -87,7 +100,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testUpcase() {
+	public function testUpcase()
+	{
 		$data = array(
 			'UpperCaseMiXed' => 'UPPERCASEMIXED',
 			3 => 3,
@@ -98,7 +112,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testCapitalize() {
+	public function testCapitalize()
+	{
 		$data = array(
 			'one Word not' => 'One Word Not',
 			'1test' => '1Test',
@@ -110,7 +125,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testUrlEncode() {
+	public function testUrlEncode()
+	{
 		$data = array(
 			'nothing' => 'nothing',
 			'%#&^' => '%25%23%26%5E',
@@ -122,7 +138,8 @@ class StandardFiltersTest extends TestCase {
 	}
 
 
-	public function testUrlDecode() {
+	public function testUrlDecode()
+	{
 		$data = array(
 			'%25%23%26%5E' => '%#&^',
 		);
@@ -133,7 +150,8 @@ class StandardFiltersTest extends TestCase {
 	}
 
 
-	public function testRaw() {
+	public function testRaw()
+	{
 		$data = array(
 			"Anything" => "Anything",
 			3 => 3,
@@ -144,7 +162,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testEscape() {
+	public function testEscape()
+	{
 		$data = array(
 			"one Word's not" => "one Word&#039;s not",
 			"&><\"'" => "&amp;&gt;&lt;&quot;&#039;",
@@ -155,7 +174,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testEscapeOnce() {
+	public function testEscapeOnce()
+	{
 		$data = array(
 			"<b><script>alert()</script>" => "&lt;b&gt;&lt;script&gt;alert()&lt;/script&gt;",
 			"a < b & c" => "a &lt; b &amp; c",
@@ -168,7 +188,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testStripNewLines() {
+	public function testStripNewLines()
+	{
 		$data = array(
 			"one Word\r\n not\r\n\r\n" => "one Word not",
 			'test' => 'test',
@@ -180,7 +201,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testNewLineToBr() {
+	public function testNewLineToBr()
+	{
 		$data = array(
 			"one Word\n not\n" => "one Word<br />\n not<br />\n",
 			'test' => 'test',
@@ -192,7 +214,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testReplace() {
+	public function testReplace()
+	{
 		// Replace for empty string
 		$data = array(
 			"one Word not Word" => "one  not ",
@@ -216,7 +239,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testReplaceFirst() {
+	public function testReplaceFirst()
+	{
 		// Replace for empty string
 		$data = array(
 			"one Word not Word" => "one  not Word",
@@ -240,7 +264,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testRemove() {
+	public function testRemove()
+	{
 		$data = array(
 			"one Word not Word" => "one  not ",
 			'test' => 'test',
@@ -252,7 +277,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testRemoveFirst() {
+	public function testRemoveFirst()
+	{
 		$data = array(
 			"one Word not Word" => "one  not Word",
 			'test' => 'test',
@@ -264,7 +290,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testAppend() {
+	public function testAppend()
+	{
 		$data = array(
 			"one Word not Word" => "one Word not Word appended",
 			'' => ' appended',
@@ -276,7 +303,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testPrepend() {
+	public function testPrepend()
+	{
 		$data = array(
 			"one Word not Word" => "prepended one Word not Word",
 			'' => 'prepended ',
@@ -288,7 +316,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testSlice() {
+	public function testSlice()
+	{
 		// Slice up to the end
 		$data = array(
 			array(
@@ -304,12 +333,12 @@ class StandardFiltersTest extends TestCase {
 				'',
 			),
 			array(
-				array(1,2,3,4,5),
-				array(3,4,5),
+				array(1, 2, 3, 4, 5),
+				array(3, 4, 5),
 			),
 			array(
-				new \ArrayIterator(array(1,2,3,4,5)),
-				array(3,4,5),
+				new \ArrayIterator(array(1, 2, 3, 4, 5)),
+				array(3, 4, 5),
 			),
 			array(
 				'12345',
@@ -348,12 +377,12 @@ class StandardFiltersTest extends TestCase {
 				'',
 			),
 			array(
-				array(1,2,3,4,5),
-				array(3,4),
+				array(1, 2, 3, 4, 5),
+				array(3, 4),
 			),
 			array(
-				new \ArrayIterator(array(1,2,3,4,5)),
-				array(3,4),
+				new \ArrayIterator(array(1, 2, 3, 4, 5)),
+				array(3, 4),
 			),
 			array(
 				'12345',
@@ -374,7 +403,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testTruncate() {
+	public function testTruncate()
+	{
 		// Truncate with default ending
 		$data = array(
 			'' => '',
@@ -394,7 +424,8 @@ class StandardFiltersTest extends TestCase {
 		$this->assertEquals('abcend', StandardFilters::truncate('abcdef', 3, 'end'));
 	}
 
-	public function testTruncateWords() {
+	public function testTruncateWords()
+	{
 		// Truncate with default ending
 		$data = array(
 			'' => '',
@@ -414,7 +445,8 @@ class StandardFiltersTest extends TestCase {
 		$this->assertEquals('helloend', StandardFilters::truncatewords('hello from string', 1, 'end'));
 	}
 
-	public function testStripHtml() {
+	public function testStripHtml()
+	{
 		$data = array(
 			'' => '',
 			'test no html tags' => 'test no html tags',
@@ -427,7 +459,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testJoin() {
+	public function testJoin()
+	{
 		$data = array(
 			array(
 				array(),
@@ -442,11 +475,11 @@ class StandardFiltersTest extends TestCase {
 				'',
 			),
 			array(
-				array(1,2,3,4,5),
+				array(1, 2, 3, 4, 5),
 				'1 2 3 4 5'
 			),
 			array(
-				new \ArrayIterator(array(1,2,3,4,5)),
+				new \ArrayIterator(array(1, 2, 3, 4, 5)),
 				'1 2 3 4 5'
 			),
 			array(
@@ -464,7 +497,8 @@ class StandardFiltersTest extends TestCase {
 		$this->assertEquals('1-2-3', StandardFilters::join(new \ArrayIterator(array(1, 2, 3)), '-'));
 	}
 
-	public function testSort() {
+	public function testSort()
+	{
 		$data = array(
 			array(
 				array(),
@@ -528,14 +562,16 @@ class StandardFiltersTest extends TestCase {
 		}
 	*/
 
-	public function testDefault() {
+	public function testDefault()
+	{
 		$this->assertEquals('hello', StandardFilters::_default('', 'hello'));
 		$this->assertEquals('world', StandardFilters::_default('world', 'hello'));
 		// check that our workaround for 'default' works as it should
 		$this->assertTemplateResult('something', '{{ nothing | default: "something" }}');
 	}
 	
-	public function testUnique() {
+	public function testUnique()
+	{
 		$data = array(
 			array(
 				array(),
@@ -560,7 +596,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testReverse() {
+	public function testReverse()
+	{
 		$data = array(
 			array(
 				array(),
@@ -585,7 +622,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testMap() {
+	public function testMap()
+	{
 		$data = array(
 			array(
 				array(),
@@ -642,7 +680,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testFirst() {
+	public function testFirst()
+	{
 		$data = array(
 			array(
 				array(),
@@ -675,7 +714,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testLast() {
+	public function testLast()
+	{
 		$data = array(
 			array(
 				array(),
@@ -708,7 +748,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testSplit() {
+	public function testSplit()
+	{
 		$data = array(
 			array(
 				'',
@@ -725,7 +766,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testStrip() {
+	public function testStrip()
+	{
 		$data = array(
 			array(
 				'',
@@ -746,7 +788,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testLStrip() {
+	public function testLStrip()
+	{
 		$data = array(
 			array(
 				'',
@@ -767,7 +810,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testRStrip() {
+	public function testRStrip()
+	{
 		$data = array(
 			array(
 				'',
@@ -788,7 +832,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testPlus() {
+	public function testPlus()
+	{
 		$data = array(
 			array(
 				'',
@@ -812,7 +857,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testMinus() {
+	public function testMinus()
+	{
 		$data = array(
 			array(
 				'',
@@ -841,7 +887,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testTimes() {
+	public function testTimes()
+	{
 		$data = array(
 			array(
 				'',
@@ -870,7 +917,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testDivideBy() {
+	public function testDivideBy()
+	{
 		$data = array(
 			array(
 				'20',
@@ -899,7 +947,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testModulo() {
+	public function testModulo()
+	{
 		$data = array(
 			array(
 				'20',
@@ -933,7 +982,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testRound() {
+	public function testRound()
+	{
 		$data = array(
 			array(
 				'20.003',
@@ -957,7 +1007,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testCeil() {
+	public function testCeil()
+	{
 		$data = array(
 			array(
 				'20.003',
@@ -978,7 +1029,8 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testFloor() {
+	public function testFloor()
+	{
 		$data = array(
 			array(
 				'20.003',
@@ -1003,21 +1055,24 @@ class StandardFiltersTest extends TestCase {
 		}
 	}
 
-	public function testLocalFilter() {
+	public function testLocalFilter()
+	{
 		$var = new Variable('var | money');
 		$this->context->set('var', 1000);
 		$this->context->addFilters(new MoneyFilter());
 		$this->assertEquals(' 1000$ ', $var->render($this->context));
 	}
 
-	public function testUnderscoreInFilterName() {
+	public function testUnderscoreInFilterName()
+	{
 		$var = new Variable('var | money_with_underscore ');
 		$this->context->set('var', 1000);
 		$this->context->addFilters(new MoneyFilter());
 		$this->assertEquals(' 1000$ ', $var->render($this->context));
 	}
 
-	public function testSecondFilterOverwritesFirst() {
+	public function testSecondFilterOverwritesFirst()
+	{
 		$var = new Variable('var | money ');
 		$this->context->set('var', 1000);
 		$this->context->addFilters(new MoneyFilter(), 'money');
@@ -1025,7 +1080,8 @@ class StandardFiltersTest extends TestCase {
 		$this->assertEquals(' 1000$ CAD ', $var->render($this->context));
 	}
 
-	public function testDate() {
+	public function testDate()
+	{
 		$var = new Variable('var | date, "%Y"');
 		$this->context->set('var', '2017-07-01 21:00:00');
 		$this->assertEquals('2017', $var->render($this->context));

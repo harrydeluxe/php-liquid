@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,7 +27,8 @@ use Liquid\Regexp;
  *
  * @author Viorel Dram
  */
-class TagDecrement extends AbstractTag {
+class TagDecrement extends AbstractTag
+{
 	/**
 	 * Name of the variable to decrement
 	 *
@@ -44,7 +45,8 @@ class TagDecrement extends AbstractTag {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		$syntax = new Regexp('/(' . Liquid::get('VARIABLE_NAME') . ')/');
 
 		if ($syntax->match($markup)) {
@@ -61,7 +63,8 @@ class TagDecrement extends AbstractTag {
 	 *
 	 * @return string|void
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		// if the value is not set in the environment check to see if it
 		// exists in the context, and if not set it to 0
 		if (!isset($context->environments[0][$this->toDecrement])) {

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,7 +11,8 @@
 
 namespace Liquid;
 
-class TestCase extends \PHPUnit_Framework_TestCase {
+class TestCase extends \PHPUnit_Framework_TestCase
+{
 	const TEMPLATES_DIR = 'templates';
 
 	/**
@@ -19,7 +20,8 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	 */
 	public $filters;
 
-	protected function setUp() {
+	protected function setUp()
+	{
 		parent::setUp();
 
 		$defaultConfig = array(
@@ -51,7 +53,8 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	 * @param array $assigns
 	 * @param string $message
 	 */
-	public function assertTemplateResult($expected, $templateString, array $assigns = array(), $message = "%s") {
+	public function assertTemplateResult($expected, $templateString, array $assigns = array(), $message = "%s")
+	{
 		$template = new Template();
 		$template->parse($templateString);
 

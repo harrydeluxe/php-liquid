@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -32,8 +32,8 @@ $assigns = array(
 	'document' => array(
 		'title' => 'This is php-liquid',
 		'content' => 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
-		'copyright' => '&copy; Copyright 2014 Guz Alexander - All rights reserved.'
-	)
+		'copyright' => '&copy; Copyright 2014 Guz Alexander - All rights reserved.',
+	),
 );
 
 echo $liquid->render($assigns);

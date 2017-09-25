@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -21,7 +21,8 @@ use Liquid\Regexp;
 /**
  * Quickly create a table from a collection
  */
-class TagTablerow extends AbstractBlock {
+class TagTablerow extends AbstractBlock
+{
 	/**
 	 * The variable name of the table tag
 	 *
@@ -52,7 +53,8 @@ class TagTablerow extends AbstractBlock {
 	 *
 	 * @throws \Liquid\LiquidException
 	 */
-	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null) {
+	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
+	{
 		parent::__construct($markup, $tokens, $fileSystem);
 
 		$syntax = new Regexp('/(\w+)\s+in\s+(' . Liquid::get('VARIABLE_NAME') . ')/');
@@ -74,7 +76,8 @@ class TagTablerow extends AbstractBlock {
 	 *
 	 * @return string
 	 */
-	public function render(Context $context) {
+	public function render(Context $context)
+	{
 		$collection = $context->get($this->collectionName);
 
 		if ($collection instanceof \Traversable) {

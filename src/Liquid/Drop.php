@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -32,7 +32,8 @@ namespace Liquid;
  * Your drop can either implement the methods sans any parameters or implement the beforeMethod(name) method which is a
  * catch all.
  */
-abstract class Drop {
+abstract class Drop
+{
 	/**
 	 * @var Context
 	 */
@@ -45,14 +46,16 @@ abstract class Drop {
 	 *
 	 * @return null
 	 */
-	protected function beforeMethod($method) {
+	protected function beforeMethod($method)
+	{
 		return null;
 	}
 
 	/**
 	 * @param Context $context
 	 */
-	public function setContext(Context $context) {
+	public function setContext(Context $context)
+	{
 		$this->context = $context;
 	}
 
@@ -63,7 +66,8 @@ abstract class Drop {
 	 *
 	 * @return mixed
 	 */
-	public function invokeDrop($method) {
+	public function invokeDrop($method)
+	{
 		$result = $this->beforeMethod($method);
 
 		if (is_null($result) && is_callable(array($this, $method))) {
@@ -80,21 +84,24 @@ abstract class Drop {
 	 *
 	 * @return bool
 	 */
-	public function hasKey($name) {
+	public function hasKey($name)
+	{
 		return true;
 	}
 
 	/**
 	 * @return Drop
 	 */
-	public function toLiquid() {
+	public function toLiquid()
+	{
 		return $this;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function __toString() {
+	public function __toString()
+	{
 		return get_class($this);
 	}
 }

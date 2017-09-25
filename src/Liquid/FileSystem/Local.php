@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -22,7 +22,8 @@ use Liquid\Liquid;
  *
  * For security reasons, template paths are only allowed to contain letters, numbers, and underscore.
  */
-class Local implements FileSystem {
+class Local implements FileSystem
+{
 	/**
 	 * The root path
 	 *
@@ -35,7 +36,8 @@ class Local implements FileSystem {
 	 *
 	 * @param string $root The root path for templates
 	 */
-	public function __construct($root) {
+	public function __construct($root)
+	{
 		// since root path can only be set from constructor, we check it once right here
 		if (!empty($root)) {
 			$realRoot = realpath($root);
@@ -55,7 +57,8 @@ class Local implements FileSystem {
 	 *
 	 * @return string template content
 	 */
-	public function readTemplateFile($templatePath) {
+	public function readTemplateFile($templatePath)
+	{
 		return file_get_contents($this->fullPath($templatePath));
 	}
 
@@ -67,7 +70,8 @@ class Local implements FileSystem {
 	 * @throws LiquidException
 	 * @return string
 	 */
-	public function fullPath($templatePath) {
+	public function fullPath($templatePath)
+	{
 		if (empty($templatePath)) {
 			throw new LiquidException("Empty template name");
 		}

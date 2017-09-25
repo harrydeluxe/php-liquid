@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,29 +11,35 @@
 
 namespace Liquid;
 
-class LiquidTest extends TestCase {
-	public function testGetNonExistingPropery() {
+class LiquidTest extends TestCase
+{
+	public function testGetNonExistingPropery()
+	{
 		$this->assertNull(Liquid::get('no_such_value'));
 	}
 
-	public function testSetProperty() {
+	public function testSetProperty()
+	{
 		$key = 'test_key';
 		$value = 'test_value';
 		Liquid::set($key, $value);
 		$this->assertSame($value, Liquid::get($key));
 	}
 
-	public function testGetSetAllowedChars() {
+	public function testGetSetAllowedChars()
+	{
 		Liquid::set('ALLOWED_VARIABLE_CHARS', 'abc');
 		$this->assertSame('abc', Liquid::get('ALLOWED_VARIABLE_CHARS'));
 		$this->assertSame('abc+', Liquid::get('VARIABLE_NAME'));
 	}
 
-	public function testArrayFlattenEmptyArray() {
+	public function testArrayFlattenEmptyArray()
+	{
 		$this->assertSame(array(), Liquid::arrayFlatten(array()));
 	}
 
-	public function testArrayFlattenFlatArray() {
+	public function testArrayFlattenFlatArray()
+	{
 		$object = new \stdClass();
 
 		// Method does not maintain keys.
@@ -52,7 +58,8 @@ class LiquidTest extends TestCase {
 		$this->assertEquals($expected, Liquid::arrayFlatten($original));
 	}
 
-	public function testArrayFlattenNestedArray() {
+	public function testArrayFlattenNestedArray()
+	{
 		$object = new \stdClass();
 
 		// Method does not maintain keys.

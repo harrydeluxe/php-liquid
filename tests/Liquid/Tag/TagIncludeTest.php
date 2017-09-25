@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,17 +18,20 @@ use Liquid\Cache\Local;
 use Liquid\FileSystem\Virtual;
 use Liquid\TestFileSystem;
 
-class TagIncludeTest extends TestCase {
+class TagIncludeTest extends TestCase
+{
 	private $fs;
 
-	protected function setUp() {
+	protected function setUp()
+	{
 		$this->fs = TestFileSystem::fromArray(array(
 			'inner' => "Inner: {{ inner }}{{ other }}",
 			'example' => "Example: {% include 'inner' %}",
 		));
 	}
 
-	protected function tearDown() {
+	protected function tearDown()
+	{
 		// PHP goes nuts unless we unset it
 		unset($this->fs);
 	}
@@ -36,7 +39,8 @@ class TagIncludeTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntaxNoTemplateName() {
+	public function testInvalidSyntaxNoTemplateName()
+	{
 		$template = new Template();
 		$template->parse("{% include %}");
 	}
@@ -44,7 +48,8 @@ class TagIncludeTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntaxNotQuotedTemplateName() {
+	public function testInvalidSyntaxNotQuotedTemplateName()
+	{
 		$template = new Template();
 		$template->parse("{% include hello %}");
 	}
@@ -52,7 +57,8 @@ class TagIncludeTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntaxInvalidKeyword() {
+	public function testInvalidSyntaxInvalidKeyword()
+	{
 		$template = new Template();
 		$template->parse("{% include 'hello' no_keyword %}");
 	}
@@ -60,12 +66,14 @@ class TagIncludeTest extends TestCase {
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntaxNoObjectCollection() {
+	public function testInvalidSyntaxNoObjectCollection()
+	{
 		$template = new Template();
 		$template->parse("{% include 'hello' with %}");
 	}
 
-	public function testIncludeTag() {
+	public function testIncludeTag()
+	{
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 
@@ -76,7 +84,8 @@ class TagIncludeTest extends TestCase {
 		$this->assertEquals("Outer-Inner: value23-OuterInner: 1loopInner: 2loopInner: 3loop", $output);
 	}
 
-	public function testIncludeTagNoWith() {
+	public function testIncludeTagNoWith()
+	{
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 
@@ -87,7 +96,8 @@ class TagIncludeTest extends TestCase {
 		$this->assertEquals("Outer-Inner: orig-Outer-Inner: orig23", $output);
 	}
 
-	public function testWithCache() {
+	public function testWithCache()
+	{
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 		$template->setCache(new Local());
@@ -101,7 +111,8 @@ class TagIncludeTest extends TestCase {
 		$template->setCache(null);
 	}
 
-	public function testIncludeTemplateFile() {
+	public function testIncludeTemplateFile()
+	{
 		Liquid::set('INCLUDE_PREFIX', '');
 		Liquid::set('INCLUDE_SUFFIX', 'tpl');
 
@@ -111,7 +122,8 @@ class TagIncludeTest extends TestCase {
 		$this->assertEquals("test content\n", $template->render());
 	}
 
-	public function testIncludePassPlainValue() {
+	public function testIncludePassPlainValue()
+	{
 		$template = new Template();
 		$template->setFileSystem(TestFileSystem::fromArray(array(
 			'inner' => "[{{ other }}]",
@@ -128,7 +140,8 @@ class TagIncludeTest extends TestCase {
 	 * @expectedException \Liquid\LiquidException
 	 * @expectedExceptionMessage Use index operator
 	 */
-	public function testIncludePassArrayWithoutIndex() {
+	public function testIncludePassArrayWithoutIndex()
+	{
 		$template = new Template();
 		$template->setFileSystem(TestFileSystem::fromArray(array(
 			'inner' => "[{{ other }}]",
@@ -139,7 +152,8 @@ class TagIncludeTest extends TestCase {
 		$template->render(array("var" => array("a", "b", "c")));
 	}
 
-	public function testIncludePassArrayWithIndex() {
+	public function testIncludePassArrayWithIndex()
+	{
 		$template = new Template();
 		$template->setFileSystem(TestFileSystem::fromArray(array(
 			'inner' => "[{{ other[0] }}]",
@@ -152,7 +166,8 @@ class TagIncludeTest extends TestCase {
 		$this->assertEquals("([a])", $output);
 	}
 
-	public function testIncludePassObjectValue() {
+	public function testIncludePassObjectValue()
+	{
 		$template = new Template();
 		$template->setFileSystem(TestFileSystem::fromArray(array(
 			'inner' => "[{{ other.a }}]",

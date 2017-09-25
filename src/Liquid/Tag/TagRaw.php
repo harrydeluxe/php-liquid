@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,11 +25,13 @@ use Liquid\Regexp;
  *     will return:
  *     {{ 5 | plus: 6 }} is equal to 11.
  */
-class TagRaw extends AbstractBlock {
+class TagRaw extends AbstractBlock
+{
 	/**
 	 * @param array $tokens
 	 */
-	public function parse(array &$tokens) {
+	public function parse(array &$tokens)
+	{
 		$tagRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '\s*(\w+)\s*(.*)?' . Liquid::get('TAG_END') . '$/');
 
 		$this->nodelist = array();

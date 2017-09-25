@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,13 +11,16 @@
 
 namespace Liquid;
 
-class VariableTest extends TestCase {
-	public function testVariable() {
+class VariableTest extends TestCase
+{
+	public function testVariable()
+	{
 		$var = new Variable('hello');
 		$this->assertEquals('hello', $var->getName());
 	}
 
-	public function testFilters() {
+	public function testFilters()
+	{
 		$var = new Variable('hello | textileze');
 		$this->assertEquals('hello', $var->getName());
 		$this->assertEquals(array(array('textileze', array())), $var->getFilters());
@@ -59,7 +62,8 @@ class VariableTest extends TestCase {
 		$this->assertEquals(array(array('things', array('"%Y, okay?"', "'the other one'"))), $var->getFilters());
 	}
 
-	public function testFiltersWithoutWhitespace() {
+	public function testFiltersWithoutWhitespace()
+	{
 		$var = new Variable('hello | textileze | paragraph');
 		$this->assertEquals('hello', $var->getName());
 		$this->assertEquals(array(array('textileze', array()), array('paragraph', array())), $var->getFilters());
@@ -69,38 +73,45 @@ class VariableTest extends TestCase {
 		$this->assertEquals(array(array('textileze', array()), array('paragraph', array())), $var->getFilters());
 	}
 
-	public function testSymbol() {
+	public function testSymbol()
+	{
 		$var = new Variable("http://disney.com/logo.gif | image: 'med' ");
 		$this->assertEquals('http://disney.com/logo.gif', $var->getName());
 		$this->assertEquals(array(array('image', array("'med'"))), $var->getFilters());
 	}
 
-	public function testStringSingleQuoted() {
+	public function testStringSingleQuoted()
+	{
 		$var = new Variable(' "hello" ');
 		$this->assertEquals('"hello"', $var->getName());
 	}
 
-	public function testStringDoubleQuoted() {
+	public function testStringDoubleQuoted()
+	{
 		$var = new Variable(" 'hello' ");
 		$this->assertEquals("'hello'", $var->getName());
 	}
 
-	public function testInteger() {
+	public function testInteger()
+	{
 		$var = new Variable(' 1000 ');
 		$this->assertEquals('1000', $var->getName());
 	}
 
-	public function testFloat() {
+	public function testFloat()
+	{
 		$var = new Variable(' 1000.01 ');
 		$this->assertEquals('1000.01', $var->getName());
 	}
 
-	public function testStringWithSpecialChars() {
+	public function testStringWithSpecialChars()
+	{
 		$var = new Variable("'hello! $!@.;\"ddasd\" ' ");
 		$this->assertEquals("'hello! $!@.;\"ddasd\" '", $var->getName());
 	}
 
-	public function testStringDot() {
+	public function testStringDot()
+	{
 		$var = new Variable(" test.test ");
 		$this->assertEquals('test.test', $var->getName());
 	}

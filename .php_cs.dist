@@ -10,14 +10,22 @@ file that was distributed with this source code.
 EOF;
 
 return PhpCsFixer\Config::create()
-    ->setRiskyAllowed(true)
-    ->setRules([
-        '@PSR2' => true,
-        'braces' => ['position_after_functions_and_oop_constructs' => 'same'],
-    ])
-    ->setIndent("\t")
-    ->setFinder(
-        PhpCsFixer\Finder::create()
-        ->in(__DIR__)
-    )
+	->setRiskyAllowed(true)
+	->setRules([
+		'@PSR2' => true,
+		'psr4' => true,
+		'no_unreachable_default_argument_value' => true,
+		'no_useless_else' => true,
+		'no_useless_return' => true,
+		'phpdoc_add_missing_param_annotation' => true,
+		'phpdoc_order' => true,
+		'semicolon_after_instruction' => true,
+		'whitespace_after_comma_in_array' => true,
+		'header_comment' => ['header' => $header],
+	])
+	->setIndent("\t")
+	->setFinder(
+		PhpCsFixer\Finder::create()
+		->in(__DIR__)
+	)
 ;

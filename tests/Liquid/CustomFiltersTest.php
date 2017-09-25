@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Liquid package.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,7 +11,8 @@
 
 namespace Liquid;
 
-class CustomFiltersTest extends TestCase {
+class CustomFiltersTest extends TestCase
+{
 	/**
 	 * The current context
 	 *
@@ -19,13 +20,15 @@ class CustomFiltersTest extends TestCase {
 	 */
 	public $context;
 
-	protected function setup() {
+	protected function setup()
+	{
 		parent::setUp();
 
 		$this->context = new Context();
 	}
 
-	public function testSortKey() {
+	public function testSortKey()
+	{
 		$data = array(
 			array(
 				array(),
