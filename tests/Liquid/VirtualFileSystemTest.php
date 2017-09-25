@@ -24,7 +24,7 @@ class VirtualFileSystemTest extends TestCase
 		new Virtual('');
 	}
 
-	public function testFeadTemplateFile() {
+	public function testReadTemplateFile() {
 		$fs = new Virtual(function ($templatePath) {
 			if ($templatePath == 'foo') {
 				return "Contents of foo";
