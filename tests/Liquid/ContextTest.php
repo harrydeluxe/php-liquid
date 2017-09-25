@@ -219,6 +219,8 @@ class ContextTest extends TestCase
 
 	public function testVariables() {
 		$this->context->set('test', 'test');
+		$this->assertTrue($this->context->hasKey('test'));
+		$this->assertFalse($this->context->hasKey('test.foo'));
 		$this->assertEquals('test', $this->context->get('test'));
 
 		// We add this text to make sure we can return values that evaluate to false properly
