@@ -76,11 +76,17 @@ class TagInclude extends AbstractTag
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
-		$regex = new Regexp('/("[^"]+"|\'[^\']+\')(\s+(with|for)\s+(' . Liquid::get('QUOTED_FRAGMENT') . '+))?/');
+		$regex = new Regexp('/("[^"]+"|\'[^\']+\'|[^\'"\s]+)(\s+(with|for)\s+(' . Liquid::get('QUOTED_FRAGMENT') . '+))?/');
 
 		if ($regex->match($markup)) {
-			$this->templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
-
+			$unquoted = (strpos($regex->matches[1], '"') === false && strpos($regex->matches[1], "'") === false);
+			$start = 1;
+			$len = strlen($regex->matches[1]) - 2;
+			if ($unquoted) {
+				$start = 0;
+				$len = strlen($regex->matches[1]);
+			}
+			$this->templateName = substr($regex->matches[1], $start, $len);
 			if (isset($regex->matches[1])) {
 				$this->collection = (isset($regex->matches[3])) ? ($regex->matches[3] == "for") : null;
 				$this->variable = (isset($regex->matches[4])) ? $regex->matches[4] : null;
