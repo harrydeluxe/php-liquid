@@ -25,6 +25,10 @@ class TagIncludeTest extends TestCase
 	protected function setUp()
 	{
 		$this->fs = TestFileSystem::fromArray(array(
+			'a' => "{% include 'b' %}",
+			'b' => "{% include 'c' %}",
+			'c' => "{% include 'd' %}",
+			'd' => '({{ inner }})',
 			'inner' => "Inner: {{ inner }}{{ other }}",
 			'example' => "Example: {% include 'inner' %}",
 		));
@@ -94,9 +98,9 @@ class TagIncludeTest extends TestCase
 		$template->setCache(new Local());
 
 		foreach (array("Before cache:", "With cache:") as $type) {
-			$template->parse("{{ type }} {% for item in list %}{% include 'example' inner:item %} {% endfor %}");
+			$template->parse("{{ type }} {% for item in list %}{% include 'example' inner:item %} {% endfor %}{% include 'a' %}");
 			$template->render(array("inner" => "foo", "list" => array(1, 2, 3)), array());
-			$this->assertEquals("$type Example: Inner: 1 Example: Inner: 2 ", $template->render(array("type" => $type, "inner" => "bar", "list" => array(1, 2))));
+			$this->assertEquals("$type Example: Inner: 1 Example: Inner: 2 (bar)", $template->render(array("type" => $type, "inner" => "bar", "list" => array(1, 2))));
 		}
 
 		$template->setCache(null);
