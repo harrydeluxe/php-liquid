@@ -39,11 +39,13 @@ class Document extends AbstractBlock
 	public function checkIncludes()
 	{
 		foreach ($this->nodelist as $token) {
-			if ($token instanceof TagInclude || $token instanceof TagExtends) {
-				/** @var TagInclude|TagExtends $token */
-				if ($token->checkIncludes() == true) {
-					return true;
-				}
+			// check any of the tokens for includes
+			if ($token instanceof TagInclude && $token->checkIncludes()) {
+				return true;
+			}
+
+			if ($token instanceof TagExtends && $token->checkIncludes()) {
+				return true;
 			}
 		}
 

@@ -165,17 +165,33 @@ class Template
 	 */
 	public function parse($source)
 	{
-		if (self::$cache !== null) {
-			if (($this->root = self::$cache->read(md5($source))) != false && $this->root->checkIncludes() != true) {
-			} else {
-				$tokens = Template::tokenize($source);
-				$this->root = new Document($tokens, $this->fileSystem);
-				self::$cache->write(md5($source), $this->root);
-			}
-		} else {
-			$tokens = Template::tokenize($source);
-			$this->root = new Document($tokens, $this->fileSystem);
+		if (!self::$cache) {
+			return $this->parseAlways($source);
 		}
+
+		$hash = md5($source);
+		$this->root = self::$cache->read($hash);
+
+		// if no cached version exists, or if it checks for includes
+		if ($this->root == false || $this->root->checkIncludes() == true) {
+			$this->parseAlways($source);
+			self::$cache->write($hash, $this->root);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Parses the given source string regardless of caching
+	 *
+	 * @param string $source
+	 *
+	 * @return Template
+	 */
+	private function parseAlways($source)
+	{
+		$tokens = Template::tokenize($source);
+		$this->root = new Document($tokens, $this->fileSystem);
 
 		return $this;
 	}
