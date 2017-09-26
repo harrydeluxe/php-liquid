@@ -82,6 +82,41 @@ class TagExtendsTest extends TestCase
 	}
 
 	/**
+	 * Render calls in this test will give different results (and fail the test) with cache enabled
+	 */
+	public function testExtendsReplaceContentWithCache()
+	{
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'outer' => "{% block content %}Content for outer block{% endblock %} / {% block footer %}Footer for outer block{% endblock %}",
+			'inner' => "{% extends 'outer' %}{% block content %}Content for inner block{% endblock %}",
+		)));
+
+		$contentsWithoutCache = $template->parseFile('inner')->render();
+
+		$template->setCache(new Local());
+		$template->parseFile('outer');
+
+		$this->assertEquals($contentsWithoutCache, $template->parseFile('inner')->render());
+	}
+
+	public function testExtendsReplaceContentWithVariables()
+	{
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'outer' => "{% block content %}Outer{{ a }}{% endblock %}Spacer{{ a }}{% block footer %}Footer{{ a }}{% endblock %}",
+			'middle' => "{% extends 'outer' %}{% block content %}Inner{{ a }}{% endblock %}",
+		)));
+
+		$template->setCache(new Local());
+
+		$template->parseFile('outer')->render(['a' => '0']);
+		$template->parseFile('middle')->render(['a' => '1']);
+		$template->parseFile('middle')->render(['a' => '2']);
+		$this->assertEquals('Inner3Spacer3Footer3', $template->parseFile('middle')->render(['a' => '3']));
+	}
+
+	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testInvalidSyntaxNoTemplateName()
