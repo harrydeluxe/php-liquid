@@ -15,6 +15,7 @@ use Liquid\TestCase;
 use Liquid\Template;
 use Liquid\Cache\Local;
 use Liquid\FileSystem\Virtual;
+use Liquid\TestFileSystem;
 
 /**
  * @see TagExtends
@@ -25,15 +26,10 @@ class TagExtendsTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->fs = new Virtual(function ($templatePath) {
-			if ($templatePath == 'base') {
-				return "{% block content %}{% endblock %}{% block footer %}{% endblock %}";
-			}
-
-			if ($templatePath == 'sub-base') {
-				return "{% extends 'base' %}{% block content %}{% endblock %}{% block footer %} Boo! {% endblock %}";
-			}
-		});
+		$this->fs = TestFileSystem::fromArray(array(
+			'base' => "{% block content %}{% endblock %}{% block footer %}{% endblock %}",
+			'sub-base' => "{% extends 'base' %}{% block content %}{% endblock %}{% block footer %} Boo! {% endblock %}",
+		));
 	}
 
 	protected function tearDown()
