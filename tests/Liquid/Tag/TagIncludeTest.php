@@ -189,4 +189,34 @@ class TagIncludeTest extends TestCase
 		$output = $template->render(array("var" => "test"));
 		$this->assertEquals("[test] (test)", $output);
 	}
+
+	/**
+	 * Render calls in this test shall give same results with cache enabled
+	 */
+	public function testIncludeWithExtends()
+	{
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'outer' => "{% block content %}Content for outer block{% endblock %} / {% block footer %}Footer for outer block{% endblock %}",
+			'content' => 'Content for {{ name }} block',
+			'middle' => "{% extends 'outer' %}{% block content %}{% include 'content' name:'middle' %}{% endblock %}",
+			'main' => "Main: {% extends 'middle' %}{% block footer %}{% include 'footer-top' hello:message %}{% endblock %}",
+			'footer-bottom' => "{{ name }} with message: {{ hello }}",
+			'footer-top' => "Footer top and {% include 'footer-bottom' name:'bottom' %}",
+		)));
+
+		$template->setCache(new Local());
+
+		foreach (array("Before cache", "With cache") as $type) {
+			$this->assertEquals("Block with message: $type", $template->parseFile('footer-bottom')->render(array("name" => "Block", "hello" => $type)));
+			$this->assertEquals('Content for middle block / Footer for outer block', $template->parseFile('middle')->render());
+			$this->assertEquals("Main: Content for middle block / Footer top and bottom with message: $type", $template->parseFile('main')->render(array("message" => $type)));
+
+			$template->parse("{% include 'main' hello:message %}");
+			$output = $template->render(array("message" => $type));
+			$this->assertEquals("Main: Content for middle block / Footer top and bottom with message: $type", $output);
+		}
+
+		$template->setCache(null);
+	}
 }
