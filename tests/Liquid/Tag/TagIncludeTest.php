@@ -175,7 +175,6 @@ class TagIncludeTest extends TestCase
 		$this->assertEquals("([b])", $output);
 	}
 
-
 	public function testIncludeWithoutQuotes()
 	{
 		$template = new Template();
@@ -188,6 +187,11 @@ class TagIncludeTest extends TestCase
 
 		$output = $template->render(array("var" => "test"));
 		$this->assertEquals("[test] (test)", $output);
+
+		$template->parse("{% include inner %}");
+
+		$output = $template->render(array("other" => "test"));
+		$this->assertEquals("[test]", $output);
 	}
 
 	/**
