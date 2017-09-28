@@ -15,6 +15,7 @@ use Liquid\TestCase;
 use Liquid\Template;
 use Liquid\Cache\Local;
 use Liquid\FileSystem\Virtual;
+use Liquid\TestFileSystem;
 
 /**
  * @see TagExtends
@@ -25,15 +26,10 @@ class TagExtendsTest extends TestCase
 
 	protected function setUp()
 	{
-		$this->fs = new Virtual(function ($templatePath) {
-			if ($templatePath == 'base') {
-				return "{% block content %}{% endblock %}{% block footer %}{% endblock %}";
-			}
-
-			if ($templatePath == 'sub-base') {
-				return "{% extends 'base' %}{% block content %}{% endblock %}{% block footer %} Boo! {% endblock %}";
-			}
-		});
+		$this->fs = TestFileSystem::fromArray(array(
+			'base' => "{% block content %}{% endblock %}{% block footer %}{% endblock %}",
+			'sub-base' => "{% extends 'base' %}{% block content %}{% endblock %}{% block footer %} Boo! {% endblock %}",
+		));
 	}
 
 	protected function tearDown()
@@ -83,6 +79,41 @@ class TagExtendsTest extends TestCase
 		}
 
 		$template->setCache(null);
+	}
+
+	/**
+	 * Render calls in this test will give different results (and fail the test) with cache enabled
+	 */
+	public function testExtendsReplaceContentWithCache()
+	{
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'outer' => "{% block content %}Content for outer block{% endblock %} / {% block footer %}Footer for outer block{% endblock %}",
+			'inner' => "{% extends 'outer' %}{% block content %}Content for inner block{% endblock %}",
+		)));
+
+		$contentsWithoutCache = $template->parseFile('inner')->render();
+
+		$template->setCache(new Local());
+		$template->parseFile('outer');
+
+		$this->assertEquals($contentsWithoutCache, $template->parseFile('inner')->render());
+	}
+
+	public function testExtendsReplaceContentWithVariables()
+	{
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'outer' => "{% block content %}Outer{{ a }}{% endblock %}Spacer{{ a }}{% block footer %}Footer{{ a }}{% endblock %}",
+			'middle' => "{% extends 'outer' %}{% block content %}Inner{{ a }}{% endblock %}",
+		)));
+
+		$template->setCache(new Local());
+
+		$template->parseFile('outer')->render(['a' => '0']);
+		$template->parseFile('middle')->render(['a' => '1']);
+		$template->parseFile('middle')->render(['a' => '2']);
+		$this->assertEquals('Inner3Spacer3Footer3', $template->parseFile('middle')->render(['a' => '3']));
 	}
 
 	/**

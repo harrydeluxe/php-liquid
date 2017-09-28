@@ -158,37 +158,38 @@ class TagExtends extends AbstractTag
 			}
 		}
 
-		$this->hash = md5($source);
-
 		$cache = Template::getCache();
 
-		if (isset($cache)) {
-			if (($this->document = $cache->read($this->hash)) != false && $this->document->checkIncludes() != true) {
-			} else {
-				$this->document = new Document($rest, $this->fileSystem);
-				$cache->write($this->hash, $this->document);
-			}
-		} else {
+		if (!$cache) {
 			$this->document = new Document($rest, $this->fileSystem);
+			return;
+		}
+
+		$this->hash = md5($source);
+
+		$this->document = $cache->read($this->hash);
+
+		if ($this->document == false || $this->document->hasIncludes() == true) {
+			$this->document = new Document($rest, $this->fileSystem);
+			$cache->write($this->hash, $this->document);
 		}
 	}
 
 	/**
-	 * Check for cached includes
+	 * Check for cached includes; if there are - do not use cache
 	 *
+	 * @see Document::hasIncludes()
 	 * @return boolean
 	 */
-	public function checkIncludes()
+	public function hasIncludes()
 	{
-		$cache = Template::getCache();
-
-		if ($this->document->checkIncludes() == true) {
+		if ($this->document->hasIncludes() == true) {
 			return true;
 		}
 
 		$source = $this->fileSystem->readTemplateFile($this->templateName);
 
-		if ($cache->exists(md5($source)) && $this->hash === md5($source)) {
+		if (Template::getCache()->exists(md5($source)) && $this->hash === md5($source)) {
 			return false;
 		}
 

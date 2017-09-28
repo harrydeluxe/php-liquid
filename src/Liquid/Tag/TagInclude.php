@@ -78,24 +78,28 @@ class TagInclude extends AbstractTag
 	{
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\'|[^\'"\s]+)(\s+(with|for)\s+(' . Liquid::get('QUOTED_FRAGMENT') . '+))?/');
 
-		if ($regex->match($markup)) {
-			$unquoted = (strpos($regex->matches[1], '"') === false && strpos($regex->matches[1], "'") === false);
-			$start = 1;
-			$len = strlen($regex->matches[1]) - 2;
-			if ($unquoted) {
-				$start = 0;
-				$len = strlen($regex->matches[1]);
-			}
-			$this->templateName = substr($regex->matches[1], $start, $len);
-			if (isset($regex->matches[1])) {
-				$this->collection = (isset($regex->matches[3])) ? ($regex->matches[3] == "for") : null;
-				$this->variable = (isset($regex->matches[4])) ? $regex->matches[4] : null;
-			}
-
-			$this->extractAttributes($markup);
-		} else {
+		if (!$regex->match($markup)) {
 			throw new LiquidException("Error in tag 'include' - Valid syntax: include '[template]' (with|for) [object|collection]");
 		}
+
+		$unquoted = (strpos($regex->matches[1], '"') === false && strpos($regex->matches[1], "'") === false);
+
+		$start = 1;
+		$len = strlen($regex->matches[1]) - 2;
+
+		if ($unquoted) {
+			$start = 0;
+			$len = strlen($regex->matches[1]);
+		}
+
+		$this->templateName = substr($regex->matches[1], $start, $len);
+
+		if (isset($regex->matches[1])) {
+			$this->collection = (isset($regex->matches[3])) ? ($regex->matches[3] == "for") : null;
+			$this->variable = (isset($regex->matches[4])) ? $regex->matches[4] : null;
+		}
+
+		$this->extractAttributes($markup);
 
 		parent::__construct($markup, $tokens, $fileSystem);
 	}
@@ -116,39 +120,40 @@ class TagInclude extends AbstractTag
 		// read the source of the template and create a new sub document
 		$source = $this->fileSystem->readTemplateFile($this->templateName);
 
-		$this->hash = md5($source);
-
 		$cache = Template::getCache();
 
-		if (isset($cache)) {
-			if (($this->document = $cache->read($this->hash)) != false && $this->document->checkIncludes() != true) {
-			} else {
-				$templateTokens = Template::tokenize($source);
-				$this->document = new Document($templateTokens, $this->fileSystem);
-				$cache->write($this->hash, $this->document);
-			}
-		} else {
+		if (!$cache) {
+			// tokens in this new document
 			$templateTokens = Template::tokenize($source);
 			$this->document = new Document($templateTokens, $this->fileSystem);
+			return;
+		}
+
+		$this->hash = md5($source);
+		$this->document = $cache->read($this->hash);
+
+		if ($this->document == false || $this->document->hasIncludes() == true) {
+			$templateTokens = Template::tokenize($source);
+			$this->document = new Document($templateTokens, $this->fileSystem);
+			$cache->write($this->hash, $this->document);
 		}
 	}
 
 	/**
-	 * check for cached includes
+	 * Check for cached includes; if there are - do not use cache
 	 *
+	 * @see Document::hasIncludes()
 	 * @return boolean
 	 */
-	public function checkIncludes()
+	public function hasIncludes()
 	{
-		$cache = Template::getCache();
-
-		if ($this->document->checkIncludes() == true) {
+		if ($this->document->hasIncludes() == true) {
 			return true;
 		}
 
 		$source = $this->fileSystem->readTemplateFile($this->templateName);
 
-		if ($cache->exists(md5($source)) && $this->hash === md5($source)) {
+		if (Template::getCache()->exists(md5($source)) && $this->hash === md5($source)) {
 			return false;
 		}
 

@@ -13,6 +13,7 @@ namespace Liquid;
 
 use Liquid\Tag\TagInclude;
 use Liquid\Tag\TagExtends;
+use Liquid\Tag\TagBlock;
 
 /**
  * This class represents the entire template document.
@@ -32,18 +33,28 @@ class Document extends AbstractBlock
 	}
 
 	/**
-	 * Check for cached includes
+	 * Check for cached includes; if there are - do not use cache
 	 *
+	 * @see \Liquid\Tag\TagInclude::hasIncludes()
+	 * @see \Liquid\Tag\TagExtends::hasIncludes()
 	 * @return string
 	 */
-	public function checkIncludes()
+	public function hasIncludes()
 	{
 		foreach ($this->nodelist as $token) {
-			if ($token instanceof TagInclude || $token instanceof TagExtends) {
-				/** @var TagInclude|TagExtends $token */
-				if ($token->checkIncludes() == true) {
-					return true;
-				}
+			// this may be suboptimal, but if we re-render all blocks we see,
+			// we avoid most if not all related caching quirks
+			if ($token instanceof TagBlock) {
+				return true;
+			}
+
+			// check any of the tokens for includes
+			if ($token instanceof TagInclude && $token->hasIncludes()) {
+				return true;
+			}
+
+			if ($token instanceof TagExtends && $token->hasIncludes()) {
+				return true;
 			}
 		}
 
