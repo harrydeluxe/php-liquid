@@ -32,19 +32,21 @@ class Document extends AbstractBlock
 	}
 
 	/**
-	 * Check for cached includes
+	 * Check for cached includes; if there are - do not use cache
 	 *
+	 * @see \Liquid\Tag\TagInclude::hasIncludes()
+	 * @see \Liquid\Tag\TagExtends::hasIncludes()
 	 * @return string
 	 */
-	public function checkIncludes()
+	public function hasIncludes()
 	{
 		foreach ($this->nodelist as $token) {
 			// check any of the tokens for includes
-			if ($token instanceof TagInclude && $token->checkIncludes()) {
+			if ($token instanceof TagInclude && $token->hasIncludes()) {
 				return true;
 			}
 
-			if ($token instanceof TagExtends && $token->checkIncludes()) {
+			if ($token instanceof TagExtends && $token->hasIncludes()) {
 				return true;
 			}
 		}

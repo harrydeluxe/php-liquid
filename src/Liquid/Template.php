@@ -173,7 +173,7 @@ class Template
 		$this->root = self::$cache->read($hash);
 
 		// if no cached version exists, or if it checks for includes
-		if ($this->root == false || $this->root->checkIncludes() == true) {
+		if ($this->root == false || $this->root->hasIncludes() == true) {
 			$this->parseAlways($source);
 			self::$cache->write($hash, $this->root);
 		}

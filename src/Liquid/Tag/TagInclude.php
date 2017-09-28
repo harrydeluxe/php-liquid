@@ -132,7 +132,7 @@ class TagInclude extends AbstractTag
 		$this->hash = md5($source);
 		$this->document = $cache->read($this->hash);
 
-		if ($this->document == false || $this->document->checkIncludes() == true) {
+		if ($this->document == false || $this->document->hasIncludes() == true) {
 			$templateTokens = Template::tokenize($source);
 			$this->document = new Document($templateTokens, $this->fileSystem);
 			$cache->write($this->hash, $this->document);
@@ -140,13 +140,14 @@ class TagInclude extends AbstractTag
 	}
 
 	/**
-	 * check for cached includes
+	 * Check for cached includes; if there are - do not use cache
 	 *
+	 * @see Document::hasIncludes()
 	 * @return boolean
 	 */
-	public function checkIncludes()
+	public function hasIncludes()
 	{
-		if ($this->document->checkIncludes() == true) {
+		if ($this->document->hasIncludes() == true) {
 			return true;
 		}
 
