@@ -48,15 +48,6 @@ class TagIncludeTest extends TestCase
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */
-	public function testInvalidSyntaxNotQuotedTemplateName()
-	{
-		$template = new Template();
-		$template->parse("{% include hello %}");
-	}
-
-	/**
-	 * @expectedException \Liquid\LiquidException
-	 */
 	public function testInvalidSyntaxInvalidKeyword()
 	{
 		$template = new Template();
@@ -178,5 +169,20 @@ class TagIncludeTest extends TestCase
 
 		$output = $template->render(array("var" => (object) array('a' => 'b')));
 		$this->assertEquals("([b])", $output);
+	}
+
+
+	public function testIncludeWithoutQuotes()
+	{
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'inner' => "[{{ other }}]",
+			'example' => "{%include inner other:var %} ({{var}})",
+		)));
+
+		$template->parse("{% include example other:var %}");
+
+		$output = $template->render(array("var" => "test"));
+		$this->assertEquals("[test] (test)", $output);
 	}
 }
