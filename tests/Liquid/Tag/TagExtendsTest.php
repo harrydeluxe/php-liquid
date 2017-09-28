@@ -116,6 +116,33 @@ class TagExtendsTest extends TestCase
 		$this->assertEquals('Inner3Spacer3Footer3', $template->parseFile('middle')->render(['a' => '3']));
 	}
 
+	public function testCacheDiscardedIfFileChanges()
+	{
+		$template = new Template();
+		$template->setCache(new Local());
+
+		$content = "[{{ name }}]";
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'outer' => &$content,
+			'inner' => "{% extends 'outer' %}"
+		)));
+
+		$template->parseFile('inner');
+		$output = $template->render(array("name" => "Example"));
+		$this->assertEquals("[Example]", $output);
+
+		// this should go from cache
+		$template->parse("{% extends 'outer' %}");
+		$output = $template->render(array("name" => "Example"));
+		$this->assertEquals("[Example]", $output);
+
+		// content change should trigger re-render
+		$content = "<{{ name }}>";
+		$template->parseFile('inner');
+		$output = $template->render(array("name" => "Example"));
+		$this->assertEquals("<Example>", $output);
+	}
+
 	/**
 	 * @expectedException \Liquid\LiquidException
 	 */

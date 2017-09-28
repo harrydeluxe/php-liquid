@@ -223,4 +223,24 @@ class TagIncludeTest extends TestCase
 
 		$template->setCache(null);
 	}
+
+	public function testCacheDiscardedIfFileChanges()
+	{
+		$template = new Template();
+		$template->setCache(new Local());
+
+		$content = "[{{ name }}]";
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'example' => &$content,
+		)));
+
+		$template->parse("{% include 'example' %}");
+		$output = $template->render(array("name" => "Example"));
+		$this->assertEquals("[Example]", $output);
+
+		$content = "<{{ name }}>";
+		$template->parse("{% include 'example' %}");
+		$output = $template->render(array("name" => "Example"));
+		$this->assertEquals("<Example>", $output);
+	}
 }
