@@ -105,7 +105,8 @@ class TagExtendsTest extends TestCase
 		$template = new Template();
 		$template->setFileSystem(TestFileSystem::fromArray(array(
 			'outer' => "{% block content %}Outer{{ a }}{% endblock %}Spacer{{ a }}{% block footer %}Footer{{ a }}{% endblock %}",
-			'middle' => "{% extends 'outer' %}{% block content %}Inner{{ a }}{% endblock %}",
+			'middle' => "{% extends 'outer' %}{% block content %}Middle{{ a }}{% endblock %}",
+			'inner' => "{% extends 'middle' %}{% block content %}Inner{{ a }}{% endblock %}",
 		)));
 
 		$template->setCache(new Local());
@@ -113,7 +114,35 @@ class TagExtendsTest extends TestCase
 		$template->parseFile('outer')->render(['a' => '0']);
 		$template->parseFile('middle')->render(['a' => '1']);
 		$template->parseFile('middle')->render(['a' => '2']);
-		$this->assertEquals('Inner3Spacer3Footer3', $template->parseFile('middle')->render(['a' => '3']));
+		$this->assertEquals('Middle3Spacer3Footer3', $template->parseFile('middle')->render(['a' => '3']));
+		$this->assertEquals('Inner4Spacer4Footer4', $template->parseFile('inner')->render(['a' => '4']));
+	}
+
+	public function testCacheDiscardedIfFileChanges()
+	{
+		$template = new Template();
+		$template->setCache(new Local());
+
+		$content = "[{{ name }}]";
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'outer' => &$content,
+			'inner' => "{% extends 'outer' %}"
+		)));
+
+		$template->parseFile('inner');
+		$output = $template->render(array("name" => "Example"));
+		$this->assertEquals("[Example]", $output);
+
+		// this should go from cache
+		$template->parse("{% extends 'outer' %}");
+		$output = $template->render(array("name" => "Example"));
+		$this->assertEquals("[Example]", $output);
+
+		// content change should trigger re-render
+		$content = "<{{ name }}>";
+		$template->parseFile('inner');
+		$output = $template->render(array("name" => "Example"));
+		$this->assertEquals("<Example>", $output);
 	}
 
 	/**

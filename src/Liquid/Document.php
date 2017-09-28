@@ -37,17 +37,32 @@ class Document extends AbstractBlock
 	 *
 	 * @see \Liquid\Tag\TagInclude::hasIncludes()
 	 * @see \Liquid\Tag\TagExtends::hasIncludes()
-	 * @return string
+	 * @return bool if need to discard cache
 	 */
 	public function hasIncludes()
 	{
-		foreach ($this->nodelist as $token) {
-			// this may be suboptimal, but if we re-render all blocks we see,
-			// we avoid most if not all related caching quirks
-			if ($token instanceof TagBlock) {
-				return true;
-			}
+		$seenExtends = false;
+		$seenBlock = false;
 
+		foreach ($this->nodelist as $token) {
+			if ($token instanceof TagExtends) {
+				$seenExtends = true;
+			} elseif ($token instanceof TagBlock) {
+				$seenBlock = true;
+			}
+		}
+
+		/*
+		 * We try to keep the base templates in cache (that not extend anything).
+		 *
+		 * At the same time if we re-render all other blocks we see, we avoid most
+		 * if not all related caching quirks. This may be suboptimal.
+		 */
+		if ($seenBlock && !$seenExtends) {
+			return true;
+		}
+
+		foreach ($this->nodelist as $token) {
 			// check any of the tokens for includes
 			if ($token instanceof TagInclude && $token->hasIncludes()) {
 				return true;
