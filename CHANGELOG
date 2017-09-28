@@ -1,5 +1,10 @@
 * master
 
+* 1.4.1 (2017-09-28)
+
+ * Unquoted template names in 'include' tag, as in Jekyll
+ * Caching now works correctly with 'extends' tag
+
 * 1.4.0 (2017-09-25)
 
  * Dropped support for EOL'ed versions of PHP (< 5.6)
