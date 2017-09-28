@@ -13,6 +13,7 @@ namespace Liquid;
 
 use Liquid\Tag\TagInclude;
 use Liquid\Tag\TagExtends;
+use Liquid\Tag\TagBlock;
 
 /**
  * This class represents the entire template document.
@@ -41,6 +42,12 @@ class Document extends AbstractBlock
 	public function hasIncludes()
 	{
 		foreach ($this->nodelist as $token) {
+			// this may be suboptimal, but if we re-render all blocks we see,
+			// we avoid most if not all related caching quirks
+			if ($token instanceof TagBlock) {
+				return true;
+			}
+
 			// check any of the tokens for includes
 			if ($token instanceof TagInclude && $token->hasIncludes()) {
 				return true;
