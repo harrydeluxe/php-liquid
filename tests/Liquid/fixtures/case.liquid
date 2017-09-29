@@ -1,0 +1,11 @@
+{% for i in (1..max) %}
+  {% case i %} 
+    {% when 1 %} 
+      hit 1 
+    {% when 2 or 3 %} 
+      hit 2 or 3
+    {% else %} 
+      ... else ... 
+  {% endcase %}
+{% endfor %}
+   

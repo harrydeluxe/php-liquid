@@ -1,0 +1,50 @@
+Hello {{ 'tobi' | upcase }}
+Hello tobi has {{ 'tobi' | size }} letters!
+Array has {{ array | size }} elements.
+Second element is: {{ array | slice: 2 | first }}
+{{ '*tobi*' | textilize | upcase }}
+{{ '1971-01-01' | date: "%Y %h" }}
+{{ 'foo' | append:'bar' }}
+{{ 'tobi' | capitalize }}
+{{ 'Tobi' | downcase }}
+{{ 10 | divided_by:2 }} #=> 5
+{{ 4 | minus:2 }} #=> 2
+{{ 'a' | plus:'b' }} #=> 0, not as is in the docs
+{{ 1 | plus:1 }} #=> 2
+{{ 'foo' | times:4 }} #=> 'foofoofoofoo'
+{{ 5 | times:4 }} #=> 20
+{{ 4.3 | round }} #=> 4
+{{ 4.8 | floor }} #=> 4
+{{ 4.3 | ceil }} #=> 5
+{{ '<div>Read more</div> &rarr;' | escape }}
+{{ '<div>Read more</div> &rarr;' | escape_once }} 
+{{ '<div>Read more</div> &rarr;' | strip_html }}
+{{ '<div>Read more</div> &rarr;' | raw }}
+{{ 'a=b&c=d' | url_encode }}
+{{ 'a%3D%26b' | url_decode }} #=> 'a=&b'
+{{ '   Foo  ' | strip }}
+[{{ '   Foo  ' | rstrip }}]
+[{{ '   Foo  ' | lstrip }}]
+{{ '' | default: "OK" }}
+{{ array | first }}
+{{ array | join:', ' }}
+{{ array | last }}
+{{ array | sort | join:'-' }}
+{{ array | reverse | join:'-' }}
+{{ foobar | newline_to_br }}
+{{ foobar | strip_newlines }}
+{{ 'bar' | prepend:'foo' }}
+{{ 'foofoo' | replace:'foo','bar' }} #=> 'barbar'
+{{ 'barbar' | replace_first:'bar','foo' }} #=> 'foobar'
+{{ 'foobarfoobar' | remove:'foo' }} #=> 'barbar'
+{{ 'barbar' | remove_first:'bar' }} #=> 'bar'
+{{ 'tests' | truncate:4 }} #=> 'test...'
+{{ 'Foo bar bar' | truncatewords:2 }} #=> 'Foo bar...'
+{{ 'Foo bar bar' | split: " " | first }} #=> 'Foo'
+{{ 'Foo bar bar' | split: " " | uniq | join: " " }} #=> 'Foo bar'
+
+
+{% assign titles = posts | sort: "id" | map: "title" %}
+{% for title in titles %}
+  {{ title }}
+{% endfor %}
