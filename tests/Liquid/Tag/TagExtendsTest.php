@@ -118,6 +118,23 @@ class TagExtendsTest extends TestCase
 		$this->assertEquals('Inner4Spacer4Footer4', $template->parseFile('inner')->render(['a' => '4']));
 	}
 
+	public function testExtendsWithEmptyDefaultContent()
+	{
+		$template = new Template();
+		$template->setFileSystem(TestFileSystem::fromArray(array(
+			'base' => "<div>{% block content %}{% endblock %}</div>",
+			'extends' => "{% extends 'base' %}{% block content %}{{ test }}{% endblock %}",
+		)));
+
+		$template->setCache(new Local());
+
+		$template->parseFile('base')->render();
+		$template->parseFile('extends')->render(['test' => 'Foo']);
+		$template->parseFile('extends')->render(['test' => 'Bar']);
+		$this->assertEquals('<div>Baz</div>', $template->parseFile('extends')->render(['test' => 'Baz']));
+		$this->assertEquals('<div></div>', $template->parseFile('base')->render());
+	}
+
 	public function testCacheDiscardedIfFileChanges()
 	{
 		$template = new Template();
