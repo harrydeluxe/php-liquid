@@ -70,6 +70,20 @@ class TagAssignTest extends TestCase
 	}
 
 	/**
+	 * Tests filtered value assignment with separators
+	 */
+	public function testTagAssignWithSplit()
+	{
+		$template = new Template();
+
+		$template->parse('{% assign rows = "one|two|three,one|two|three" | upcase | split: "," %}{% for row in rows %}{% assign cols = row | split: "|" %}{% for col in cols %} {{col}}{%endfor%}{% endfor %}');
+		$this->assertEquals($template->render(), ' ONE TWO THREE ONE TWO THREE');
+
+		$template->parse('{% assign issue_numbers = "1339|1338|1321" | split: "|" %}{% for issue in issue_numbers %} {{ issue }}{% endfor %}');
+		$this->assertEquals($template->render(), ' 1339 1338 1321');
+	}
+
+	/**
 	 * Tests a simple assignment with numbers
 	 */
 	public function testNumbersAssign()
