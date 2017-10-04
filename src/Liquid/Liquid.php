@@ -94,8 +94,6 @@ class Liquid
 		switch ($key) {
 				case 'QUOTED_FRAGMENT':
 					return self::$config['QUOTED_STRING'] . '|(?:[^\s,\|\'"]|' . self::$config['QUOTED_STRING'] . ')+';
-				case 'QUOTED_FRAGMENT_FILTER_ARGUMENT':
-					return self::$config['QUOTED_STRING_FILTER_ARGUMENT'] . '|(?:[^\s:,\|\'"]|' . self::$config['QUOTED_STRING_FILTER_ARGUMENT'] . ')+';
 				case 'TAG_ATTRIBUTES':
 					return '/(\w+)\s*\:\s*(' . self::get('QUOTED_FRAGMENT') . ')/';
 				case 'TOKENIZATION_REGEXP':

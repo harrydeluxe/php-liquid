@@ -40,30 +40,30 @@ class Variable
 	{
 		$this->markup = $markup;
 
-		$quotedFragmentRegexp = new Regexp('/\s*(' . Liquid::get('QUOTED_FRAGMENT') . ')/');
-		$filterSeperatorRegexp = new Regexp('/' . Liquid::get('FILTER_SEPARATOR') . '\s*(.*)/');
-		$filterSplitRegexp = new Regexp('/' . Liquid::get('FILTER_SEPARATOR') . '/');
-		$filterNameRegexp = new Regexp('/\s*(\w+)/');
-		$filterArgumentRegexp = new Regexp('/(?:' . Liquid::get('FILTER_ARGUMENT_SEPARATOR') . '|' . Liquid::get('ARGUMENT_SEPARATOR') . ')\s*(' . Liquid::get('QUOTED_FRAGMENT_FILTER_ARGUMENT') . ')/');
+		$filterSep = new Regexp('/' . Liquid::get('FILTER_SEPARATOR') . '\s*(.*)/m');
+		$syntaxParser = new Regexp('/(' . Liquid::get('QUOTED_FRAGMENT') . ')(.*)/m');
+		$filterParser = new Regexp('/(?:\s+|' . Liquid::get('QUOTED_FRAGMENT') . '|' . Liquid::get('ARGUMENT_SEPARATOR') . ')+/');
+		$filterArgsRegex = new Regexp('/(?:' . Liquid::get('FILTER_ARGUMENT_SEPARATOR') . '|' . Liquid::get('ARGUMENT_SEPARATOR') . ')\s*((?:\w+\s*\:\s*)?' . Liquid::get('QUOTED_FRAGMENT') . ')/');
 
-		$quotedFragmentRegexp->match($markup);
+		$this->filters = [];
+		if ($syntaxParser->match($markup)) {
+			$nameMarkup = $syntaxParser->matches[1];
+			$this->name = $nameMarkup;
+			$filterMarkup = $syntaxParser->matches[2];
 
-		$this->name = (isset($quotedFragmentRegexp->matches[1])) ? $quotedFragmentRegexp->matches[1] : null;
+			if ($filterSep->match($filterMarkup)) {
+				$filterParser->matchAll($filterSep->matches[1]);
 
-		if ($filterSeperatorRegexp->match($markup)) {
-			$filters = $filterSplitRegexp->split($filterSeperatorRegexp->matches[1]);
-
-			foreach ($filters as $filter) {
-				$filterNameRegexp->match($filter);
-				$filtername = $filterNameRegexp->matches[1];
-
-				$filterArgumentRegexp->matchAll($filter);
-				$matches = Liquid::arrayFlatten($filterArgumentRegexp->matches[1]);
-
-				$this->filters[] = array($filtername, $matches);
+				foreach ($filterParser->matches[0] as $filter) {
+					$filter = trim($filter);
+					if (preg_match('/\w+/', $filter, $matches)) {
+						$filterName = $matches[0];
+						$filterArgsRegex->matchAll($filter);
+						$matches = Liquid::arrayFlatten($filterArgsRegex->matches[1]);
+						$this->filters[] = array($filterName, $matches);
+					}
+				}
 			}
-		} else {
-			$this->filters = array();
 		}
 
 		if (Liquid::get('ESCAPE_BY_DEFAULT')) {
@@ -90,6 +90,7 @@ class Variable
 			}
 		}
 	}
+
 
 	/**
 	 * Gets the variable name
@@ -121,7 +122,6 @@ class Variable
 	public function render(Context $context)
 	{
 		$output = $context->get($this->name);
-
 		foreach ($this->filters as $filter) {
 			list($filtername, $filterArgKeys) = $filter;
 
@@ -133,7 +133,6 @@ class Variable
 
 			$output = $context->invoke($filtername, $output, $filterArgValues);
 		}
-
 		return $output;
 	}
 }
