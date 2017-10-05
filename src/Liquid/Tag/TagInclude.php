@@ -14,6 +14,8 @@ namespace Liquid\Tag;
 use Liquid\AbstractTag;
 use Liquid\Document;
 use Liquid\Context;
+use Liquid\Exception\FilesystemException;
+use Liquid\Exception\ParseException;
 use Liquid\Liquid;
 use Liquid\LiquidException;
 use Liquid\FileSystem;
@@ -72,14 +74,14 @@ class TagInclude extends AbstractTag
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
 		$regex = new Regexp('/("[^"]+"|\'[^\']+\'|[^\'"\s]+)(\s+(with|for)\s+(' . Liquid::get('QUOTED_FRAGMENT') . '+))?/');
 
 		if (!$regex->match($markup)) {
-			throw new LiquidException("Error in tag 'include' - Valid syntax: include '[template]' (with|for) [object|collection]");
+			throw new ParseException("Error in tag 'include' - Valid syntax: include '[template]' (with|for) [object|collection]");
 		}
 
 		$unquoted = (strpos($regex->matches[1], '"') === false && strpos($regex->matches[1], "'") === false);
@@ -109,12 +111,12 @@ class TagInclude extends AbstractTag
 	 *
 	 * @param array $tokens
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\FilesystemException
 	 */
 	public function parse(array &$tokens)
 	{
 		if ($this->fileSystem === null) {
-			throw new LiquidException("No file system");
+			throw new FilesystemException("No file system");
 		}
 
 		// read the source of the template and create a new sub document

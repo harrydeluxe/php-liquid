@@ -12,9 +12,10 @@
 namespace Liquid\Tag;
 
 use Liquid\AbstractBlock;
+use Liquid\Exception\ParseException;
+use Liquid\Exception\RenderException;
 use Liquid\Liquid;
 use Liquid\Context;
-use Liquid\LiquidException;
 use Liquid\FileSystem;
 use Liquid\Regexp;
 
@@ -51,7 +52,7 @@ class TagTablerow extends AbstractBlock
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
@@ -65,7 +66,7 @@ class TagTablerow extends AbstractBlock
 
 			$this->extractAttributes($markup);
 		} else {
-			throw new LiquidException("Syntax Error in 'table_row loop' - Valid syntax: table_row [item] in [collection] cols:3");
+			throw new ParseException("Syntax Error in 'table_row loop' - Valid syntax: table_row [item] in [collection] cols:3");
 		}
 	}
 
@@ -73,7 +74,7 @@ class TagTablerow extends AbstractBlock
 	 * Renders the current node
 	 *
 	 * @param Context $context
-	 *
+	 * @throws \Liquid\Exception\RenderException
 	 * @return string
 	 */
 	public function render(Context $context)
@@ -85,7 +86,7 @@ class TagTablerow extends AbstractBlock
 		}
 
 		if (!is_array($collection)) {
-			throw new LiquidException("Not an array");
+			throw new RenderException("Not an array");
 		}
 
 		// discard keys

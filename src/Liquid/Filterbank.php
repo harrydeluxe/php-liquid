@@ -11,6 +11,8 @@
 
 namespace Liquid;
 
+use Liquid\Exception\WrongArgumentException;
+
 /**
  * The filter bank is where all registered filters are stored, and where filter invocation is handled
  * it supports a variety of different filter types; objects, class, and simple methods.
@@ -57,7 +59,7 @@ class Filterbank
 	 * @param mixed $filter Can either be an object, the name of a class (in which case the
 	 *						filters will be called statically) or the name of a function.
 	 *
-	 * @throws LiquidException
+	 * @throws \Liquid\Exception\WrongArgumentException
 	 * @return bool
 	 */
 	public function addFilter($filter)
@@ -72,7 +74,7 @@ class Filterbank
 
 		// If it wasn't an object an isn't a string either, it's a bad parameter
 		if (!is_string($filter)) {
-			throw new LiquidException("Parameter passed to addFilter must be an object or a string");
+			throw new WrongArgumentException("Parameter passed to addFilter must be an object or a string");
 		}
 
 		// If the filter is a class, register all its methods
@@ -91,7 +93,7 @@ class Filterbank
 			return true;
 		}
 
-		throw new LiquidException("Parameter passed to addFilter must a class or a function");
+		throw new WrongArgumentException("Parameter passed to addFilter must a class or a function");
 	}
 
 	/**

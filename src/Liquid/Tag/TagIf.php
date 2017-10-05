@@ -13,8 +13,8 @@ namespace Liquid\Tag;
 
 use Liquid\Decision;
 use Liquid\Context;
+use Liquid\Exception\ParseException;
 use Liquid\Liquid;
-use Liquid\LiquidException;
 use Liquid\FileSystem;
 use Liquid\Regexp;
 
@@ -85,7 +85,7 @@ class TagIf extends Decision
 	 *
 	 * @param Context $context
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 * @return string
 	 */
 	public function render(Context $context)
@@ -126,7 +126,7 @@ class TagIf extends Decision
 							'right' => $right
 						));
 					} else {
-						throw new LiquidException("Syntax Error in tag 'if' - Valid syntax: if [condition]");
+						throw new ParseException("Syntax Error in tag 'if' - Valid syntax: if [condition]");
 					}
 				}
 				if (count($logicalOperators)) {

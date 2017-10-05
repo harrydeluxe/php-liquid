@@ -17,7 +17,7 @@ use Liquid\Template;
 class TagCycleTest extends TestCase
 {
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testInvalidSyntax()
 	{

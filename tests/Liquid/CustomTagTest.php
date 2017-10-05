@@ -20,7 +20,7 @@ class TagFoo extends TagComment
 class CustomTagTest extends TestCase
 {
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 * @expectedExceptionMessage Unknown tag foo
 	 */
 	public function testUnknownTag()

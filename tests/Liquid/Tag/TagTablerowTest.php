@@ -47,7 +47,7 @@ class TagTablerowTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testInvalidSyntax()
 	{
@@ -55,7 +55,7 @@ class TagTablerowTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\RenderException
 	 */
 	public function testNotArray()
 	{

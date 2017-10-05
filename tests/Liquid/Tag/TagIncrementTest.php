@@ -16,7 +16,7 @@ use Liquid\TestCase;
 class TagIncrementTest extends TestCase
 {
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxError()
 	{

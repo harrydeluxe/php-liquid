@@ -40,7 +40,7 @@ class FileTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\FilesystemException
 	 */
 	public function testConstructInvalidOptions()
 	{
@@ -48,7 +48,7 @@ class FileTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\FilesystemException
 	 */
 	public function testConstructNoSuchDirOrNotWritable()
 	{

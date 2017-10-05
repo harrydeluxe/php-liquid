@@ -13,9 +13,10 @@ namespace Liquid\Tag;
 
 use Liquid\AbstractTag;
 use Liquid\Document;
+use Liquid\Exception\FilesystemException;
+use Liquid\Exception\ParseException;
 use Liquid\Liquid;
 use Liquid\Context;
-use Liquid\LiquidException;
 use Liquid\FileSystem;
 use Liquid\Regexp;
 use Liquid\Template;
@@ -51,7 +52,7 @@ class TagExtends extends AbstractTag
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
@@ -60,7 +61,7 @@ class TagExtends extends AbstractTag
 		if ($regex->match($markup) && isset($regex->matches[1])) {
 			$this->templateName = substr($regex->matches[1], 1, strlen($regex->matches[1]) - 2);
 		} else {
-			throw new LiquidException("Error in tag 'extends' - Valid syntax: extends '[template name]'");
+			throw new ParseException("Error in tag 'extends' - Valid syntax: extends '[template name]'");
 		}
 
 		parent::__construct($markup, $tokens, $fileSystem);
@@ -100,12 +101,12 @@ class TagExtends extends AbstractTag
 	 *
 	 * @param array $tokens
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\FilesystemException
 	 */
 	public function parse(array &$tokens)
 	{
 		if ($this->fileSystem === null) {
-			throw new LiquidException("No file system");
+			throw new FilesystemException("No file system");
 		}
 
 		// read the source of the template and create a new sub document

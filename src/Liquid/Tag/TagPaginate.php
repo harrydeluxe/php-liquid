@@ -12,9 +12,9 @@
 namespace Liquid\Tag;
 
 use Liquid\AbstractBlock;
+use Liquid\Exception\ParseException;
 use Liquid\Liquid;
 use Liquid\Context;
-use Liquid\LiquidException;
 use Liquid\FileSystem;
 use Liquid\Regexp;
 
@@ -77,7 +77,7 @@ class TagPaginate extends AbstractBlock
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 *
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
@@ -91,7 +91,7 @@ class TagPaginate extends AbstractBlock
 			$this->numberItems = $syntax->matches[2];
 			$this->extractAttributes($markup);
 		} else {
-			throw new LiquidException("Syntax Error - Valid syntax: paginate [collection] by [items]");
+			throw new ParseException("Syntax Error - Valid syntax: paginate [collection] by [items]");
 		}
 	}
 

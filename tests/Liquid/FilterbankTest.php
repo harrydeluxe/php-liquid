@@ -68,7 +68,7 @@ class FilterbankTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\WrongArgumentException
 	 */
 	public function testAddFilterNotObjectAndString()
 	{
@@ -76,7 +76,7 @@ class FilterbankTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\WrongArgumentException
 	 */
 	public function testAddFilterNoFunctionOrClass()
 	{

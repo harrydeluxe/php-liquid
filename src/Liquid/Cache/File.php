@@ -12,7 +12,7 @@
 namespace Liquid\Cache;
 
 use Liquid\Cache;
-use Liquid\LiquidException;
+use Liquid\Exception\NotFoundException;
 
 /**
  * Implements cache stored in files.
@@ -26,7 +26,7 @@ class File extends Cache
 	 *
 	 * @param array $options
 	 *
-	 * @throws LiquidException if Cachedir not exists.
+	 * @throws NotFoundException if Cachedir not exists.
 	 */
 	public function __construct(array $options = array())
 	{
@@ -35,7 +35,7 @@ class File extends Cache
 		if (isset($options['cache_dir']) && is_writable($options['cache_dir'])) {
 			$this->path = realpath($options['cache_dir']) . DIRECTORY_SEPARATOR;
 		} else {
-			throw new LiquidException('Cachedir not exists or not writable');
+			throw new NotFoundException('Cachedir not exists or not writable');
 		}
 	}
 
