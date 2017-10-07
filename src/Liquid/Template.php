@@ -25,6 +25,8 @@ use Liquid\Exception\MissingFilesystemException;
  */
 class Template
 {
+	const CLASS_PREFIX = '\Liquid\Cache\\';
+
 	/**
 	 * @var Document The root of the node tree
 	 */
@@ -83,8 +85,7 @@ class Template
 	public function setCache($cache)
 	{
 		if (is_array($cache)) {
-			if (isset($cache['cache']) && class_exists('\Liquid\Cache\\' . ucwords($cache['cache']))) {
-				$classname = '\Liquid\Cache\\' . ucwords($cache['cache']);
+			if (isset($cache['cache']) && class_exists($classname = self::CLASS_PREFIX . ucwords($cache['cache']))) {
 				self::$cache = new $classname($cache);
 			} else {
 				throw new CacheException('Invalid cache options!');

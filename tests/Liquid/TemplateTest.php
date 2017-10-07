@@ -55,7 +55,7 @@ class TemplateTest extends TestCase
 	{
 		$template = new Template();
 		$template->setCache(array('cache' => 'file', 'cache_dir' => $this->cacheDir));
-		$this->assertInstanceOf('\Liquid\Cache\File', $template::getCache());
+		$this->assertInstanceOf(\Liquid\Cache\File::class, $template::getCache());
 	}
 
 	public function testSetCacheThroughCacheObject()
@@ -106,7 +106,7 @@ class TemplateTest extends TestCase
 		$nodelist = $template->getRoot()->getNodelist();
 
 		$this->assertEquals(2, count($nodelist));
-		$this->assertInstanceOf('\Liquid\Variable', $nodelist[0]);
+		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[0]);
 		$this->assertInternalType('string', $nodelist[1]);
 	}
 
@@ -119,7 +119,7 @@ class TemplateTest extends TestCase
 
 		$this->assertEquals(2, count($nodelist));
 		$this->assertInternalType('string', $nodelist[0]);
-		$this->assertInstanceOf('\Liquid\Variable', $nodelist[1]);
+		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[1]);
 	}
 
 	public function testVariableMiddle()
@@ -131,7 +131,7 @@ class TemplateTest extends TestCase
 
 		$this->assertEquals(3, count($nodelist));
 		$this->assertInternalType('string', $nodelist[0]);
-		$this->assertInstanceOf('\Liquid\Variable', $nodelist[1]);
+		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[1]);
 		$this->assertInternalType('string', $nodelist[2]);
 	}
 
@@ -144,11 +144,11 @@ class TemplateTest extends TestCase
 
 		$this->assertEquals(7, count($nodelist));
 		$this->assertInternalType('string', $nodelist[0]);
-		$this->assertInstanceOf('\Liquid\Variable', $nodelist[1]);
+		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[1]);
 		$this->assertInternalType('string', $nodelist[2]);
-		$this->assertInstanceOf('\Liquid\Variable', $nodelist[3]);
+		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[3]);
 		$this->assertInternalType('string', $nodelist[4]);
-		$this->assertInstanceOf('\Liquid\Variable', $nodelist[5]);
+		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[5]);
 		$this->assertInternalType('string', $nodelist[6]);
 	}
 
@@ -161,7 +161,7 @@ class TemplateTest extends TestCase
 
 		$this->assertEquals(3, count($nodelist));
 		$this->assertInternalType('string', $nodelist[0]);
-		$this->assertInstanceOf('\Liquid\Tag\TagComment', $nodelist[1]);
+		$this->assertInstanceOf(\Liquid\Tag\TagComment::class, $nodelist[1]);
 		$this->assertInternalType('string', $nodelist[2]);
 	}
 }

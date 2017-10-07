@@ -49,8 +49,8 @@ class Filterbank
 	{
 		$this->context = $context;
 
-		$this->addFilter('\Liquid\StandardFilters');
-		$this->addFilter('\Liquid\CustomFilters');
+		$this->addFilter(\Liquid\StandardFilters::class);
+		$this->addFilter(\Liquid\CustomFilters::class);
 	}
 
 	/**
