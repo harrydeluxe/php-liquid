@@ -14,7 +14,6 @@ namespace Liquid\Tag;
 use Liquid\TestCase;
 use Liquid\Template;
 use Liquid\Cache\Local;
-use Liquid\FileSystem\Virtual;
 use Liquid\TestFileSystem;
 
 /**

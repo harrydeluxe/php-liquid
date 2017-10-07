@@ -15,7 +15,6 @@ use Liquid\TestCase;
 use Liquid\Template;
 use Liquid\Liquid;
 use Liquid\Cache\Local;
-use Liquid\FileSystem\Virtual;
 use Liquid\TestFileSystem;
 
 class TagIncludeTest extends TestCase
