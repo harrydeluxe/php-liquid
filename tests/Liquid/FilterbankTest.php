@@ -107,8 +107,19 @@ class FilterbankTest extends TestCase
 	{
 		$var = new Variable('var | static_test');
 		$this->context->set('var', 1000);
-		$this->context->addFilters('\ClassFilter');
+		$this->context->addFilters(\ClassFilter::class);
 		$this->assertEquals('worked', $var->render($this->context));
+	}
+
+	/**
+	 * Test with instance method on a static class
+	 */
+	public function testStaticMixedClassFilter()
+	{
+		$var = new Variable('var | instance_test_one');
+		$this->context->set('var', 'foo');
+		$this->context->addFilters(\ClassFilter::class);
+		$this->assertEquals('foo', $var->render($this->context));
 	}
 
 	/**
@@ -124,6 +135,9 @@ class FilterbankTest extends TestCase
 
 		$var = new Variable('var | instance_test_two');
 		$this->assertEquals('set', $var->render($this->context));
+
+		$var = new Variable('var | static_test');
+		$this->assertEquals('worked', $var->render($this->context));
 	}
 }
 

@@ -64,36 +64,38 @@ class Filterbank
 	 */
 	public function addFilter($filter)
 	{
-		// If the passed filter was an object, store the object for future reference.
-		if (is_object($filter)) {
-			$filter->context = $this->context;
-			$name = get_class($filter);
-			$this->filters[$name] = $filter;
-			$filter = $name;
-		}
-
-		// If it wasn't an object an isn't a string either, it's a bad parameter
-		if (!is_string($filter)) {
-			throw new WrongArgumentException("Parameter passed to addFilter must be an object or a string");
-		}
-
-		// If the filter is a class, register all its methods
-		if (class_exists($filter)) {
-			$methods = array_flip(get_class_methods($filter));
-			foreach ($methods as $method => $null) {
-				$this->methodMap[$method] = $filter;
+		// If the filter is a class, register all its static methods
+		if (is_string($filter) && class_exists($filter)) {
+			$reflection = new \ReflectionClass($filter);
+			foreach ($reflection->getMethods(\ReflectionMethod::IS_STATIC) as $method) {
+				$this->methodMap[$method->name] = $method->class;
 			}
 
 			return true;
 		}
 
-		// If it's a function register it simply
-		if (function_exists($filter)) {
+		// If it's a global function, register it simply
+		if (is_string($filter) && function_exists($filter)) {
 			$this->methodMap[$filter] = false;
 			return true;
 		}
 
-		throw new WrongArgumentException("Parameter passed to addFilter must a class or a function");
+		// If it isn't an object an isn't a string either, it's a bad parameter
+		if (!is_object($filter)) {
+			throw new WrongArgumentException("Parameter passed to addFilter must be an object or a string");
+		}
+
+		// If the passed filter was an object, store the object for future reference.
+		$filter->context = $this->context;
+		$className = get_class($filter);
+		$this->filters[$className] = $filter;
+
+		// Then register all public static and not methods as filters
+		foreach (get_class_methods($filter) as $method) {
+			$this->methodMap[$method] = $className;
+		}
+
+		return true;
 	}
 
 	/**
@@ -127,6 +129,8 @@ class Filterbank
 			if ($class === false) {
 				return call_user_func_array($name, $args);
 			}
+
+			// Call a class or an instance method
 			return call_user_func_array(array($class, $name), $args);
 		}
 
