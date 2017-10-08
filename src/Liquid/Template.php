@@ -12,7 +12,7 @@
 namespace Liquid;
 
 use Liquid\Exception\CacheException;
-use Liquid\Exception\FilesystemException;
+use Liquid\Exception\MissingFilesystemException;
 
 /**
  * The Template class.
@@ -203,13 +203,13 @@ class Template
 	 * Parses the given template file
 	 *
 	 * @param string $templatePath
-	 * @throws \Liquid\Exception\FilesystemException
+	 * @throws \Liquid\Exception\MissingFilesystemException
 	 * @return Template
 	 */
 	public function parseFile($templatePath)
 	{
 		if (!$this->fileSystem) {
-			throw new FilesystemException("Could not load a template without an initialized file system");
+			throw new MissingFilesystemException("Could not load a template without an initialized file system");
 		}
 
 		return $this->parse($this->fileSystem->readTemplateFile($templatePath));

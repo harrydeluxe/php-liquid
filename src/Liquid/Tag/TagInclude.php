@@ -14,7 +14,7 @@ namespace Liquid\Tag;
 use Liquid\AbstractTag;
 use Liquid\Document;
 use Liquid\Context;
-use Liquid\Exception\FilesystemException;
+use Liquid\Exception\MissingFilesystemException;
 use Liquid\Exception\ParseException;
 use Liquid\Liquid;
 use Liquid\LiquidException;
@@ -111,12 +111,12 @@ class TagInclude extends AbstractTag
 	 *
 	 * @param array $tokens
 	 *
-	 * @throws \Liquid\Exception\FilesystemException
+	 * @throws \Liquid\Exception\MissingFilesystemException
 	 */
 	public function parse(array &$tokens)
 	{
 		if ($this->fileSystem === null) {
-			throw new FilesystemException("No file system");
+			throw new MissingFilesystemException("No file system");
 		}
 
 		// read the source of the template and create a new sub document
