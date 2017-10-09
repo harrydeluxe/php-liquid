@@ -172,11 +172,22 @@ class TagExtendsTest extends TestCase
 
 	/**
 	 * @expectedException \Liquid\Exception\ParseException
+	 * @expectedExceptionMessage Error in tag
 	 */
 	public function testInvalidSyntaxNotQuotedTemplateName()
 	{
 		$template = new Template();
 		$template->parse("{% extends base %}");
+	}
+
+	/**
+	 * @expectedException \Liquid\Exception\MissingFilesystemException
+	 * @expectedExceptionMessage No file system
+	 */
+	public function testMissingFilesystem()
+	{
+		$template = new Template();
+		$template->parse("{% extends 'base' %}");
 	}
 
 	/**

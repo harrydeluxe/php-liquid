@@ -49,6 +49,16 @@ class TagIncludeTest extends TestCase
 		$template->parse("{% include %}");
 	}
 
+	/**
+	 * @expectedException \Liquid\Exception\MissingFilesystemException
+	 * @expectedExceptionMessage No file system
+	 */
+	public function testMissingFilesystem()
+	{
+		$template = new Template();
+		$template->parse("{% include 'hello' %}");
+	}
+
 	public function testInvalidSyntaxInvalidKeyword()
 	{
 		$template = new Template();
