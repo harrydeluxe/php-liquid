@@ -44,6 +44,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
 		foreach ($defaultConfig as $configKey => $configValue) {
 			Liquid::set($configKey, $configValue);
 		}
+
+		Template::setCache(null);
 	}
 
 	/**

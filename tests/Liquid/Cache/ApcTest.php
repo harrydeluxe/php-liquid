@@ -12,7 +12,6 @@
 namespace Liquid\Cache;
 
 use Liquid\TestCase;
-use \Liquid\Cache\Apc;
 
 class ApcTest extends TestCase
 {

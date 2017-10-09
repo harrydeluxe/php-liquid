@@ -49,8 +49,8 @@ class Filterbank
 	{
 		$this->context = $context;
 
-		$this->addFilter('\Liquid\StandardFilters');
-		$this->addFilter('\Liquid\CustomFilters');
+		$this->addFilter(\Liquid\StandardFilters::class);
+		$this->addFilter(\Liquid\CustomFilters::class);
 	}
 
 	/**
@@ -62,38 +62,46 @@ class Filterbank
 	 * @throws \Liquid\Exception\WrongArgumentException
 	 * @return bool
 	 */
-	public function addFilter($filter)
+	public function addFilter($filter, callable $callback = null)
 	{
-		// If the passed filter was an object, store the object for future reference.
-		if (is_object($filter)) {
-			$filter->context = $this->context;
-			$name = get_class($filter);
-			$this->filters[$name] = $filter;
-			$filter = $name;
+		// If it is a callback, save it as it is
+		if (is_string($filter) && $callback) {
+			$this->methodMap[$filter] = $callback;
+			return true;
 		}
 
-		// If it wasn't an object an isn't a string either, it's a bad parameter
-		if (!is_string($filter)) {
-			throw new WrongArgumentException("Parameter passed to addFilter must be an object or a string");
-		}
-
-		// If the filter is a class, register all its methods
-		if (class_exists($filter)) {
-			$methods = array_flip(get_class_methods($filter));
-			foreach ($methods as $method => $null) {
-				$this->methodMap[$method] = $filter;
+		// If the filter is a class, register all its static methods
+		if (is_string($filter) && class_exists($filter)) {
+			$reflection = new \ReflectionClass($filter);
+			foreach ($reflection->getMethods(\ReflectionMethod::IS_STATIC) as $method) {
+				$this->methodMap[$method->name] = $method->class;
 			}
 
 			return true;
 		}
 
-		// If it's a function register it simply
-		if (function_exists($filter)) {
+		// If it's a global function, register it simply
+		if (is_string($filter) && function_exists($filter)) {
 			$this->methodMap[$filter] = false;
 			return true;
 		}
 
-		throw new WrongArgumentException("Parameter passed to addFilter must a class or a function");
+		// If it isn't an object an isn't a string either, it's a bad parameter
+		if (!is_object($filter)) {
+			throw new WrongArgumentException("Parameter passed to addFilter must be an object or a string");
+		}
+
+		// If the passed filter was an object, store the object for future reference.
+		$filter->context = $this->context;
+		$className = get_class($filter);
+		$this->filters[$className] = $filter;
+
+		// Then register all public static and not methods as filters
+		foreach (get_class_methods($filter) as $method) {
+			$this->methodMap[$method] = $className;
+		}
+
+		return true;
 	}
 
 	/**
@@ -115,21 +123,28 @@ class Filterbank
 		array_unshift($args, $value);
 
 		// Consult the mapping
-		if (isset($this->methodMap[$name])) {
-			$class = $this->methodMap[$name];
-
-			// If we have a registered object for the class, use that instead
-			if (isset($this->filters[$class])) {
-				$class = $this->filters[$class];
-			}
-
-			// If we're calling a function
-			if ($class === false) {
-				return call_user_func_array($name, $args);
-			}
-			return call_user_func_array(array($class, $name), $args);
+		if (!isset($this->methodMap[$name])) {
+			return $value;
 		}
 
-		return $value;
+		$class = $this->methodMap[$name];
+
+		// If we have a callback
+		if (is_callable($class)) {
+			return call_user_func_array($class, $args);
+		}
+
+		// If we have a registered object for the class, use that instead
+		if (isset($this->filters[$class])) {
+			$class = $this->filters[$class];
+		}
+
+		// If we're calling a function
+		if ($class === false) {
+			return call_user_func_array($name, $args);
+		}
+
+		// Call a class or an instance method
+		return call_user_func_array(array($class, $name), $args);
 	}
 }

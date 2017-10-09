@@ -19,6 +19,8 @@ use Liquid\Exception\RenderException;
  */
 class AbstractBlock extends AbstractTag
 {
+	const TAG_PREFIX = '\Liquid\Tag\Tag';
+
 	/**
 	 * @var AbstractTag[]
 	 */
@@ -65,7 +67,7 @@ class AbstractBlock extends AbstractTag
 					if (array_key_exists($tagRegexp->matches[1], $tags)) {
 						$tagName = $tags[$tagRegexp->matches[1]];
 					} else {
-						$tagName = '\Liquid\Tag\Tag' . ucwords($tagRegexp->matches[1]);
+						$tagName = self::TAG_PREFIX . ucwords($tagRegexp->matches[1]);
 						$tagName = (class_exists($tagName) === true) ? $tagName : null;
 					}
 

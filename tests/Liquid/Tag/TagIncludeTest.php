@@ -15,7 +15,6 @@ use Liquid\TestCase;
 use Liquid\Template;
 use Liquid\Liquid;
 use Liquid\Cache\Local;
-use Liquid\FileSystem\Virtual;
 use Liquid\TestFileSystem;
 
 class TagIncludeTest extends TestCase
@@ -42,6 +41,7 @@ class TagIncludeTest extends TestCase
 
 	/**
 	 * @expectedException \Liquid\Exception\ParseException
+	 * @expectedExceptionMessage Error in tag
 	 */
 	public function testInvalidSyntaxNoTemplateName()
 	{
@@ -51,26 +51,31 @@ class TagIncludeTest extends TestCase
 	}
 
 	/**
-	 * This needs fixing because it currently throws A FilesystemException (because the template filesystem is not defined in the test) instead of a ParseException which it should logically throw if the syntax is invalid.
-	 *
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\MissingFilesystemException
+	 * @expectedExceptionMessage No file system
 	 */
-	public function testInvalidSyntaxInvalidKeyword()
+	public function testMissingFilesystem()
 	{
-		$this->markTestIncomplete('Throws not because the syntax is invalid, but because there is no filesystem for the include');
 		$template = new Template();
-		$template->parse("{% include 'hello' no_keyword %}");
+		$template->parse("{% include 'hello' %}");
 	}
 
-	/**
-	 * This needs fixing because it currently throws A FilesystemException (because the template filesystem is not defined in the test) instead of a ParseException which it should logically throw if the syntax is invalid.
-	 *
-	 * @expectedException \Liquid\LiquidException
-	 */
+	public function testInvalidSyntaxInvalidKeyword()
+	{
+		$template = new Template();
+		$template->setFileSystem($this->fs);
+		$template->parse("{% include 'hello' no_keyword %}");
+
+		$this->markTestIncomplete("Exception is expected here");
+	}
+
 	public function testInvalidSyntaxNoObjectCollection()
 	{
 		$template = new Template();
+		$template->setFileSystem($this->fs);
 		$template->parse("{% include 'hello' with %}");
+
+		$this->markTestIncomplete("Exception is expected here");
 	}
 
 	public function testIncludeTag()

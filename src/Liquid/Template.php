@@ -25,6 +25,8 @@ use Liquid\Exception\MissingFilesystemException;
  */
 class Template
 {
+	const CLASS_PREFIX = '\Liquid\Cache\\';
+
 	/**
 	 * @var Document The root of the node tree
 	 */
@@ -80,11 +82,10 @@ class Template
 	 *
 	 * @throws \Liquid\Exception\CacheException
 	 */
-	public function setCache($cache)
+	public static function setCache($cache)
 	{
 		if (is_array($cache)) {
-			if (isset($cache['cache']) && class_exists('\Liquid\Cache\\' . ucwords($cache['cache']))) {
-				$classname = '\Liquid\Cache\\' . ucwords($cache['cache']);
+			if (isset($cache['cache']) && class_exists($classname = self::CLASS_PREFIX . ucwords($cache['cache']))) {
 				self::$cache = new $classname($cache);
 			} else {
 				throw new CacheException('Invalid cache options!');
@@ -140,9 +141,14 @@ class Template
 	 *
 	 * @param string $filter
 	 */
-	public function registerFilter($filter)
+	public function registerFilter($filter, callable $callback = null)
 	{
-		$this->filters[] = $filter;
+		// Store callback for later use
+		if ($callback) {
+			$this->filters[] = [$filter, $callback];
+		} else {
+			$this->filters[] = $filter;
+		}
 	}
 
 	/**
@@ -237,7 +243,12 @@ class Template
 		}
 
 		foreach ($this->filters as $filter) {
-			$context->addFilters($filter);
+			if (is_array($filter)) {
+				// Unpack a callback saved as second argument
+				$context->addFilters(...$filter);
+			} else {
+				$context->addFilters($filter);
+			}
 		}
 
 		return $this->root->render($context);

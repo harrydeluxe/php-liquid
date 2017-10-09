@@ -12,7 +12,6 @@
 namespace Liquid\Cache;
 
 use Liquid\TestCase;
-use \Liquid\Cache\Local;
 
 class LocalTest extends TestCase
 {
