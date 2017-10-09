@@ -1,5 +1,14 @@
 * master
 
+* 1.4.2 (2017-10-09)
+
+ * Better caching for non-extending templates
+ * Simplified 'assign' tag to use rules for variables
+ * Now supporting PHP 7.2
+ * Different types of exception depending on the case
+ * Filterbank will not call instance methods statically
+ * Callback-type filters
+
 * 1.4.1 (2017-09-28)
 
  * Unquoted template names in 'include' tag, as in Jekyll
