@@ -82,7 +82,7 @@ class Template
 	 *
 	 * @throws \Liquid\Exception\CacheException
 	 */
-	public function setCache($cache)
+	public static function setCache($cache)
 	{
 		if (is_array($cache)) {
 			if (isset($cache['cache']) && class_exists($classname = self::CLASS_PREFIX . ucwords($cache['cache']))) {
