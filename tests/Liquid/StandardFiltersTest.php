@@ -1075,8 +1075,8 @@ class StandardFiltersTest extends TestCase
 	{
 		$var = new Variable('var | money ');
 		$this->context->set('var', 1000);
-		$this->context->addFilters(new MoneyFilter(), 'money');
-		$this->context->addFilters(new CanadianMoneyFilter(), 'money');
+		$this->context->addFilters(new MoneyFilter());
+		$this->context->addFilters(new CanadianMoneyFilter());
 		$this->assertEquals(' 1000$ CAD ', $var->render($this->context));
 	}
 
