@@ -41,6 +41,7 @@ class TagIncludeTest extends TestCase
 
 	/**
 	 * @expectedException \Liquid\Exception\ParseException
+	 * @expectedExceptionMessage Error in tag
 	 */
 	public function testInvalidSyntaxNoTemplateName()
 	{
