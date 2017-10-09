@@ -12,9 +12,9 @@
 namespace Liquid\Tag;
 
 use Liquid\AbstractTag;
+use Liquid\Exception\ParseException;
 use Liquid\Liquid;
 use Liquid\Context;
-use Liquid\LiquidException;
 use Liquid\FileSystem;
 use Liquid\Regexp;
 
@@ -43,7 +43,7 @@ class TagDecrement extends AbstractTag
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
@@ -52,7 +52,7 @@ class TagDecrement extends AbstractTag
 		if ($syntax->match($markup)) {
 			$this->toDecrement = $syntax->matches[0];
 		} else {
-			throw new LiquidException("Syntax Error in 'decrement' - Valid syntax: decrement [var]");
+			throw new ParseException("Syntax Error in 'decrement' - Valid syntax: decrement [var]");
 		}
 	}
 

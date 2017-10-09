@@ -11,6 +11,8 @@
 
 namespace Liquid;
 
+use Liquid\Exception\RenderException;
+
 /**
  * Base class for blocks that make logical decisions.
  */
@@ -35,7 +37,7 @@ class Decision extends AbstractBlock
 	 *
 	 * @param mixed $value
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\RenderException
 	 * @return string
 	 */
 	private function stringValue($value)
@@ -47,7 +49,7 @@ class Decision extends AbstractBlock
 			} else {
 				// toLiquid is handled in Context::variable
 				$class = get_class($value);
-				throw new LiquidException("Value of type $class has no `toLiquid` nor `__toString` methods");
+				throw new RenderException("Value of type $class has no `toLiquid` nor `__toString` methods");
 			}
 		}
 
@@ -84,7 +86,7 @@ class Decision extends AbstractBlock
 	 * @param string $op
 	 * @param Context $context
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\RenderException
 	 * @return bool
 	 */
 	protected function interpretCondition($left, $right, $op, Context $context)
@@ -149,7 +151,7 @@ class Decision extends AbstractBlock
 				return is_array($left) ? in_array($right, $left) : (strpos($left, $right) !== false);
 
 			default:
-				throw new LiquidException("Error in tag '" . $this->name() . "' - Unknown operator $op");
+				throw new RenderException("Error in tag '" . $this->name() . "' - Unknown operator $op");
 		}
 	}
 }

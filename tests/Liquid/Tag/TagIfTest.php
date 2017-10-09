@@ -217,7 +217,7 @@ class TagIfTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 * @expectedExceptionMessage if tag was never closed
 	 */
 	public function testSyntaxErrorNotClosed()
@@ -226,7 +226,7 @@ class TagIfTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxErrorEnd()
 	{
@@ -234,7 +234,7 @@ class TagIfTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\RenderException
 	 */
 	public function testInvalidOperator()
 	{
@@ -242,7 +242,7 @@ class TagIfTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\RenderException
 	 */
 	public function testIncomparable()
 	{
@@ -250,7 +250,7 @@ class TagIfTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 * @expectedExceptionMessage does not expect else tag
 	 */
 	public function testSyntaxErrorElse()
@@ -259,7 +259,7 @@ class TagIfTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 * @expectedExceptionMessage Unknown tag
 	 */
 	public function testSyntaxErrorUnknown()

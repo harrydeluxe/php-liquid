@@ -11,6 +11,9 @@
 
 namespace Liquid;
 
+use Liquid\Exception\ParseException;
+use Liquid\Exception\RenderException;
+
 /**
  * Base class for blocks.
  */
@@ -75,7 +78,7 @@ class AbstractBlock extends AbstractTag
 						$this->unknownTag($tagRegexp->matches[1], $tagRegexp->matches[2], $tokens);
 					}
 				} else {
-					throw new LiquidException("Tag $token was not properly terminated"); // harry
+					throw new ParseException("Tag $token was not properly terminated"); // harry
 				}
 			} elseif ($variableStartRegexp->match($token)) {
 				$this->nodelist[] = $this->createVariable($token);
@@ -119,7 +122,7 @@ class AbstractBlock extends AbstractTag
 			}
 
 			if (is_array($value)) {
-				throw new LiquidException("Implicit rendering of arrays not supported. Use index operator.");
+				throw new RenderException("Implicit rendering of arrays not supported. Use index operator.");
 			}
 
 			$result .= $value;
@@ -150,30 +153,30 @@ class AbstractBlock extends AbstractTag
 	 * @param string $params
 	 * @param array $tokens
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	protected function unknownTag($tag, $params, array $tokens)
 	{
 		switch ($tag) {
 			case 'else':
-				throw new LiquidException($this->blockName() . " does not expect else tag");
+				throw new ParseException($this->blockName() . " does not expect else tag");
 			case 'end':
-				throw new LiquidException("'end' is not a valid delimiter for " . $this->blockName() . " tags. Use " . $this->blockDelimiter());
+				throw new ParseException("'end' is not a valid delimiter for " . $this->blockName() . " tags. Use " . $this->blockDelimiter());
 			default:
-				throw new LiquidException("Unknown tag $tag");
+				throw new ParseException("Unknown tag $tag");
 		}
 	}
 
 	/**
-	 * This method is called at the end of parsing, and will through an error unless
+	 * This method is called at the end of parsing, and will throw an error unless
 	 * this method is subclassed, like it is for Document
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 * @return bool
 	 */
 	protected function assertMissingDelimitation()
 	{
-		throw new LiquidException($this->blockName() . " tag was never closed");
+		throw new ParseException($this->blockName() . " tag was never closed");
 	}
 
 	/**
@@ -202,7 +205,7 @@ class AbstractBlock extends AbstractTag
 	 *
 	 * @param string $token
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 * @return Variable
 	 */
 	private function createVariable($token)
@@ -212,6 +215,6 @@ class AbstractBlock extends AbstractTag
 			return new Variable($variableRegexp->matches[1]);
 		}
 
-		throw new LiquidException("Variable $token was not properly terminated");
+		throw new ParseException("Variable $token was not properly terminated");
 	}
 }

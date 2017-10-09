@@ -41,24 +41,30 @@ class TagIncludeTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testInvalidSyntaxNoTemplateName()
 	{
 		$template = new Template();
+		$template->setFileSystem($this->fs);
 		$template->parse("{% include %}");
 	}
 
 	/**
+	 * This needs fixing because it currently throws A FilesystemException (because the template filesystem is not defined in the test) instead of a ParseException which it should logically throw if the syntax is invalid.
+	 *
 	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testInvalidSyntaxInvalidKeyword()
 	{
+		$this->markTestIncomplete('Throws not because the syntax is invalid, but because there is no filesystem for the include');
 		$template = new Template();
 		$template->parse("{% include 'hello' no_keyword %}");
 	}
 
 	/**
+	 * This needs fixing because it currently throws A FilesystemException (because the template filesystem is not defined in the test) instead of a ParseException which it should logically throw if the syntax is invalid.
+	 *
 	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testInvalidSyntaxNoObjectCollection()
@@ -132,7 +138,7 @@ class TagIncludeTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\RenderException
 	 * @expectedExceptionMessage Use index operator
 	 */
 	public function testIncludePassArrayWithoutIndex()

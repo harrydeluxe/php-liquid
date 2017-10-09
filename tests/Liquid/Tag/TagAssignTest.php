@@ -23,7 +23,7 @@ class TagAssignTest extends TestCase
 	/**
 	 * Tests the normal behavior of throwing an exception when the assignment is incorrect
 	 *
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testInvalidAssign()
 	{

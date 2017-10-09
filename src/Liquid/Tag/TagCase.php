@@ -13,8 +13,8 @@ namespace Liquid\Tag;
 
 use Liquid\Decision;
 use Liquid\Context;
+use Liquid\Exception\ParseException;
 use Liquid\Liquid;
-use Liquid\LiquidException;
 use Liquid\FileSystem;
 use Liquid\Regexp;
 
@@ -62,7 +62,7 @@ class TagCase extends Decision
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
@@ -76,7 +76,7 @@ class TagCase extends Decision
 		if ($syntaxRegexp->match($markup)) {
 			$this->left = $syntaxRegexp->matches[0];
 		} else {
-			throw new LiquidException("Syntax Error in tag 'case' - Valid syntax: case [condition]"); // harry
+			throw new ParseException("Syntax Error in tag 'case' - Valid syntax: case [condition]"); // harry
 		}
 	}
 
@@ -95,7 +95,7 @@ class TagCase extends Decision
 	 * @param string $params
 	 * @param array $tokens
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function unknownTag($tag, $params, array $tokens)
 	{
@@ -109,7 +109,7 @@ class TagCase extends Decision
 					$this->right = $whenSyntaxRegexp->matches[0];
 					$this->nodelist = array();
 				} else {
-					throw new LiquidException("Syntax Error in tag 'case' - Valid when condition: when [condition]"); // harry
+					throw new ParseException("Syntax Error in tag 'case' - Valid when condition: when [condition]"); // harry
 				}
 				break;
 

@@ -12,8 +12,8 @@
 namespace Liquid\Tag;
 
 use Liquid\AbstractTag;
+use Liquid\Exception\ParseException;
 use Liquid\Liquid;
-use Liquid\LiquidException;
 use Liquid\FileSystem;
 use Liquid\Regexp;
 use Liquid\Context;
@@ -46,7 +46,7 @@ class TagAssign extends AbstractTag
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
@@ -56,7 +56,7 @@ class TagAssign extends AbstractTag
 			$this->to = $syntaxRegexp->matches[1];
 			$this->from = new Variable($syntaxRegexp->matches[2]);
 		} else {
-			throw new LiquidException("Syntax Error in 'assign' - Valid syntax: assign [var] = [source]");
+			throw new ParseException("Syntax Error in 'assign' - Valid syntax: assign [var] = [source]");
 		}
 	}
 

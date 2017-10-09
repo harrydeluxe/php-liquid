@@ -11,6 +11,8 @@
 
 namespace Liquid;
 
+use Liquid\Exception\RenderException;
+
 /**
  * A selection of standard filters.
  */
@@ -450,7 +452,7 @@ class StandardFilters
 	 * Return the size of an array or of an string
 	 *
 	 * @param mixed $input
-	 *
+	 * @throws RenderException
 	 * @return int
 	 */
 	public static function size($input)
@@ -470,7 +472,7 @@ class StandardFilters
 
 			if (!method_exists($input, '__toString')) {
 				$class = get_class($input);
-				throw new LiquidException("Size of $class cannot be estimated: it has no method 'size' nor can be converted to a string");
+				throw new RenderException("Size of $class cannot be estimated: it has no method 'size' nor can be converted to a string");
 			}
 		}
 

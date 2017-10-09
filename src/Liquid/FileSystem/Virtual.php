@@ -11,8 +11,8 @@
 
 namespace Liquid\FileSystem;
 
+use Liquid\Exception\FilesystemException;
 use Liquid\FileSystem;
-use Liquid\LiquidException;
 
 /**
  * This implements a virtual file system with actual code used to find files injected from outside thus achieving inversion of control.
@@ -28,13 +28,13 @@ class Virtual implements FileSystem
 	 * Constructor
 	 *
 	 * @param callable $callback Callback is responsible for providing content of requested templates. Should return template's text.
-	 * @throws LiquidException
+	 * @throws \Liquid\Exception\FilesystemException
 	 */
 	public function __construct($callback)
 	{
 		// Since a callback can only be set from the constructor, we check it once right here.
 		if (!is_callable($callback)) {
-			throw new LiquidException("Not a callback provided");
+			throw new FilesystemException("Not a callback provided");
 		}
 
 		$this->callback = $callback;
@@ -56,7 +56,7 @@ class Virtual implements FileSystem
 	{
 		// we cannot serialize a closure
 		if ($this->callback instanceof \Closure) {
-			throw new LiquidException("Virtual file system with a Closure as a callback cannot be used with a serializing cache");
+			throw new FilesystemException("Virtual file system with a Closure as a callback cannot be used with a serializing cache");
 		}
 
 		return array_keys(get_object_vars($this));

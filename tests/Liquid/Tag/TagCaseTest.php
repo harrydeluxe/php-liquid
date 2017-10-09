@@ -59,7 +59,7 @@ class TagCaseTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxErrorCase()
 	{
@@ -67,7 +67,7 @@ class TagCaseTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxErrorWhen()
 	{
@@ -75,7 +75,7 @@ class TagCaseTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxErrorEnd()
 	{
@@ -83,7 +83,7 @@ class TagCaseTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\RenderException
 	 */
 	public function testObject()
 	{

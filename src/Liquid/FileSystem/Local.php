@@ -11,8 +11,9 @@
 
 namespace Liquid\FileSystem;
 
+use Liquid\Exception\NotFoundException;
+use Liquid\Exception\ParseException;
 use Liquid\FileSystem;
-use Liquid\LiquidException;
 use Liquid\Regexp;
 use Liquid\Liquid;
 
@@ -35,6 +36,7 @@ class Local implements FileSystem
 	 * Constructor
 	 *
 	 * @param string $root The root path for templates
+	 * @throws \Liquid\Exception\NotFoundException
 	 */
 	public function __construct($root)
 	{
@@ -42,7 +44,7 @@ class Local implements FileSystem
 		if (!empty($root)) {
 			$realRoot = realpath($root);
 			if ($realRoot === false) {
-				throw new LiquidException("Root path could not be found: '$root'");
+				throw new NotFoundException("Root path could not be found: '$root'");
 			}
 			$root = $realRoot;
 		}
@@ -67,13 +69,14 @@ class Local implements FileSystem
 	 *
 	 * @param string $templatePath
 	 *
-	 * @throws LiquidException
+	 * @throws \Liquid\Exception\ParseException
+	 * @throws \Liquid\Exception\NotFoundException
 	 * @return string
 	 */
 	public function fullPath($templatePath)
 	{
 		if (empty($templatePath)) {
-			throw new LiquidException("Empty template name");
+			throw new ParseException("Empty template name");
 		}
 
 		$nameRegex = Liquid::get('INCLUDE_ALLOW_EXT')
@@ -81,7 +84,7 @@ class Local implements FileSystem
 		: new Regexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
 
 		if (!$nameRegex->match($templatePath)) {
-			throw new LiquidException("Illegal template name '$templatePath'");
+			throw new ParseException("Illegal template name '$templatePath'");
 		}
 
 		$templateDir = dirname($templatePath);
@@ -95,11 +98,11 @@ class Local implements FileSystem
 
 		$realFullPath = realpath($fullPath);
 		if ($realFullPath === false) {
-			throw new LiquidException("File not found: $fullPath");
+			throw new NotFoundException("File not found: $fullPath");
 		}
 
 		if (strpos($realFullPath, $this->root) !== 0) {
-			throw new LiquidException("Illegal template full path: {$realFullPath} not under {$this->root}");
+			throw new NotFoundException("Illegal template full path: {$realFullPath} not under {$this->root}");
 		}
 
 		return $realFullPath;

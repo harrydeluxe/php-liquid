@@ -13,7 +13,7 @@ namespace Liquid\Tag;
 
 use Liquid\AbstractBlock;
 use Liquid\Context;
-use Liquid\LiquidException;
+use Liquid\Exception\ParseException;
 use Liquid\FileSystem;
 use Liquid\Regexp;
 
@@ -40,7 +40,7 @@ class TagCapture extends AbstractBlock
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
@@ -50,7 +50,7 @@ class TagCapture extends AbstractBlock
 			$this->to = $syntaxRegexp->matches[1];
 			parent::__construct($markup, $tokens, $fileSystem);
 		} else {
-			throw new LiquidException("Syntax Error in 'capture' - Valid syntax: capture [var] [value]");
+			throw new ParseException("Syntax Error in 'capture' - Valid syntax: capture [var] [value]");
 		}
 	}
 

@@ -37,7 +37,7 @@ class TagPaginateTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxErrorCase()
 	{

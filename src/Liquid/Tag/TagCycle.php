@@ -12,9 +12,9 @@
 namespace Liquid\Tag;
 
 use Liquid\AbstractTag;
+use Liquid\Exception\ParseException;
 use Liquid\Liquid;
 use Liquid\Context;
-use Liquid\LiquidException;
 use Liquid\Regexp;
 use Liquid\Variable;
 use Liquid\FileSystem;
@@ -53,7 +53,7 @@ class TagCycle extends AbstractTag
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
@@ -67,7 +67,7 @@ class TagCycle extends AbstractTag
 			$this->variables = $this->variablesFromString($markup);
 			$this->name = "'" . implode($this->variables) . "'";
 		} else {
-			throw new LiquidException("Syntax Error in 'cycle' - Valid syntax: cycle [name :] var [, var2, var3 ...]");
+			throw new ParseException("Syntax Error in 'cycle' - Valid syntax: cycle [name :] var [, var2, var3 ...]");
 		}
 	}
 

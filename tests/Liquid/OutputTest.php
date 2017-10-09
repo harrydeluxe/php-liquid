@@ -149,7 +149,7 @@ class OutputTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
+	 * @expectedException \Liquid\Exception\ParseException
 	 * @expectedExceptionMessage was not properly terminated
 	 */
 	public function testVariableWithANewLine()

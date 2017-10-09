@@ -12,9 +12,9 @@
 namespace Liquid\Tag;
 
 use Liquid\AbstractBlock;
+use Liquid\Exception\ParseException;
 use Liquid\Liquid;
 use Liquid\Context;
-use Liquid\LiquidException;
 use Liquid\FileSystem;
 use Liquid\Regexp;
 
@@ -62,7 +62,7 @@ class TagFor extends AbstractBlock
 	 * @param array $tokens
 	 * @param FileSystem $fileSystem
 	 *
-	 * @throws \Liquid\LiquidException
+	 * @throws \Liquid\Exception\ParseException
 	 */
 	public function __construct($markup, array &$tokens, FileSystem $fileSystem = null)
 	{
@@ -85,7 +85,7 @@ class TagFor extends AbstractBlock
 				$this->name = $syntaxRegexp->matches[1].'-digit';
 				$this->extractAttributes($markup);
 			} else {
-				throw new LiquidException("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]");
+				throw new ParseException("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]");
 			}
 		}
 	}

@@ -11,6 +11,9 @@
 
 namespace Liquid;
 
+use Liquid\Exception\CacheException;
+use Liquid\Exception\MissingFilesystemException;
+
 /**
  * The Template class.
  *
@@ -75,7 +78,7 @@ class Template
 	/**
 	 * @param array|Cache $cache
 	 *
-	 * @throws LiquidException
+	 * @throws \Liquid\Exception\CacheException
 	 */
 	public function setCache($cache)
 	{
@@ -84,7 +87,7 @@ class Template
 				$classname = '\Liquid\Cache\\' . ucwords($cache['cache']);
 				self::$cache = new $classname($cache);
 			} else {
-				throw new LiquidException('Invalid cache options!');
+				throw new CacheException('Invalid cache options!');
 			}
 		}
 
@@ -200,13 +203,13 @@ class Template
 	 * Parses the given template file
 	 *
 	 * @param string $templatePath
-	 *
+	 * @throws \Liquid\Exception\MissingFilesystemException
 	 * @return Template
 	 */
 	public function parseFile($templatePath)
 	{
 		if (!$this->fileSystem) {
-			throw new LiquidException("Could not load a template without an initialized file system");
+			throw new MissingFilesystemException("Could not load a template without an initialized file system");
 		}
 
 		return $this->parse($this->fileSystem->readTemplateFile($templatePath));
