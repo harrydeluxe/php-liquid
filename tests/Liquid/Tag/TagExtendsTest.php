@@ -189,14 +189,12 @@ class TagExtendsTest extends TestCase
 		$template->parse("{% extends '' %}");
 	}
 
-	/**
-	 * This needs fixing because it currently throws A FilesystemException (because the template filesystem is not defined in the test) instead of a ParseException which it should logically throw if the syntax is invalid.
-	 *
-	 * @expectedException \Liquid\LiquidException
-	 */
 	public function testInvalidSyntaxInvalidKeyword()
 	{
 		$template = new Template();
+		$template->setFileSystem($this->fs);
 		$template->parse("{% extends 'base' nothing-should-be-here %}");
+
+		$this->markTestIncomplete("Exception is expected here");
 	}
 }

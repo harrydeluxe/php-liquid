@@ -49,27 +49,22 @@ class TagIncludeTest extends TestCase
 		$template->parse("{% include %}");
 	}
 
-	/**
-	 * This needs fixing because it currently throws A FilesystemException (because the template filesystem is not defined in the test) instead of a ParseException which it should logically throw if the syntax is invalid.
-	 *
-	 * @expectedException \Liquid\LiquidException
-	 */
 	public function testInvalidSyntaxInvalidKeyword()
 	{
-		$this->markTestIncomplete('Throws not because the syntax is invalid, but because there is no filesystem for the include');
 		$template = new Template();
+		$template->setFileSystem($this->fs);
 		$template->parse("{% include 'hello' no_keyword %}");
+
+		$this->markTestIncomplete("Exception is expected here");
 	}
 
-	/**
-	 * This needs fixing because it currently throws A FilesystemException (because the template filesystem is not defined in the test) instead of a ParseException which it should logically throw if the syntax is invalid.
-	 *
-	 * @expectedException \Liquid\LiquidException
-	 */
 	public function testInvalidSyntaxNoObjectCollection()
 	{
 		$template = new Template();
+		$template->setFileSystem($this->fs);
 		$template->parse("{% include 'hello' with %}");
+
+		$this->markTestIncomplete("Exception is expected here");
 	}
 
 	public function testIncludeTag()
