@@ -141,9 +141,14 @@ class Template
 	 *
 	 * @param string $filter
 	 */
-	public function registerFilter($filter)
+	public function registerFilter($filter, callable $callback = null)
 	{
-		$this->filters[] = $filter;
+		// Store callback for later use
+		if ($callback) {
+			$this->filters[] = [$filter, $callback];
+		} else {
+			$this->filters[] = $filter;
+		}
 	}
 
 	/**
@@ -238,7 +243,12 @@ class Template
 		}
 
 		foreach ($this->filters as $filter) {
-			$context->addFilters($filter);
+			if (is_array($filter)) {
+				// Unpack a callback saved as second argument
+				$context->addFilters(...$filter);
+			} else {
+				$context->addFilters($filter);
+			}
 		}
 
 		return $this->root->render($context);

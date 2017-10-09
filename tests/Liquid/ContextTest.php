@@ -304,6 +304,17 @@ class ContextTest extends TestCase
 		$this->assertEquals('Local test', $template->render(array(), new LocalFilter()));
 	}
 
+	public function testCallbackFilter()
+	{
+		$template = new Template();
+		$template->registerFilter('foo', function ($arg) {
+			return "Foo $arg";
+		});
+
+		$template->parse("{{'test' | foo }}");
+		$this->assertEquals('Foo test', $template->render());
+	}
+
 	public function testAddItemInOuterScope()
 	{
 		$this->context->set('test', 'test');

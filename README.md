@@ -99,6 +99,20 @@ If you render the same template over and over for at least a dozen of times, the
 
 You should probably extend `Liquid\Template` to initialize everything you do with `Liquid::set` in one place.
 
+### Custom filters
+
+Adding filters has never been easier.
+
+	$template = new Template();
+	$template->registerFilter('absolute_url', function ($arg) {
+	    return "https://www.example.com$arg";
+	});
+	$template->parse("{{ my_url | absolute_url }}");
+	echo $template->render(array(
+	    'my_url' => '/test'
+	));
+	// expect: https://www.example.com/test
+
 ## Requirements
 
  * PHP 5.6+

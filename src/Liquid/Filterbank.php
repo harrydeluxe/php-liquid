@@ -62,8 +62,14 @@ class Filterbank
 	 * @throws \Liquid\Exception\WrongArgumentException
 	 * @return bool
 	 */
-	public function addFilter($filter)
+	public function addFilter($filter, callable $callback = null)
 	{
+		// If it is a callback, save it as it is
+		if (is_string($filter) && $callback) {
+			$this->methodMap[$filter] = $callback;
+			return true;
+		}
+
 		// If the filter is a class, register all its static methods
 		if (is_string($filter) && class_exists($filter)) {
 			$reflection = new \ReflectionClass($filter);
@@ -117,23 +123,28 @@ class Filterbank
 		array_unshift($args, $value);
 
 		// Consult the mapping
-		if (isset($this->methodMap[$name])) {
-			$class = $this->methodMap[$name];
-
-			// If we have a registered object for the class, use that instead
-			if (isset($this->filters[$class])) {
-				$class = $this->filters[$class];
-			}
-
-			// If we're calling a function
-			if ($class === false) {
-				return call_user_func_array($name, $args);
-			}
-
-			// Call a class or an instance method
-			return call_user_func_array(array($class, $name), $args);
+		if (!isset($this->methodMap[$name])) {
+			return $value;
 		}
 
-		return $value;
+		$class = $this->methodMap[$name];
+
+		// If we have a callback
+		if (is_callable($class)) {
+			return call_user_func_array($class, $args);
+		}
+
+		// If we have a registered object for the class, use that instead
+		if (isset($this->filters[$class])) {
+			$class = $this->filters[$class];
+		}
+
+		// If we're calling a function
+		if ($class === false) {
+			return call_user_func_array($name, $args);
+		}
+
+		// Call a class or an instance method
+		return call_user_func_array(array($class, $name), $args);
 	}
 }

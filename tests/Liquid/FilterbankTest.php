@@ -51,6 +51,8 @@ class ClassFilter
 
 namespace Liquid {
 
+use Liquid\Cache\File;
+
 class NamespacedClassFilter
 {
 	public static function static_test2($var)
@@ -73,6 +75,13 @@ class FilterbankTest extends TestCase
 
 		$this->context = new Context();
 		$this->filterBank = new FilterBank($this->context);
+	}
+
+	protected function tearDown()
+	{
+		// have to destroy these else PHP goes nuts
+		unset($this->context);
+		unset($this->filterBank);
 	}
 
 	/**
@@ -157,6 +166,35 @@ class FilterbankTest extends TestCase
 
 		$var = new Variable('var | static_test');
 		$this->assertEquals('worked', $var->render($this->context));
+	}
+
+	public function testCallbackFilter()
+	{
+		$var = new Variable('var | my_callback');
+		$this->context->set('var', 1000);
+		$this->context->addFilters('my_callback', function ($var) {
+			return $var * 2;
+		});
+		$this->assertEquals('2000', $var->render($this->context));
+	}
+
+	/**
+	 * Closures are not to be serialized. Let's check that.
+	 */
+	public function testWithSerializingCache()
+	{
+		$template = new Template();
+		$template->registerFilter('foo', function ($arg) {
+			return "Foo $arg";
+		});
+		$template->setCache(new File(array(
+			'cache_dir' => __DIR__.'/cache_dir/',
+		)));
+		$template->parse("{{'test' | foo }}");
+		$this->assertEquals('Foo test', $template->render());
+
+		$template->parse("{{'bar' | foo }}");
+		$this->assertEquals('Foo bar', $template->render());
 	}
 }
 
