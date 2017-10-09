@@ -51,6 +51,14 @@ class ClassFilter
 
 namespace Liquid {
 
+class NamespacedClassFilter
+{
+	public static function static_test2()
+	{
+		return "good";
+	}
+}
+
 class FilterbankTest extends TestCase
 {
 	/** @var FilterBank */
@@ -98,6 +106,17 @@ class FilterbankTest extends TestCase
 		$this->context->set('var', 1000);
 		$this->context->addFilters('functionFilter');
 		$this->assertEquals('worked', $var->render($this->context));
+	}
+
+	/**
+	 * Test using a namespaced static class
+	 */
+	public function testNamespacedStaticClassFilter()
+	{
+		$var = new Variable('var | static_test2');
+		$this->context->set('var', 1000);
+		$this->context->addFilters(NamespacedClassFilter::class);
+		$this->assertEquals('good', $var->render($this->context));
 	}
 
 	/**
