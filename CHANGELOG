@@ -1,5 +1,10 @@
 * master
 
+* 1.4.3 (2017-10-10)
+
+ * `escape` and `escape_once` filters now escape everything, but arrays
+ * New standard filter for explicit string conversion
+
 * 1.4.2 (2017-10-09)
 
  * Better caching for non-extending templates
