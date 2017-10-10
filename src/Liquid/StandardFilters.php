@@ -145,7 +145,12 @@ class StandardFilters
 	 */
 	public static function escape($input)
 	{
-		return is_string($input) ? htmlentities($input, ENT_QUOTES) : $input;
+		// Arrays are taken care down the stack with an error
+		if (is_array($input)) {
+			return $input;
+		}
+
+		return htmlentities($input, ENT_QUOTES);
 	}
 
 
@@ -158,7 +163,12 @@ class StandardFilters
 	 */
 	public static function escape_once($input)
 	{
-		return is_string($input) ? htmlentities($input, ENT_QUOTES, null, false) : $input;
+		// Arrays are taken care down the stack with an error
+		if (is_array($input)) {
+			return $input;
+		}
+
+		return htmlentities($input, ENT_QUOTES, null, false);
 	}
 
 

@@ -177,6 +177,8 @@ class StandardFiltersTest extends TestCase
 		foreach ($data as $element => $expected) {
 			$this->assertEquals($expected, StandardFilters::escape($element));
 		}
+
+		$this->assertSame(array(1), StandardFilters::escape(array(1)));
 	}
 
 	public function testEscapeOnce()
@@ -191,6 +193,8 @@ class StandardFiltersTest extends TestCase
 		foreach ($data as $element => $expected) {
 			$this->assertEquals($expected, StandardFilters::escape_once($element));
 		}
+
+		$this->assertSame(array(1), StandardFilters::escape_once(array(1)));
 	}
 
 	public function testStripNewLines()
