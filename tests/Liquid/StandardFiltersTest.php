@@ -45,6 +45,11 @@ class SizeClass
 	{
 		return self::SIZE;
 	}
+
+	public function __toString()
+	{
+		return "forty two";
+	}
 }
 
 
@@ -745,6 +750,24 @@ class StandardFiltersTest extends TestCase
 
 		foreach ($data as $item) {
 			$this->assertEquals($item[1], StandardFilters::last($item[0]));
+		}
+	}
+
+	public function testString()
+	{
+		$data = array(
+				array(
+						1,
+						'1',
+				),
+				array(
+						new SizeClass(),
+						"forty two",
+				),
+		);
+
+		foreach ($data as $item) {
+			$this->assertEquals($item[1], StandardFilters::string($item[0]));
 		}
 	}
 

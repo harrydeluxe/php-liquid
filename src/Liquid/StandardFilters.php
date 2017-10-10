@@ -535,7 +535,18 @@ class StandardFilters
 
 		return $input;
 	}
-	
+
+	/**
+	 * Explicit string conversion.
+	 *
+	 * @param mixed $input
+	 *
+	 * @return string
+	 */
+	public static function string($input)
+	{
+		return strval($input);
+	}
 
 	/**
 	 * Split input string into an array of substrings separated by given pattern.
