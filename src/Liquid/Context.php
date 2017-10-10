@@ -351,7 +351,7 @@ class Context
 
 		// lastly, try to get an embedded value of an object
 		// value could be of any type, not just string, so we have to do this
-		// conversion here, not laster in AbstractBlock::renderAll
+		// conversion here, not later in AbstractBlock::renderAll
 		if (method_exists($object, 'toLiquid')) {
 			$object = $object->toLiquid();
 		}

@@ -11,6 +11,21 @@
 
 namespace Liquid;
 
+class ObjectWithToString
+{
+	private $string = '';
+
+	public function __construct($string)
+	{
+		$this->string = $string;
+	}
+
+	public function __toString()
+	{
+		return $this->string;
+	}
+}
+
 class EscapeByDefaultTest extends TestCase
 {
 	const XSS = "<script>alert()</script>";
@@ -82,6 +97,17 @@ class EscapeByDefaultTest extends TestCase
 		$text = "{{ xss | newline_to_br }}";
 		$expected = self::XSS."<br />\n".self::XSS;
 		$this->assertTemplateResult($expected, $text, array('xss' => self::XSS."\n".self::XSS));
+	}
+
+	public function testToStringEscape()
+	{
+		$this->assertTemplateResult(self::XSS_FAILED, "{{ xss | escape }}", array('xss' => new ObjectWithToString(self::XSS)));
+	}
+
+	public function testToStringEscapeDefault()
+	{
+		Liquid::set('ESCAPE_BY_DEFAULT', true);
+		$this->assertTemplateResult(self::XSS_FAILED, "{{ xss }}", array('xss' => new ObjectWithToString(self::XSS)));
 	}
 
 	/** System default value for the escape flag */

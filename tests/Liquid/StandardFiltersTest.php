@@ -45,6 +45,11 @@ class SizeClass
 	{
 		return self::SIZE;
 	}
+
+	public function __toString()
+	{
+		return "forty two";
+	}
 }
 
 
@@ -172,6 +177,8 @@ class StandardFiltersTest extends TestCase
 		foreach ($data as $element => $expected) {
 			$this->assertEquals($expected, StandardFilters::escape($element));
 		}
+
+		$this->assertSame(array(1), StandardFilters::escape(array(1)));
 	}
 
 	public function testEscapeOnce()
@@ -186,6 +193,8 @@ class StandardFiltersTest extends TestCase
 		foreach ($data as $element => $expected) {
 			$this->assertEquals($expected, StandardFilters::escape_once($element));
 		}
+
+		$this->assertSame(array(1), StandardFilters::escape_once(array(1)));
 	}
 
 	public function testStripNewLines()
@@ -745,6 +754,24 @@ class StandardFiltersTest extends TestCase
 
 		foreach ($data as $item) {
 			$this->assertEquals($item[1], StandardFilters::last($item[0]));
+		}
+	}
+
+	public function testString()
+	{
+		$data = array(
+				array(
+						1,
+						'1',
+				),
+				array(
+						new SizeClass(),
+						"forty two",
+				),
+		);
+
+		foreach ($data as $item) {
+			$this->assertEquals($item[1], StandardFilters::string($item[0]));
 		}
 	}
 

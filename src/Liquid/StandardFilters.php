@@ -145,7 +145,12 @@ class StandardFilters
 	 */
 	public static function escape($input)
 	{
-		return is_string($input) ? htmlentities($input, ENT_QUOTES) : $input;
+		// Arrays are taken care down the stack with an error
+		if (is_array($input)) {
+			return $input;
+		}
+
+		return htmlentities($input, ENT_QUOTES);
 	}
 
 
@@ -158,7 +163,12 @@ class StandardFilters
 	 */
 	public static function escape_once($input)
 	{
-		return is_string($input) ? htmlentities($input, ENT_QUOTES, null, false) : $input;
+		// Arrays are taken care down the stack with an error
+		if (is_array($input)) {
+			return $input;
+		}
+
+		return htmlentities($input, ENT_QUOTES, null, false);
 	}
 
 
@@ -535,7 +545,18 @@ class StandardFilters
 
 		return $input;
 	}
-	
+
+	/**
+	 * Explicit string conversion.
+	 *
+	 * @param mixed $input
+	 *
+	 * @return string
+	 */
+	public static function string($input)
+	{
+		return strval($input);
+	}
 
 	/**
 	 * Split input string into an array of substrings separated by given pattern.
