@@ -144,6 +144,9 @@ class TagIf extends Decision
 					$display = $this->interpretCondition($conditions[0]['left'], $conditions[0]['right'], $conditions[0]['operator'], $context);
 				}
 
+				// hook for unless tag
+				$display = $this->negateIfUnless($display);
+
 				if ($display) {
 					$result = $this->renderAll($block[2], $context);
 
@@ -155,5 +158,11 @@ class TagIf extends Decision
 		$context->pop();
 
 		return $result;
+	}
+
+	protected function negateIfUnless($display)
+	{
+		// no need to negate a condition in a regular `if` tag (will do that in `unless` tag)
+		return $display;
 	}
 }
