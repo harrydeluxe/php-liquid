@@ -80,8 +80,8 @@ class Local implements FileSystem
 		}
 
 		$nameRegex = Liquid::get('INCLUDE_ALLOW_EXT')
-		? new Regexp('/^[^.\/][a-zA-Z0-9_\.\/]+$/')
-		: new Regexp('/^[^.\/][a-zA-Z0-9_\/]+$/');
+		? new Regexp('/^[^.\/][a-zA-Z0-9_\.\/-]+$/')
+		: new Regexp('/^[^.\/][a-zA-Z0-9_\/-]+$/');
 
 		if (!$nameRegex->match($templatePath)) {
 			throw new ParseException("Illegal template name '$templatePath'");
