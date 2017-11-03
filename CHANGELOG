@@ -1,5 +1,10 @@
 * master
 
+* 1.4.4 (2017-11-03)
+
+ * TagUnless is an inverted TagIf: simplified implementation
+ * Allow dashes in filenames
+
 * 1.4.3 (2017-10-10)
 
  * `escape` and `escape_once` filters now escape everything, but arrays
