@@ -12,12 +12,13 @@
 
 
 {% if true %}
-true
 {% assign my_variable = 'test 0' %}
 {% capture my_variable %}test 3{% endcapture %}
+{{ my_variable }} == test 3 (inside an if)
 {% else %}
-false
-{% capture my_variable%}test 4{% endcapture %}
+{% capture my_variable %}test 4{% endcapture %}
+{{ my_variable }}
+
 {% endif %}
 
-{{ my_variable }} == test 3
+{{ my_variable }} == test 3 (outside of an if)
