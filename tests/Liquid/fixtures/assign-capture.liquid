@@ -1,0 +1,24 @@
+{% assign my_variable = 'test 0' %}
+
+{{ my_variable }} == test 0
+
+{% capture my_variable %}test 1{% endcapture %}
+
+{{ my_variable }} == test 1
+
+{% capture my_variable %}test 2{% endcapture %}
+
+{{ my_variable }} == test 2
+
+
+{% if true %}
+{% assign my_variable = 'test 0' %}
+{% capture my_variable %}test 3{% endcapture %}
+{{ my_variable }} == test 3 (inside an if)
+{% else %}
+{% capture my_variable %}test 4{% endcapture %}
+{{ my_variable }}
+
+{% endif %}
+
+{{ my_variable }} == test 3 (outside of an if)
