@@ -65,7 +65,7 @@ class TagCapture extends AbstractBlock
 	{
 		$output = parent::render($context);
 
-		$context->set($this->to, $output);
+		$context->set($this->to, $output, true);
 		return '';
 	}
 }
