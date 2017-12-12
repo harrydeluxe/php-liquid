@@ -1,0 +1,23 @@
+{% assign my_variable = 'test 0' %}
+
+{{ my_variable }} == test 0
+
+{% capture my_variable %}test 1{% endcapture %}
+
+{{ my_variable }} == test 1
+
+{% capture my_variable %}test 2{% endcapture %}
+
+{{ my_variable }} == test 2
+
+
+{% if true %}
+true
+{% assign my_variable = 'test 0' %}
+{% capture my_variable %}test 3{% endcapture %}
+{% else %}
+false
+{% capture my_variable%}test 4{% endcapture %}
+{% endif %}
+
+{{ my_variable }} == test 3
