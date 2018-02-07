@@ -103,15 +103,12 @@ class TagFor extends AbstractBlock
 			$context->registers['for'] = array();
 		}
 
-		switch ($this->type) {
-			case 'collection':
-				return $this->renderCollection($context);
-			break;
-
-			case 'digit':
-				return $this->renderDigit($context);
-			break;
+		if ($this->type == 'digit') {
+			return $this->renderDigit($context);
 		}
+
+		// that's the default
+		return $this->renderCollection($context);
 	}
 
 	private function renderCollection(Context $context)
