@@ -1,5 +1,10 @@
 * master
 
+* 1.4.6 (2018-02-07)
+
+ * TagPaginate shall not pullute the global scope, but work in own scope.
+ * TagPaginate errors if no collection present instead of vague warning.
+
 * 1.4.5 (2017-12-12)
 
  * Capture tag shall save a variable in the global context.
