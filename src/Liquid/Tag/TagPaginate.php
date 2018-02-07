@@ -17,6 +17,7 @@ use Liquid\Liquid;
 use Liquid\Context;
 use Liquid\FileSystem;
 use Liquid\Regexp;
+use Liquid\Exception\RenderException;
 
 /**
  * The paginate tag works in conjunction with the for tag to split content into numerous pages.
@@ -113,6 +114,12 @@ class TagPaginate extends AbstractBlock
 		}
 		$this->collectionSize = count($this->collection);
 		$this->totalPages = ceil($this->collectionSize / $this->numberItems);
+
+		if (!is_array($this->collection)) {
+			// TODO do not throw up if error mode allows, see #83
+			throw new RenderException("Missing collection with name '{$this->collectionName}'");
+		}
+
 		$paginatedCollection = array_slice($this->collection, $this->currentOffset, $this->numberItems);
 
 		// We must work in a new scope so we won't pollute a global scope

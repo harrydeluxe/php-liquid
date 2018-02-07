@@ -44,6 +44,15 @@ class TagPaginateTest extends TestCase
 		$this->assertTemplateResult('', '{% paginate products %}{% endpaginate %}');
 	}
 
+	/**
+	 * @expectedException \Liquid\Exception\RenderException
+	 * @expectedExceptionMessage Missing collection
+	 */
+	public function testNoCollection()
+	{
+		$this->assertTemplateResult('', '{% paginate products by 1 %}{% for product in products %}{{ product.id }}{% endfor %}{% endpaginate %}');
+	}
+
 	public function testPaginationForRepeatedCalls()
 	{
 		$assigns = array(
