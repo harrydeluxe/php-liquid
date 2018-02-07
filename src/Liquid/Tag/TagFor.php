@@ -103,121 +103,126 @@ class TagFor extends AbstractBlock
 			$context->registers['for'] = array();
 		}
 
-		switch ($this->type) {
+		if ($this->type == 'digit') {
+			return $this->renderDigit($context);
+		}
 
-			case 'collection':
+		// that's the default
+		return $this->renderCollection($context);
+	}
 
-				$collection = $context->get($this->collectionName);
+	private function renderCollection(Context $context)
+	{
+		$collection = $context->get($this->collectionName);
 
-				if ($collection instanceof \Traversable) {
-					$collection = iterator_to_array($collection);
-				}
+		if ($collection instanceof \Traversable) {
+			$collection = iterator_to_array($collection);
+		}
 
-				if (is_null($collection) || !is_array($collection) || count($collection) == 0) {
-					return '';
-				}
+		if (is_null($collection) || !is_array($collection) || count($collection) == 0) {
+			return '';
+		}
 
-				$range = array(0, count($collection));
+		$range = array(0, count($collection));
 
-				if (isset($this->attributes['limit']) || isset($this->attributes['offset'])) {
-					$offset = 0;
+		if (isset($this->attributes['limit']) || isset($this->attributes['offset'])) {
+			$offset = 0;
 
-					if (isset($this->attributes['offset'])) {
-						$offset = ($this->attributes['offset'] == 'continue') ? $context->registers['for'][$this->name] : $context->get($this->attributes['offset']);
-					}
+			if (isset($this->attributes['offset'])) {
+				$offset = ($this->attributes['offset'] == 'continue') ? $context->registers['for'][$this->name] : $context->get($this->attributes['offset']);
+			}
 
-					$limit = (isset($this->attributes['limit'])) ? $context->get($this->attributes['limit']) : null;
-					$rangeEnd = $limit ? $limit : count($collection) - $offset;
-					$range = array($offset, $rangeEnd);
+			$limit = (isset($this->attributes['limit'])) ? $context->get($this->attributes['limit']) : null;
+			$rangeEnd = $limit ? $limit : count($collection) - $offset;
+			$range = array($offset, $rangeEnd);
 
-					$context->registers['for'][$this->name] = $rangeEnd + $offset;
-				}
+			$context->registers['for'][$this->name] = $rangeEnd + $offset;
+		}
 
-				$result = '';
-				$segment = array_slice($collection, $range[0], $range[1]);
-				if (!count($segment)) {
-					return null;
-				}
+		$result = '';
+		$segment = array_slice($collection, $range[0], $range[1]);
+		if (!count($segment)) {
+			return null;
+		}
 
-				$context->push();
-				$length = count($segment);
+		$context->push();
+		$length = count($segment);
 
-				$index = 0;
-				foreach ($segment as $key => $item) {
-					$value = is_numeric($key) ? $item : array($key, $item);
-					$context->set($this->variableName, $value);
-					$context->set('forloop', array(
-						'name' => $this->name,
-						'length' => $length,
-						'index' => $index + 1,
-						'index0' => $index,
-						'rindex' => $length - $index,
-						'rindex0' => $length - $index - 1,
-						'first' => (int)($index == 0),
-						'last' => (int)($index == $length - 1)
-					));
+		$index = 0;
+		foreach ($segment as $key => $item) {
+			$value = is_numeric($key) ? $item : array($key, $item);
+			$context->set($this->variableName, $value);
+			$context->set('forloop', array(
+					'name' => $this->name,
+					'length' => $length,
+					'index' => $index + 1,
+					'index0' => $index,
+					'rindex' => $length - $index,
+					'rindex0' => $length - $index - 1,
+					'first' => (int)($index == 0),
+					'last' => (int)($index == $length - 1)
+			));
 
-					$result .= $this->renderAll($this->nodelist, $context);
+			$result .= $this->renderAll($this->nodelist, $context);
 
-					$index++;
+			$index++;
 
-					if (isset($context->registers['break'])) {
-						unset($context->registers['break']);
-						break;
-					}
-					if (isset($context->registers['continue'])) {
-						unset($context->registers['continue']);
-					}
-				}
+			if (isset($context->registers['break'])) {
+				unset($context->registers['break']);
+				break;
+			}
+			if (isset($context->registers['continue'])) {
+				unset($context->registers['continue']);
+			}
+		}
 
-			break;
+		$context->pop();
 
-			case 'digit':
+		return $result;
+	}
 
-				$start = $this->start;
-				if (!is_integer($this->start)) {
-					$start = $context->get($this->start);
-				}
+	private function renderDigit(Context $context)
+	{
+		$start = $this->start;
+		if (!is_integer($this->start)) {
+			$start = $context->get($this->start);
+		}
 
-				$end = $this->collectionName;
-				if (!is_integer($this->collectionName)) {
-					$end = $context->get($this->collectionName);
-				}
+		$end = $this->collectionName;
+		if (!is_integer($this->collectionName)) {
+			$end = $context->get($this->collectionName);
+		}
 
-				$range = array($start, $end);
+		$range = array($start, $end);
 
-				$context->push();
-				$result = '';
-				$index = 0;
-				$length = $range[1] - $range[0];
-				for ($i=$range[0]; $i<=$range[1]; $i++) {
-					$context->set($this->variableName, $i);
-					$context->set('forloop', array(
-						'name'		=> $this->name,
-						'length'	=> $length,
-						'index'		=> $index + 1,
-						'index0'	=> $index,
-						'rindex'	=> $length - $index,
-						'rindex0'	=> $length - $index - 1,
-						'first'		=> (int)($index == 0),
-						'last'		=> (int)($index == $length - 1)
-					));
+		$context->push();
+		$result = '';
+		$index = 0;
+		$length = $range[1] - $range[0];
+		for ($i = $range[0]; $i <= $range[1]; $i++) {
+			$context->set($this->variableName, $i);
+			$context->set('forloop', array(
+				'name'		=> $this->name,
+				'length'	=> $length,
+				'index'		=> $index + 1,
+				'index0'	=> $index,
+				'rindex'	=> $length - $index,
+				'rindex0'	=> $length - $index - 1,
+				'first'		=> (int)($index == 0),
+				'last'		=> (int)($index == $length - 1)
+			));
 
-					$result .= $this->renderAll($this->nodelist, $context);
+			$result .= $this->renderAll($this->nodelist, $context);
 
-					$index++;
+			$index++;
 
-					if (isset($context->registers['break'])) {
-						unset($context->registers['break']);
-						break;
-					}
-					if (isset($context->registers['continue'])) {
-						unset($context->registers['continue']);
-					}
-				}
-
-			break;
-
+			if (isset($context->registers['break'])) {
+				unset($context->registers['break']);
+				break;
+			}
+			if (isset($context->registers['continue'])) {
+				unset($context->registers['continue']);
+			}
 		}
 
 		$context->pop();

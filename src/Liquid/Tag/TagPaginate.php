@@ -17,6 +17,7 @@ use Liquid\Liquid;
 use Liquid\Context;
 use Liquid\FileSystem;
 use Liquid\Regexp;
+use Liquid\Exception\RenderException;
 
 /**
  * The paginate tag works in conjunction with the for tag to split content into numerous pages.
@@ -108,12 +109,22 @@ class TagPaginate extends AbstractBlock
 		$this->currentPage = (is_numeric($context->get('page'))) ? $context->get('page') : 1;
 		$this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
 		$this->collection = $context->get($this->collectionName);
+
 		if ($this->collection instanceof \Traversable) {
 			$this->collection = iterator_to_array($this->collection);
 		}
+
+		if (!is_array($this->collection)) {
+			// TODO do not throw up if error mode allows, see #83
+			throw new RenderException("Missing collection with name '{$this->collectionName}'");
+		}
+
 		$this->collectionSize = count($this->collection);
 		$this->totalPages = ceil($this->collectionSize / $this->numberItems);
 		$paginatedCollection = array_slice($this->collection, $this->currentOffset, $this->numberItems);
+
+		// We must work in a new scope so we won't pollute a global scope
+		$context->push();
 
 		// Sets the collection if it's a key of another collection (ie search.results, collection.products, blog.articles)
 		$segments = explode('.', $this->collectionName);
@@ -143,7 +154,11 @@ class TagPaginate extends AbstractBlock
 
 		$context->set('paginate', $paginate);
 
-		return parent::render($context);
+		$result = parent::render($context);
+
+		$context->pop();
+
+		return $result;
 	}
 
 	/**

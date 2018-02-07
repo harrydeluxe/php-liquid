@@ -14,4 +14,9 @@ return array(
 	'item' => array(
 		'quantity' => 5,
 	),
+	'articles' => array(
+		array('title' => 1),
+		array('title' => 2),
+		array('title' => 3),
+	),
 );
