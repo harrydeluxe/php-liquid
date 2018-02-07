@@ -115,6 +115,9 @@ class TagPaginate extends AbstractBlock
 		$this->totalPages = ceil($this->collectionSize / $this->numberItems);
 		$paginatedCollection = array_slice($this->collection, $this->currentOffset, $this->numberItems);
 
+		// We must work in a new scope so we won't pollute a global scope
+		$context->push();
+
 		// Sets the collection if it's a key of another collection (ie search.results, collection.products, blog.articles)
 		$segments = explode('.', $this->collectionName);
 		if (count($segments) == 2) {
@@ -143,7 +146,11 @@ class TagPaginate extends AbstractBlock
 
 		$context->set('paginate', $paginate);
 
-		return parent::render($context);
+		$result = parent::render($context);
+
+		$context->pop();
+
+		return $result;
 	}
 
 	/**

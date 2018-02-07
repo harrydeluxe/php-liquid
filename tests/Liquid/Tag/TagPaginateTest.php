@@ -43,4 +43,19 @@ class TagPaginateTest extends TestCase
 	{
 		$this->assertTemplateResult('', '{% paginate products %}{% endpaginate %}');
 	}
+
+	public function testPaginationForRepeatedCalls()
+	{
+		$assigns = array(
+			'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3)),
+		);
+
+		$text = '{% for article in articles %}{{ article.title }},{% endfor %}';
+		$expected = '1,2,3,';
+		$this->assertTemplateResult($expected, $text, $assigns);
+
+		$text = '{% paginate articles by 2 %}{% for article in articles %}{{ article.title }},{% endfor %}{% endpaginate %} '.$text;
+		$expected = '1,2, 1,2,3,';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
 }
