@@ -24,3 +24,18 @@ Range loop:
 {% for i in (1..item.quantity) %}
   {{ i }}
 {% endfor %}
+
+Regular loop:
+{% for article in articles %}
+  {{ article.title }}
+{% endfor %}
+
+Within a pagination:
+{% paginate articles by 2 %}{% for article in articles %}
+  {{ article.title }}
+{% endfor %}{% endpaginate %}
+
+Should not be affected by a pagination:
+{% for article in articles %}
+  {{ article.title }}
+{% endfor %}
