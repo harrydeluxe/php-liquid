@@ -45,7 +45,6 @@ class TagPaginate extends AbstractBlock
 	private $collection;
 
 	/**
-	 *
 	 * @var int The size of the collection
 	 */
 	private $collectionSize;
@@ -106,9 +105,8 @@ class TagPaginate extends AbstractBlock
 	 */
 	public function render(Context $context)
 	{
-		// Check for a setting in the Liquid config for the context key to use to refer to the current page
+		// Get the context key to use to refer to the current page
 		$pageContextKey = Liquid::get('PAGINATION_CONTEXT_KEY');
-		$pageContextKey = ($pageContextKey) ? $pageContextKey : 'page';
 
 		$this->currentPage = (is_numeric($context->get($pageContextKey))) ? $context->get($pageContextKey) : 1;
 		$this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
@@ -146,9 +144,8 @@ class TagPaginate extends AbstractBlock
 			'items' => $this->collectionSize
 		);
 
-		// look to see if there's a key in the Liquid config for the request field to use in URLs
+		// Get the name of the request field to use in URLs
 		$pageRequestKey = Liquid::get('PAGINATION_REQUEST_KEY');
-		$pageRequestKey = ($pageRequestKey) ? $pageRequestKey : 'page';
 
 		if ($this->currentPage != 1) {
 			$paginate['previous']['title'] = 'Previous';

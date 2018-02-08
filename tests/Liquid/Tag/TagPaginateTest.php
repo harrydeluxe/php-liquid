@@ -12,9 +12,28 @@
 namespace Liquid\Tag;
 
 use Liquid\TestCase;
+use Liquid\Liquid;
 
 class TagPaginateTest extends TestCase
 {
+	/** System default values for the request and context page key */
+	private static $requestKeyDefault;
+	private static $contextKeyDefault;
+
+	public static function setUpBeforeClass()
+	{
+		// save system default value for the escape flag before all tests
+		self::$requestKeyDefault = Liquid::get('PAGINATION_REQUEST_KEY');
+		self::$contextKeyDefault = Liquid::get('PAGINATION_CONTEXT_KEY');
+	}
+
+	public function tearDown()
+	{
+		// reset to the defaults after each test
+		Liquid::set('PAGINATION_REQUEST_KEY', self::$requestKeyDefault);
+		Liquid::set('PAGINATION_CONTEXT_KEY', self::$contextKeyDefault);
+	}
+
 	public function testWorks()
 	{
 		$text = "{% paginate products by 3 %}{% for product in products %} {{ product.id }} {% endfor %}{% endpaginate %}";
@@ -71,7 +90,7 @@ class TagPaginateTest extends TestCase
 	public function testPaginationDoesntIncludePreviousIfFirst()
 	{
 		$assigns = array(
-			'HTTP_HOST' => 'example.com', 'page' => 1, 'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3))
+			'HTTP_HOST' => 'example.com', 'page' => 1, 'articles' => $this->provideArticleFixture()
 		);
 
 		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
@@ -84,7 +103,7 @@ class TagPaginateTest extends TestCase
 	public function testPaginateDoesntIncludeNextIfLast()
 	{
 		$assigns = array(
-			'HTTP_HOST' => 'example.com', 'page' => 3, 'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3))
+			'HTTP_HOST' => 'example.com', 'page' => 3, 'articles' => $this->provideArticleFixture()
 		);
 
 		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
@@ -97,30 +116,33 @@ class TagPaginateTest extends TestCase
 	public function testPaginateUsingDifferentRequestParameterName()
 	{
 		$assigns = array(
-			'HTTP_HOST' => 'example.com', 'page' => 2, 'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3))
+			'HTTP_HOST' => 'example.com', 'page' => 2, 'articles' => $this->provideArticleFixture()
 		);
 
 		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
 
 		$expected = '2 Previous,http://example.com?pagina=1 Next,http://example.com?pagina=3';
 
-		\Liquid\Liquid::set('PAGINATION_REQUEST_KEY', 'pagina');
+		Liquid::set('PAGINATION_REQUEST_KEY', 'pagina');
 		$this->assertTemplateResult($expected, $text, $assigns);
-		\Liquid\Liquid::set('PAGINATION_REQUEST_KEY', null);
 	}
 	
 	public function testPaginateUsingDifferentContextParameter()
 	{
 		$assigns = array(
-			'HTTP_HOST' => 'example.com', 'the_current_page' => 2, 'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3))
+			'HTTP_HOST' => 'example.com', 'the_current_page' => 2, 'articles' => $this->provideArticleFixture()
 		);
 
 		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
 
 		$expected = '2 Previous,http://example.com?page=1 Next,http://example.com?page=3';
 
-		\Liquid\Liquid::set('PAGINATION_CONTEXT_KEY', 'the_current_page');
+		Liquid::set('PAGINATION_CONTEXT_KEY', 'the_current_page');
 		$this->assertTemplateResult($expected, $text, $assigns);
-		\Liquid\Liquid::set('PAGINATION_CONTEXT_KEY', null);
+	}
+
+	private function provideArticleFixture()
+	{
+		return array(array('title' => 1), array('title' => 2), array('title' => 3));
 	}
 }
