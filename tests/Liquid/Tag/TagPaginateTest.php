@@ -67,4 +67,60 @@ class TagPaginateTest extends TestCase
 		$expected = '1,2, 1,2,3,';
 		$this->assertTemplateResult($expected, $text, $assigns);
 	}
+
+	public function testPaginationDoesntIncludePreviousIfFirst()
+	{
+		$assigns = array(
+			'HTTP_HOST' => 'example.com', 'page' => 1, 'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3))
+		);
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+
+		$expected = '1 , Next,http://example.com?page=2';
+
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateDoesntIncludeNextIfLast()
+	{
+		$assigns = array(
+			'HTTP_HOST' => 'example.com', 'page' => 3, 'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3))
+		);
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+
+		$expected = '3 Previous,http://example.com?page=2 ,';
+
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateUsingDifferentRequestParameterName()
+	{
+		$assigns = array(
+			'HTTP_HOST' => 'example.com', 'page' => 2, 'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3))
+		);
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+
+		$expected = '2 Previous,http://example.com?pagina=1 Next,http://example.com?pagina=3';
+
+		\Liquid\Liquid::set('PAGINATION_REQUEST_KEY', 'pagina');
+		$this->assertTemplateResult($expected, $text, $assigns);
+		\Liquid\Liquid::set('PAGINATION_REQUEST_KEY', null);
+	}
+	
+	public function testPaginateUsingDifferentContextParameter()
+	{
+		$assigns = array(
+			'HTTP_HOST' => 'example.com', 'the_current_page' => 2, 'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3))
+		);
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+
+		$expected = '2 Previous,http://example.com?page=1 Next,http://example.com?page=3';
+
+		\Liquid\Liquid::set('PAGINATION_CONTEXT_KEY', 'the_current_page');
+		$this->assertTemplateResult($expected, $text, $assigns);
+		\Liquid\Liquid::set('PAGINATION_CONTEXT_KEY', null);
+	}
 }
