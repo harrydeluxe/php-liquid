@@ -133,8 +133,35 @@ class TagPaginateTest extends TestCase
 		$this->assertTemplateResult($expected, $text, $assigns);
 	}
 
-	private function provideArticleFixture()
+	public function testPaginateUrlGenerationPreservesParams()
 	{
-		return array(array('title' => 1), array('title' => 2), array('title' => 3));
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['REQUEST_URI'] = '/testfile.php?someparam=1';
+
+		$text = '{% paginate articles by 1 %}{{ paginate.next.url }}{% endpaginate %}';
+		$expected = 'https://example.com/testfile.php?someparam=1&page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateUrlGenerationReplacesPageKey()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['REQUEST_URI'] = '/testfile.php?someparam=1&page=1';
+
+		$text = '{% paginate articles by 1 %}{{ paginate.next.url }}{% endpaginate %}';
+		$expected = 'https://example.com/testfile.php?someparam=1&page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateUrlGenerationRespectsPageParameterKey()
+	{
+		Liquid::set('PAGINATION_REQUEST_KEY', 'pagina');
+
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['REQUEST_URI'] = '/testfile.php?someparam=1&page=hello&pagina=1';
+
+		$text = '{% paginate articles by 1 %}{{ paginate.next.url }}{% endpaginate %}';
+		$expected = 'https://example.com/testfile.php?someparam=1&page=hello&pagina=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
 	}
 }
