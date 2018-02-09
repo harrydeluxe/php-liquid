@@ -175,4 +175,34 @@ class TagPaginateTest extends TestCase
 		$expected = 'http://example.com/?page=2';
 		$this->assertTemplateResult($expected, $text, $assigns);
 	}
+
+	public function testPaginateDoesntIncludeNextIfAfterLast()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['page'] = 42;
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+		$expected = '3 Previous,https://example.com?page=2 ,';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateDoesntIncludePreviousIfBeforeFirst()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['page'] = 0;
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+		$expected = '1 , Next,https://example.com?page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateIgnoresNonNumbers()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['page'] = 'foo';
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+		$expected = '1 , Next,https://example.com?page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
 }

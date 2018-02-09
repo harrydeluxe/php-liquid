@@ -105,11 +105,6 @@ class TagPaginate extends AbstractBlock
 	 */
 	public function render(Context $context)
 	{
-		// Get the context key to use to refer to the current page
-		$pageContextKey = Liquid::get('PAGINATION_CONTEXT_KEY');
-
-		$this->currentPage = (is_numeric($context->get($pageContextKey))) ? $context->get($pageContextKey) : 1;
-		$this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
 		$this->collection = $context->get($this->collectionName);
 
 		if ($this->collection instanceof \Traversable) {
@@ -121,8 +116,18 @@ class TagPaginate extends AbstractBlock
 			throw new RenderException("Missing collection with name '{$this->collectionName}'");
 		}
 
+		// How many pages are there?
 		$this->collectionSize = count($this->collection);
 		$this->totalPages = ceil($this->collectionSize / $this->numberItems);
+
+		// Whatever there is in the context, we need a number
+		$this->currentPage = intval($context->get(Liquid::get('PAGINATION_CONTEXT_KEY')));
+
+		// Page number can only be between 1 and a number of pages
+		$this->currentPage = max(1, min($this->currentPage, $this->totalPages));
+
+		// Find the offset and select that part
+		$this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
 		$paginatedCollection = array_slice($this->collection, $this->currentOffset, $this->numberItems);
 
 		// We must work in a new scope so we won't pollute a global scope
