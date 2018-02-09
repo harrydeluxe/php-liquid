@@ -147,14 +147,18 @@ class TagPaginate extends AbstractBlock
 		// Get the name of the request field to use in URLs
 		$pageRequestKey = Liquid::get('PAGINATION_REQUEST_KEY');
 
-		if ($this->currentPage != 1) {
+		if ($this->currentPage > 1) {
 			$paginate['previous']['title'] = 'Previous';
-			$paginate['previous']['url'] = $this->currentUrl($context) . '?' . urlencode($pageRequestKey) . '=' . ($this->currentPage - 1);
+			$paginate['previous']['url'] = $this->currentUrl($context, [
+				$pageRequestKey => $this->currentPage - 1,
+			]);
 		}
 
-		if ($this->currentPage != $this->totalPages) {
+		if ($this->currentPage < $this->totalPages) {
 			$paginate['next']['title'] = 'Next';
-			$paginate['next']['url'] = $this->currentUrl($context) . '?' . urlencode($pageRequestKey) . '=' . ($this->currentPage + 1);
+			$paginate['next']['url'] = $this->currentUrl($context, [
+				$pageRequestKey => $this->currentPage + 1,
+			]);
 		}
 
 		$context->set('paginate', $paginate);
@@ -170,20 +174,28 @@ class TagPaginate extends AbstractBlock
 	 * Returns the current page URL
 	 *
 	 * @param Context $context
+	 * @param array $queryPart
 	 *
 	 * @return string
 	 *
 	 */
-	public function currentUrl($context)
+	public function currentUrl($context, $queryPart = [])
 	{
-		$uri = explode('?', $context->get('REQUEST_URI'));
+		// From here we have $url->path and $url->query
+		$url = (object) parse_url($context->get('REQUEST_URI'));
 
-		$url = 'http';
-		if ($context->get('HTTPS') == 'on') {
-			$url .= 's';
+		// Let's merge the query part
+		if (isset($url->query)) {
+			parse_str($url->query, $url->query);
+			$url->query = array_merge($url->query, $queryPart);
+		} else {
+			$url->query = $queryPart;
 		}
-		$url .= '://' . $context->get('HTTP_HOST') . reset($uri);
 
-		return $url;
+		$url->query = http_build_query($url->query);
+
+		$scheme = $context->get('HTTPS') == 'on' ? 'https' : 'http';
+
+		return "$scheme://{$context->get('HTTP_HOST')}{$url->path}?{$url->query}";
 	}
 }
