@@ -72,77 +72,137 @@ class TagPaginateTest extends TestCase
 		$this->assertTemplateResult('', '{% paginate products by 1 %}{% for product in products %}{{ product.id }}{% endfor %}{% endpaginate %}');
 	}
 
+	const PAGINATION_ASSIGNS = array(
+		'HTTP_HOST' => 'example.com',
+		'HTTPS' => 'on',
+		'page' => 1,
+		'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3)),
+	);
+
 	public function testPaginationForRepeatedCalls()
 	{
-		$assigns = array(
-			'articles' => array(array('title' => 1), array('title' => 2), array('title' => 3)),
-		);
-
 		$text = '{% for article in articles %}{{ article.title }},{% endfor %}';
 		$expected = '1,2,3,';
-		$this->assertTemplateResult($expected, $text, $assigns);
+		$this->assertTemplateResult($expected, $text, self::PAGINATION_ASSIGNS);
 
 		$text = '{% paginate articles by 2 %}{% for article in articles %}{{ article.title }},{% endfor %}{% endpaginate %} '.$text;
 		$expected = '1,2, 1,2,3,';
-		$this->assertTemplateResult($expected, $text, $assigns);
+		$this->assertTemplateResult($expected, $text, self::PAGINATION_ASSIGNS);
 	}
 
 	public function testPaginationDoesntIncludePreviousIfFirst()
 	{
-		$assigns = array(
-			'HTTP_HOST' => 'example.com', 'page' => 1, 'articles' => $this->provideArticleFixture()
-		);
+		$assigns = self::PAGINATION_ASSIGNS;
 
 		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
-
-		$expected = '1 , Next,http://example.com?page=2';
-
+		$expected = '1 , Next,https://example.com?page=2';
 		$this->assertTemplateResult($expected, $text, $assigns);
 	}
 
 	public function testPaginateDoesntIncludeNextIfLast()
 	{
-		$assigns = array(
-			'HTTP_HOST' => 'example.com', 'page' => 3, 'articles' => $this->provideArticleFixture()
-		);
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['page'] = 3;
 
 		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
-
-		$expected = '3 Previous,http://example.com?page=2 ,';
-
+		$expected = '3 Previous,https://example.com?page=2 ,';
 		$this->assertTemplateResult($expected, $text, $assigns);
 	}
 
 	public function testPaginateUsingDifferentRequestParameterName()
 	{
-		$assigns = array(
-			'HTTP_HOST' => 'example.com', 'page' => 2, 'articles' => $this->provideArticleFixture()
-		);
+		Liquid::set('PAGINATION_REQUEST_KEY', 'pagina');
+
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['page'] = 2;
 
 		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
-
-		$expected = '2 Previous,http://example.com?pagina=1 Next,http://example.com?pagina=3';
-
-		Liquid::set('PAGINATION_REQUEST_KEY', 'pagina');
+		$expected = '2 Previous,https://example.com?pagina=1 Next,https://example.com?pagina=3';
 		$this->assertTemplateResult($expected, $text, $assigns);
 	}
-	
+
 	public function testPaginateUsingDifferentContextParameter()
 	{
-		$assigns = array(
-			'HTTP_HOST' => 'example.com', 'the_current_page' => 2, 'articles' => $this->provideArticleFixture()
-		);
+		Liquid::set('PAGINATION_CONTEXT_KEY', 'the_current_page');
+
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['the_current_page'] = 2;
 
 		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
-
-		$expected = '2 Previous,http://example.com?page=1 Next,http://example.com?page=3';
-
-		Liquid::set('PAGINATION_CONTEXT_KEY', 'the_current_page');
+		$expected = '2 Previous,https://example.com?page=1 Next,https://example.com?page=3';
 		$this->assertTemplateResult($expected, $text, $assigns);
 	}
 
-	private function provideArticleFixture()
+	public function testPaginateUrlGenerationPreservesParams()
 	{
-		return array(array('title' => 1), array('title' => 2), array('title' => 3));
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['REQUEST_URI'] = '/testfile.php?someparam=1';
+
+		$text = '{% paginate articles by 1 %}{{ paginate.next.url }}{% endpaginate %}';
+		$expected = 'https://example.com/testfile.php?someparam=1&page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateUrlGenerationReplacesPageKey()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['REQUEST_URI'] = '/testfile.php?someparam=1&page=1';
+
+		$text = '{% paginate articles by 1 %}{{ paginate.next.url }}{% endpaginate %}';
+		$expected = 'https://example.com/testfile.php?someparam=1&page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateUrlGenerationRespectsPageParameterKey()
+	{
+		Liquid::set('PAGINATION_REQUEST_KEY', 'pagina');
+
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['REQUEST_URI'] = '/testfile.php?someparam=1&page=hello&pagina=1';
+
+		$text = '{% paginate articles by 1 %}{{ paginate.next.url }}{% endpaginate %}';
+		$expected = 'https://example.com/testfile.php?someparam=1&page=hello&pagina=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateUrlGenerationWithoutHTTPS()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['REQUEST_URI'] = '/';
+		$assigns['HTTPS'] = '';
+
+		$text = '{% paginate articles by 1 %}{{ paginate.next.url }}{% endpaginate %}';
+		$expected = 'http://example.com/?page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateDoesntIncludeNextIfAfterLast()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['page'] = 42;
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+		$expected = '3 Previous,https://example.com?page=2 ,';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateDoesntIncludePreviousIfBeforeFirst()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['page'] = 0;
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+		$expected = '1 , Next,https://example.com?page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
+
+	public function testPaginateIgnoresNonNumbers()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['page'] = 'foo';
+
+		$text = '{% paginate articles by 1 %}{% for article in articles %}{{article.title}}{% endfor %} {{paginate.previous.title}},{{paginate.previous.url}} {{paginate.next.title}},{{paginate.next.url}}{% endpaginate %}';
+		$expected = '1 , Next,https://example.com?page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
 	}
 }
