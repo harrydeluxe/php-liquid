@@ -45,7 +45,6 @@ class TagPaginate extends AbstractBlock
 	private $collection;
 
 	/**
-	 *
 	 * @var int The size of the collection
 	 */
 	private $collectionSize;
@@ -106,7 +105,10 @@ class TagPaginate extends AbstractBlock
 	 */
 	public function render(Context $context)
 	{
-		$this->currentPage = (is_numeric($context->get('page'))) ? $context->get('page') : 1;
+		// Get the context key to use to refer to the current page
+		$pageContextKey = Liquid::get('PAGINATION_CONTEXT_KEY');
+
+		$this->currentPage = (is_numeric($context->get($pageContextKey))) ? $context->get($pageContextKey) : 1;
 		$this->currentOffset = ($this->currentPage - 1) * $this->numberItems;
 		$this->collection = $context->get($this->collectionName);
 
@@ -142,14 +144,17 @@ class TagPaginate extends AbstractBlock
 			'items' => $this->collectionSize
 		);
 
+		// Get the name of the request field to use in URLs
+		$pageRequestKey = Liquid::get('PAGINATION_REQUEST_KEY');
+
 		if ($this->currentPage != 1) {
 			$paginate['previous']['title'] = 'Previous';
-			$paginate['previous']['url'] = $this->currentUrl($context) . '?page=' . ($this->currentPage - 1);
+			$paginate['previous']['url'] = $this->currentUrl($context) . '?' . urlencode($pageRequestKey) . '=' . ($this->currentPage - 1);
 		}
 
 		if ($this->currentPage != $this->totalPages) {
 			$paginate['next']['title'] = 'Next';
-			$paginate['next']['url'] = $this->currentUrl($context) . '?page=' . ($this->currentPage + 1);
+			$paginate['next']['url'] = $this->currentUrl($context) . '?' . urlencode($pageRequestKey) . '=' . ($this->currentPage + 1);
 		}
 
 		$context->set('paginate', $paginate);

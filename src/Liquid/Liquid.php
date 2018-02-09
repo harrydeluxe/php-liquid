@@ -72,6 +72,12 @@ class Liquid
 
 		// Automatically escape any variables unless told otherwise by a "raw" filter
 		'ESCAPE_BY_DEFAULT' => false,
+
+		// The name of the key to use when building pagination query strings e.g. ?page=1
+		'PAGINATION_REQUEST_KEY' => 'page',
+
+		// The name of the context key used to denote the current page number
+		'PAGINATION_CONTEXT_KEY' => 'page'
 	);
 
 	/**
