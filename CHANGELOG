@@ -1,8 +1,14 @@
 * master
 
+* 1.4.7 (2018-02-09)
+
+ * Paginate tag shall now respect request parameters.
+ * It is now possible to set a custom query param for the paginate tag.
+ * Page number will now never go overboard.
+
 * 1.4.6 (2018-02-07)
 
- * TagPaginate shall not pullute the global scope, but work in own scope.
+ * TagPaginate shall not pollute the global scope, but work in own scope.
  * TagPaginate errors if no collection present instead of vague warning.
 
 * 1.4.5 (2017-12-12)
