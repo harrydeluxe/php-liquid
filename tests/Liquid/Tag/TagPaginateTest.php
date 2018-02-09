@@ -164,4 +164,15 @@ class TagPaginateTest extends TestCase
 		$expected = 'https://example.com/testfile.php?someparam=1&page=hello&pagina=2';
 		$this->assertTemplateResult($expected, $text, $assigns);
 	}
+
+	public function testPaginateUrlGenerationWithoutHTTPS()
+	{
+		$assigns = self::PAGINATION_ASSIGNS;
+		$assigns['REQUEST_URI'] = '/';
+		$assigns['HTTPS'] = '';
+
+		$text = '{% paginate articles by 1 %}{{ paginate.next.url }}{% endpaginate %}';
+		$expected = 'http://example.com/?page=2';
+		$this->assertTemplateResult($expected, $text, $assigns);
+	}
 }
