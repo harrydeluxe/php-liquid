@@ -192,6 +192,7 @@ class ContextTest extends TestCase
 		$this->context->set('test', new NoToLiquid());
 		$this->assertEquals(42, $this->context->get('test.answer'));
 		$this->assertEquals(1, $this->context->get('test.count'));
+		$this->assertEquals(null, $this->context->get('test.invalid'));
 		$this->assertEquals("forty two", $this->context->get('test'));
 		$this->assertEquals("example", $this->context->get('test.name'));
 	}

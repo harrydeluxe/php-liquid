@@ -340,6 +340,11 @@ class Context
 				continue;
 			}
 
+			// Inexistent property is a null, PHP-speak
+			if (!property_exists($object, $nextPartName)) {
+				return null;
+			}
+
 			// then try a property (independent of accessibility)
 			if (property_exists($object, $nextPartName)) {
 				$object = $object->$nextPartName;
