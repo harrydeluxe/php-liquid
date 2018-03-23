@@ -1,5 +1,9 @@
 * master
 
+* 1.4.8 (2018-03-22)
+
+ * Now we return null for missing properties, like we do for missing keys for arrays.
+
 * 1.4.7 (2018-02-09)
 
  * Paginate tag shall now respect request parameters.
