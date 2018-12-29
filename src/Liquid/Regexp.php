@@ -121,4 +121,14 @@ class Regexp
 	{
 		return preg_split($this->pattern, $string, $limit);
 	}
+
+	/**
+	 * Returns the original pattern primarily for debugging purposes
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return $this->pattern;
+	}
 }
