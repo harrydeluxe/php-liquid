@@ -38,6 +38,8 @@ class FixturesTest extends TestCase
 
 	public function fixtures()
 	{
-		return array_map(null, glob(__DIR__.'/fixtures/*.liquid'), glob(__DIR__.'/fixtures/*.php'), glob(__DIR__.'/fixtures/*.html'));
+		foreach (array_map(null, glob(__DIR__.'/fixtures/*.liquid'), glob(__DIR__.'/fixtures/*.php'), glob(__DIR__.'/fixtures/*.html')) as $files) {
+			yield basename($files[0], '.liquid') => $files;
+		};
 	}
 }

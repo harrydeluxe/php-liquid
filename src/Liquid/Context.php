@@ -272,7 +272,7 @@ class Context
 			// since we still have a part to consider
 			// and since we can't dig deeper into plain values
 			// it can be thought as if it has a property with a null value
-			if (!is_object($object) && !is_array($object)) {
+			if (!is_object($object) && !is_array($object) && !is_string($object)) {
 				return null;
 			}
 
@@ -292,6 +292,16 @@ class Context
 			}
 
 			$nextPartName = array_shift($parts);
+
+			if (is_string($object)) {
+				if ($nextPartName == 'size') {
+					// if the last part of the context variable is .size we return the string length
+					return mb_strlen($object);
+				}
+
+				// no other special properties for strings, yet
+				return null;
+			}
 
 			if (is_array($object)) {
 				// if the last part of the context variable is .size we just return the count

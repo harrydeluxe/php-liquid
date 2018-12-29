@@ -53,10 +53,10 @@ class Liquid
 		'INCLUDE_PREFIX' => '_',
 
 		// Tag start.
-		'TAG_START' => '{%',
+		'TAG_START' => '(?:{%|\s*{%-)',
 
 		// Tag end.
-		'TAG_END' => '%}',
+		'TAG_END' => '(?:%}|-%}\s*)',
 
 		// Variable start.
 		'VARIABLE_START' => '{{',

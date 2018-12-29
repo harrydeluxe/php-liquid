@@ -34,8 +34,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
 			'INCLUDE_ALLOW_EXT' => false,
 			'INCLUDE_SUFFIX' => 'liquid',
 			'INCLUDE_PREFIX' => '_',
-			'TAG_START' => '{%',
-			'TAG_END' => '%}',
 			'VARIABLE_START' => '{{',
 			'VARIABLE_END' => '}}',
 			'VARIABLE_NAME' => '[a-zA-Z_][a-zA-Z0-9_.-]*',

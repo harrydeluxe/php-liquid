@@ -80,7 +80,7 @@ class AbstractBlock extends AbstractTag
 						$this->unknownTag($tagRegexp->matches[1], $tagRegexp->matches[2], $tokens);
 					}
 				} else {
-					throw new ParseException("Tag $token was not properly terminated"); // harry
+					throw new ParseException("Tag $token was not properly terminated (won't match $tagRegexp)");
 				}
 			} elseif ($variableStartRegexp->match($token)) {
 				$this->nodelist[] = $this->createVariable($token);
