@@ -91,7 +91,7 @@ class TagAssignTest extends TestCase
 		$this->assertTemplateResult('42', '{% assign i = 42 %}{{ i }}');
 		$this->assertTemplateResult('3.14', '{% assign i = 3.14 %}{{ i }}');
 		$this->assertTemplateResult('-100', '{% assign i = -100 %}{{ i }}');
-		$this->assertTemplateResult('-10', '{% assign i = -10.0 %}{{ i }}');
+		$this->assertTemplateResult('-10.0', '{% assign i = -10.0 %}{{ i }}');
 		$this->assertTemplateResult('-10.5', '{% assign i = -10.5 %}{{ i }}');
 	}
 }
