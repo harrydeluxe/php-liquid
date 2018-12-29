@@ -263,6 +263,15 @@ class ContextTest extends TestCase
 		$this->assertEquals(4, $this->context->get('numbers.size'));
 	}
 
+	public function testStringLength()
+	{
+		$this->context->set('name', 'Foo Bar');
+		$this->assertEquals(7, $this->context->get('name.size'));
+
+		$this->context->set('name', 'テスト');
+		$this->assertEquals(3, $this->context->get('name.size'));
+	}
+
 	public function testOverrideSize()
 	{
 		$this->context->set('hash', array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'size' => '5000'));
