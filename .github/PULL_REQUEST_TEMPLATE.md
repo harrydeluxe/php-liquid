@@ -3,5 +3,3 @@
 - [ ] I've seen the coverage report at `build/coverage/index.html`
 - [ ] Not a single line left uncovered by tests
 - [ ] Any coding standards issues were fixed with `vendor/bin/php-cs-fixer fix`
-- [ ] Hotfix-type commits were squashed with `git rebase -i` or `git commit --amend`
-- [ ] All my work wasn't smushed into one large commit without necessity
