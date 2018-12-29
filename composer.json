@@ -43,5 +43,13 @@
         "psr-4": {
             "Liquid\\": "tests/Liquid"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
