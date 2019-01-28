@@ -98,6 +98,9 @@ class Filterbank
 
 		// Then register all public static and not methods as filters
 		foreach (get_class_methods($filter) as $method) {
+			if (strtolower($method) === '__construct') {
+				continue;
+			}
 			$this->methodMap[$method] = $className;
 		}
 
