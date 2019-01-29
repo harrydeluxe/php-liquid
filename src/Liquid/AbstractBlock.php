@@ -135,6 +135,8 @@ class AbstractBlock extends AbstractTag
 			if (isset($context->registers['continue'])) {
 				break;
 			}
+
+			$context->tick();
 		}
 
 		return $result;

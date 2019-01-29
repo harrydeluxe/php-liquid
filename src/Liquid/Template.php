@@ -43,6 +43,11 @@ class Template
 	private $filters = array();
 
 	/**
+	 * @var callable|null Called "sometimes" while rendering. For example to abort the execution of a rendering.
+	 */
+	private $tickFunction = null;
+
+	/**
 	 * @var array Custom tags
 	 */
 	private static $tags = array();
@@ -151,6 +156,11 @@ class Template
 		}
 	}
 
+	public function setTickFunction(callable $tickFunction)
+	{
+		$this->tickFunction = $tickFunction;
+	}
+
 	/**
 	 * Tokenizes the given source string
 	 *
@@ -233,6 +243,10 @@ class Template
 	public function render(array $assigns = array(), $filters = null, array $registers = array())
 	{
 		$context = new Context($assigns, $registers);
+
+		if ($this->tickFunction) {
+			$context->setTickFunction($this->tickFunction);
+		}
 
 		if (!is_null($filters)) {
 			if (is_array($filters)) {

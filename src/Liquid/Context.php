@@ -45,6 +45,13 @@ class Context
 	public $environments = array();
 
 	/**
+	 * Called "sometimes" while rendering. For example to abort the execution of a rendering.
+	 *
+	 * @var null|callable
+	 */
+	private $tickFunction = null;
+
+	/**
 	 * Constructor
 	 *
 	 * @param array $assigns
@@ -57,6 +64,16 @@ class Context
 		$this->filterbank = new Filterbank($this);
 		// first empty array serves as source for overrides, e.g. as in TagDecrement
 		$this->environments = array(array(), $_SERVER);
+	}
+
+	/**
+	 * Sets a tick function, this function is called sometimes while liquid is rendering a template.
+	 *
+	 * @param callable $tickFunction
+	 */
+	public function setTickFunction(callable $tickFunction)
+	{
+		$this->tickFunction = $tickFunction;
 	}
 
 	/**
@@ -382,5 +399,15 @@ class Context
 		 */
 
 		return $object;
+	}
+
+	public function tick()
+	{
+		if ($this->tickFunction === null) {
+			return;
+		}
+
+		$tickFunction = $this->tickFunction;
+		$tickFunction($this);
 	}
 }
