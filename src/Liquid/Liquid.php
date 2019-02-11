@@ -77,7 +77,10 @@ class Liquid
 		'PAGINATION_REQUEST_KEY' => 'page',
 
 		// The name of the context key used to denote the current page number
-		'PAGINATION_CONTEXT_KEY' => 'page'
+		'PAGINATION_CONTEXT_KEY' => 'page',
+
+		// Whenever variables from $_SERVER should be directly available to templates
+		'EXPOSE_SERVER' => false,
 	);
 
 	/**

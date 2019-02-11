@@ -37,6 +37,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 			'VARIABLE_START' => '{{',
 			'VARIABLE_END' => '}}',
 			'VARIABLE_NAME' => '[a-zA-Z_][a-zA-Z0-9_.-]*',
+			'EXPOSE_SERVER' => false,
 		);
 
 		foreach ($defaultConfig as $configKey => $configValue) {

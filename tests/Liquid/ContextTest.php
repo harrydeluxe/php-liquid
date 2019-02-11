@@ -392,4 +392,28 @@ class ContextTest extends TestCase
 		$context->set('test', 'test');
 		$this->assertEquals('test', $context->get('test'));
 	}
+
+	public function testServerNotExposedByDefault()
+	{
+		$_SERVER['AWS_SECRET_ACCESS_KEY'] = 'super_secret';
+
+		$context = new Context();
+		$this->assertNull($context->get('AWS_SECRET_ACCESS_KEY'));
+
+		$context->set('AWS_SECRET_ACCESS_KEY', 'test');
+		$this->assertEquals('test', $context->get('AWS_SECRET_ACCESS_KEY'));
+	}
+
+	public function testServerExposedWhenRequested()
+	{
+		Liquid::set('EXPOSE_SERVER', true);
+
+		$_SERVER['AWS_SECRET_ACCESS_KEY'] = 'super_secret';
+
+		$context = new Context();
+		$this->assertEquals('super_secret', $context->get('AWS_SECRET_ACCESS_KEY'));
+
+		$context->set('AWS_SECRET_ACCESS_KEY', 'test');
+		$this->assertEquals('super_secret', $context->get('AWS_SECRET_ACCESS_KEY'), '$_SERVER should take precedence in this case');
+	}
 }

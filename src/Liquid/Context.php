@@ -62,8 +62,13 @@ class Context
 		$this->assigns = array($assigns);
 		$this->registers = $registers;
 		$this->filterbank = new Filterbank($this);
+
 		// first empty array serves as source for overrides, e.g. as in TagDecrement
-		$this->environments = array(array(), $_SERVER);
+		$this->environments = array(array(), array());
+
+		if (Liquid::get('EXPOSE_SERVER')) {
+			$this->environments[1] = $_SERVER;
+		}
 	}
 
 	/**
