@@ -45,7 +45,7 @@ class AbstractBlock extends AbstractTag
 	public function parse(array &$tokens)
 	{
 		$startRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '/');
-		$tagRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '\s*(\w+)\s*(.*)?' . Liquid::get('TAG_END') . '$/');
+		$tagRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '\s*(\w+)\s*(.*?)' . Liquid::get('TAG_END') . '$/');
 		$variableStartRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . '/');
 
 		$this->nodelist = array();
