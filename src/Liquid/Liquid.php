@@ -52,11 +52,14 @@ class Liquid
 		// Prefix for include files.
 		'INCLUDE_PREFIX' => '_',
 
+		// Whitespace control.
+		'WHITESPACE_CONTROL' => '-',
+
 		// Tag start.
-		'TAG_START' => '(?:{%|\s*{%-)',
+		'TAG_START' => '{%',
 
 		// Tag end.
-		'TAG_END' => '(?:%}|-%}\s*)',
+		'TAG_END' => '%}',
 
 		// Variable start.
 		'VARIABLE_START' => '{{',
