@@ -118,7 +118,7 @@ class AbstractBlock extends AbstractTag
 			}
 		}
 
-		self::$trimWhitespace = (mb_strlen($token) > 2 && $token[-3] === Liquid::get('WHITESPACE_CONTROL'));
+		self::$trimWhitespace = (mb_strlen($token) > 2 && substr($token, -3, 1) === Liquid::get('WHITESPACE_CONTROL'));
 	}
 
 	/**
