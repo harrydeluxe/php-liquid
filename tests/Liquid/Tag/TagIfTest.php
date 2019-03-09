@@ -158,6 +158,12 @@ class TagIfTest extends TestCase
 		$this->assertTemplateResult($expected, $text, array('var' => 1));
 	}
 
+	public function testNotNilWhitespaceControlEdgeCase()
+	{
+		$this->assertTemplateResult("true", "{% if 1 -%}true{% endif %}");
+		$this->assertTemplateResult("true", "{% if 1 -%} true{% endif %}");
+	}
+
 	public function testIfFromVariable()
 	{
 		$this->assertTemplateResult('', '{% if var %} NO {% endif %}', array('var' => false));
