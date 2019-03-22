@@ -22,4 +22,18 @@ class AbstractBlockTest extends TestCase
 	{
 		$this->assertTemplateResult('', '{% block }');
 	}
+
+	public function testWhitespaceHandler()
+	{
+		$this->assertTemplateResult('foo', '{% if true %}foo{% endif %}');
+		$this->assertTemplateResult(' foo ', '{% if true %} foo {% endif %}');
+		$this->assertTemplateResult('  foo  ', ' {% if true %} foo {% endif %} ');
+		$this->assertTemplateResult('foo ', '{% if true -%} foo {% endif %}');
+		$this->assertTemplateResult('foo', '{% if true -%} foo {%- endif %}');
+		$this->assertTemplateResult('foo', ' {%- if true -%} foo {%- endif %}');
+		$this->assertTemplateResult('foo', ' {%- if true -%} foo {%- endif -%} ');
+		$this->assertTemplateResult('foo', ' {%- if true -%} foo {%- endif -%}  {%- if false -%} bar {%- endif -%} ');
+		$this->assertTemplateResult('foobar', ' {%- if true -%} foo {%- endif -%}  {%- if true -%} bar {%- endif -%} ');
+		$this->assertTemplateResult('-> foo', '{% if true %}-> {% endif %} {%- if true -%} foo {%- endif -%}');
+	}
 }

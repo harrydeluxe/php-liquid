@@ -22,11 +22,13 @@ class AbstractBlock extends AbstractTag
 	const TAG_PREFIX = '\Liquid\Tag\Tag';
 
 	/**
-	 * @var AbstractTag[]
+	 * @var AbstractTag[]|Variable[]|string[]
 	 */
 	protected $nodelist = array();
 
 	/**
+	 * Whenever next token should be ltrim'med.
+	 *
 	 * @var bool
 	 */
 	protected static $trimWhitespace = false;
@@ -92,6 +94,7 @@ class AbstractBlock extends AbstractTag
 				$this->whitespaceHandler($token);
 				$this->nodelist[] = $this->createVariable($token);
 			} else {
+				// This is neither a tag or a variable, proceed with an ltrim
 				if (self::$trimWhitespace) {
 					$token = ltrim($token);
 				}
@@ -109,16 +112,24 @@ class AbstractBlock extends AbstractTag
 	 *
 	 * @param string $token
 	 */
-	protected function whitespaceHandler(&$token)
+	protected function whitespaceHandler($token)
 	{
+		/*
+		 * This assumes that TAG_START is always '{%', and a whitespace control indicator
+		 * is exactly one character long, on a third position.
+		 */
 		if (mb_substr($token, 2, 1) === Liquid::get('WHITESPACE_CONTROL')) {
 			$previousToken = end($this->nodelist);
-			if (is_string($previousToken)) {
+			if (is_string($previousToken)) { // this can also be a tag or a variable
 				$this->nodelist[key($this->nodelist)] = rtrim($previousToken);
 			}
 		}
 
-		self::$trimWhitespace = (mb_substr($token, -3, 1) === Liquid::get('WHITESPACE_CONTROL'));
+		/*
+		 * This assumes that TAG_END is always '%}', and a whitespace control indicator
+		 * is exactly one character long, on a third position from the end.
+		 */
+		self::$trimWhitespace = mb_substr($token, -3, 1) === Liquid::get('WHITESPACE_CONTROL');
 	}
 
 	/**
