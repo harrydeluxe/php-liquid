@@ -27,6 +27,11 @@ class AbstractBlock extends AbstractTag
 	protected $nodelist = array();
 
 	/**
+	 * @var bool
+	 */
+	protected static $trimWhitespace = false;
+
+	/**
 	 * @return array
 	 */
 	public function getNodelist()
@@ -45,7 +50,7 @@ class AbstractBlock extends AbstractTag
 	public function parse(array &$tokens)
 	{
 		$startRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '/');
-		$tagRegexp = new Regexp('/^' . Liquid::get('TAG_START') . '\s*(\w+)\s*(.*?)' . Liquid::get('TAG_END') . '$/');
+		$tagRegexp = new Regexp('/^' . Liquid::get('TAG_START') . Liquid::get('WHITESPACE_CONTROL') . '?\s*(\w+)\s*(.*?)' . Liquid::get('WHITESPACE_CONTROL') . '?' . Liquid::get('TAG_END') . '$/');
 		$variableStartRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . '/');
 
 		$this->nodelist = array();
@@ -56,6 +61,7 @@ class AbstractBlock extends AbstractTag
 			$token = array_shift($tokens);
 
 			if ($startRegexp->match($token)) {
+				$this->whitespaceHandler($token);
 				if ($tagRegexp->match($token)) {
 					// If we found the proper block delimitor just end parsing here and let the outer block proceed
 					if ($tagRegexp->matches[1] == $this->blockDelimiter()) {
@@ -83,13 +89,36 @@ class AbstractBlock extends AbstractTag
 					throw new ParseException("Tag $token was not properly terminated (won't match $tagRegexp)");
 				}
 			} elseif ($variableStartRegexp->match($token)) {
+				$this->whitespaceHandler($token);
 				$this->nodelist[] = $this->createVariable($token);
-			} elseif ($token != '') {
+			} else {
+				if (self::$trimWhitespace) {
+					$token = ltrim($token);
+				}
+
+				self::$trimWhitespace = false;
 				$this->nodelist[] = $token;
 			}
 		}
 
 		$this->assertMissingDelimitation();
+	}
+
+	/**
+	 * Handle the whitespace.
+	 *
+	 * @param string $token
+	 */
+	protected function whitespaceHandler(&$token)
+	{
+		if (mb_substr($token, 2, 1) === Liquid::get('WHITESPACE_CONTROL')) {
+			$previousToken = end($this->nodelist);
+			if (is_string($previousToken)) {
+				$this->nodelist[key($this->nodelist)] = rtrim($previousToken);
+			}
+		}
+
+		self::$trimWhitespace = (mb_substr($token, -3, 1) === Liquid::get('WHITESPACE_CONTROL'));
 	}
 
 	/**
@@ -214,7 +243,7 @@ class AbstractBlock extends AbstractTag
 	 */
 	private function createVariable($token)
 	{
-		$variableRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . '(.*)' . Liquid::get('VARIABLE_END') . '$/');
+		$variableRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . Liquid::get('WHITESPACE_CONTROL') . '?(.*?)' . Liquid::get('WHITESPACE_CONTROL') . '?' . Liquid::get('VARIABLE_END') . '$/');
 		if ($variableRegexp->match($token)) {
 			return new Variable($variableRegexp->matches[1]);
 		}
