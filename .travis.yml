@@ -5,6 +5,11 @@ php:
   - 7.0
   - 7.1
   - 7.2
+  - 7.3
+
+env:
+  global:
+    - PHP_CS_FIXER_IGNORE_ENV=1
 
 cache:
   directories:
@@ -15,7 +20,7 @@ install:
   - composer install --prefer-dist
 
 script:
-  - vendor/bin/phpunit --verbose || travis_terminate 1
+  - vendor/bin/phpunit --verbose --coverage-clover=build/logs/clover.xml || travis_terminate 1
   - php vendor/bin/infection --min-msi=80 --min-covered-msi=80 --log-verbosity=2 --threads=4
   - mkdir -p build/cache && vendor/bin/php-cs-fixer --cache-file=build/cache/.php_cs.cache --diff --dry-run --stop-on-violation --verbose fix
 

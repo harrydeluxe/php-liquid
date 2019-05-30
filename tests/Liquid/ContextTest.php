@@ -288,7 +288,7 @@ class ContextTest extends TestCase
 	public function testHierchalDataNoKey()
 	{
 		$this->context->set('hash', array('name' => 'tobi'));
-		$this->assertNotNull('tobi', $this->context->get('hash.no_key'));
+		$this->assertNull($this->context->get('hash.no_key'));
 	}
 
 	public function testAddFilter()
