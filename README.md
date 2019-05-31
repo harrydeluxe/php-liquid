@@ -115,9 +115,9 @@ Adding filters has never been easier.
 
 ## Requirements
 
- * PHP 5.6+
+ * PHP 7.0+
 
-Package versions below 1.4 could be used with PHP 5.3/5.4/5.5.
+Some earlier versions could be used with PHP 5.3/5.4/5.5/5.6, though they're not supported anymore.
 
 ## Issues
 
