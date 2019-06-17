@@ -104,6 +104,19 @@ class FilterbankTest extends TestCase
 		$this->filterBank->addFilter('no_such_function_or_class');
 	}
 
+	public function testTypeErrorExceptionAndCallDateFilterWithoutArguments()
+	{
+		if (\PHP_VERSION_ID < 70100) {
+			$this->markTestSkipped('TypeError is not thrown in PHP 7.0');
+		}
+
+		$var = new Variable('var | date');
+		$this->context->set('var', 1000);
+
+		$this->expectException(\Liquid\LiquidException::class);
+		$var->render($this->context);
+	}
+
 	public function testInvokeNoFilter()
 	{
 		$value = 'value';

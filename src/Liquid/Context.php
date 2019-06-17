@@ -102,7 +102,11 @@ class Context
 	 */
 	public function invoke($name, $value, array $args = array())
 	{
-		return $this->filterbank->invoke($name, $value, $args);
+		try {
+			return $this->filterbank->invoke($name, $value, $args);
+		} catch (\TypeError $typeError) {
+			throw new LiquidException($typeError->getMessage(), 0, $typeError);
+		}
 	}
 
 	/**
