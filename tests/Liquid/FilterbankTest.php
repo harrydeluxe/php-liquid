@@ -104,6 +104,17 @@ class FilterbankTest extends TestCase
 		$this->filterBank->addFilter('no_such_function_or_class');
 	}
 
+
+	/**
+	 * @expectedException \Liquid\LiquidException
+	 */
+	public function testTypeErrorExceptionAndCallDateFilterWithoutArguments()
+	{
+		$var = new Variable('var | date');
+		$this->context->set('var', 1000);
+		$this->assertEquals('worked', $var->render($this->context));
+	}
+
 	public function testInvokeNoFilter()
 	{
 		$value = 'value';
