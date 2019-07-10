@@ -372,6 +372,12 @@ class Context
 				continue;
 			}
 
+			// if a magic accessor method present...
+			if (method_exists($object, '__get')) {
+				$object = $object->$nextPartName;
+				continue;
+			}
+
 			// Inexistent property is a null, PHP-speak
 			if (!property_exists($object, $nextPartName)) {
 				return null;

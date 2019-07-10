@@ -106,6 +106,17 @@ class GetSetObject
 	}
 }
 
+class GetSetMagic
+{
+	public function __get($prop)
+	{
+		if ($prop == 'prime') {
+			return 2;
+		}
+	}
+}
+
+
 class HiFilter
 {
 	public function hi($value)
@@ -237,6 +248,13 @@ class ContextTest extends TestCase
 	{
 		$this->context->set('object', new GetSetObject());
 		$this->assertEquals(42, $this->context->get('object.answer'));
+		$this->assertNull($this->context->get('object.invalid'));
+	}
+
+	public function testGetSetMagic()
+	{
+		$this->context->set('object', new GetSetMagic());
+		$this->assertEquals(2, $this->context->get('object.prime'));
 		$this->assertNull($this->context->get('object.invalid'));
 	}
 
