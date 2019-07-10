@@ -19,6 +19,14 @@ class HundredCentes
 	}
 }
 
+class ToLiquidNotObject
+{
+	public function toLiquid()
+	{
+		return STDIN;
+	}
+}
+
 class CentsDrop extends Drop
 {
 	public function amount()
@@ -295,6 +303,12 @@ class ContextTest extends TestCase
 	{
 		$this->context->set('hash', array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'size' => '5000'));
 		$this->assertEquals(5000, $this->context->get('hash.size'));
+	}
+
+	public function testDeepValueNotObject()
+	{
+		$this->context->set('example', array('foo' => new ToLiquidNotObject()));
+		$this->assertNull($this->context->get('example.foo.bar'));
 	}
 
 	public function testHierchalData()
