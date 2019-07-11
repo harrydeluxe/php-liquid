@@ -1,5 +1,6 @@
 {
     "name": "liquid/liquid",
+    "type": "library",
     "description": "Liquid template engine for PHP",
     "keywords": [
         "liquid",
@@ -7,7 +8,6 @@
     ],
     "homepage": "https://github.com/kalimatas/php-liquid",
     "license": "MIT",
-    "type": "library",
     "authors": [
         {
             "name": "Guz Alexander",
@@ -30,10 +30,18 @@
         "php": ">=7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.5 || ^7.4",
-        "php-coveralls/php-coveralls": "^1.0",
         "friendsofphp/php-cs-fixer": "^2.6",
-        "infection/infection": "^0.8.1"
+        "infection/infection": "^0.8.1",
+        "php-coveralls/php-coveralls": ">=1.0",
+        "phpunit/phpunit": "^6.5 || ^7.4"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
     },
     "autoload": {
         "psr-4": {
@@ -44,13 +52,5 @@
         "psr-4": {
             "Liquid\\": "tests/Liquid"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.x-dev"
-        }
-    },
-    "config": {
-        "sort-packages": true
     }
 }
