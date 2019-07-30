@@ -350,6 +350,13 @@ class Context
 				return null;
 			}
 
+			if ($object instanceof \Countable) {
+				// if the last part of the context variable is .size we just return the count
+				if ($nextPartName == 'size' && count($parts) == 0) {
+					return count($object);
+				}
+			}
+
 			if ($object instanceof Drop) {
 				// if the object is a drop, make sure it supports the given method
 				if (!$object->hasKey($nextPartName)) {
