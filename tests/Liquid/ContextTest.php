@@ -83,6 +83,14 @@ class NestedObject
 	}
 }
 
+class CountableObject implements \Countable
+{
+	public function count()
+	{
+		return 2;
+	}
+}
+
 class ToArrayObject
 {
 	public $property;
@@ -297,6 +305,12 @@ class ContextTest extends TestCase
 
 		$this->context->set('name', 'テスト');
 		$this->assertEquals(3, $this->context->get('name.size'));
+	}
+
+	public function testCountableLength()
+	{
+		$this->context->set('countable', new CountableObject());
+		$this->assertEquals(2, $this->context->get('countable.size'));
 	}
 
 	public function testOverrideSize()
