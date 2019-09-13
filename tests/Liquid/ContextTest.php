@@ -319,6 +319,18 @@ class ContextTest extends TestCase
 		$this->assertEquals(5000, $this->context->get('hash.size'));
 	}
 
+	public function testArrayFirst()
+	{
+		$this->context->set('array', array(11, 'jack', 43, 74, 5, 'tom'));
+		$this->assertEquals(11, $this->context->get('array.first'));
+	}
+
+	public function testArrayLast()
+	{
+		$this->context->set('array', array(11, 'jack', 43, 74, 5, 'tom'));
+		$this->assertEquals('tom', $this->context->get('array.last'));
+	}
+
 	public function testDeepValueNotObject()
 	{
 		$this->context->set('example', array('foo' => new ToLiquidNotObject()));

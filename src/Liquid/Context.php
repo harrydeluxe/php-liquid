@@ -330,6 +330,16 @@ class Context
 			}
 
 			if (is_array($object)) {
+				// if the last part of the context variable is .first we return the first array element
+				if ($nextPartName == 'first' && count($parts) == 0 && !Liquid::arrayIsAssoc($object)) {
+					return StandardFilters::first($object);
+				}
+
+				// if the last part of the context variable is .first we return the last array element
+				if ($nextPartName == 'last' && count($parts) == 0 && !Liquid::arrayIsAssoc($object)) {
+					return StandardFilters::last($object);
+				}
+
 				// if the last part of the context variable is .size we just return the count
 				if ($nextPartName == 'size' && count($parts) == 0 && !array_key_exists('size', $object)) {
 					return count($object);
