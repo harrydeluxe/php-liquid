@@ -151,18 +151,4 @@ class Liquid
 		}
 		return $return;
 	}
-
-	/**
-	 * Check if an array is associative or not.
-	 *
-	 * @param array $array
-	 *
-	 * @return bool
-	 */
-	public static function arrayIsAssoc(array $array)
-	{
-		$keys = array_keys($array);
-
-		return array_keys($keys) !== $keys;
-	}
 }

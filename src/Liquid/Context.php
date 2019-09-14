@@ -331,12 +331,12 @@ class Context
 
 			if (is_array($object)) {
 				// if the last part of the context variable is .first we return the first array element
-				if ($nextPartName == 'first' && count($parts) == 0 && !Liquid::arrayIsAssoc($object)) {
+				if ($nextPartName == 'first' && count($parts) == 0 && !array_key_exists('first', $object)) {
 					return StandardFilters::first($object);
 				}
 
 				// if the last part of the context variable is .last we return the last array element
-				if ($nextPartName == 'last' && count($parts) == 0 && !Liquid::arrayIsAssoc($object)) {
+				if ($nextPartName == 'last' && count($parts) == 0 && !array_key_exists('last', $object)) {
 					return StandardFilters::last($object);
 				}
 
