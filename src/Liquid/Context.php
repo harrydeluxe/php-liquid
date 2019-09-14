@@ -335,7 +335,7 @@ class Context
 					return StandardFilters::first($object);
 				}
 
-				// if the last part of the context variable is .first we return the last array element
+				// if the last part of the context variable is .last we return the last array element
 				if ($nextPartName == 'last' && count($parts) == 0 && !Liquid::arrayIsAssoc($object)) {
 					return StandardFilters::last($object);
 				}
