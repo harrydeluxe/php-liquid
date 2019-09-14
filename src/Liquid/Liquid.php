@@ -159,7 +159,7 @@ class Liquid
 	 *
 	 * @return bool
 	 */
-	public static function arrayIsAssoc($array)
+	public static function arrayIsAssoc(array $array)
 	{
 		$keys = array_keys($array);
 
