@@ -70,7 +70,7 @@ class Liquid
 		// Variable name.
 		'VARIABLE_NAME' => '[a-zA-Z_][a-zA-Z_0-9.-]*',
 
-		'QUOTED_STRING' => '"[^"]*"|\'[^\']*\'',
+		'QUOTED_STRING' => '(?:"[^"]*"|\'[^\']*\')',
 		'QUOTED_STRING_FILTER_ARGUMENT' => '"[^"]*"|\'[^\']*\'',
 
 		// Automatically escape any variables unless told otherwise by a "raw" filter
@@ -105,7 +105,7 @@ class Liquid
 		// This case is needed for compound settings
 		switch ($key) {
 				case 'QUOTED_FRAGMENT':
-					return self::$config['QUOTED_STRING'] . '|(?:[^\s,\|\'"]|' . self::$config['QUOTED_STRING'] . ')+';
+					return '(?:' . self::get('QUOTED_STRING') . '|(?:[^\s,\|\'"]|' . self::get('QUOTED_STRING') . ')+)';
 				case 'TAG_ATTRIBUTES':
 					return '/(\w+)\s*\:\s*(' . self::get('QUOTED_FRAGMENT') . ')/';
 				case 'TOKENIZATION_REGEXP':

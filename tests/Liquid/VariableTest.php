@@ -60,6 +60,10 @@ class VariableTest extends TestCase
 		$var = new Variable(" hello | things: \"%Y, okay?\", 'the other one'");
 		$this->assertEquals('hello', $var->getName());
 		$this->assertEquals(array(array('things', array('"%Y, okay?"', "'the other one'"))), $var->getFilters());
+
+		$var = new Variable(" product.featured_image | img_url: '450x450', crop: 'center', scale: 2 ");
+		$this->assertEquals("product.featured_image", $var->getName());
+		$this->assertEquals(array(array('img_url', array("'450x450'", array("crop" => "'center'", "scale" => "2")))), $var->getFilters());
 	}
 
 	public function testFiltersWithoutWhitespace()

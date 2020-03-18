@@ -60,7 +60,7 @@ class Variable
 						$filterName = $matches[0];
 						$filterArgsRegex->matchAll($filter);
 						$matches = Liquid::arrayFlatten($filterArgsRegex->matches[1]);
-						$this->filters[] = array($filterName, $matches);
+						$this->filters[] = $this->parseFilterExpressions($filterName, $matches);
 					}
 				}
 			}
@@ -91,6 +91,32 @@ class Variable
 		}
 	}
 
+	/**
+	 * @param string $filterName
+	 * @param array $unparsedArgs
+	 * @return array
+	 */
+	private static function parseFilterExpressions($filterName, array $unparsedArgs)
+	{
+		$filterArgs = array();
+		$keywordArgs = array();
+
+		$justTagAttributes = new Regexp('/\A' . trim(Liquid::get('TAG_ATTRIBUTES'), '/') . '\z/');
+
+		foreach ($unparsedArgs as $a) {
+			if ($justTagAttributes->match($a)) {
+				$keywordArgs[$justTagAttributes->matches[1]] = $justTagAttributes->matches[2];
+			} else {
+				$filterArgs[] = $a;
+			}
+		}
+
+		if (count($keywordArgs)) {
+			$filterArgs[] = $keywordArgs;
+		}
+
+		return array($filterName, $filterArgs);
+	}
 
 	/**
 	 * Gets the variable name
@@ -126,9 +152,18 @@ class Variable
 			list($filtername, $filterArgKeys) = $filter;
 
 			$filterArgValues = array();
+			$keywordArgValues = array();
 
 			foreach ($filterArgKeys as $arg_key) {
-				$filterArgValues[] = $context->get($arg_key);
+				if (is_array($arg_key)) {
+					foreach ($arg_key as $keywordArgName => $keywordArgKey) {
+						$keywordArgValues[$keywordArgName] = $context->get($keywordArgKey);
+					}
+
+					$filterArgValues[] = $keywordArgValues;
+				} else {
+					$filterArgValues[] = $context->get($arg_key);
+				}
 			}
 
 			$output = $context->invoke($filtername, $output, $filterArgValues);

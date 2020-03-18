@@ -42,6 +42,26 @@ class FunnyFilter
 	{
 		return "<a href=\"" . $protocol . '://' .$url . "\">" . $name . "</a>";
 	}
+
+	public function str_replace($input, $data)
+	{
+		foreach ($data as $k => $v) {
+			$input = str_replace("[" . $k . "]", $v, $input);
+		}
+		return $input;
+	}
+
+	public function img_url($input, $size, $opts = null)
+	{
+		$output = "image_" . $size;
+		if (isset($opts['crop'])) {
+			$output .= "_cropped_" . $opts['crop'];
+		}
+		if (isset($opts['scale'])) {
+			$output .= "@" . $opts['scale'] . 'x';
+		}
+		return $output . ".png";
+	}
 }
 
 class OutputTest extends TestCase
@@ -128,6 +148,22 @@ class OutputTest extends TestCase
 	{
 		$text = " {{ car.gm | add_tag : 'span', car.bmw}} ";
 		$expected = " <span id=\"good\">bad</span> ";
+
+		$this->assertTemplateResult($expected, $text, $this->assigns);
+	}
+
+	public function testVariablePipingWithKeywordArg()
+	{
+		$text = " {{ 'Welcome, [name]' | str_replace: name: 'Santa' }} ";
+		$expected = " Welcome, Santa ";
+
+		$this->assertTemplateResult($expected, $text, $this->assigns);
+	}
+
+	public function testVariablePipingWithArgsAndKeywordArgs()
+	{
+		$text = " {{ car.gm | img_url: '450x450', crop: 'center', scale: 2 }} ";
+		$expected = " image_450x450_cropped_center@2x.png ";
 
 		$this->assertTemplateResult($expected, $text, $this->assigns);
 	}
