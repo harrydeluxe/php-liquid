@@ -45,12 +45,16 @@ class Decision extends AbstractBlock
 		// Objects should have a __toString method to get a value to compare to
 		if (is_object($value)) {
 			if (method_exists($value, '__toString')) {
-				$value = (string) $value;
-			} else {
-				// toLiquid is handled in Context::variable
-				$class = get_class($value);
-				throw new RenderException("Value of type $class has no `toLiquid` nor `__toString` methods");
+				return (string) $value;
 			}
+
+			if ($value instanceof \Generator) {
+				return (string) $value->valid();
+			}
+
+			// toLiquid is handled in Context::variable
+			$class = get_class($value);
+			throw new RenderException("Value of type $class has no `toLiquid` nor `__toString` methods");
 		}
 
 		// Arrays simply return true

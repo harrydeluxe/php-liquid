@@ -33,6 +33,11 @@ class FixturesTest extends TestCase
 		$template->parse(file_get_contents($liquid));
 		$result = $template->render(include $data);
 
+		if (getenv('GOLDEN') !== false) {
+			file_put_contents($expected, $result);
+			$this->markTestIncomplete("Saved golden fixture");
+		}
+
 		$this->assertEquals(file_get_contents($expected), $result);
 	}
 

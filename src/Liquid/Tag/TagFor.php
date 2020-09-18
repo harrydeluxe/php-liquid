@@ -115,6 +115,10 @@ class TagFor extends AbstractBlock
 	{
 		$collection = $context->get($this->collectionName);
 
+		if ($collection instanceof \Generator && !$collection->valid()) {
+			return '';
+		}
+
 		if ($collection instanceof \Traversable) {
 			$collection = iterator_to_array($collection);
 		}
