@@ -23,7 +23,7 @@ class TagExtendsTest extends TestCase
 {
 	private $fs;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->fs = TestFileSystem::fromArray(array(
 			'base' => "{% block content %}{% endblock %}{% block footer %}{% endblock %}",
@@ -31,7 +31,7 @@ class TagExtendsTest extends TestCase
 		));
 	}
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		// PHP goes nuts unless we unset it
 		unset($this->fs);
@@ -162,39 +162,43 @@ class TagExtendsTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testInvalidSyntaxNoTemplateName()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$template = new Template();
 		$template->parse("{% extends %}");
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
-	 * @expectedExceptionMessage Error in tag
 	 */
 	public function testInvalidSyntaxNotQuotedTemplateName()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+		$this->expectExceptionMessage('Error in tag');
+
 		$template = new Template();
 		$template->parse("{% extends base %}");
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\MissingFilesystemException
-	 * @expectedExceptionMessage No file system
 	 */
 	public function testMissingFilesystem()
 	{
+		$this->expectException(\Liquid\Exception\MissingFilesystemException::class);
+		$this->expectExceptionMessage('No file system');
+
 		$template = new Template();
 		$template->parse("{% extends 'base' %}");
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testInvalidSyntaxEmptyTemplateName()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$template = new Template();
 		$template->setFileSystem($this->fs);
 		$template->parse("{% extends '' %}");

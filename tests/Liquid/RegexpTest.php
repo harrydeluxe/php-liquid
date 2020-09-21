@@ -16,7 +16,7 @@ class RegexpTest extends TestCase
 	/** @var Regexp */
 	protected $regexp;
 
-	protected function setup()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

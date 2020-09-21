@@ -128,7 +128,7 @@ class Template
 	 * @param string $name
 	 * @param string $class
 	 */
-	public function registerTag($name, $class)
+	public static function registerTag($name, $class)
 	{
 		self::$tags[$name] = $class;
 	}

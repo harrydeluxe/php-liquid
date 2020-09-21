@@ -23,10 +23,11 @@ class TagAssignTest extends TestCase
 	/**
 	 * Tests the normal behavior of throwing an exception when the assignment is incorrect
 	 *
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testInvalidAssign()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$template = new Template();
 
 		$template->parse('{% assign test %}');

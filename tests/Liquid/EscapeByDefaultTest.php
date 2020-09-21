@@ -33,7 +33,7 @@ class EscapeByDefaultTest extends TestCase
 
 	protected $assigns = array();
 
-	protected function setup()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -113,13 +113,13 @@ class EscapeByDefaultTest extends TestCase
 	/** System default value for the escape flag */
 	private static $escapeDefault;
 
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		// save system default value for the escape flag before all tests
 		self::$escapeDefault = Liquid::get('ESCAPE_BY_DEFAULT');
 	}
 
-	public function tearDown()
+	protected function tearDown(): void
 	{
 		// reset to the default after each test
 		Liquid::set('ESCAPE_BY_DEFAULT', self::$escapeDefault);

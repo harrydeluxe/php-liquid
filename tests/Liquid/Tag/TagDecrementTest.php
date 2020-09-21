@@ -16,10 +16,11 @@ use Liquid\TestCase;
 class TagDecrementTest extends TestCase
 {
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testSyntaxError()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		$this->assertTemplateResult('', '{% decrement %}');
 	}
 

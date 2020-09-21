@@ -76,11 +76,12 @@ class ProductDrop extends Drop
 class DropTest extends TestCase
 {
 	/**
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage worked
 	 */
 	public function testProductDrop()
 	{
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('worked');
+
 		$template = new Template();
 		$template->parse(' {{ product.top_sales }} ');
 		$template->render(array('product' => new ProductDrop));

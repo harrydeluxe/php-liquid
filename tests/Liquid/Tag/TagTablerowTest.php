@@ -47,18 +47,20 @@ class TagTablerowTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testInvalidSyntax()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$this->assertTemplateResult('', '{%tablerow item array%} yo {%endtablerow%}', array());
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\RenderException
 	 */
 	public function testNotArray()
 	{
+		$this->expectException(\Liquid\Exception\RenderException::class);
+
 		$this->assertTemplateResult('', '{%tablerow item in array%} yo {%endtablerow%}', array('array' => true));
 	}
 }

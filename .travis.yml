@@ -1,8 +1,5 @@
 language: php
 php:
-  - 7.0
-  - 7.1
-  - 7.2
   - 7.3
   - 7.4
 
@@ -21,7 +18,7 @@ install:
 
 script:
   - vendor/bin/phpunit --verbose --coverage-clover=build/logs/clover.xml || travis_terminate 1
-  - php vendor/bin/infection --min-msi=80 --min-covered-msi=80 --log-verbosity=2 --threads=4
+  - php vendor/bin/infection --min-msi=80 --min-covered-msi=80 --threads=4
   - vendor/bin/php-cs-fixer --cache-file=build/cache/.php_cs.cache --diff --dry-run --stop-on-violation --verbose fix
 
 after_success:

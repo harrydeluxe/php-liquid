@@ -16,10 +16,11 @@ use Liquid\TestCase;
 class TagBlockTest extends TestCase
 {
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxError()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$this->assertTemplateResult('', '{% block %}');
 	}
 

@@ -68,7 +68,7 @@ class OutputTest extends TestCase
 {
 	protected $assigns = array();
 
-	protected function setup()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -185,11 +185,12 @@ class OutputTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
-	 * @expectedExceptionMessage was not properly terminated
 	 */
 	public function testVariableWithANewLine()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+		$this->expectExceptionMessage('was not properly terminated');
+
 		$text = "{{ aaa\n }}";
 		$this->assertTemplateResult('', $text, $this->assigns);
 	}

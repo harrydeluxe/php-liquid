@@ -162,7 +162,7 @@ class ContextTest extends TestCase
 	/** @var Context */
 	public $context;
 
-	public function setup()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -176,18 +176,20 @@ class ContextTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testNoScopeToPop()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		$this->context->pop();
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testGetArray()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		$this->context->get(array());
 	}
 
@@ -219,7 +221,7 @@ class ContextTest extends TestCase
 		$this->context->set('test', new NoToLiquid());
 		$this->assertEquals(42, $this->context->get('test.answer'));
 		$this->assertEquals(1, $this->context->get('test.count'));
-		$this->assertEquals(null, $this->context->get('test.invalid'));
+		$this->assertNull($this->context->get('test.invalid'));
 		$this->assertEquals("forty two", $this->context->get('test'));
 		$this->assertEquals("example", $this->context->get('test.name'));
 	}
@@ -410,7 +412,7 @@ class ContextTest extends TestCase
 		$this->context->set('test', 'test');
 		$this->assertEquals('test', $this->context->get('test'));
 		$this->context->pop();
-		$this->assertEquals(null, $this->context->get('test'));
+		$this->assertNull($this->context->get('test'));
 	}
 
 	public function testMerge()

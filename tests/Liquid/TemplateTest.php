@@ -18,14 +18,14 @@ class TemplateTest extends TestCase
 	/** @var string full path to cache dir  */
 	protected $cacheDir;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
 		$this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . self::CACHE_DIR;
 	}
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		parent::tearDown();
 
@@ -34,19 +34,21 @@ class TemplateTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testSetCacheInvalidKey()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		$template = new Template();
 		$template->setCache(array());
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testSetCacheInvalidClass()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		$template = new Template();
 		$template->setCache(array('cache' => 'no_such_class'));
 	}
@@ -105,9 +107,9 @@ class TemplateTest extends TestCase
 
 		$nodelist = $template->getRoot()->getNodelist();
 
-		$this->assertEquals(2, count($nodelist));
+		$this->assertCount(2, $nodelist);
 		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[0]);
-		$this->assertInternalType('string', $nodelist[1]);
+		$this->assertIsString($nodelist[1]);
 	}
 
 	public function testVariableEnd()
@@ -117,8 +119,8 @@ class TemplateTest extends TestCase
 
 		$nodelist = $template->getRoot()->getNodelist();
 
-		$this->assertEquals(2, count($nodelist));
-		$this->assertInternalType('string', $nodelist[0]);
+		$this->assertCount(2, $nodelist);
+		$this->assertIsString($nodelist[0]);
 		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[1]);
 	}
 
@@ -129,10 +131,10 @@ class TemplateTest extends TestCase
 
 		$nodelist = $template->getRoot()->getNodelist();
 
-		$this->assertEquals(3, count($nodelist));
-		$this->assertInternalType('string', $nodelist[0]);
+		$this->assertCount(3, $nodelist);
+		$this->assertIsString($nodelist[0]);
 		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[1]);
-		$this->assertInternalType('string', $nodelist[2]);
+		$this->assertIsString($nodelist[2]);
 	}
 
 	public function testVariableManyEmbeddedFragments()
@@ -142,14 +144,14 @@ class TemplateTest extends TestCase
 
 		$nodelist = $template->getRoot()->getNodelist();
 
-		$this->assertEquals(7, count($nodelist));
-		$this->assertInternalType('string', $nodelist[0]);
+		$this->assertCount(7, $nodelist);
+		$this->assertIsString($nodelist[0]);
 		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[1]);
-		$this->assertInternalType('string', $nodelist[2]);
+		$this->assertIsString($nodelist[2]);
 		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[3]);
-		$this->assertInternalType('string', $nodelist[4]);
+		$this->assertIsString($nodelist[4]);
 		$this->assertInstanceOf(\Liquid\Variable::class, $nodelist[5]);
-		$this->assertInternalType('string', $nodelist[6]);
+		$this->assertIsString($nodelist[6]);
 	}
 
 	public function testWithBlock()
@@ -159,9 +161,9 @@ class TemplateTest extends TestCase
 
 		$nodelist = $template->getRoot()->getNodelist();
 
-		$this->assertEquals(3, count($nodelist));
-		$this->assertInternalType('string', $nodelist[0]);
+		$this->assertCount(3, $nodelist);
+		$this->assertIsString($nodelist[0]);
 		$this->assertInstanceOf(\Liquid\Tag\TagComment::class, $nodelist[1]);
-		$this->assertInternalType('string', $nodelist[2]);
+		$this->assertIsString($nodelist[2]);
 	}
 }

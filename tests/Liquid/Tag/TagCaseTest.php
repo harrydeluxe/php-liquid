@@ -59,34 +59,38 @@ class TagCaseTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxErrorCase()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$this->assertTemplateResult('', '{% case %}{% when 5 %}{% endcase %}');
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxErrorWhen()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$this->assertTemplateResult('', '{% case condition %}{% when %}{% endcase %}');
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxErrorEnd()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$this->assertTemplateResult('', '{% case condition %}{% end %}');
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\RenderException
 	 */
 	public function testObject()
 	{
+		$this->expectException(\Liquid\Exception\RenderException::class);
+
 		$this->assertTemplateResult('', '{% case variable %}{% when 5 %}{% endcase %}', array('variable' => (object) array()));
 	}
 

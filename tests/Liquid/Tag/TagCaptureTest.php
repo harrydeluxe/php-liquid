@@ -17,10 +17,11 @@ use Liquid\Template;
 class TagCaptureTest extends TestCase
 {
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testInvalidSyntax()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$template = new Template();
 		$template->parse("{% capture %} hello");
 	}

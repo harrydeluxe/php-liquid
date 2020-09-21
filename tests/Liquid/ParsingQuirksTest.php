@@ -22,6 +22,6 @@ class ParsingQuirksTest extends TestCase
 		$nodelist = $template->getRoot()->getNodelist();
 
 		$this->assertEquals($text, $template->render());
-		$this->assertInternalType('string', $nodelist[0]);
+		$this->assertIsString($nodelist[0]);
 	}
 }

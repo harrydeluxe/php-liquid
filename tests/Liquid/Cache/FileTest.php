@@ -19,7 +19,7 @@ class FileTest extends TestCase
 	protected $cache;
 	protected $cacheDir;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -31,7 +31,7 @@ class FileTest extends TestCase
 		));
 	}
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		parent::tearDown();
 
@@ -39,19 +39,17 @@ class FileTest extends TestCase
 		array_map('unlink', glob($this->cacheDir . DIRECTORY_SEPARATOR . '*'));
 	}
 
-	/**
-	 * @expectedException \Liquid\Exception\FilesystemException
-	 */
 	public function testConstructInvalidOptions()
 	{
+		$this->expectException(\Liquid\Exception\FilesystemException::class);
+
 		new File();
 	}
 
-	/**
-	 * @expectedException \Liquid\Exception\FilesystemException
-	 */
 	public function testConstructNoSuchDirOrNotWritable()
 	{
+		$this->expectException(\Liquid\Exception\FilesystemException::class);
+
 		new File(array('cache_dir' => '/no/such/dir/liquid/cache'));
 	}
 
@@ -81,7 +79,9 @@ class FileTest extends TestCase
 		touch($this->cacheDir . DIRECTORY_SEPARATOR . 'liquid_test');
 		touch($this->cacheDir . DIRECTORY_SEPARATOR . 'liquid_test_two');
 
-		$this->assertCount(2, glob($this->cacheDir . DIRECTORY_SEPARATOR . '*'));
+		$files = join(', ', glob($this->cacheDir . DIRECTORY_SEPARATOR . '*'));
+
+		$this->assertCount(2, glob($this->cacheDir . DIRECTORY_SEPARATOR . '*'), "Found more than two files: $files");
 
 		$this->cache->flush();
 
@@ -93,7 +93,9 @@ class FileTest extends TestCase
 		touch($this->cacheDir . DIRECTORY_SEPARATOR . 'liquid_test');
 		touch($this->cacheDir . DIRECTORY_SEPARATOR . 'liquid_test_two', time() - 1000000);
 
-		$this->assertCount(2, glob($this->cacheDir . DIRECTORY_SEPARATOR . '*'));
+		$files = join(', ', glob($this->cacheDir . DIRECTORY_SEPARATOR . '*'));
+
+		$this->assertCount(2, glob($this->cacheDir . DIRECTORY_SEPARATOR . '*'), "Found more than two files: $files");
 
 		$this->cache->flush(true);
 

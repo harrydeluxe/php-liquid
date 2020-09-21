@@ -20,7 +20,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
 	 */
 	public $filters;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

@@ -17,10 +17,11 @@ use Liquid\Template;
 class TagForTest extends TestCase
 {
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testForInvalidSyntax()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$template = new Template();
 		$template->parse("{% for elem %}{% endfor %}");
 	}

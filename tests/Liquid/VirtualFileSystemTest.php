@@ -17,11 +17,12 @@ use Liquid\Cache\File;
 class VirtualFileSystemTest extends TestCase
 {
 	/**
-	 * @expectedException \Liquid\LiquidException
-	 * @expectedExceptionMessage Not a callback
 	 */
 	public function testInvalidCallback()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+		$this->expectExceptionMessage('Not a callback');
+
 		new Virtual('');
 	}
 
@@ -45,11 +46,12 @@ class VirtualFileSystemTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
-	 * @expectedExceptionMessage cannot be used with a serializing cache
 	 */
 	public function testWithFileCache()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+		$this->expectExceptionMessage('cannot be used with a serializing cache');
+
 		$template = new Template();
 		$template->setFileSystem(new Virtual(function ($templatePath) {
 			return '';

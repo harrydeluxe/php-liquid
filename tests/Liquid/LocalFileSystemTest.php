@@ -17,7 +17,7 @@ class LocalFileSystemTest extends TestCase
 {
 	protected $root;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->root = __DIR__ . DIRECTORY_SEPARATOR . self::TEMPLATES_DIR . DIRECTORY_SEPARATOR;
 		// reset to defaults
@@ -25,28 +25,31 @@ class LocalFileSystemTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testIllegalTemplateNameEmpty()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		$fileSystem = new Local('');
 		$fileSystem->fullPath('');
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testIllegalRootPath()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		$fileSystem = new Local('invalid/not/found');
 		$fileSystem->fullPath('');
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testIllegalTemplateNameIncludeExtension()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		Liquid::set('INCLUDE_ALLOW_EXT', false);
 
 		$fileSystem = new Local('');
@@ -54,10 +57,11 @@ class LocalFileSystemTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testIllegalTemplateNameNotIncludeExtension()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		Liquid::set('INCLUDE_ALLOW_EXT', true);
 
 		$fileSystem = new Local('');
@@ -65,29 +69,32 @@ class LocalFileSystemTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testIllegalTemplatePathNoRoot()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		$fileSystem = new Local('');
 		$fileSystem->fullPath('mypartial');
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
 	 */
 	public function testIllegalTemplatePathNoFileExists()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+
 		$fileSystem = new Local(dirname(__DIR__));
 		$fileSystem->fullPath('no_such_file_exists');
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
-	 * @expectedExceptionMessage not under
 	 */
 	public function testIllegalTemplatePathNotUnderTemplateRoot()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+		$this->expectExceptionMessage('not under');
+
 		Liquid::set('INCLUDE_ALLOW_EXT', true);
 		$fileSystem = new Local(dirname($this->root));
 		// find any fail under deeper under the root, so all other checks would pass
@@ -116,11 +123,12 @@ class LocalFileSystemTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
-	 * @expectedExceptionMessage File not found
 	 */
 	public function testReadIllegalTemplatePathNoFileExists()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+		$this->expectExceptionMessage('File not found');
+
 		$fileSystem = new Local(dirname(__DIR__));
 		$fileSystem->readTemplateFile('no_such_file_exists');
 	}
@@ -149,11 +157,12 @@ class LocalFileSystemTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\LiquidException
-	 * @expectedExceptionMessage Could not load a template
 	 */
 	public function testParseTemplateFileError()
 	{
+		$this->expectException(\Liquid\LiquidException::class);
+		$this->expectExceptionMessage('Could not load a template');
+
 		$template = new Template();
 		$template->parseFile('mypartial');
 	}

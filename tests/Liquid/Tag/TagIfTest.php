@@ -223,53 +223,59 @@ class TagIfTest extends TestCase
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
-	 * @expectedExceptionMessage if tag was never closed
 	 */
 	public function testSyntaxErrorNotClosed()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+		$this->expectExceptionMessage('if tag was never closed');
+
 		$this->assertTemplateResult('', '{% if jerry == 1 %}');
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
 	 */
 	public function testSyntaxErrorEnd()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$this->assertTemplateResult('', '{% if jerry == 1 %}{% end %}');
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\RenderException
 	 */
 	public function testInvalidOperator()
 	{
+		$this->expectException(\Liquid\Exception\RenderException::class);
+
 		$this->assertTemplateResult('', '{% if foo === y %}true{% else %}false{% endif %}', array('foo' => true, 'y' => true));
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\RenderException
 	 */
 	public function testIncomparable()
 	{
+		$this->expectException(\Liquid\Exception\RenderException::class);
+
 		$this->assertTemplateResult('', '{% if foo == 1 %}true{% endif %}', array('foo' => (object) array()));
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
-	 * @expectedExceptionMessage does not expect else tag
 	 */
 	public function testSyntaxErrorElse()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+		$this->expectExceptionMessage('does not expect else tag');
+
 		$this->assertTemplateResult('', '{% if foo == 1 %}{% endif %}{% else %}');
 	}
 
 	/**
-	 * @expectedException \Liquid\Exception\ParseException
-	 * @expectedExceptionMessage Unknown tag
 	 */
 	public function testSyntaxErrorUnknown()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+		$this->expectExceptionMessage('Unknown tag');
+
 		$this->assertTemplateResult('', '{% unknown-tag %}');
 	}
 }

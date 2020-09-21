@@ -18,7 +18,7 @@ class LocalTest extends TestCase
 	/** @var \Liquid\Cache\Local */
 	protected $cache;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

@@ -15,11 +15,10 @@ use Liquid\TestCase;
 
 class AbstractBlockTest extends TestCase
 {
-	/**
-	 * @expectedException \Liquid\Exception\ParseException
-	 */
 	public function testUnterminatedBlockError()
 	{
+		$this->expectException(\Liquid\Exception\ParseException::class);
+
 		$this->assertTemplateResult('', '{% block }');
 	}
 
