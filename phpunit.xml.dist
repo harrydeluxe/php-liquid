@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php" verbose="true" colors="true">
+
+<phpunit bootstrap="vendor/autoload.php"
+    colors="true"
+    verbose="true"
+    executionOrder="random"
+    resolveDependencies="true"
+    failOnRisky="true"
+    failOnWarning="true"
+    backupStaticAttributes="true"
+>
 	<testsuites>
 		<testsuite name="Main">
 			<directory>tests/</directory>

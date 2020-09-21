@@ -104,6 +104,9 @@ class TagIncludeTest extends TestCase
 		$this->assertEquals("Outer-Inner: orig-Outer-Inner: orig23", $output);
 	}
 
+	/**
+	 * @depends testInvalidSyntaxNoObjectCollection
+	 */
 	public function testWithCache()
 	{
 		$template = new Template();
