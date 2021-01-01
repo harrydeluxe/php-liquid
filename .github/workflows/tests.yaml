@@ -17,7 +17,9 @@ jobs:
         dependencies: ['']
         include:
           - { php-version: '7.3', dependencies: '--prefer-lowest' }
+          - { php-version: '8.0', dependencies: '--ignore-platform-req=php' }
 
+    continue-on-error: ${{ matrix.php-version == '8.0' }}
     name: PHP ${{ matrix.php-version }} ${{ matrix.dependencies }}
 
     steps:
@@ -29,17 +31,21 @@ jobs:
           php-version: ${{ matrix.php-version }}
           extensions: 
           coverage: pcov
-          tools: composer:v1
+          tools: composer:v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/composer
+          key: composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.*') }}
+          restore-keys: |
+            composer-${{ matrix.php-version }}-
+            composer-
 
       - name: Install dependencies
         run: |
-          composer update --no-interaction ${{ matrix.dependencies }}
+          composer update --prefer-dist --no-interaction --no-progress ${{ matrix.dependencies }}
 
       - name: Run tests
         run: |
           php vendor/bin/phpunit
-
-      - name: Run mutation testing
-        run: |
-          php vendor/bin/infection --min-msi=80 --min-covered-msi=80 --show-mutations --threads=$(nproc)
-          

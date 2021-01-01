@@ -1,4 +1,4 @@
-name: Code Style
+name: Mutation Testing
 
 on:
   push:
@@ -6,15 +6,17 @@ on:
   pull_request:
     branches: [ master ]
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        php-version: ['7.3']
+        php-version: ['7.4']
+        dependencies: ['']
 
-    name: PHP ${{ matrix.php-version }}
+    name: PHP ${{ matrix.php-version }} ${{ matrix.dependencies }}
 
     steps:
       - uses: actions/checkout@v2
@@ -25,7 +27,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
           extensions: 
           coverage: pcov
-          tools: composer:v1
+          tools: composer:v2
 
       - name: Cache dependencies
         uses: actions/cache@v2
@@ -40,7 +42,7 @@ jobs:
         run: |
           composer update --prefer-dist --no-interaction --no-progress ${{ matrix.dependencies }}
 
-      - name: Check code style
+      - name: Run mutation testing
         run: |
-          php vendor/bin/php-cs-fixer --using-cache=no --diff --dry-run --stop-on-violation --verbose fix
+          php vendor/bin/infection --min-msi=80 --min-covered-msi=80 --show-mutations --threads=$(nproc)
           

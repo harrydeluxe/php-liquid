@@ -303,10 +303,12 @@ class Context
 			}
 
 			// first try to cast an object to an array or value
-			if (method_exists($object, 'toLiquid')) {
-				$object = $object->toLiquid();
-			} elseif (method_exists($object, 'toArray')) {
-				$object = $object->toArray();
+			if (is_object($object)) {
+				if (method_exists($object, 'toLiquid')) {
+					$object = $object->toLiquid();
+				} elseif (method_exists($object, 'toArray')) {
+					$object = $object->toArray();
+				}
 			}
 
 			if (is_null($object)) {
@@ -394,7 +396,7 @@ class Context
 			}
 
 			// if a magic accessor method present...
-			if (method_exists($object, '__get')) {
+			if (is_object($object) && method_exists($object, '__get')) {
 				$object = $object->$nextPartName;
 				continue;
 			}
@@ -416,7 +418,7 @@ class Context
 		// lastly, try to get an embedded value of an object
 		// value could be of any type, not just string, so we have to do this
 		// conversion here, not later in AbstractBlock::renderAll
-		if (method_exists($object, 'toLiquid')) {
+		if (is_object($object) && method_exists($object, 'toLiquid')) {
 			$object = $object->toLiquid();
 		}
 

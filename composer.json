@@ -27,12 +27,12 @@
         }
     ],
     "require": {
-        "php": "^7.3"
+        "php": "^7.3 || ^8.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.8",
         "friendsofphp/php-cs-fixer": "^2.16.4",
-        "infection/infection": "^0.17.5",
+        "infection/infection": "^0.17.6",
         "php-coveralls/php-coveralls": "^2.2",
         "phpunit/phpunit": "^9.2.6"
     },
