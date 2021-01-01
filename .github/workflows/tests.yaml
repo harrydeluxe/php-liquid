@@ -1,11 +1,14 @@
-name: Tests
+# yamllint disable rule:line-length
+# yamllint disable rule:braces
+
+name: CI
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
-
+  push:
+    branches:
+      - master
+      - main
 
 jobs:
   build:
@@ -13,14 +16,11 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['7.3', '7.4']
-        dependencies: ['']
+        php-version: ['7.3', '7.4', '8.0']
         include:
-          - { php-version: '7.3', dependencies: '--prefer-lowest' }
-          - { php-version: '8.0', dependencies: '--ignore-platform-req=php' }
+          - { php-version: '7.3', dependencies: '--prefer-lowest', legend: 'with lowest dependencies' }
 
-    continue-on-error: ${{ matrix.php-version == '8.0' }}
-    name: PHP ${{ matrix.php-version }} ${{ matrix.dependencies }}
+    name: PHP ${{ matrix.php-version }} ${{ matrix.legend }}
 
     steps:
       - uses: actions/checkout@v2
@@ -29,17 +29,22 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: 
           coverage: pcov
           tools: composer:v2
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: ~/.cache/composer
-          key: composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.*') }}
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}-${{ matrix.composer-flags }}
           restore-keys: |
-            composer-${{ matrix.php-version }}-
+            composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}-
+            composer-${{ runner.os }}-${{ matrix.php-version }}-
+            composer-${{ runner.os }}-
             composer-
 
       - name: Install dependencies
