@@ -84,6 +84,22 @@ class Liquid
 
 		// Whenever variables from $_SERVER should be directly available to templates
 		'EXPOSE_SERVER' => false,
+
+		// $_SERVER variables whitelist - exposed even when EXPOSE_SERVER is false
+		'SERVER_SUPERGLOBAL_WHITELIST' => [
+			'HTTP_ACCEPT',
+			'HTTP_ACCEPT_CHARSET',
+			'HTTP_ACCEPT_ENCODING',
+			'HTTP_ACCEPT_LANGUAGE',
+			'HTTP_CONNECTION',
+			'HTTP_HOST',
+			'HTTP_REFERER',
+			'HTTP_USER_AGENT',
+			'HTTPS',
+			'REQUEST_METHOD',
+			'REQUEST_URI',
+			'SERVER_NAME',
+		],
 	);
 
 	/**

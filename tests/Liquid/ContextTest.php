@@ -465,7 +465,7 @@ class ContextTest extends TestCase
 		$this->assertEquals('test', $context->get('test'));
 	}
 
-	public function testServerNotExposedByDefault()
+	public function testServerOnlyExposeWhitelistByDefault()
 	{
 		$_SERVER['AWS_SECRET_ACCESS_KEY'] = 'super_secret';
 
@@ -474,6 +474,18 @@ class ContextTest extends TestCase
 
 		$context->set('AWS_SECRET_ACCESS_KEY', 'test');
 		$this->assertEquals('test', $context->get('AWS_SECRET_ACCESS_KEY'));
+
+		$_SERVER['FOO'] = 'foo';
+		$_SERVER['BAR'] = 'bar';
+
+		Liquid::set('SERVER_SUPERGLOBAL_WHITELIST', ['FOO']);
+
+		$context = new Context();
+		$this->assertEquals('foo', $context->get('FOO'));
+		$this->assertNull($context->get('BAR'));
+
+		$context->set('BAR', 'bar');
+		$this->assertEquals('bar', $context->get('BAR'));
 	}
 
 	public function testServerExposedWhenRequested()
