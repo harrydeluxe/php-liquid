@@ -411,6 +411,8 @@ class StandardFiltersTest extends TestCase
 			}
 			$this->assertEquals($item[1], $actual);
 		}
+
+		$this->assertEquals('Владимир', StandardFilters::slice('Владимир Владимирович', 0, 8));
 	}
 
 	public function testTruncate()

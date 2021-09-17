@@ -506,9 +506,7 @@ class StandardFilters
 		if (is_array($input)) {
 			$input = array_slice($input, $offset, $length);
 		} elseif (is_string($input)) {
-			$input = $length === null
-				? substr($input, $offset)
-				: substr($input, $offset, $length);
+			$input = mb_substr($input, $offset, $length);
 		}
 
 		return $input;
