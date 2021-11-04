@@ -164,7 +164,7 @@ class AbstractBlock extends AbstractTag
 			}
 
 			if (is_array($value)) {
-				throw new RenderException("Implicit rendering of arrays not supported. Use index operator.");
+				$value = htmlspecialchars(print_r($value, true));
 			}
 
 			$result .= $value;

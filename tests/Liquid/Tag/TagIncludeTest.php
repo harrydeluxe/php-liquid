@@ -151,9 +151,6 @@ class TagIncludeTest extends TestCase
 	 */
 	public function testIncludePassArrayWithoutIndex()
 	{
-		$this->expectException(\Liquid\Exception\RenderException::class);
-		$this->expectExceptionMessage('Use index operator');
-
 		$template = new Template();
 		$template->setFileSystem(TestFileSystem::fromArray(array(
 			'inner' => "[{{ other }}]",
@@ -161,7 +158,10 @@ class TagIncludeTest extends TestCase
 		)));
 
 		$template->parse("{% include 'example' %}");
-		$template->render(array("var" => array("a", "b", "c")));
+		
+		$output = $template->render(array("var" => array("a", "b", "c")));
+		$expectedOutput = htmlspecialchars(print_r(array("a", "b", "c"), true));
+		$this->assertEquals("([$expectedOutput])", $output);
 	}
 
 	public function testIncludePassArrayWithIndex()
