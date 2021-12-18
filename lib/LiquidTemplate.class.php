@@ -1,14 +1,14 @@
 <?php
 /**
  * The template class.
- * 
- * @example 
+ *
+ * @example
  * $tpl = new LiquidTemplate();
  * $tpl->parse(template_source);
  * $tpl->render(array('foo'=>1, 'bar'=>2);
  *
  * @package Liquid
- * @copyright Copyright (c) 2011-2012 Harald Hanek, 
+ * @copyright Copyright (c) 2011-2012 Harald Hanek,
  * fork of php-liquid (c) 2006 Mateo Murphy,
  * based on Liquid for Ruby (c) 2006 Tobias Luetke
  * @license http://harrydeluxe.mit-license.org
@@ -54,7 +54,7 @@ class LiquidTemplate
 
 
     /**
-     * 
+     *
      *
      */
     public function setFileSystem($fileSystem)
@@ -64,7 +64,7 @@ class LiquidTemplate
 
 
     /**
-     * 
+     *
      *
      */
     public function setCache($cache)
@@ -87,7 +87,7 @@ class LiquidTemplate
 
 
     /**
-     * 
+     *
      *
      * @return object
      */
@@ -98,7 +98,7 @@ class LiquidTemplate
 
 
     /**
-     * 
+     *
      *
      * @return LiquidDocument
      */
@@ -121,7 +121,7 @@ class LiquidTemplate
 
 
     /**
-     * 
+     *
      *
      * @return array
      */
@@ -150,7 +150,7 @@ class LiquidTemplate
      */
     public static function tokenize($source)
     {
-        return (!$source) ? array() : preg_split(LIQUID_TOKENIZATION_REGEXP, $source, null, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        return (!$source) ? array() : preg_split(LIQUID_TOKENIZATION_REGEXP, $source, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
     }
 
 
