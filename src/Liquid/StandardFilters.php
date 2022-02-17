@@ -43,7 +43,8 @@ class StandardFilters
 	public static function capitalize($input)
 	{
 		return preg_replace_callback("/(^|[^\p{L}'])([\p{Ll}])/u", function ($matches) {
-			return $matches[1] . ucfirst($matches[2]);
+			$first_char = mb_substr($matches[2], 0, 1);
+			return $matches[1] . mb_strtoupper($first_char) . mb_substr($matches[2], 1);
 		}, ucwords($input));
 	}
 	
@@ -119,7 +120,7 @@ class StandardFilters
 	 */
 	public static function downcase($input)
 	{
-		return is_string($input) ? strtolower($input) : $input;
+		return is_string($input) ? mb_strtolower($input) : $input;
 	}
 	
 	
@@ -636,7 +637,7 @@ class StandardFilters
 	{
 		if (is_string($input) || is_numeric($input)) {
 			if (strlen($input) > $characters) {
-				return substr($input, 0, $characters) . $ending;
+				return mb_substr($input, 0, $characters) . $ending;
 			}
 		}
 
@@ -692,7 +693,7 @@ class StandardFilters
 	 */
 	public static function upcase($input)
 	{
-		return is_string($input) ? strtoupper($input) : $input;
+		return is_string($input) ? mb_strtoupper($input) : $input;
 	}
 
 
