@@ -37,6 +37,14 @@ class VariableResolutionTest extends TestCase
 		$this->assertEquals('', $template->render());
 	}
 
+	public function testLineBreak()
+	{
+		$template = new Template();
+
+		$template->parse("{{ test |\n strip_html }}");
+		$this->assertEquals('worked', $template->render(array('test' => '<b>worked</b>')));
+	}
+
 	public function testArrayScoping()
 	{
 		$template = new Template();

@@ -41,7 +41,7 @@ class Variable
 		$this->markup = $markup;
 
 		$filterSep = new Regexp('/' . Liquid::get('FILTER_SEPARATOR') . '\s*(.*)/m');
-		$syntaxParser = new Regexp('/(' . Liquid::get('QUOTED_FRAGMENT') . ')(.*)/m');
+		$syntaxParser = new Regexp('/(' . Liquid::get('QUOTED_FRAGMENT') . ')(.*)/ms');
 		$filterParser = new Regexp('/(?:\s+|' . Liquid::get('QUOTED_FRAGMENT') . '|' . Liquid::get('ARGUMENT_SEPARATOR') . ')+/');
 		$filterArgsRegex = new Regexp('/(?:' . Liquid::get('FILTER_ARGUMENT_SEPARATOR') . '|' . Liquid::get('ARGUMENT_SEPARATOR') . ')\s*((?:\w+\s*\:\s*)?' . Liquid::get('QUOTED_FRAGMENT') . ')/');
 

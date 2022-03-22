@@ -254,7 +254,7 @@ class AbstractBlock extends AbstractTag
 	 */
 	private function createVariable($token)
 	{
-		$variableRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . Liquid::get('WHITESPACE_CONTROL') . '?(.*?)' . Liquid::get('WHITESPACE_CONTROL') . '?' . Liquid::get('VARIABLE_END') . '$/');
+		$variableRegexp = new Regexp('/^' . Liquid::get('VARIABLE_START') . Liquid::get('WHITESPACE_CONTROL') . '?(.*?)' . Liquid::get('WHITESPACE_CONTROL') . '?' . Liquid::get('VARIABLE_END') . '$/s');
 		if ($variableRegexp->match($token)) {
 			return new Variable($variableRegexp->matches[1]);
 		}

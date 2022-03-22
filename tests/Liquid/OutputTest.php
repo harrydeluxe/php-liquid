@@ -188,9 +188,6 @@ class OutputTest extends TestCase
 	 */
 	public function testVariableWithANewLine()
 	{
-		$this->expectException(\Liquid\Exception\ParseException::class);
-		$this->expectExceptionMessage('was not properly terminated');
-
 		$text = "{{ aaa\n }}";
 		$this->assertTemplateResult('', $text, $this->assigns);
 	}
