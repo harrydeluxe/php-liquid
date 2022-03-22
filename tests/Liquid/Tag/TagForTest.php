@@ -60,6 +60,7 @@ HERE;
 		$this->assertTemplateResult('abcd', '{%for item in array%}{{item}}{%endfor%}', array('array' => array('a', 'b', 'c', 'd')));
 		$this->assertTemplateResult('a b c', '{%for item in array%}{{item}}{%endfor%}', array('array' => array('a', ' ', 'b', ' ', 'c')));
 		$this->assertTemplateResult('abc', '{%for item in array%}{{item}}{%endfor%}', array('array' => array('a', '', 'b', '', 'c')));
+		$this->assertTemplateResult(' a ', "{%\nfor item in array%} {{item}} {%endfor%}", array('array' => array('a')));
 	}
 	
 	public function testForWithHash()

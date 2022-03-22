@@ -125,7 +125,7 @@ class Liquid
 				case 'TAG_ATTRIBUTES':
 					return '/(\w+)\s*\:\s*(' . self::get('QUOTED_FRAGMENT') . ')/';
 				case 'TOKENIZATION_REGEXP':
-					return '/(' . self::$config['TAG_START'] . '.*?' . self::$config['TAG_END'] . '|' . self::$config['VARIABLE_START'] . '.*?' . self::$config['VARIABLE_END'] . ')/';
+					return '/(' . self::$config['TAG_START'] . '.*?' . self::$config['TAG_END'] . '|' . self::$config['VARIABLE_START'] . '.*?' . self::$config['VARIABLE_END'] . ')/s';
 				default:
 					return null;
 			}
