@@ -117,7 +117,7 @@ class Regexp
 	 *
 	 * @return array
 	 */
-	public function split($string, $limit = null)
+	public function split($string, $limit = -1)
 	{
 		return preg_split($this->pattern, $string, $limit);
 	}
