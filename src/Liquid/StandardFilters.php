@@ -567,6 +567,10 @@ class StandardFilters
 	 */
 	public static function split($input, $pattern)
 	{
+		if ($input === '' || $input === null) {
+			return [];
+		}
+
 		return explode($pattern, $input);
 	}
 

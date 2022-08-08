@@ -792,7 +792,11 @@ class StandardFiltersTest extends TestCase
 		$data = array(
 			array(
 				'',
-				array(0 => ''),
+				array(),
+			),
+			array(
+				null,
+				array(),
 			),
 			array(
 				'two-one-three',
