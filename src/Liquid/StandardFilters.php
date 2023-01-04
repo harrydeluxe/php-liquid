@@ -61,24 +61,37 @@ class StandardFilters
 	
 
 	/**
-	 * Formats a date using strftime
+	 * Formats a date
 	 *
 	 * @param mixed $input
-	 * @param string $format
+	 * @param string $strftimeFormat (see http://strftime.net)
 	 *
 	 * @return string
 	 */
-	public static function date($input, $format)
+	public static function date($input, $strftimeFormat = '%A, %B %e, %Y at %l:%S %P %z')
 	{
-		if (!is_numeric($input)) {
-			$input = strtotime($input);
+		if (!$strftimeFormat) {
+			return $input;
 		}
 
-		if ($format == 'r') {
-			return date($format, $input);
+		if (is_numeric($input)) {
+			$input = date('Y-m-d H:i:s', $input);
 		}
 
-		return strftime($format, $input);
+		$dateTime = new \DateTime($input);
+		if (!$dateTime) {
+			return "";
+		}
+
+		$dateFormat = str_replace(
+			['at', '%a', '%A', '%d', '%e', '%u', '%w', '%W', '%b', '%h', '%B', '%m', '%y', '%Y', '%D', '%F', '%x', '%n', '%t', '%H', '%k', '%I', '%l', '%M', '%p', '%P', '%r', '%R', '%S', '%T', '%X', '%z', '%Z', '%c', '%s', '%%'],
+			['\a\t', 'D', 'l', 'd', 'j', 'N', 'w', 'W', 'M', 'M', 'F', 'm', 'y', 'Y', 'm/d/y', 'Y-m-d', 'm/d/y', "\n", "\t", 'H', 'G', 'h', 'g', 'i', 'A', 'a', 'h:i:s A', 'H:i', 's', 'H:i:s', 'H:i:s', 'O', 'T', 'D M j H:i:s Y', 'U', '%'],
+			$strftimeFormat
+		);
+
+		$formatted = $dateTime->format($dateFormat);
+
+		return $formatted;
 	}
 	
 	

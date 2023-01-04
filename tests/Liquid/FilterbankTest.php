@@ -113,7 +113,7 @@ class FilterbankTest extends TestCase
 		}
 
 		$var = new Variable('var | date');
-		$this->context->set('var', 1000);
+		$this->context->set('var', []);
 
 		$this->expectException(\Liquid\LiquidException::class);
 		$var->render($this->context);
