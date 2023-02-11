@@ -1,0 +1,8 @@
+/.gitattributes       export-ignore
+/.github              export-ignore
+/.gitignore           export-ignore
+/.php_cs.dist         export-ignore
+/.infection.json.dist export-ignore
+/.phpunit.xml.dist    export-ignore
+/examples             export-ignore
+/tests                export-ignore
