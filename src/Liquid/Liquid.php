@@ -121,7 +121,7 @@ class Liquid
 		// This case is needed for compound settings
 		switch ($key) {
 				case 'QUOTED_FRAGMENT':
-					return '(?:' . self::get('QUOTED_STRING') . '|(?:[^\s,\|\'"]|' . self::get('QUOTED_STRING') . ')+)';
+					return '(?:' . self::get('QUOTED_STRING') . '|[^\s,\|\'"]+)';
 				case 'TAG_ATTRIBUTES':
 					return '/(\w+)\s*\:\s*(' . self::get('QUOTED_FRAGMENT') . ')/';
 				case 'TOKENIZATION_REGEXP':
