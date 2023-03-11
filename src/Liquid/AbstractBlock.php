@@ -164,7 +164,7 @@ class AbstractBlock extends AbstractTag
 			}
 
 			if (is_array($value)) {
-				$value = htmlspecialchars(print_r($value, true));
+				$value = htmlspecialchars(implode($value));
 			}
 
 			$result .= $value;

@@ -160,8 +160,7 @@ class TagIncludeTest extends TestCase
 		$template->parse("{% include 'example' %}");
 		
 		$output = $template->render(array("var" => array("a", "b", "c")));
-		$expectedOutput = htmlspecialchars(print_r(array("a", "b", "c"), true));
-		$this->assertEquals("([$expectedOutput])", $output);
+		$this->assertEquals("([abc])", $output);
 	}
 
 	public function testIncludePassArrayWithIndex()
