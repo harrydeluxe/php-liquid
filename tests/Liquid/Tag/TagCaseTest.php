@@ -49,6 +49,26 @@ class TagCaseTest extends TestCase
 		$this->assertTemplateResult('', '{% case condition %}{% when "string here" %} hit {% endcase %}', $assigns);
 	}
 
+	public function multipleConditionsProvider()
+	{
+		yield [[], '{% assign handle = "apple" %}{% case handle %}{% when "cake" %}This is a cake{% when "cookie", "biscuit" %}This is a cookie{% else %}This is not a cake nor a cookie{% endcase %}', 'This is not a cake nor a cookie'];
+		yield [[], '{% assign handle = "cake" %}{% case handle %}{% when "cake" %}This is a cake{% when "cookie", "biscuit" %}This is a cookie{% else %}This is not a cake nor a cookie{% endcase %}', 'This is a cake'];
+		yield [[], '{% assign handle = "cookie" %}{% case handle %}{% when "cake" %}This is a cake{% when "cookie", "biscuit" %}This is a cookie{% else %}This is not a cake nor a cookie{% endcase %}', 'This is a cookie'];
+		yield [[], '{% assign handle = "cookie" %}{% case handle %}{% when "cake" %}This is a cake{% when "cookie" ,"biscuit" %}This is a cookie{% else %}This is not a cake nor a cookie{% endcase %}', 'This is a cookie'];
+		yield [[], '{% assign handle = "cookie" %}{% case handle %}{% when "cake" %}This is a cake{% when "cookie" or "biscuit" %}This is a cookie{% else %}This is not a cake nor a cookie{% endcase %}', 'This is a cookie'];
+		yield [[], '{% assign handle = "cookie" %}{% case handle %}{% when "cake" %}This is a cake{% when "cookie"or"biscuit" %}This is a cookie{% else %}This is not a cake nor a cookie{% endcase %}', 'This is a cookie'];
+		yield [['condition' => 'cookie'], '{% assign handle = "cookie" %}{% case handle %}{% when "cake" %}This is a cake{% when condition, "biscuit" %}This is a cookie{% else %}This is not a cake nor a cookie{% endcase %}', 'This is a cookie'];
+		yield [[], '{% assign handle = "cookie" %}{% assign condition = "cookie" %}{% case handle %}{% when "cake" %}This is a cake{% when condition, "biscuit" %}This is a cookie{% else %}This is not a cake nor a cookie{% endcase %}', 'This is a cookie'];
+	}
+
+	/**
+	 * @dataProvider multipleConditionsProvider
+	 */
+	public function testMultipleConditions(array $assigns, string $test, string $expected)
+	{
+		$this->assertTemplateResult($expected, $test, $assigns);
+	}
+
 	public function testCaseWithElse()
 	{
 		$assigns = array('condition' => 5);
