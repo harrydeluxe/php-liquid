@@ -153,7 +153,7 @@ class LocalFileSystemTest extends TestCase
 		Liquid::set('INCLUDE_SUFFIX', 'tpl');
 
 		$template = new Template($this->root);
-		$this->assertEquals("test content\n", $template->parseFile('mypartial')->render());
+		$this->assertEquals("test content" . PHP_EOL, $template->parseFile('mypartial')->render());
 	}
 
 	/**

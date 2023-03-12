@@ -24,11 +24,7 @@ class TagTablerowTest extends TestCase
 		);
 
 		$this->assertTemplateResult(
-			'<tr class="row1">
-<td class="col1"> item 1 </td></tr>
-<tr class="row2">
-<td class="col1"> item 2 </td></tr>
-',
+			'<tr class="row1">' . "\n" . '<td class="col1"> item 1 </td></tr>' . "\n" . '<tr class="row2">' . "\n" . '<td class="col1"> item 2 </td></tr>' . "\n",
 			'{% tablerow item in array cols:1 %} item {{ item }} {% endtablerow %}',
 			array('array' => array(1, 2))
 		);

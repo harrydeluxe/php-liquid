@@ -130,7 +130,7 @@ class TagIncludeTest extends TestCase
 		$template = new Template(dirname(__DIR__).DIRECTORY_SEPARATOR.self::TEMPLATES_DIR);
 		$template->parse("{% include 'mypartial' %}");
 		// template include inserts a new line
-		$this->assertEquals("test content\n", $template->render());
+		$this->assertEquals("test content" . PHP_EOL, $template->render());
 	}
 
 	public function testIncludePassPlainValue()
