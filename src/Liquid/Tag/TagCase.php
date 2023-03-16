@@ -99,14 +99,13 @@ class TagCase extends Decision
 	 */
 	public function unknownTag($tag, $params, array $tokens)
 	{
-		$whenSyntaxRegexp = new Regexp('/' . Liquid::get('QUOTED_FRAGMENT') . '/');
-
 		switch ($tag) {
 			case 'when':
+				$whenSyntax = preg_match_all('/(?<=,|or|^)\s*(' . Liquid::get('QUOTED_FRAGMENT') . ')/', $params, $matches);
 				// push the current nodelist onto the stack and prepare for a new one
-				if ($whenSyntaxRegexp->match($params)) {
+				if ($whenSyntax) {
 					$this->pushNodelist();
-					$this->right = $whenSyntaxRegexp->matches[0];
+					$this->right = $matches[1];
 					$this->nodelist = array();
 				} else {
 					throw new ParseException("Syntax Error in tag 'case' - Valid when condition: when [condition]"); // harry
@@ -151,12 +150,16 @@ class TagCase extends Decision
 		foreach ($this->nodelists as $data) {
 			list($right, $nodelist) = $data;
 
-			if ($this->equalVariables($this->left, $right, $context)) {
-				$runElseBlock = false;
+			foreach ($right as $var) {
+				if ($this->equalVariables($this->left, $var, $context)) {
+					$runElseBlock = false;
 
-				$context->push();
-				$output .= $this->renderAll($nodelist, $context);
-				$context->pop();
+					$context->push();
+					$output .= $this->renderAll($nodelist, $context);
+					$context->pop();
+
+					break;
+				}
 			}
 		}
 
