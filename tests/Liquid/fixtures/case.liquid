@@ -9,3 +9,30 @@
   {% endcase %}
 {% endfor %}
    
+{% assign m = post.date | date: "%b" %}
+{% case m %}
+  {% when 'April' %}Spring
+  {% when 'May'  %}Spring
+  {% when 'June' %}Spring
+  {% when 'July' %}Summer
+  {% when 'August' %}Summer
+  {% when 'September' %}Summer
+  {% when 'October' %}Autumn
+  {% when 'November' %}Autumn
+  {% when 'December' %}Autumn
+  {% when 'January'  %}Winter
+  {% when 'February' %}Winter
+  {% when 'March' %}Winter
+  {% else %}{{ post.date | date: "%b" }}.
+{% endcase %}
+{{ post.date | date: "%Y" }}
+
+{% assign m = post.date | date: "%b" %}
+{% case m %}
+  {% when 'April' or 'May' or 'June' %}Spring
+  {% when 'July' or 'August' or 'September' %}Summer
+  {% when 'October' or 'November' or 'December' %}Autumn
+  {% when 'January' or 'February' or 'March'  %}Winter
+  {% else %}{{ post.date | date: "%b" }}.
+{% endcase %}
+{{ post.date | date: "%Y" }}
