@@ -151,6 +151,19 @@ class StandardFilters
 
 
 	/**
+	 * Converts into JSON string
+	 *
+	 * @param mixed $input
+	 *
+	 * @return string
+	 */
+	public static function json($input)
+	{
+		return json_encode($input);
+	}
+
+
+	/**
 	 * Escape a string
 	 *
 	 * @param string $input

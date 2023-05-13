@@ -174,6 +174,36 @@ class StandardFiltersTest extends TestCase
 		}
 	}
 
+	public function testJson()
+	{
+		$data = array(
+			array(
+				"before" => "Anything",
+				"after" => "\"Anything\"",
+			),
+			array(
+				"before" => 3,
+				"after" => 3,
+			),
+			array(
+				"before" => array(1, 2, 3),
+				"after" => "[1,2,3]",
+			),
+			array(
+				"before" => array("one" => 1, "two" => 2, "three" => 3),
+				"after" => "{\"one\":1,\"two\":2,\"three\":3}",
+			),
+			array(
+				"before" => array("one" => 1, "two" => array(1, 2, 3), "three" => 3),
+				"after" => "{\"one\":1,\"two\":[1,2,3],\"three\":3}",
+			),
+		);
+
+		foreach ($data as $testCase) {
+			$this->assertEquals($testCase['after'], StandardFilters::json($testCase['before']));
+		}
+	}
+
 	public function testEscape()
 	{
 		$data = array(
