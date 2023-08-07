@@ -120,15 +120,15 @@ class Liquid
 		}
 		// This case is needed for compound settings
 		switch ($key) {
-				case 'QUOTED_FRAGMENT':
-					return '(?:' . self::get('QUOTED_STRING') . '|[^\s,\|\'"]+)';
-				case 'TAG_ATTRIBUTES':
-					return '/(\w+)\s*\:\s*(' . self::get('QUOTED_FRAGMENT') . ')/';
-				case 'TOKENIZATION_REGEXP':
-					return '/(' . self::$config['TAG_START'] . '.*?' . self::$config['TAG_END'] . '|' . self::$config['VARIABLE_START'] . '.*?' . self::$config['VARIABLE_END'] . ')/s';
-				default:
-					return null;
-			}
+			case 'QUOTED_FRAGMENT':
+				return '(?:' . self::get('QUOTED_STRING') . '|[^\s,\|\'"]+)';
+			case 'TAG_ATTRIBUTES':
+				return '/(\w+)\s*\:\s*(' . self::get('QUOTED_FRAGMENT') . ')/';
+			case 'TOKENIZATION_REGEXP':
+				return '/(' . self::$config['TAG_START'] . '.*?' . self::$config['TAG_END'] . '|' . self::$config['VARIABLE_START'] . '.*?' . self::$config['VARIABLE_END'] . ')/s';
+			default:
+				return null;
+		}
 	}
 
 	/**

@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['7.4']
+        php-version: ['8.2']
         dependencies: ['']
 
     name: PHP ${{ matrix.php-version }} ${{ matrix.dependencies }}
