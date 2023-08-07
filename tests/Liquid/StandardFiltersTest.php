@@ -1126,7 +1126,7 @@ class StandardFiltersTest extends TestCase
 	public function testDate()
 	{
 		$dateVar = '2017-07-01 21:00:00';
-		
+
 		$var = new Variable('var | date, "%Y"');
 		$this->context->set('var', $dateVar);
 		$this->assertEquals('2017', $var->render($this->context));

@@ -158,7 +158,7 @@ class TagIncludeTest extends TestCase
 		)));
 
 		$template->parse("{% include 'example' %}");
-		
+
 		$output = $template->render(array("var" => array("a", "b", "c")));
 		$this->assertEquals("([abc])", $output);
 	}
