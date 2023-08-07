@@ -9,11 +9,12 @@ file that was distributed with this source code.
 @package Liquid
 EOF;
 
-return PhpCsFixer\Config::create()
-	->setRiskyAllowed(true)
-	->setRules([
+$config = new PhpCsFixer\Config();
+$config
+    ->setRiskyAllowed(true)
+    ->setRules([
 		'@PSR2' => true,
-		'psr4' => true,
+		'psr_autoloading' => true,
 		'no_unreachable_default_argument_value' => true,
 		'no_useless_else' => true,
 		'no_useless_return' => true,
@@ -30,7 +31,7 @@ return PhpCsFixer\Config::create()
 		'php_unit_mock' => true,
 		'php_unit_namespaced' => true,
 		'php_unit_no_expectation_annotation' => true,
-		'php_unit_ordered_covers' => true,
+                "phpdoc_order_by_value" => ['annotations' => ['covers']],
 		'php_unit_set_up_tear_down_visibility' => true,
 		'php_unit_test_case_static_method_calls' => ['call_type' => 'this'],
 	])
@@ -40,3 +41,6 @@ return PhpCsFixer\Config::create()
 		->in(__DIR__)
 	)
 ;
+
+
+return $config;
