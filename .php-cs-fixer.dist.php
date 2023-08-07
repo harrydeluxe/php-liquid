@@ -34,6 +34,7 @@ $config
                 "phpdoc_order_by_value" => ['annotations' => ['covers']],
 		'php_unit_set_up_tear_down_visibility' => true,
 		'php_unit_test_case_static_method_calls' => ['call_type' => 'this'],
+                'no_whitespace_in_blank_line' => true,
 	])
 	->setIndent("\t")
 	->setFinder(
