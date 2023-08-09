@@ -591,6 +591,28 @@ class StandardFiltersTest extends TestCase
 		$this->assertEquals($expected, array_values(StandardFilters::sort(new \ArrayIterator($original), 'b')));
 	}
 
+	public function testSortWithoutKey()
+	{
+		// Sort by inner key
+		$original = array(
+			array('a' => 20, 'b' => 10),
+			array('a' => 45, 'b' => 5),
+			array('a' => 40, 'b' => 6),
+			array('a' => 30, 'b' => 48),
+			array('a' => 50),
+		);
+		$expected = array(
+			array('a' => 50),
+			array('a' => 45, 'b' => 5),
+			array('a' => 40, 'b' => 6),
+			array('a' => 20, 'b' => 10),
+			array('a' => 30, 'b' => 48),
+		);
+
+		$this->assertEquals($expected, array_values(StandardFilters::sort($original, 'b')));
+		$this->assertEquals($expected, array_values(StandardFilters::sort(new \ArrayIterator($original), 'b')));
+	}
+
 	/*
 
 		I've commented this out as its not one of the Ruby Standard Filters

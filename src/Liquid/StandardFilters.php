@@ -559,11 +559,11 @@ class StandardFilters
 			$first = reset($input);
 			if ($first !== false && is_array($first) && array_key_exists($property, $first)) {
 				uasort($input, function ($a, $b) use ($property) {
-					if ($a[$property] == $b[$property]) {
+					if (($a[$property] ?? 0) == ($b[$property] ?? 0)) {
 						return 0;
 					}
 
-					return $a[$property] < $b[$property] ? -1 : 1;
+					return ($a[$property] ?? 0) < ($b[$property] ?? 0) ? -1 : 1;
 				});
 			}
 		}
