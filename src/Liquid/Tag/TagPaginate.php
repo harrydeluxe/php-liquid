@@ -187,7 +187,7 @@ class TagPaginate extends AbstractBlock
 	public function currentUrl($context, $queryPart = [])
 	{
 		// From here we have $url->path and $url->query
-		$url = (object) parse_url($context->get('REQUEST_URI'));
+		$url = (object) parse_url($context->get('REQUEST_URI') ?: '');
 
 		// Let's merge the query part
 		if (isset($url->query)) {

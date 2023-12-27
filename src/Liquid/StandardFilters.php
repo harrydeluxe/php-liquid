@@ -162,6 +162,27 @@ class StandardFilters
 		return json_encode($input);
 	}
 
+	/**
+	 * Creates an array including only the objects with a given property value
+	 * @link https://shopify.github.io/liquid/filters/where/
+	 *
+	 * @param array $input
+	 * @param string ...$args
+	 *
+	 * @throws LiquidException
+	 * @return array
+	 */
+	public static function where(array $input, string ...$args): array
+	{
+		switch (count($args)) {
+			case 1:
+				return array_filter($input, fn ($v) => ($v[$args[0]] ?? null) !== null);
+			case 2:
+				return array_filter($input, fn ($v) => ($v[$args[0]] ?? '') == $args[1]);
+			default:
+				throw new LiquidException('Wrong number of arguments to function `where`, given ' . count($args) . ', expected 1 or 2');
+		}
+	}
 
 	/**
 	 * Escape a string

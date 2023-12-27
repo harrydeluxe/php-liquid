@@ -13,6 +13,8 @@ namespace Liquid;
 
 class MoneyFilter
 {
+	public Context $context;
+
 	public function money($value)
 	{
 		return sprintf(' %d$ ', $value);
@@ -26,6 +28,8 @@ class MoneyFilter
 
 class CanadianMoneyFilter
 {
+	public Context $context;
+
 	public function money($value)
 	{
 		return sprintf(' %d$ CAD ', $value);
@@ -201,6 +205,24 @@ class StandardFiltersTest extends TestCase
 
 		foreach ($data as $testCase) {
 			$this->assertEquals($testCase['after'], StandardFilters::json($testCase['before']));
+		}
+	}
+
+	public function testWhere()
+	{
+		$data = [
+			[
+				'before' => [['model' => 'bmw'], ['model' => 'audi']],
+				'after' => [['model' => 'bmw']],
+			],
+			[
+				'before' => ['model' => 'bmw'],
+				'after' => [],
+			],
+		];
+
+		foreach ($data as $testCase) {
+			$this->assertEquals($testCase['after'], StandardFilters::where($testCase['before'], 'model', 'bmw'));
 		}
 	}
 

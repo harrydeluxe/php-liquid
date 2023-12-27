@@ -11,6 +11,8 @@
 
 namespace {
 
+	use Liquid\Context;
+
 	/**
 	 * Global function acts as a filter.
 	 *
@@ -28,6 +30,8 @@ namespace {
 	 */
 	class ClassFilter
 	{
+		public Context $context;
+
 		private $variable = 'not set';
 
 		public function __construct()
@@ -59,6 +63,8 @@ namespace Liquid {
 
 	class NamespacedClassFilter
 	{
+		public Context $context;
+
 		public static function static_test2($var)
 		{
 			return "good {$var}";
