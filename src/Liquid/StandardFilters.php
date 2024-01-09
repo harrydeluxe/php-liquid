@@ -166,22 +166,25 @@ class StandardFilters
 	 * Creates an array including only the objects with a given property value
 	 * @link https://shopify.github.io/liquid/filters/where/
 	 *
-	 * @param array $input
+	 * @param mixed $input
 	 * @param string ...$args
 	 *
 	 * @throws LiquidException
-	 * @return array
+	 * @return mixed
 	 */
-	public static function where(array $input, string ...$args): array
+	public static function where($input, string ...$args)
 	{
-		switch (count($args)) {
-			case 1:
-				return array_filter($input, fn ($v) => ($v[$args[0]] ?? null) !== null);
-			case 2:
-				return array_filter($input, fn ($v) => ($v[$args[0]] ?? '') == $args[1]);
-			default:
-				throw new LiquidException('Wrong number of arguments to function `where`, given ' . count($args) . ', expected 1 or 2');
+		if (is_array($input)) {
+			switch (count($args)) {
+				case 1:
+					return array_values(array_filter($input, fn ($v) => !in_array($v[$args[0]] ?? null, [null, false], true)));
+				case 2:
+					return array_values(array_filter($input, fn ($v) => ($v[$args[0]] ?? '') == $args[1]));
+				default:
+					throw new LiquidException('Wrong number of arguments to function `where`, given ' . count($args) . ', expected 1 or 2');
+			}
 		}
+		return $input;
 	}
 
 	/**
