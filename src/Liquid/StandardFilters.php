@@ -621,6 +621,10 @@ class StandardFilters
 			return [];
 		}
 
+		if ($pattern === '') {
+			return mb_str_split($input);
+		}
+
 		return explode($pattern, $input);
 	}
 
