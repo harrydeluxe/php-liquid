@@ -876,10 +876,15 @@ class StandardFiltersTest extends TestCase
 				'two-one-three',
 				array('two', 'one', 'three'),
 			),
+			array(
+				'12301230123',
+				array('123', '123', '123'),
+				'0'
+			),
 		);
 
 		foreach ($data as $item) {
-			$this->assertEquals($item[1], StandardFilters::split($item[0], '-'));
+			$this->assertEquals($item[1], StandardFilters::split($item[0], $item[2] ?? '-'));
 		}
 	}
 
